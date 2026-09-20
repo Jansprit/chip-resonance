@@ -1,0 +1,173 @@
+<!DOCTYPE html>
+<html lang="zh-TW">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>9 大因子詳解 — 籌碼共振選股系統</title>
+  <meta name="description" content="完整的 9 因子量化定義、權重、資料源與公式說明。">
+  <script src="https://cdn.tailwindcss.com"></script>
+  <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.0/dist/chart.umd.min.js"></script>
+  <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+  <!-- 導覽列 -->
+  <nav class="navbar">
+    <div class="navbar-inner">
+      <a class="brand" href="index.html">
+        <span class="brand-logo">🔺</span>
+        <div>
+          <div class="brand-text">籌碼共振選股系統</div>
+          <div class="brand-tag">Chip-Resonance Selection System</div>
+        </div>
+      </a>
+      <div class="nav-links">
+        <a class="nav-link" href="index.html">首頁</a>
+        <a class="nav-link active" href="factors.html">9 大因子</a>
+        <a class="nav-link" href="scoring.html">評分模擬器</a>
+        <a class="nav-link" href="backtest.html">回測驗證</a>
+      </div>
+    </div>
+  </nav>
+
+  <div class="container">
+    <!-- Page Header -->
+    <header style="padding: 32px 0;">
+      <h1 style="font-size: 36px; font-weight: 800; margin: 0 0 12px;">
+        📐 9 大因子詳解
+      </h1>
+      <p style="font-size: 16px; color: var(--text-secondary); margin: 0;">
+        把原本的質化策略全部「翻譯」成數學條件——這是模型可被回測、可被證偽的根基。
+      </p>
+    </header>
+
+    <!-- Quick navigation -->
+    <section class="card" style="margin-bottom: 24px;">
+      <div class="card-title">🗂 因子快速索引</div>
+      <div style="display: flex; flex-wrap: wrap; gap: 8px; margin-top: 12px;">
+        <a href="#factor-F1" class="tier-badge tier-A" style="text-decoration:none;">F1 大股東連續加碼</a>
+        <a href="#factor-F2" class="tier-badge tier-A" style="text-decoration:none;">F2 產業輪動</a>
+        <a href="#factor-F3" class="tier-badge tier-A" style="text-decoration:none;">F3 董監加碼價格落後</a>
+        <a href="#factor-F4" class="tier-badge tier-A" style="text-decoration:none;">F4 集中度突破</a>
+        <a href="#factor-F5" class="tier-badge tier-A" style="text-decoration:none;">F5 股利穩定</a>
+        <a href="#factor-F6" class="tier-badge tier-A" style="text-decoration:none;">F6 散戶退場主力接手</a>
+        <a href="#factor-F8" class="tier-badge tier-B" style="text-decoration:none;">F8 回調籌碼守穩</a>
+        <a href="#factor-F9" class="tier-badge tier-D" style="text-decoration:none;">F9 價籌背離懲罰</a>
+        <a href="#factor-F10" class="tier-badge tier-B" style="text-decoration:none;">F10 利空籌碼修復</a>
+      </div>
+    </section>
+
+    <!-- 因子權重總覽 -->
+    <section class="section">
+      <h2 class="section-title"><span class="section-title-emoji">⚖️</span> 因子權重總覽</h2>
+      <p class="section-subtitle">8 個加分項總計 95% 權重，F9 為唯一扣分項（封頂 −20%）</p>
+      <div class="chart-container" style="height: 400px;">
+        <canvas id="factor-weight-chart"></canvas>
+      </div>
+    </section>
+
+    <!-- 9 因子卡片清單 -->
+    <section class="section">
+      <h2 class="section-title"><span class="section-title-emoji">🔬</span> 各因子量化公式</h2>
+      <p class="section-subtitle">點擊上方索引快速跳轉到指定因子</p>
+      <div id="factor-list"></div>
+    </section>
+
+    <!-- 硬性過濾層 -->
+    <section class="section">
+      <h2 class="section-title"><span class="section-title-emoji">🛡️</span> 硬性過濾層（先排除，不評分）</h2>
+      <p class="section-subtitle">任何一項觸發即剔除，取代人類「排雷」的工作</p>
+      <div id="hard-filter-list" class="card-grid"></div>
+    </section>
+
+    <!-- 因子驗證說明 -->
+    <section class="section">
+      <h2 class="section-title"><span class="section-title-emoji">✅</span> 因子驗效方法</h2>
+      <p class="section-subtitle">單獨驗效每個因子的有效性，是系統自我淘汰機制的核心</p>
+
+      <div class="card-grid">
+        <div class="card" style="border-left: 4px solid var(--purple);">
+          <div class="card-title">📊 五分位分層回測</div>
+          <p class="card-desc">將股票依單一因子值分為 5 等分，比較 Q5 vs Q1 的未來 4 週 / 12 週報酬差距。差距必須顯著為正，才代表因子有選股能力。</p>
+        </div>
+        <div class="card" style="border-left: 4px solid var(--gold);">
+          <div class="card-title">📈 IC 分析（Information Coefficient）</div>
+          <p class="card-desc">計算因子值與未來報酬的 Spearman 秩相關。IC 絕對值長期 &lt; 0.02 的因子，應降權或移除——讓系統具備自我淘汰機制。</p>
+        </div>
+        <div class="card" style="border-left: 4px solid var(--green);">
+          <div class="card-title">🔄 IC 衰減曲線</div>
+          <p class="card-desc">觀察 IC 在 lag 1~20 日的衰減速度，判斷因子有效預測窗口。快速衰減表示因子適合短週期反轉，緩慢衰減適合長週期持有。</p>
+        </div>
+        <div class="card" style="border-left: 4px solid var(--blue);">
+          <div class="card-title">📉 換月 IC 穩定性</div>
+          <p class="card-desc">逐月計算 IC，檢查 IC 的時間序列穩定性。若 IC 月月正負互換，該因子可能只在特定市況下有效。</p>
+        </div>
+      </div>
+    </section>
+
+    <!-- 程式碼骨架 -->
+    <section class="section">
+      <h2 class="section-title"><span class="section-title-emoji">💻</span> Python 程式骨架</h2>
+      <p class="section-subtitle">每週五收盤後執行的主流程</p>
+
+      <div class="code-block">
+<span class="keyword">def</span> weekly_pipeline(date):
+    <span class="comment"># 1. 資料擷取（金字塔/集保/Goodinfo/FinMind）</span>
+    holders   = fetch_holder_structure(date)      <span class="comment"># 大戶分級、人數、平均張數</span>
+    directors = fetch_director_holding(date)      <span class="comment"># 董監、質押</span>
+    prices    = fetch_price_volume(date)          <span class="comment"># 價量、融資券、當沖</span>
+    dividends = fetch_dividend_history(date)
+
+    <span class="comment"># 2. 硬性過濾</span>
+    universe = hard_filter(holders, directors, prices)
+
+    <span class="comment"># 3. 因子計算（皆向量化，pandas 可一次算全市場）</span>
+    F = pd.DataFrame(index=universe)
+    F[<span class="string">"F1"</span>]  = consecutive_increase(holders[<span class="string">"pct_1000up"</span>], weeks=<span class="number">3</span>)
+    F[<span class="string">"F2"</span>]  = industry_flow_rank(holders, by=<span class="string">"CID"</span>, window=<span class="number">4</span>)
+    F[<span class="string">"F3"</span>]  = director_divergence(directors, prices, months=<span class="number">3</span>)
+    F[<span class="string">"F4"</span>]  = first_breakout_52w(holders[<span class="string">"pct_400up"</span>])
+    F[<span class="string">"F5"</span>]  = dividend_stability(dividends, years=<span class="number">5</span>)
+    F[<span class="string">"F6"</span>]  = retail_exodus(holders[<span class="string">"holder_cnt"</span>], holders[<span class="string">"avg_lot"</span>], weeks=<span class="number">8</span>)
+    F[<span class="string">"F8"</span>]  = pullback_with_holder_support(prices, holders)
+    F[<span class="string">"F10"</span>] = crash_repair(prices, holders)
+    F[<span class="string">"F9_penalty"</span>] = price_chip_divergence(
+        prices, holders,
+        daytrade_ratio=prices[<span class="string">"dt_ratio"</span>],
+        margin_usage=prices[<span class="string">"margin_pct"</span>]
+    )
+
+    <span class="comment"># 4. 標準化 + 加權合成</span>
+    Z = (F - F.mean()) / F.std()
+    score = (Z * WEIGHTS).sum(axis=<span class="number">1</span>)
+
+    <span class="comment"># 5. 分層輸出 + 寫入追蹤資料庫（供後續驗證 IC）</span>
+    output_tiered_list(score)
+    log_to_backtest_db(date, F, score)
+      </div>
+    </section>
+
+    <!-- 行動呼籲 -->
+    <section style="margin-top: 48px;">
+      <div class="alert-success">
+        <strong>🎯 下一步：</strong> 看完 9 因子後，前往 <a href="scoring.html" style="color: var(--gold); text-decoration: underline;">評分模擬器</a> 看實際評分結果，或到 <a href="backtest.html" style="color: var(--gold); text-decoration: underline;">回測驗證</a> 了解四個里程碑的 QA 閘門。
+      </div>
+    </section>
+
+    <!-- 免責聲明 -->
+    <div class="alert-warning" style="margin-top: 24px;">
+      <strong>📌 免責聲明：</strong> 所有資料為模擬生成，僅供教學演示。<br>
+      <em>內容由 AI 生成僅供參考，不構成任何投資建議。</em>
+    </div>
+  </div>
+
+  <footer class="footer">
+    <div>
+      🔺 籌碼共振選股系統 — Chip-Resonance Selection System<br>
+      <span style="font-size: 11px;">基於多因子選股模型 + Walk-Forward 驗證框架</span>
+    </div>
+  </footer>
+
+  <script src="data.js"></script>
+  <script src="app.js"></script>
+</body>
+</html>

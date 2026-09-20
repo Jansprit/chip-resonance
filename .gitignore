@@ -1,0 +1,35 @@
+# OS files
+.DS_Store
+Thumbs.db
+desktop.ini
+
+# Editor files
+.vscode/
+.idea/
+*.swp
+*.swo
+
+# Logs and temp
+*.log
+*.tmp
+*.bak
+
+# Node / npm (in case future tooling is added)
+node_modules/
+package-lock.json
+npm-debug.log*
+
+# Python (in case future tooling is added)
+__pycache__/
+*.pyc
+.venv/
+venv/
+
+# Environment files (never commit secrets)
+.env
+.env.local
+.env.*.local
+
+# Build outputs (in case bundler is added later)
+dist/
+build/

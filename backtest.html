@@ -1,0 +1,370 @@
+<!DOCTYPE html>
+<html lang="zh-TW">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>回測驗證框架 — 籌碼共振選股系統</title>
+  <meta name="description" content="四大里程碑 + 自動化 QA 閘門，源自交易策略回測驗證系統的方法論。">
+  <script src="https://cdn.tailwindcss.com"></script>
+  <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.0/dist/chart.umd.min.js"></script>
+  <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+  <!-- 導覽列 -->
+  <nav class="navbar">
+    <div class="navbar-inner">
+      <a class="brand" href="index.html">
+        <span class="brand-logo">🔺</span>
+        <div>
+          <div class="brand-text">籌碼共振選股系統</div>
+          <div class="brand-tag">Chip-Resonance Selection System</div>
+        </div>
+      </a>
+      <div class="nav-links">
+        <a class="nav-link" href="index.html">首頁</a>
+        <a class="nav-link" href="factors.html">9 大因子</a>
+        <a class="nav-link" href="scoring.html">評分模擬器</a>
+        <a class="nav-link active" href="backtest.html">回測驗證</a>
+      </div>
+    </div>
+  </nav>
+
+  <div class="container">
+    <!-- Page Header -->
+    <header style="padding: 32px 0;">
+      <h1 style="font-size: 36px; font-weight: 800; margin: 0 0 12px;">
+        🔬 回測驗證框架
+      </h1>
+      <p style="font-size: 16px; color: var(--text-secondary); margin: 0;">
+        源自「交易策略回測驗證系統」方法論 ——
+        <strong>四個里程碑 × 自動化 QA 閘門</strong>，
+        確保每個開發階段都能正確「否決」失敗的策略，而非只能「相信」策略。
+      </p>
+    </header>
+
+    <!-- 核心方法論 -->
+    <section class="section">
+      <h2 class="section-title"><span class="section-title-emoji">🎓</span> 核心方法論</h2>
+      <p class="section-subtitle">從「工程正確性」到「流程制度」，四層遞進的專業階梯</p>
+
+      <div class="card-grid">
+        <div class="card" style="border-left: 4px solid var(--blue);">
+          <div class="card-title">⚙️ 工程正確性</div>
+          <p class="card-desc"><strong>回答：儀器本身說不說謊？</strong><br>
+          七層管線、倖存者偏差、PIT、前視偏差、成本與成交約束。</p>
+        </div>
+        <div class="card" style="border-left: 4px solid var(--purple);">
+          <div class="card-title">📊 統計證據學</div>
+          <p class="card-desc"><strong>回答：證據在「搜尋過」之後還剩多少？</strong><br>
+          有效試驗次數 N、PSR/DSR/PBO、CSCV、Reality Check。</p>
+        </div>
+        <div class="card" style="border-left: 4px solid var(--gold);">
+          <div class="card-title">💰 經濟認識論</div>
+          <p class="card-desc"><strong>回答：這個 edge 為什麼存在、憑什麼繼續？</strong><br>
+          邊際來源分類、對手方測試、貝葉斯收縮、Lucas 批判。</p>
+        </div>
+        <div class="card" style="border-left: 4px solid var(--green);">
+          <div class="card-title">📋 流程制度</div>
+          <p class="card-desc"><strong>回答：人在疲勞與規模下如何不自欺？</strong><br>
+          預註冊、研究帳本、數據快照雜湊、晉升閘門、紅隊清單。</p>
+        </div>
+      </div>
+
+      <div class="alert-info" style="margin-top: 24px;">
+        <strong>💡 最終 KPI 重構：</strong>
+        回測系統的產品是「<strong>校準過的信念</strong>」，衡量標準是
+        <strong>否決想法的速度與放行策略的實盤兌現率</strong>——
+        把四層串起來的拱心石。
+      </div>
+    </section>
+
+    <!-- KPI 卡片 -->
+    <section class="section">
+      <h2 class="section-title"><span class="section-title-emoji">🏆</span> 樣本外驗證 KPI（模擬）</h2>
+      <p class="section-subtitle">2022~2025 樣本外期間，籌碼共振策略 vs 0050 基準</p>
+      <div class="stat-grid" id="kpi-cards"></div>
+    </section>
+
+    <!-- 淨值曲線 -->
+    <section class="section">
+      <h2 class="section-title"><span class="section-title-emoji">📈</span> 60 週淨值曲線（模擬）</h2>
+      <p class="section-subtitle">對比籌碼共振策略與 0050 基準指數</p>
+      <div class="chart-container" style="height: 400px;">
+        <canvas id="backtest-nav-curve"></canvas>
+      </div>
+    </section>
+
+    <!-- 四大里程碑 -->
+    <section class="section">
+      <h2 class="section-title"><span class="section-title-emoji">🚀</span> 四大里程碑</h2>
+      <p class="section-subtitle">每個里程碑對應一個核心交付物與一組可機判 QA 閘門</p>
+
+      <!-- M1 -->
+      <div class="milestone">
+        <div class="milestone-head">
+          <span class="milestone-badge">M1</span>
+          <h3 class="milestone-title">最小無偏差管線</h3>
+          <span class="milestone-status">✓ PASS</span>
+        </div>
+        <p class="milestone-desc">
+          跑出一條<strong>確定沒有作弊</strong>的淨值曲線，哪怕策略本身很平庸。對應文件的工程正確性層。
+          涵蓋數據快照腳本、向量化回測核心、保守成本模型、基礎績效層。
+        </p>
+        <div class="milestone-deliverables">
+          <div class="milestone-deliverables-title">📦 核心交付物</div>
+          <ul>
+            <li>數據快照腳本（FinMind 還原價 + 下市櫃股票）</li>
+            <li>向量化回測核心：訊號在 t 收盤計算、t+1 開盤成交</li>
+            <li>保守成本模型：手續費 0.1425% + 證交稅 0.3% + 滑價 0.2~0.3%</li>
+            <li>基礎績效層：CAGR、Sharpe、最大回撤、年化換手率</li>
+            <li>黃金測試：合成股票損益與解析解誤差 &lt; 1e-8</li>
+          </ul>
+        </div>
+        <div style="margin-top: 16px;">
+          <h4 style="color: var(--text-secondary); font-size: 13px; margin-bottom: 8px;">QA 閘門</h4>
+          <div id="qa-m1"></div>
+        </div>
+      </div>
+
+      <!-- M2 -->
+      <div class="milestone">
+        <div class="milestone-head">
+          <span class="milestone-badge">M2</span>
+          <h3 class="milestone-title">驗證工具箱與研究金字塔</h3>
+          <span class="milestone-status">✓ PASS</span>
+        </div>
+        <p class="milestone-desc">
+          對應文件的統計證據學層，目標是讓系統具備「<strong>量化自欺程度</strong>」的能力。
+          包括 IC 分析、PSR/DSR/CSCV-PBO、Block Bootstrap、毛轉淨瀑布圖。
+        </p>
+        <div class="milestone-deliverables">
+          <div class="milestone-deliverables-title">📦 核心交付物</div>
+          <ul>
+            <li><strong>IC 分析器</strong>：Spearman 秩相關、IC 衰減曲線、分位數組合價差</li>
+            <li><strong>PSR</strong>（Probabilistic Sharpe Ratio）：考慮偏態峰度</li>
+            <li><strong>DSR</strong>（Deflated Sharpe Ratio）：用試驗次數 N 去膨脹</li>
+            <li><strong>CSCV/PBO</strong>：檢驗「選擇流程本身」的工具</li>
+            <li><strong>Walk-Forward 分析器 + 參數高原圖</strong></li>
+            <li><strong>毛轉淨瀑布圖</strong>：定位每筆失敗發生在哪一層</li>
+          </ul>
+        </div>
+        <div style="margin-top: 16px;">
+          <h4 style="color: var(--text-secondary); font-size: 13px; margin-bottom: 8px;">QA 閘門</h4>
+          <div id="qa-m2"></div>
+        </div>
+      </div>
+
+      <!-- M3 -->
+      <div class="milestone">
+        <div class="milestone-head">
+          <span class="milestone-badge">M3</span>
+          <h3 class="milestone-title">流程基礎設施</h3>
+          <span class="milestone-status">✓ PASS</span>
+        </div>
+        <p class="milestone-desc">
+          對應文件的流程技術層——紀律若不是基礎設施，就只是口號。
+          包括實驗帳本、預註冊模板、可重現性三元組、晉升閘門。
+        </p>
+        <div class="milestone-deliverables">
+          <div class="milestone-deliverables-title">📦 核心交付物</div>
+          <ul>
+            <li><strong>實驗帳本</strong>（SQLite / YAML）：實驗編號、假設陳述、邊際來源分類、對手方假設、試驗次數 N</li>
+            <li><strong>預註冊模板</strong>：跑樣本外前必須先 commit 一份假設文件</li>
+            <li><strong>可重現性三元組</strong>：(code commit hash, data snapshot hash, config hash)</li>
+            <li><strong>晉升閘門 + 紅隊清單</strong>：每條逐條打勾並附證據</li>
+          </ul>
+        </div>
+        <div style="margin-top: 16px;">
+          <h4 style="color: var(--text-secondary); font-size: 13px; margin-bottom: 8px;">QA 閘門</h4>
+          <div id="qa-m3"></div>
+        </div>
+      </div>
+
+      <!-- M4 -->
+      <div class="milestone">
+        <div class="milestone-head">
+          <span class="milestone-badge">M4</span>
+          <h3 class="milestone-title">事件驅動覆核與實戰閉環</h3>
+          <span class="milestone-status">✓ PASS</span>
+        </div>
+        <p class="milestone-desc">
+          對通過前三關的極少數策略，做高擬真覆核：事件驅動引擎、ADV 參與率上限、
+          平方根衝擊模型、容量曲線、模擬盤對帳。
+        </p>
+        <div class="milestone-deliverables">
+          <div class="milestone-deliverables-title">📦 核心交付物</div>
+          <ul>
+            <li><strong>事件驅動引擎</strong>：成交量參與率上限（單日 &lt; 10%）</li>
+            <li><strong>平方根衝擊模型</strong>：衝擊成本 ∝ σ√(Q/ADV)</li>
+            <li><strong>容量曲線</strong>：1x / 5x / 20x 規模單調遞減驗證</li>
+            <li><strong>模擬盤對帳</strong>：至少 6 個月，預先定義 kill criteria</li>
+            <li><strong>滑價偏差監控</strong>：實測 vs 模型預測逐月記錄</li>
+          </ul>
+        </div>
+        <div style="margin-top: 16px;">
+          <h4 style="color: var(--text-secondary); font-size: 13px; margin-bottom: 8px;">QA 閘門</h4>
+          <div id="qa-m4"></div>
+        </div>
+      </div>
+    </section>
+
+    <!-- 容量曲線 -->
+    <section class="section">
+      <h2 class="section-title"><span class="section-title-emoji">📉</span> 容量衰減曲線（M4）</h2>
+      <p class="section-subtitle">資金規模擴大時，策略淨值的單調遞減性</p>
+      <div class="chart-container" style="height: 400px;">
+        <canvas id="capacity-curve"></canvas>
+      </div>
+      <div class="alert-warning">
+        <strong>📉 容量限制訊息：</strong>
+        當規模擴大到 20x 時，平方根衝擊模型預估策略淨值將衰減到約 30%。
+        這告訴我們：即使策略樣本外有效，<strong>真實可操作規模仍有上限</strong>。
+      </div>
+    </section>
+
+    <!-- 驗證參數 -->
+    <section class="section">
+      <h2 class="section-title"><span class="section-title-emoji">⚙️</span> 回測參數設定</h2>
+
+      <div style="overflow-x:auto;">
+        <table class="stock-table">
+          <thead>
+            <tr>
+              <th>項目</th>
+              <th>設定</th>
+              <th>說明</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td><strong>樣本切割</strong></td>
+              <td>2016~2021 樣本內 / 2022~2025 樣本外</td>
+              <td>2026 年起紙上追蹤（paper trading）</td>
+            </tr>
+            <tr>
+              <td><strong>再平衡頻率</strong></td>
+              <td>每週一</td>
+              <td>對應 T+3 集保股權分散表公布時點</td>
+            </tr>
+            <tr>
+              <td><strong>持有期間</strong></td>
+              <td>4~12 週</td>
+              <td>依 IC 衰減曲線決定最佳持有窗口</td>
+            </tr>
+            <tr>
+              <td><strong>手續費</strong></td>
+              <td>0.1425%</td>
+              <td>不打折</td>
+            </tr>
+            <tr>
+              <td><strong>證交稅</strong></td>
+              <td>0.3%</td>
+              <td>台股買賣皆課</td>
+            </tr>
+            <tr>
+              <td><strong>滑價</strong></td>
+              <td>0.1%</td>
+              <td>保守估計</td>
+            </tr>
+            <tr>
+              <td><strong>對照組</strong></td>
+              <td>0050 報酬指數</td>
+              <td>含息報酬基準</td>
+            </tr>
+            <tr>
+              <td><strong>偏誤控制</strong></td>
+              <td>還原股價 + 納入下市股</td>
+              <td>避免倖存者偏差</td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+    </section>
+
+    <!-- 核心指標 -->
+    <section class="section">
+      <h2 class="section-title"><span class="section-title-emoji">📏</span> 核心績效指標</h2>
+      <div class="card-grid">
+        <div class="card" style="border-left: 4px solid var(--gold);">
+          <div class="card-title">💰 年化超額報酬</div>
+          <p class="card-desc">策略年化報酬 − 基準年化報酬，衡量 alpha 的絕對水準。</p>
+        </div>
+        <div class="card" style="border-left: 4px solid var(--red);">
+          <div class="card-title">📉 最大回撤</div>
+          <p class="card-desc">歷史淨值最高點至最低點的最大跌幅，考驗風控紀律。</p>
+        </div>
+        <div class="card" style="border-left: 4px solid var(--purple);">
+          <div class="card-title">📐 Sharpe Ratio</div>
+          <p class="card-desc">單位風險報酬率，但須配合 PSR/DSR 校正多重檢定偏誤。</p>
+        </div>
+        <div class="card" style="border-left: 4px solid var(--green);">
+          <div class="card-title">🎯 勝率</div>
+          <p class="card-desc">4 週 / 12 週持有期正報酬機率。須排除倖存者偏差後計算。</p>
+        </div>
+        <div class="card" style="border-left: 4px solid var(--blue);">
+          <div class="card-title">📊 多空分層價差</div>
+          <p class="card-desc"><strong>最重要指標</strong>：Q5 減 Q1 是否顯著為正，代表評分真的有序別能力。</p>
+        </div>
+        <div class="card" style="border-left: 4px solid var(--yellow);">
+          <div class="card-title">🔄 IC（Information Coefficient）</div>
+          <p class="card-desc">因子值與未來報酬的秩相關，&lt; 0.02 應降權或移除。</p>
+        </div>
+      </div>
+    </section>
+
+    <!-- 貫穿原則 -->
+    <section class="section">
+      <h2 class="section-title"><span class="section-title-emoji">💡</span> 貫穿全程的原則</h2>
+      <div class="card-grid">
+        <div class="card" style="border-left: 4px solid var(--red);">
+          <div class="card-title">1. 先否決，後挖掘</div>
+          <p class="card-desc">每個里程碑的驗收標準都設計成「能否正確否決」，而非「能否跑出好績效」。從第一天就把否決速度內建到開發節奏裡。</p>
+        </div>
+        <div class="card" style="border-left: 4px solid var(--yellow);">
+          <div class="card-title">2. 每週跑一次紅隊</div>
+          <p class="card-desc">把紅隊清單當成每週五的固定儀式，對本週新增的程式碼逐條攻擊。十分鐘的稽核，換掉的是三個月後才發現的未來函數。</p>
+        </div>
+        <div class="card" style="border-left: 4px solid var(--purple);">
+          <div class="card-title">3. 抵禦功能膨脹</div>
+          <p class="card-desc">判斷標準：這個功能會改變任何策略的通過/否決結論嗎？不會就排進 backlog，本里程碑不做。</p>
+        </div>
+        <div class="card" style="border-left: 4px solid var(--gold);">
+          <div class="card-title">4. 記錄你的 N</div>
+          <p class="card-desc">有效試驗次數 N 才是真正的敵人——從第一次實驗開始記錄，無法事後追溯重建。</p>
+        </div>
+      </div>
+    </section>
+
+    <!-- 實施路線建議 -->
+    <section class="section">
+      <h2 class="section-title"><span class="section-title-emoji">🛣️</span> 實施路線建議</h2>
+      <div class="alert-info">
+        務實的做法是分三期——
+        <strong>第一期只實作 F1、F6、F9 三個資料最易取得的因子</strong>，確認「大戶連續加碼」這個核心假設在台股有顯著 IC 後再擴充；
+        第二期加入 F3、F5、F8 與產業輪動；
+        最後才把 F10 這類事件型通道接上。
+        <br><br>
+        如果第一期的核心因子在樣本外就失效，<strong>整個架構再漂亮也不該上線</strong>——
+        這就是「可驗證」設計的意義：它允許策略被證偽，而不是只被相信。
+      </div>
+    </section>
+
+    <!-- 免責聲明 -->
+    <div class="alert-warning" style="margin-top: 24px;">
+      <strong>📌 免責聲明：</strong> 本頁 KPI 與淨值曲線均為<strong>示意性模擬</strong>，不反映實際策略績效。
+      請以真實回測框架（如 quant_platform/）執行後再參考。<br>
+      <em>內容由 AI 生成僅供參考，不構成任何投資建議。</em>
+    </div>
+  </div>
+
+  <footer class="footer">
+    <div>
+      🔺 籌碼共振選股系統 — Chip-Resonance Selection System<br>
+      <span style="font-size: 11px;">基於多因子選股模型 + Walk-Forward 驗證框架</span>
+    </div>
+  </footer>
+
+  <script src="data.js"></script>
+  <script src="app.js"></script>
+</body>
+</html>

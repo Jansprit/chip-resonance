@@ -1,0 +1,152 @@
+<!DOCTYPE html>
+<html lang="zh-TW">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>評分模擬器 — 籌碼共振選股系統</title>
+  <meta name="description" content="互動式評分模擬器，即時調整篩選條件、查看分層輸出與各因子分數。">
+  <script src="https://cdn.tailwindcss.com"></script>
+  <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.0/dist/chart.umd.min.js"></script>
+  <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+  <!-- 導覽列 -->
+  <nav class="navbar">
+    <div class="navbar-inner">
+      <a class="brand" href="index.html">
+        <span class="brand-logo">🔺</span>
+        <div>
+          <div class="brand-text">籌碼共振選股系統</div>
+          <div class="brand-tag">Chip-Resonance Selection System</div>
+        </div>
+      </a>
+      <div class="nav-links">
+        <a class="nav-link" href="index.html">首頁</a>
+        <a class="nav-link" href="factors.html">9 大因子</a>
+        <a class="nav-link active" href="scoring.html">評分模擬器</a>
+        <a class="nav-link" href="backtest.html">回測驗證</a>
+      </div>
+    </div>
+  </nav>
+
+  <div class="container">
+    <!-- Page Header -->
+    <header style="padding: 32px 0;">
+      <h1 style="font-size: 36px; font-weight: 800; margin: 0 0 12px;">
+        🧮 評分模擬器
+      </h1>
+      <p style="font-size: 16px; color: var(--text-secondary); margin: 0;">
+        即時調整篩選條件，查看分層輸出與各因子分數。資料為模擬，僅供方法論演示。
+      </p>
+    </header>
+
+    <!-- Tier overview (clickable filter) -->
+    <section class="section">
+      <h2 class="section-title"><span class="section-title-emoji">🎯</span> 點擊 Tier 卡切換檢視</h2>
+      <div id="tier-overview"></div>
+    </section>
+
+    <!-- Filter bar -->
+    <section class="section">
+      <div class="filter-bar">
+        <div class="filter-group">
+          <span class="filter-label">產業：</span>
+          <select class="filter-select" id="industry-filter">
+            <option value="ALL">全部產業</option>
+            <option value="SEMI">🔌 半導體</option>
+            <option value="FIN">🏦 金融保險</option>
+            <option value="PCB">🧩 PCB／載板</option>
+            <option value="BIO">💊 生技醫療</option>
+            <option value="SHIP">🚢 航運／物流</option>
+            <option value="AUTO">🚗 汽車／零件</option>
+            <option value="PLAS">🛢️ 塑膠／化工</option>
+            <option value="FOOD">🌾 食品／農林</option>
+            <option value="ELEC">⚙️ 電子零組件</option>
+          </select>
+        </div>
+        <div class="filter-group">
+          <label class="filter-label" style="display:flex; align-items:center; gap:6px;">
+            <input type="checkbox" id="include-filtered">
+            <span>顯示被過濾個股</span>
+          </label>
+        </div>
+        <div class="filter-group" style="margin-left:auto;">
+          <span class="filter-label">📊 <span id="result-count">計算中...</span></span>
+        </div>
+      </div>
+    </section>
+
+    <!-- Stock table -->
+    <section class="section">
+      <h2 class="section-title"><span class="section-title-emoji">📋</span> 個股評分明細</h2>
+      <p class="section-subtitle">所有分數為橫截面標準化後的 0~100 分；F9 為扣分項（−20 封頂）</p>
+      <div id="stock-table"></div>
+    </section>
+
+    <!-- 視覺化圖表 -->
+    <section class="section">
+      <h2 class="section-title"><span class="section-title-emoji">📈</span> 視覺化分析</h2>
+      <div class="card-grid" style="grid-template-columns: 1fr 1fr;">
+        <div class="chart-container">
+          <h4 style="margin-top:0; color: var(--text-secondary); font-size: 14px;">產業 × Tier 分布</h4>
+          <canvas id="industry-chart"></canvas>
+        </div>
+        <div class="chart-container">
+          <h4 style="margin-top:0; color: var(--text-secondary); font-size: 14px;">分數區間分佈</h4>
+          <canvas id="score-distribution"></canvas>
+        </div>
+        <div class="chart-container" style="grid-column: span 2;">
+          <h4 style="margin-top:0; color: var(--text-secondary); font-size: 14px;">因子權重分配</h4>
+          <canvas id="factor-weight-chart"></canvas>
+        </div>
+      </div>
+    </section>
+
+    <!-- 評分解讀 -->
+    <section class="section">
+      <h2 class="section-title"><span class="section-title-emoji">📖</span> 評分解讀指南</h2>
+      <div class="card-grid">
+        <div class="card" style="border-top: 3px solid var(--gold-bright);">
+          <div class="card-title">🏆 A 級（≥75 分）</div>
+          <p class="card-desc">多個核心因子共振，且無重大背離訊號。屬於核心候選池，建議進入買進評估流程。注意 A 級個股仍須等股價站上 20 日均線才進場。</p>
+        </div>
+        <div class="card" style="border-top: 3px solid var(--purple-light);">
+          <div class="card-title">👀 B 級（60~75 分）</div>
+          <p class="card-desc">多數因子正向，但缺少一兩個關鍵共振訊號。屬於觀察倉，等待因子強化（例如 F1 連續加碼確立）或股價確認。</p>
+        </div>
+        <div class="card" style="border-top: 3px solid var(--text-secondary);">
+          <div class="card-title">📊 C 級（45~60 分）</div>
+          <p class="card-desc">因子表現中性，可作為產業分散或避險候選，但非主力進攻標的。</p>
+        </div>
+        <div class="card" style="border-top: 3px solid var(--red);">
+          <div class="card-title">🚫 D 級（&lt;45 分 或 F9 觸發 ≥2）</div>
+          <p class="card-desc">多數因子負面或價籌背離嚴重。即使總分看似不低，雙重 F9 觸發會自動降級。</p>
+        </div>
+      </div>
+    </section>
+
+    <!-- 行動呼籲 -->
+    <section style="margin-top: 32px;">
+      <div class="alert-success">
+        <strong>🚀 進階探索：</strong> 想了解這套評分在歷史回測中的實際表現，請前往 <a href="backtest.html" style="color: var(--gold); text-decoration: underline;">回測驗證</a> 查看四大里程碑的 QA 閘門與績效指標。
+      </div>
+    </section>
+
+    <!-- 免責聲明 -->
+    <div class="alert-warning" style="margin-top: 24px;">
+      <strong>📌 免責聲明：</strong> 本評分為模擬生成結果，僅供方法論演示。所有資料來自示意性樣本，不可用於實際投資決策。<br>
+      <em>內容由 AI 生成僅供參考，不構成任何投資建議。</em>
+    </div>
+  </div>
+
+  <footer class="footer">
+    <div>
+      🔺 籌碼共振選股系統 — Chip-Resonance Selection System<br>
+      <span style="font-size: 11px;">基於多因子選股模型 + Walk-Forward 驗證框架</span>
+    </div>
+  </footer>
+
+  <script src="data.js"></script>
+  <script src="app.js"></script>
+</body>
+</html>

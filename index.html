@@ -1,0 +1,343 @@
+<!DOCTYPE html>
+<html lang="zh-TW">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>籌碼共振選股系統 — Chip-Resonance Selection System</title>
+  <meta name="description" content="以籌碼面為主軸、基本面為濾網、產業面為權重、背離訊號為懲罰的多因子台股選股模型，可量化、可回測驗證。">
+  <script src="https://cdn.tailwindcss.com"></script>
+  <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.0/dist/chart.umd.min.js"></script>
+  <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+  <!-- 導覽列 -->
+  <nav class="navbar">
+    <div class="navbar-inner">
+      <a class="brand" href="index.html">
+        <span class="brand-logo">🔺</span>
+        <div>
+          <div class="brand-text">籌碼共振選股系統</div>
+          <div class="brand-tag">Chip-Resonance Selection System</div>
+        </div>
+      </a>
+      <div class="nav-links">
+        <a class="nav-link active" href="index.html">首頁</a>
+        <a class="nav-link" href="factors.html">9 大因子</a>
+        <a class="nav-link" href="scoring.html">評分模擬器</a>
+        <a class="nav-link" href="backtest.html">回測驗證</a>
+      </div>
+    </div>
+  </nav>
+
+  <!-- Hero -->
+  <header class="hero">
+    <div class="hero-pyramid">🔺</div>
+    <h1 class="hero-title">籌碼共振選股系統</h1>
+    <p class="hero-subtitle">
+      「籌碼面為主軸、基本面為濾網、產業面為權重、背離訊號為懲罰」<br>
+      多因子台股選股模型，全程無需人工判斷，可量化、可回測驗證。
+    </p>
+    <div class="hero-tags">
+      <span class="hero-tag">📊 9 大因子</span>
+      <span class="hero-tag">🛡️ 6 條硬性過濾</span>
+      <span class="hero-tag">⚡ T+3 公布時點</span>
+      <span class="hero-tag">🔄 Walk-Forward 驗證</span>
+      <span class="hero-tag">📈 3 層分級輸出</span>
+    </div>
+  </header>
+
+  <div class="container">
+    <!-- 三大核心原則 -->
+    <section class="section">
+      <h2 class="section-title"><span class="section-title-emoji">🧬</span> 三大核心原則</h2>
+      <p class="section-subtitle">從神秘金字塔大股東週資料出發，融合基本面、技術面與市場情緒指標</p>
+      <div class="card-grid">
+        <div class="card" style="border-top: 3px solid var(--gold);">
+          <div class="card-title">🪙 1. 籌碼共振</div>
+          <p class="card-desc">當大戶連續加碼、董監同步進場、散戶退場三者同向時，視為「籌碼集中」訊號。大戶用真金白銀投票，是最難造假也最難操縱的領先指標。</p>
+        </div>
+        <div class="card" style="border-top: 3px solid var(--red);">
+          <div class="card-title">⚡ 2. 背離懲罰</div>
+          <p class="card-desc">當股價創新高但大戶退場、或當沖比過熱時，主動扣分。F9 因子對「價籌背離」最高扣 −20 分，避免追高陷阱。</p>
+        </div>
+        <div class="card" style="border-top: 3px solid var(--purple);">
+          <div class="card-title">🔬 3. 可驗證</div>
+          <p class="card-desc">所有資料標記 T+3 公布時點，Walk-Forward 滾動驗證，因子 IC（Information Coefficient）長期低於 0.02 即降權或移除，具備自我淘汰機制。</p>
+        </div>
+      </div>
+    </section>
+
+    <!-- 系統架構圖 -->
+    <section class="section">
+      <h2 class="section-title"><span class="section-title-emoji">🏗️</span> 系統總體架構</h2>
+      <p class="section-subtitle">六層管線，從資料擷取到回測反饋，形成自我校正的研究閉環</p>
+
+      <div class="arch-diagram">
+        <div class="flow-row">
+          <div class="flow-node feed-in">
+            <div class="flow-node-icon">📥</div>
+            <div class="flow-node-title">資料擷取層</div>
+            <div class="flow-node-desc">金字塔 / 集保 / Goodinfo / FinMind</div>
+          </div>
+          <div class="arch-arrow">→</div>
+          <div class="flow-node filter">
+            <div class="flow-node-icon">🛡️</div>
+            <div class="flow-node-title">硬性過濾層</div>
+            <div class="flow-node-desc">排除地雷股</div>
+          </div>
+          <div class="arch-arrow">→</div>
+          <div class="flow-node calc">
+            <div class="flow-node-icon">⚙️</div>
+            <div class="flow-node-title">因子計算層</div>
+            <div class="flow-node-desc">9 大因子標準化</div>
+          </div>
+          <div class="arch-arrow">→</div>
+          <div class="flow-node score">
+            <div class="flow-node-icon">🎯</div>
+            <div class="flow-node-title">評分合成層</div>
+            <div class="flow-node-desc">加權總分 0~100</div>
+          </div>
+          <div class="arch-arrow">→</div>
+          <div class="flow-node output">
+            <div class="flow-node-icon">📊</div>
+            <div class="flow-node-title">分層輸出層</div>
+            <div class="flow-node-desc">A / B / 觀察清單</div>
+          </div>
+          <div class="arch-arrow">→</div>
+          <div class="flow-node calc" style="border-color: var(--purple-light);">
+            <div class="flow-node-icon">🔄</div>
+            <div class="flow-node-title">回測驗證層</div>
+            <div class="flow-node-desc">Walk-Forward + IC</div>
+          </div>
+        </div>
+        <div style="text-align:center; margin-top:16px;">
+          <div class="flow-node feedback" style="display:inline-block; min-width: 200px;">
+            <div class="flow-node-icon">↩️</div>
+            <div class="flow-node-title">因子失效回饋</div>
+            <div class="flow-node-desc">IC &lt; 0.02 → 降權或移除</div>
+          </div>
+        </div>
+      </div>
+
+      <div class="alert-info">
+        <strong>💡 關鍵時序假設：</strong> 集保股權分散表是「每週五收盤的資料、次週才可得」，因此所有因子在回測中必須標記為 <strong>T+3 交易日後才可使用</strong>。這是整個系統能否「可驗證」的生命線——凡是用到公布日之前的資料，回測結果都是假的。
+      </div>
+    </section>
+
+    <!-- 數據來源 -->
+    <section class="section">
+      <h2 class="section-title"><span class="section-title-emoji">📚</span> 資料來源與更新頻率</h2>
+      <p class="section-subtitle">全程公開資料源，無人工介入</p>
+
+      <div style="overflow-x:auto;">
+        <table class="stock-table">
+          <thead>
+            <tr>
+              <th>資料項目</th>
+              <th>來源</th>
+              <th>頻率</th>
+              <th>對應因子</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td>大股東持股分級（400/600/800/1000 張以上）</td>
+              <td>神秘金字塔 + 集保中心</td>
+              <td><span class="industry-badge">週</span></td>
+              <td>F1 · F4 · F6 · F8 · F9 · F10</td>
+            </tr>
+            <tr>
+              <td>股東總人數、平均持有張數</td>
+              <td>集保分散表</td>
+              <td><span class="industry-badge">週</span></td>
+              <td>F6</td>
+            </tr>
+            <tr>
+              <td>董監持股比例、質押率</td>
+              <td>Goodinfo / 公開資訊觀測站</td>
+              <td><span class="industry-badge">月</span></td>
+              <td>F3</td>
+            </tr>
+            <tr>
+              <td>連續配息年數、殖利率歷史</td>
+              <td>金字塔股利模組 + Goodinfo</td>
+              <td><span class="industry-badge">季/年</span></td>
+              <td>F5</td>
+            </tr>
+            <tr>
+              <td>股價、成交量、均線、回撤</td>
+              <td>TWSE OpenAPI / FinMind</td>
+              <td><span class="industry-badge">日</span></td>
+              <td>F8 · F9 · F10</td>
+            </tr>
+            <tr>
+              <td>融資券、當沖比率</td>
+              <td>證交所 / Goodinfo</td>
+              <td><span class="industry-badge">日</span></td>
+              <td>F9</td>
+            </tr>
+            <tr>
+              <td>產業分類與類股行情</td>
+              <td>金字塔 CID 參數</td>
+              <td><span class="industry-badge">週</span></td>
+              <td>F2</td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+    </section>
+
+    <!-- 評分公式 -->
+    <section class="section">
+      <h2 class="section-title"><span class="section-title-emoji">🧮</span> 評分合成公式</h2>
+      <p class="section-subtitle">橫截面標準化（z-score）+ 加權合成，最終對映到 0~100 分</p>
+
+      <div class="code-block">
+<span class="comment">// 每檔股票每週計算一次總分</span>
+<span class="keyword">Score</span> = Σ <span class="keyword">w<sub>i</sub></span> · <span class="keyword">z<sub>i</sub></span>  −  Penalty<sub>F9</sub>
+
+<span class="comment">// 其中</span>
+<span class="keyword">z<sub>i</sub></span> = 各因子經過橫截面標準化（z-score）後的數值，確保不同量綱可比較
+<span class="keyword">w<sub>i</sub></span> = { F1:20, F2:10, F3:15, F4:10, F5:10, F6:15, F8:10, F10:5 }
+Penalty<sub>F9</sub> = max(0, 20)  <span class="comment">// 價籌背離懲罰封頂 −20</span>
+
+<span class="comment">// 輸出分層</span>
+<span class="keyword">A 級</span> = Score ≥ 75            → <span class="string">核心候選，進入買進評估</span>
+<span class="keyword">B 級</span> = 60 ≤ Score &lt; 75       → <span class="string">觀察倉，等待因子強化或股價確認</span>
+<span class="keyword">C 級</span> = 45 ≤ Score &lt; 60       → <span class="string">中性池</span>
+<span class="keyword">D 級</span> = Score &lt; 45            → <span class="string">剔除候選</span>
+      </div>
+
+      <div class="alert-warning" style="margin-top:24px;">
+        <strong>⚠️ F9 雙重觸發降級規則：</strong> 當 F9 觸發條件 ≥2 項（價創 60 日新高但大戶退場 + 當沖比 &gt;40% + 融資使用率 &gt;70% 中任兩項），即使總分落在 A 或 B 級，也必須自動降一級。
+      </div>
+    </section>
+
+    <!-- 本週評分結果 -->
+    <section class="section">
+      <h2 class="section-title"><span class="section-title-emoji">📊</span> 本週模擬評分結果</h2>
+      <p class="section-subtitle">47 檔示範個股經硬性過濾 + 9 因子評分後的分層輸出（資料為模擬，僅供方法論演示）</p>
+
+      <div class="stat-grid">
+        <div class="stat-card">
+          <div class="stat-value" id="stat-total">--</div>
+          <div class="stat-label">總股票池</div>
+        </div>
+        <div class="stat-card">
+          <div class="stat-value" id="stat-filtered">--</div>
+          <div class="stat-label">被硬性過濾</div>
+        </div>
+        <div class="stat-card">
+          <div class="stat-value" id="stat-a">--</div>
+          <div class="stat-label">A 級個股</div>
+        </div>
+        <div class="stat-card">
+          <div class="stat-value" id="stat-b">--</div>
+          <div class="stat-label">B 級個股</div>
+        </div>
+      </div>
+
+      <div id="tier-overview-home" style="margin:24px 0;"></div>
+
+      <h3 style="margin-top:32px;">🏆 A 級核心候選 Top 5</h3>
+      <div id="top-stocks"></div>
+
+      <h3 style="margin-top:32px;">🚫 被硬性過濾之個股</h3>
+      <p style="color:var(--text-muted); font-size:13px;">觸發任一硬性條件即先排除，不進入評分</p>
+      <div id="filtered-stocks"></div>
+    </section>
+
+    <!-- 視覺化圖表 -->
+    <section class="section">
+      <h2 class="section-title"><span class="section-title-emoji">📈</span> 視覺化分析</h2>
+      <p class="section-subtitle">從產業分布到分數分佈，多角度檢視評分結果</p>
+
+      <div class="card-grid" style="grid-template-columns: 1fr 1fr;">
+        <div class="chart-container">
+          <h4 style="margin-top:0; color: var(--text-secondary); font-size: 14px;">產業 × Tier 分布</h4>
+          <canvas id="home-industry-chart"></canvas>
+        </div>
+        <div class="chart-container">
+          <h4 style="margin-top:0; color: var(--text-secondary); font-size: 14px;">分數區間分佈</h4>
+          <canvas id="home-score-distribution"></canvas>
+        </div>
+      </div>
+    </section>
+
+    <!-- 進出場規則 -->
+    <section class="section">
+      <h2 class="section-title"><span class="section-title-emoji">🎯</span> 進出場規則</h2>
+      <p class="section-subtitle">完全程式化，無人工判斷</p>
+      <div class="card-grid">
+        <div class="card" style="border-left: 4px solid var(--green);">
+          <div class="card-title">✅ 進場條件</div>
+          <p class="card-desc">A 級 + 股價站上 20 日均線，分兩批建倉。單檔部位上限 15%，同一 CID 產業合計上限 30%。</p>
+        </div>
+        <div class="card" style="border-left: 4px solid var(--yellow);">
+          <div class="card-title">⏳ 觀察名單</div>
+          <p class="card-desc">B 級個股進入觀察倉，等待因子強化或股價確認，不急於進場。</p>
+        </div>
+        <div class="card" style="border-left: 4px solid var(--red);">
+          <div class="card-title">🛑 出場條件</div>
+          <p class="card-desc">持有期間若 F1 連續加碼中斷且 F9 懲罰觸發，或總分跌破 50，強制出場。</p>
+        </div>
+        <div class="card" style="border-left: 4px solid var(--purple);">
+          <div class="card-title">📉 停損紀律</div>
+          <p class="card-desc">單檔停損設進場價 −12% 或 ATR(14) 的 2.5 倍，取較近者。</p>
+        </div>
+      </div>
+    </section>
+
+    <!-- 快速入口 -->
+    <section class="section">
+      <h2 class="section-title"><span class="section-title-emoji">🚀</span> 開始探索</h2>
+      <div class="card-grid">
+        <a href="factors.html" class="card" style="text-decoration:none; color:inherit; transition: transform 0.2s;">
+          <div class="card-title">📐 9 大因子詳解 <span style="float:right; color:var(--gold);">→</span></div>
+          <p class="card-desc">查看每個因子的量化定義、資料源、頻率與權重分配。</p>
+        </a>
+        <a href="scoring.html" class="card" style="text-decoration:none; color:inherit;">
+          <div class="card-title">🧮 互動評分模擬器 <span style="float:right; color:var(--gold);">→</span></div>
+          <p class="card-desc">即時調整篩選條件，查看分層輸出與各因子分數。</p>
+        </a>
+        <a href="backtest.html" class="card" style="text-decoration:none; color:inherit;">
+          <div class="card-title">🔬 回測驗證框架 <span style="float:right; color:var(--gold);">→</span></div>
+          <p class="card-desc">了解 Walk-Forward 驗證、IC 分析與四大里程碑 QA 閘門。</p>
+        </a>
+      </div>
+    </section>
+
+    <!-- 免責聲明 -->
+    <div class="alert-warning" style="margin-top:48px;">
+      <strong>📌 免責聲明：</strong> 本系統為研究示範工具，所有資料均為<strong>模擬生成</strong>，僅供方法論展示與教學用途。實際投入資金前，請務必以真實資料源（神秘金字塔、集保中心、FinMind、TEJ 等）連接，並完成樣本外驗證。<br><br>
+      <em>內容由 AI 生成僅供參考，不構成任何投資建議。</em>
+    </div>
+  </div>
+
+  <footer class="footer">
+    <div>
+      🔺 籌碼共振選股系統 — Chip-Resonance Selection System<br>
+      <span style="font-size: 11px;">基於多因子選股模型 + Walk-Forward 驗證框架</span>
+    </div>
+  </footer>
+
+  <!-- 注入 stat 數字 -->
+  <script>
+    // 在 initIndexPage 之後再補 stat 數字
+    document.addEventListener('DOMContentLoaded', () => {
+      setTimeout(() => {
+        const results = computeScores(window.STOCK_UNIVERSE);
+        document.getElementById('stat-total').textContent = window.STOCK_UNIVERSE.length;
+        document.getElementById('stat-filtered').textContent = results.rejected.length;
+        const aCount = results.survivors.filter(s => s.tier === 'A').length;
+        const bCount = results.survivors.filter(s => s.tier === 'B').length;
+        document.getElementById('stat-a').textContent = aCount;
+        document.getElementById('stat-b').textContent = bCount;
+      }, 100);
+    });
+  </script>
+
+  <script src="data.js"></script>
+  <script src="app.js"></script>
+</body>
+</html>
