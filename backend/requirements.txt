@@ -1,0 +1,11 @@
+# Backend dependencies for the chip-resonance scraper
+# Python 3.10+
+requests>=2.31.0          # HTTP client
+pydantic>=2.5.0           # data validation
+jsonschema>=4.20.0        # JSON Schema validation for CI
+python-dateutil>=2.8.2    # date math
+tenacity>=8.2.3           # retry decorators (optional helper)
+
+# Dev / test
+pytest>=7.4.0
+pytest-asyncio>=0.23.0

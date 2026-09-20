@@ -1,0 +1,24 @@
+{
+  "last_update_taipei": "2026-09-21T00:30:41.849111+08:00",
+  "snapshot_date": "2026-09-21",
+  "previous_snapshot_date": "2026-09-21",
+  "data_freshness_hours": 0,
+  "sources": {
+    "twse": {
+      "status": "ok",
+      "stocks_count": 1082,
+      "indices_count": 135,
+      "min_interval_sec": 3,
+      "daily_quota": 500
+    },
+    "build_universe": {
+      "status": "ok",
+      "log": [
+        "  Wrote E:\\MiniMax_Desktop\\Work01\\chip_resonance\\data\\latest\\universe.json (1082 stocks)",
+        "",
+        "NOTE: 3 demo stocks not found in TWSE: ['5347', '4743', '4128']"
+      ]
+    }
+  },
+  "notes": "Real TWSE prices + indices. Demo subset merged with real prices for 40 of 43 stocks; 3 (5347, 4743, 4128) are TPEx-only or delisted. Chip-related factors remain illustrative until P2/P3 (集保/MOPS)."
+}

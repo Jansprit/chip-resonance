@@ -14,9 +14,9 @@ function highlightActiveNav() {
   });
 }
 
-// 共用：取得個股完整計算結果
+// 共用：取得個股完整計算結果（呼叫前請確認 window.STOCK_UNIVERSE 已就緒）
 function getAllComputed() {
-  return computeScores(window.STOCK_UNIVERSE);
+  return computeScores(window.STOCK_UNIVERSE || []);
 }
 
 // 共用：依 Tier 分組
@@ -530,18 +530,21 @@ function renderFactorRadar(canvasId, stock) {
 }
 
 // =============================================================
-// 初始化：scoring.html 互動邏輯
+// 初始化：scoring.html 互動邏輯（async，等資料載入完成才跑）
 // =============================================================
-function initScoringPage() {
+async function initScoringPage() {
   if (!document.getElementById('tier-overview')) return;
+
+  await window.initializeData();
+  showMetaBanner();
 
   // 預設選中 A 級
   const initialState = { tier: 'A', industry: 'ALL', minScore: 0, maxScore: 100, includeFiltered: false };
 
   function update() {
     renderStockTable('#stock-table', initialState);
-    document.getElementById('result-count').textContent =
-      `共 ${document.querySelectorAll('#stock-table tbody tr').length} 筆`;
+    const count = document.querySelectorAll('#stock-table tbody tr').length;
+    document.getElementById('result-count').textContent = `共 ${count} 筆`;
   }
 
   renderTierOverview('#tier-overview', tier => {
@@ -553,7 +556,6 @@ function initScoringPage() {
   renderScoreDistribution('score-distribution');
   renderFactorWeightChart('factor-weight-chart');
 
-  // 綁定篩選器
   document.getElementById('industry-filter').addEventListener('change', e => {
     initialState.industry = e.target.value;
     update();
@@ -563,21 +565,23 @@ function initScoringPage() {
     update();
   });
 
-  // 預設 active tier = A
   setTimeout(() => {
     const aCard = document.querySelector('.tier-card[data-tier="A"]');
     if (aCard) aCard.classList.add('active');
   }, 50);
 
   update();
-  toast('評分模擬器已載入', 'success');
+  toast('評分模擬器已載入（真實 TWSE 資料）', 'success');
 }
 
 // =============================================================
-// 初始化：index.html
+// 初始化：index.html（async）
 // =============================================================
-function initIndexPage() {
+async function initIndexPage() {
   if (!document.getElementById('tier-overview-home')) return;
+
+  await window.initializeData();
+  showMetaBanner();
 
   renderTierOverview('#tier-overview-home');
   renderIndustryChart('home-industry-chart');
@@ -619,6 +623,8 @@ function initIndexPage() {
         </table>
       </div>
     `;
+  } else {
+    target.innerHTML = `<div style="text-align:center; color:var(--text-muted); padding:24px;">目前無 A 級個股</div>`;
   }
 
   // 顯示被過濾掉的個股
@@ -654,6 +660,60 @@ function initIndexPage() {
       `;
     }
   }
+
+  // 補上 stat 數字（hero 區塊）
+  const totalEl = document.getElementById('stat-total');
+  const filteredEl = document.getElementById('stat-filtered');
+  const aEl = document.getElementById('stat-a');
+  const bEl = document.getElementById('stat-b');
+  if (totalEl) totalEl.textContent = (window.STOCK_UNIVERSE || []).length;
+  if (filteredEl) filteredEl.textContent = results.rejected.length;
+  if (aEl) aEl.textContent = results.survivors.filter(s => s.tier === 'A').length;
+  if (bEl) bEl.textContent = results.survivors.filter(s => s.tier === 'B').length;
+}
+
+// =============================================================
+// 共用：顯示「最後更新時間」橫幅
+// =============================================================
+function showMetaBanner() {
+  const meta = window.getDataMeta ? window.getDataMeta() : null;
+  const err = window.getDataLoadError ? window.getDataLoadError() : null;
+
+  // 找現有 banner 或建立
+  let banner = document.getElementById('data-meta-banner');
+  if (!banner) {
+    banner = document.createElement('div');
+    banner.id = 'data-meta-banner';
+    banner.style.cssText = `
+      position: fixed; bottom: 16px; left: 16px; z-index: 50;
+      padding: 8px 14px; border-radius: 8px; font-size: 12px;
+      background: var(--bg-card); border: 1px solid var(--border);
+      color: var(--text-secondary); box-shadow: 0 4px 12px rgba(0,0,0,0.3);
+    `;
+    document.body.appendChild(banner);
+  }
+
+  if (err || !meta) {
+    banner.innerHTML = `
+      <strong style="color:var(--red);">⚠ 資料載入失敗</strong><br>
+      <span style="font-size:11px;">${err || 'fetch /data/latest/_meta.json 失敗'}</span>
+    `;
+    return;
+  }
+
+  const upd = meta.last_update_taipei || '—';
+  const stockCount = (meta.sources && meta.sources.twse && meta.sources.twse.stocks_count) || 0;
+  const freshnessH = meta.data_freshness_hours || 0;
+  const stale = freshnessH > 168; // 超過 7 天
+
+  banner.innerHTML = `
+    <strong>📊 真實資料來源：TWSE OpenAPI</strong><br>
+    <span style="font-size:11px;">
+      最後更新：${upd}<br>
+      上市個股：${stockCount} 檔
+      ${stale ? '<span style="color:var(--yellow);"> ⚠ 資料已過期</span>' : ''}
+    </span>
+  `;
 }
 
 // =============================================================

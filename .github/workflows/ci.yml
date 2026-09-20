@@ -21,13 +21,17 @@ jobs:
           missing=0
           for f in LICENSE README.md \
                    index.html factors.html scoring.html backtest.html \
-                   app.js data.js styles.css .gitignore; do
+                   app.js data.js styles.css .gitignore \
+                   backend/scrapers/base.py backend/scrapers/twse.py \
+                   backend/pipeline.py backend/schema.py backend/requirements.txt \
+                   backend/tests/test_rate_limiter.py \
+                   .github/workflows/scrape.yml; do
             if [ ! -s "$f" ]; then
               echo "::error::Missing or empty file: $f"
               missing=1
             else
               size=$(stat -c%s "$f")
-              printf "  %-20s %8d bytes\n" "$f" "$size"
+              printf "  %-40s %8d bytes\n" "$f" "$size"
             fi
           done
           if [ $missing -ne 0 ]; then
@@ -35,6 +39,15 @@ jobs:
             exit 1
           fi
           echo "All required files present."
+
+      # 1b) Data JSON shape validation（如果有資料檔）
+      - name: Validate data/latest/*.json
+        if: hashFiles('data/latest/_meta.json') != ''
+        run: |
+          python -m pip install --quiet pydantic
+          python -m backend.schema data/latest/prices.json
+          python -m backend.schema data/latest/market_index.json
+          python -m backend.schema data/latest/_meta.json
 
       # 2) HTML well-formedness 檢查 — 用 Python html.parser 確認 4 個 HTML 檔案至少語法正確
       - name: HTML well-formedness check
@@ -78,6 +91,13 @@ jobs:
           for f in app.js data.js; do
             node --check "$f" && echo "  $f: syntax OK"
           done
+
+      # 3b) Python rate limiter 單元測試
+      - name: Backend unit tests
+        run: |
+          echo "=== Backend unit tests ==="
+          pip install --quiet pydantic
+          python backend/tests/test_rate_limiter.py
 
       # 4) 連結檢查 — 用 lychee 確認 README 與 docs 內部連結有效
       - name: Link check (markdown & HTML)

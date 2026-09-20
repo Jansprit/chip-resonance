@@ -1,0 +1,1 @@
+"""tests package — pytest-based unit tests for the backend."""
