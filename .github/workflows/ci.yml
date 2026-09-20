@@ -83,7 +83,7 @@ jobs:
       - name: Link check (markdown & HTML)
         uses: lycheeverse/lychee-action@v2
         with:
-          args: --no-progress --max-concurrency=4 --accept 200,206,403,429 --timeout 10s --exclude-loopback README.md
+          args: --no-progress --max-concurrency=4 --accept 200,206,403,429 --timeout 10 --exclude-loopback README.md
           fail: true
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
