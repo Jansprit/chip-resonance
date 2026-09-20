@@ -82,3 +82,20 @@ Score = Σ wi·zi - Penalty_F9
 *本系統為研究示範工具，所有資料均為模擬生成，僅供方法論展示與教學用途。實際投入資金前，請務必以真實資料源（神秘金字塔、集保中心、FinMind、TEJ 等）連接，並完成樣本外驗證。*
 
 *內容由 AI 生成僅供參考。*
+
+## 授權
+
+本專案以 [MIT License](./LICENSE) 授權釋出。
+
+## 貢獻
+
+歡迎透過 [Issue](../../issues) 回報 Bug 或提出新功能建議。提交前請使用對應的 Issue 模板（🐛 Bug Report 或 ✨ Feature Request）。
+
+開發流程：
+1. Fork 此專案
+2. 建立 feature branch（`git checkout -b feature/amazing-feature`）
+3. 提交修改（`git commit -m 'Add some amazing feature'`）
+4. Push 到分支（`git push origin feature/amazing-feature`）
+5. 開啟 Pull Request
+
+CI 將自動檢查 HTML well-formedness、JavaScript 語法與檔案結構完整性。
