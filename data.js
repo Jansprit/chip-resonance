@@ -128,12 +128,12 @@ async function fetchJSON(url) {
 }
 
 async function loadRealData() {
-  // 並行抓 _meta + demo_subset，timeout 10s
+  // 並行抓 meta + demo_subset，timeout 10s
   const controller = new AbortController();
   const timeout = setTimeout(() => controller.abort(), 10000);
   try {
     const [meta, demo] = await Promise.all([
-      fetchJSON('data/latest/_meta.json'),
+      fetchJSON('data/latest/meta.json'),
       fetchJSON('data/latest/demo_subset.json'),
     ]);
     DATA_META = meta;

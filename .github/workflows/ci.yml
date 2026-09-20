@@ -42,7 +42,7 @@ jobs:
 
       # 1b) Data JSON shape validation（如果有資料檔）
       - name: Validate data/latest/*.json
-        if: hashFiles('data/latest/_meta.json') != ''
+        if: hashFiles('data/latest/meta.json') != ''
         run: |
           python -m pip install --quiet pydantic
           python -m backend.schema data/latest/prices.json

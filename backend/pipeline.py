@@ -4,7 +4,7 @@ pipeline.py — 主流程 orchestrator
 執行順序：
 1. TWSE 抓取（價格 + 指數）
 2. build_universe.py：合併 demo_subset.json 與全市場 universe.json
-3. 寫 _meta.json（包含各源狀態、節流配額）
+3. 寫 meta.json（包含各源狀態、節流配額）
 
 回傳 0 = 全部成功，1 = 部分失敗，2 = 全部失敗（CI 會顯示但不會擋網站）
 """
@@ -29,13 +29,13 @@ def _taipei_now() -> datetime:
 
 
 def update_meta(out_dir: Path, sources_status: dict, notes: str = "") -> None:
-    """更新 data/latest/_meta.json。"""
+    """更新 data/latest/meta.json。"""
     now = _taipei_now()
     today = now.date().isoformat()
 
     # 計算資料陳舊時數（從 snapshot_date 到現在）
     try:
-        last_run_meta = json.loads((out_dir / "_meta.json").read_text(encoding="utf-8"))
+        last_run_meta = json.loads((out_dir / "meta.json").read_text(encoding="utf-8"))
         last_snapshot = last_run_meta.get("snapshot_date", today)
     except Exception:
         last_snapshot = today
@@ -57,7 +57,7 @@ def update_meta(out_dir: Path, sources_status: dict, notes: str = "") -> None:
         "sources": sources_status,
         "notes": notes,
     }
-    write_json(out_dir / "_meta.json", meta)
+    write_json(out_dir / "meta.json", meta)
 
 
 def run_twse(out_dir: Path) -> dict:

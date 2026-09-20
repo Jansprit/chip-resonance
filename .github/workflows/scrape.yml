@@ -62,7 +62,7 @@ jobs:
         run: |
           python -m backend.schema data/latest/prices.json
           python -m backend.schema data/latest/market_index.json
-          python -m backend.schema data/latest/_meta.json
+          python -m backend.schema data/latest/meta.json
 
       - name: Commit & push (only if changed)
         run: |
@@ -82,8 +82,8 @@ jobs:
           echo "### Pipeline Summary" >> $GITHUB_STEP_SUMMARY
           echo "" >> $GITHUB_STEP_SUMMARY
           echo "- Run time: $(date)" >> $GITHUB_STEP_SUMMARY
-          if [ -f data/latest/_meta.json ]; then
-            echo "- Last update (Taipei): $(jq -r '.last_update_taipei' data/latest/_meta.json)" >> $GITHUB_STEP_SUMMARY
-            echo "- Stocks: $(jq -r '.sources.twse.stocks_count' data/latest/_meta.json)" >> $GITHUB_STEP_SUMMARY
-            echo "- Indices: $(jq -r '.sources.twse.indices_count' data/latest/_meta.json)" >> $GITHUB_STEP_SUMMARY
+          if [ -f data/latest/meta.json ]; then
+            echo "- Last update (Taipei): $(jq -r '.last_update_taipei' data/latest/meta.json)" >> $GITHUB_STEP_SUMMARY
+            echo "- Stocks: $(jq -r '.sources.twse.stocks_count' data/latest/meta.json)" >> $GITHUB_STEP_SUMMARY
+            echo "- Indices: $(jq -r '.sources.twse.indices_count' data/latest/meta.json)" >> $GITHUB_STEP_SUMMARY
           fi
