@@ -89,7 +89,7 @@ Score = Σ wi·zi - Penalty_F9
 
 ## 貢獻
 
-歡迎透過 [Issue](../../issues) 回報 Bug 或提出新功能建議。提交前請使用對應的 Issue 模板（🐛 Bug Report 或 ✨ Feature Request）。
+歡迎透過 [Issue](https://github.com/Jansprit/chip-resonance/issues) 回報 Bug 或提出新功能建議。提交前請使用對應的 Issue 模板（🐛 Bug Report 或 ✨ Feature Request）。
 
 開發流程：
 1. Fork 此專案
