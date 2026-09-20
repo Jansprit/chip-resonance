@@ -42,9 +42,11 @@ def test_no_call_below_min_interval():
 
 def test_constructor_rejects_too_low_interval():
     """min_interval < 0.5 應拋 ValueError（保護站點）。"""
-    import pytest
-    with pytest.raises(ValueError):
+    try:
         RateLimiter(min_interval=0.1)
+    except ValueError:
+        return  # 預期拋出
+    raise AssertionError("expected ValueError for min_interval < 0.5")
 
 
 def test_thread_safe_under_concurrent_calls():
