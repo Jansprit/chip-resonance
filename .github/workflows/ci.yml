@@ -47,7 +47,7 @@ jobs:
           python -m pip install --quiet pydantic
           python -m backend.schema data/latest/prices.json
           python -m backend.schema data/latest/market_index.json
-          python -m backend.schema data/latest/_meta.json
+          python -m backend.schema data/latest/meta.json
 
       # 2) HTML well-formedness 檢查 — 用 Python html.parser 確認 4 個 HTML 檔案至少語法正確
       - name: HTML well-formedness check

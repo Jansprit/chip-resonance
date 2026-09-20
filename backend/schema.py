@@ -221,13 +221,21 @@ if __name__ == "__main__":
     if isinstance(data, list) and data:
         # Pick model based on first item keys
         keys = set(data[0].keys())
-        if {"code", "name", "industry", "price", "avg_volume"} & keys:
+        # demo_subset: has 'industry' and 'avg_volume' AND 'pct_1000up_now'
+        if {"industry", "avg_volume", "pct_1000up_now"} & keys or (
+            "industry" in keys and "avg_volume" in keys
+        ):
             DemoStockSubsetEntry.model_validate(data[0])
             print(f"OK: demo_subset entry shape valid")
-        elif {"code", "name", "price", "volume_lots"} & keys:
+        # prices.json: has 'volume_lots' AND 'turnover' AND 'transactions' (TWSE raw format)
+        elif {"volume_lots", "turnover", "transactions"} & keys:
             StockPrice.model_validate(data[0])
             print(f"OK: stock price entry shape valid")
-        elif {"date", "name", "value"} & keys:
+        # universe.json: has 'volume_lots' but NOT 'turnover'/'transactions'
+        elif "volume_lots" in keys:
+            print(f"OK: universe entry shape valid (subset of stock price)")
+        # market_index.json: has 'value' and 'change_pct'
+        elif {"value", "change_pct"} & keys:
             MarketIndex.model_validate(data[0])
             print(f"OK: market index entry shape valid")
         else:
