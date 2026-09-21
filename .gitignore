@@ -32,13 +32,15 @@ venv/
 
 # Backend secrets — session cookies, local-only data
 backend/.env
-backend/.env.*
+backend/.env.local
+backend/.env.production
 backend/.sessions/
 backend/.sessions/**
 backend/data/local/      # 私有完整資料（僅本機）
 backend/data/local/**
 data/local/             # 私有資料快照
 data/local/**
+# Note: backend/.env.example is NOT ignored (it should be committed as template)
 
 # Build outputs (in case bundler is added later)
 dist/
