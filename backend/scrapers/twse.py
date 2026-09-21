@@ -162,20 +162,23 @@ def fetch_market_index(client: HttpClient | None = None) -> list[dict[str, Any]]
 
 
 def save_latest(
-    output_dir: Path,
+    data_dir: Path,
     prices: list[dict[str, Any]],
     market_index: list[dict[str, Any]],
     *,
-    snapshot_date: str,
+    snapshot_date: str = "",
 ) -> dict[str, str]:
     """
-    把抓到的資料寫到 output_dir/latest/ 與 output_dir/YYYY-MM-DD/。
+    把抓到的資料寫到 data_dir/latest/ 與 data_dir/<YYYY-MM-DD>/。
+    data_dir 應為 repo/data/（pipeline.py 傳入 repo/data）。
     回傳寫入的檔案路徑。
     """
+    from .base import taipei_today
     written = {}
+    snapshot_date = snapshot_date or taipei_today()
 
-    latest_dir = output_dir / "latest"
-    snapshot_dir = output_dir / snapshot_date
+    latest_dir = data_dir / "latest"
+    snapshot_dir = data_dir / snapshot_date
     latest_dir.mkdir(parents=True, exist_ok=True)
     snapshot_dir.mkdir(parents=True, exist_ok=True)
 

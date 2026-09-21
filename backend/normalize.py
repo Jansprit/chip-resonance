@@ -351,11 +351,12 @@ def merge_into(
 # 簡化版：依股號首碼歸到常見產業
 # 這只是 fallback；實際應該從 Goodinfo / TWSE 抓取正式 CID
 CODE_TO_INDUSTRY_HINT = {
-    # 半導體 — 23xx, 24xx, 30xx, 31xx, 49xx, 52xx, 53xx, 64xx, 66xx, 80xx
+    # 半導體 — 23xx, 24xx, 30xx, 31xx, 37xx, 49xx, 52xx, 53xx, 64xx, 66xx, 80xx
     "23": "SEMI",
     "24": "SEMI",
     "30": "SEMI",
     "31": "SEMI",
+    "37": "SEMI",  # 日月光投控
     "49": "SEMI",
     "52": "SEMI",
     "53": "SEMI",
@@ -374,8 +375,9 @@ CODE_TO_INDUSTRY_HINT = {
     "17": "BIO",
     # 航運 — 26xx
     "26": "SHIP",
-    # 食品 — 12xx
+    # 食品 — 12xx, 29xx
     "12": "FOOD",
+    "29": "FOOD",  # 統一超
     # 塑化 — 13xx
     "130": "PLAS",
     "131": "PLAS",

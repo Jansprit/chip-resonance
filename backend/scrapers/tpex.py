@@ -127,22 +127,20 @@ def fetch_daily_quotes(client: HttpClient | None = None) -> list[dict[str, Any]]
         return parse_daily_quotes(json.loads(text))
 
 
-def save_latest(out_dir: Path, parsed: list[dict[str, Any]], *, snapshot_date: str = "") -> dict[str, str]:
+def save_latest(data_dir: Path, parsed: list[dict[str, Any]], *, snapshot_date: str = "") -> dict[str, str]:
     """
-    寫入 out_dir/tpex_prices.json 與快照。
-    out_dir 應該已經是 data/latest/，所以這裡直接寫到 out_dir 即可。
-
-    Note: taipei_today 與 write_json 在函式內 import，避免不同 entry point
-    造成 module re-import 的問題（pipeline.py 與單獨 python -m 載入路徑不同）
+    寫入 data_dir/tpex_prices.json 與 data_dir/<date>/tpex_prices.json。
+    data_dir 應為 repo/data/（pipeline.py 傳入 out_dir.parent）。
     """
     from .base import taipei_today, write_json as _write_json
     written = {}
     snapshot_date = snapshot_date or taipei_today()
-    out_dir.mkdir(parents=True, exist_ok=True)
-    snapshot_dir = out_dir.parent / snapshot_date
+    latest_dir = data_dir / "latest"
+    snapshot_dir = data_dir / snapshot_date
+    latest_dir.mkdir(parents=True, exist_ok=True)
     snapshot_dir.mkdir(parents=True, exist_ok=True)
     name = "tpex_prices.json"
-    latest_path = out_dir / name
+    latest_path = latest_dir / name
     snapshot_path = snapshot_dir / name
     _write_json(latest_path, parsed)
     _write_json(snapshot_path, parsed)

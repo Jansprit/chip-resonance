@@ -117,7 +117,8 @@ def save_latest(out_dir: Path, parsed: list[dict[str, Any]], *, snapshot_date: s
     written = {}
     snapshot_date = snapshot_date or taipei_today()
     out_dir.mkdir(parents=True, exist_ok=True)
-    snapshot_dir = out_dir.parent / snapshot_date
+    # Save dated snapshot to data/<YYYY-MM-DD>/ (sibling of data/latest/)
+    snapshot_dir = out_dir.parent.parent / snapshot_date
     snapshot_dir.mkdir(parents=True, exist_ok=True)
     name = "pyramid_chip.json"
     latest_path = out_dir / name

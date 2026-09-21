@@ -117,7 +117,9 @@ def run_twse(out_dir: Path) -> dict:
         client = create_twse_client()
         prices = fetch_prices(client)
         idx = fetch_market_index(client)
-        twse_save_latest(out_dir, prices, idx, snapshot_date=taipei_today())
+        # out_dir 是 repo/data/latest/，但 twse_save_latest 內部建 latest/ + <date>/
+        # 所以傳 out_dir.parent（= repo/data/）讓它能正確建 repo/data/latest/ + repo/data/<date>/
+        twse_save_latest(out_dir.parent, prices, idx)
         status["stocks_count"] = len(prices)
         status["indices_count"] = len(idx)
         return status
@@ -137,7 +139,8 @@ def run_tpex(out_dir: Path) -> dict:
     try:
         client = create_tpex_client()
         rows = fetch_daily_quotes(client)
-        tpex_save_latest(out_dir, rows, snapshot_date=taipei_today())
+        # 傳 out_dir.parent（= repo/data/）讓 tpex_save_latest 正確建 latest/ + <date>/
+        tpex_save_latest(out_dir.parent, rows)
         status["stocks_count"] = len(rows)
         return status
     except (SourceBannedError, SourceDisabledError) as e:
