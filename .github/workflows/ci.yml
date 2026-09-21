@@ -100,7 +100,7 @@ jobs:
             node --check "$f" && echo "  $f: syntax OK"
           done
 
-      # 3b) Python unit tests (rate limiter + normalize + integration)
+      # 3b) Python unit tests (rate limiter + normalize + integration + rotate)
       - name: Backend unit tests
         run: |
           echo "=== Backend unit tests ==="
@@ -108,6 +108,7 @@ jobs:
           python backend/tests/test_rate_limiter.py
           python backend/tests/test_normalize.py
           python backend/tests/test_integration.py
+          python backend/tests/test_rotate_snapshots.py
 
       # 4) 連結檢查 — 用 lychee 確認 README 與 docs 內部連結有效
       - name: Link check (markdown & HTML)

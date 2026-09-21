@@ -1,0 +1,118 @@
+[project]
+name = "chip-resonance-backend"
+version = "0.2.0"
+description = "Multi-source Taiwan stock chip data pipeline (TWSE, TPEx, FinMind, MOPS, 集保, 神秘金字塔, Goodinfo)"
+requires-python = ">=3.10"
+authors = [
+    {name = "Jansprit", email = "research@example.com"},
+]
+license = {text = "MIT"}
+
+dependencies = [
+    "requests>=2.31.0",
+    "pydantic>=2.5.0",
+    "jsonschema>=4.20.0",
+    "python-dateutil>=2.8.2",
+    "tenacity>=8.2.3",
+    "playwright>=1.40.0",
+    "beautifulsoup4>=4.12.0",
+    "lxml>=4.9.0",
+]
+
+[project.optional-dependencies]
+dev = [
+    "pytest>=7.4.0",
+    "pytest-asyncio>=0.23.0",
+    "ruff>=0.1.0",
+    "mypy>=1.7.0",
+]
+
+[project.scripts]
+chip-pipeline = "backend.scripts.run_local:main"
+chip-rotate = "backend.scripts.rotate_snapshots:main"
+chip-auth = "backend.scripts.auth_setup:main"
+
+[build-system]
+requires = ["setuptools>=68.0"]
+build-backend = "setuptools.build_meta"
+
+[tool.setuptools]
+packages = ["backend", "backend.scrapers", "backend.scripts", "backend.tests"]
+
+[tool.setuptools.package-data]
+backend = ["requirements.txt"]
+
+# ========== Tool configurations ==========
+
+[tool.ruff]
+line-length = 100
+target-version = "py310"
+exclude = [".venv", "build", "dist", "__pycache__"]
+
+[tool.ruff.lint]
+select = [
+    "E",   # pycodestyle errors
+    "W",   # pycodestyle warnings
+    "F",   # pyflakes
+    "I",   # isort
+    "B",   # flake8-bugbear
+    "UP",  # pyupgrade
+]
+ignore = [
+    "E501",  # line-too-long (handled by formatter)
+    "B008",  # function call in default argument (intentional for some tests)
+]
+
+[tool.ruff.lint.per-file-ignores]
+"backend/tests/*" = ["B011"]  # asserts are fine in tests
+
+[tool.pytest.ini_options]
+minversion = "7.0"
+testpaths = ["backend/tests"]
+python_files = ["test_*.py"]
+python_classes = ["Test*"]
+python_functions = ["test_*"]
+addopts = [
+    "-v",
+    "--tb=short",
+    "--strict-markers",
+]
+markers = [
+    "slow: marks tests as slow (deselect with '-m \"not slow\"')",
+    "integration: marks tests that need external resources",
+]
+
+[tool.mypy]
+python_version = "3.10"
+warn_unused_ignores = true
+warn_redundant_casts = true
+disallow_untyped_defs = false  # gradually typed
+ignore_missing_imports = true
+files = ["backend/"]
+exclude = ["backend/tests/*"]
+
+# ========== 部署相關 ==========
+
+[tool.chip-resonance]
+# 環境變數需求（會在 auth_setup.py / first_run 時檢查）
+required_env = []
+optional_env = [
+    "FINMIND_TOKEN",
+    "PYRAMID_USERNAME", "PYRAMID_PASSWORD",
+    "GOODINFO_USERNAME", "GOODINFO_PASSWORD",
+    "GOODINFO_PROXY_URL",
+    "FINNHUB_API_KEY", "ALPHA_VANTAGE_API_KEY", "TWELVE_DATA_API_KEY",
+    "FRED_API_KEY", "SEC_USER_AGENT",
+]
+
+# 節流預設（覆寫請在 .env 設 RL_JITTER）
+[tool.chip-resonance.throttle]
+default_min_interval_sec = 3.0
+default_jitter_sec = 0.5
+default_daily_quota = 100
+
+# 抓取日次
+[tool.chip-resonance.schedule]
+public_subset_cron = "30 5 * * 1-5"     # 週一至五 13:30 UTC+8
+full_pipeline_cron = "0 6 * * 5"         # 週五 14:00 UTC+8
+data_retention_days = 90
