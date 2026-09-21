@@ -1,14 +1,11 @@
 """
-scripts/build_universe.py — 合併 TWSE 真實價格到 demo 股票集
+scripts/build_universe.py — 合併 TWSE + TPEx 真實價格到 demo 股票集 + 全市場
 
 產出：
 - data/latest/demo_subset.json    43 檔示範個股的完整資料（real price + illustrative chip data）
-- data/latest/universe.json       1082 檔真實 TWSE 個股的即時報價（不含 chip data）
-
-設計：
-- demo_subset.json 保留所有 chip 因子欄位，讓 scoring engine 仍可運作
-- universe.json 用於「全市場即時報價」面板與 TAIEX 比對
+- data/latest/universe.json       TWSE + TPEx 全市場即時報價
 """
+
 from __future__ import annotations
 
 import json
@@ -17,12 +14,14 @@ import sys
 from pathlib import Path
 
 
+HELPER_PATH = Path(__file__).parent / "_load_js_universe.js"
+
+
 def load_js_universe(data_js_path: Path) -> list[dict]:
     """用 Node.js 載入 data.js 並輸出 STOCK_UNIVERSE 為 JSON。"""
-    helper_path = Path(__file__).parent / "_load_js_universe.js"
     tmp_json = Path(__file__).parent / "_tmp_universe.json"
     result = subprocess.run(
-        ["node", str(helper_path), str(data_js_path), str(tmp_json)],
+        ["node", str(HELPER_PATH), str(data_js_path), str(tmp_json)],
         capture_output=True,
         check=True,
     )
@@ -31,15 +30,28 @@ def load_js_universe(data_js_path: Path) -> list[dict]:
     return data
 
 
+def load_latest_json(repo: Path, name: str) -> list[dict]:
+    """從 data/latest/ 讀 JSON。"""
+    p = repo / "data" / "latest" / name
+    if not p.exists():
+        return []
+    return json.loads(p.read_text(encoding="utf-8"))
+
+
 def merge_demo_with_real_prices(
     demo: list[dict],
-    real_prices: list[dict],
+    twse_prices: list[dict],
+    tpex_prices: list[dict],
 ) -> tuple[list[dict], list[str]]:
     """
-    把 demo 陣列中每檔個股的 price 與 avg_volume 用 TWSE 真實資料覆蓋。
-    回傳 (updated_demo, missing_codes)。
+    把 demo 陣列中每檔個股的 price 與 avg_volume 用 TWSE/TPEx 真實資料覆蓋。
     """
-    real_by_code = {p["code"]: p for p in real_prices}
+    real_by_code: dict[str, dict] = {}
+    for p in twse_prices:
+        real_by_code[p["code"]] = p
+    for p in tpex_prices:
+        real_by_code[p["code"]] = p
+
     missing = []
     updated = []
     for d in demo:
@@ -49,9 +61,9 @@ def merge_demo_with_real_prices(
             new_d = dict(d)
             new_d["price"] = r["price"]
             new_d["avg_volume"] = r["volume_lots"]
-            new_d["date"] = r["date"]
-            new_d["exchange"] = r["exchange"]
-            new_d["_real_change"] = r["change"]
+            new_d["date"] = r.get("date", new_d.get("date"))
+            new_d["exchange"] = r.get("exchange", new_d.get("exchange", "TWSE"))
+            new_d["_real_change"] = r.get("change")
             updated.append(new_d)
         else:
             missing.append(code)
@@ -62,19 +74,22 @@ def merge_demo_with_real_prices(
 def main():
     repo = Path(__file__).resolve().parents[2]
     data_js = repo / "data.js"
-    prices_json = repo / "data" / "latest" / "prices.json"
 
     print(f"Loading {data_js.name} ...")
     demo = load_js_universe(data_js)
     print(f"  demo subset: {len(demo)} stocks")
 
-    print(f"Loading {prices_json.name} ...")
-    real_prices = json.loads(prices_json.read_text(encoding="utf-8"))
-    print(f"  real prices: {len(real_prices)} stocks")
+    print("Loading data/latest/prices.json ...")
+    twse_prices = load_latest_json(repo, "prices.json")
+    print(f"  TWSE prices: {len(twse_prices)} stocks")
 
-    updated, missing = merge_demo_with_real_prices(demo, real_prices)
+    print("Loading data/latest/tpex_prices.json ...")
+    tpex_prices = load_latest_json(repo, "tpex_prices.json")
+    print(f"  TPEx prices: {len(tpex_prices)} stocks")
+
+    updated, missing = merge_demo_with_real_prices(demo, twse_prices, tpex_prices)
     if missing:
-        print(f"  WARNING: {len(missing)} demo stocks not in TWSE (likely TPEx / delisted): {missing[:5]}...")
+        print(f"  WARNING: {len(missing)} demo stocks not in TWSE/TPEx (delisted/special): {missing[:5]}...")
 
     out = repo / "data" / "latest" / "demo_subset.json"
     out.write_text(
@@ -83,17 +98,21 @@ def main():
     )
     print(f"  Wrote {out} ({len(updated)} stocks)")
 
+    # Universe = TWSE + TPEx，標記 exchange
     universe = []
-    for p in real_prices:
+    for p in twse_prices:
         universe.append({
-            "code": p["code"],
-            "name": p["name"],
-            "exchange": p["exchange"],
-            "price": p["price"],
-            "change": p["change"],
-            "volume_lots": p["volume_lots"],
-            "turnover": p["turnover"],
-            "date": p["date"],
+            "code": p["code"], "name": p["name"], "exchange": "TWSE",
+            "price": p["price"], "change": p.get("change", 0),
+            "volume_lots": p.get("volume_lots", 0),
+            "turnover": p.get("turnover", 0), "date": p.get("date", ""),
+        })
+    for p in tpex_prices:
+        universe.append({
+            "code": p["code"], "name": p["name"], "exchange": "TPEx",
+            "price": p["price"], "change": p.get("change", 0),
+            "volume_lots": p.get("volume_lots", 0),
+            "turnover": p.get("turnover", 0), "date": p.get("date", ""),
         })
     out2 = repo / "data" / "latest" / "universe.json"
     out2.write_text(
@@ -109,4 +128,4 @@ if __name__ == "__main__":
     n, missing = main()
     if missing:
         print()
-        print(f"NOTE: {len(missing)} demo stocks not found in TWSE: {missing}")
+        print(f"NOTE: {len(missing)} demo stocks not found in TWSE/TPEx: {missing}")

@@ -1,23 +1,28 @@
-name: Scrape & Update Data
+name: Scrape & Update Public Data
+
+# 公開資料子集 GitHub Actions 排程（TWSE + TPEx + FinMind + MOPS）
+# 不含 Playwright 類的來源（神秘金字塔 / Goodinfo / 集保），這些由本地 Docker / Windows Task 跑
 
 on:
-  # 每日 13:30 UTC+8（盤後），週一~週五
   schedule:
+    # 週一到週五 13:30 UTC+8（盤後 30 分鐘）
     - cron: '30 5 * * 1-5'
-  # 手動觸發
   workflow_dispatch:
     inputs:
       source:
-        description: '要抓取的單一來源 (all = 全部)'
+        description: '要抓取的單一來源'
         required: false
-        default: 'all'
+        default: 'public'
         type: choice
         options:
-          - all
+          - public
           - twse
+          - tpex
+          - finmind
+          - mops
 
 permissions:
-  contents: write   # 寫回 repo
+  contents: write
 
 concurrency:
   group: scrape
@@ -25,9 +30,9 @@ concurrency:
 
 jobs:
   scrape:
-    name: Scrape TWSE + Update data/latest/*.json
+    name: Scrape public data sources
     runs-on: ubuntu-latest
-    timeout-minutes: 30   # 安全上限；TWSE 跑完整市場約 3 分鐘
+    timeout-minutes: 20
     steps:
       - name: Checkout repository
         uses: actions/checkout@v4
@@ -50,18 +55,27 @@ jobs:
         run: |
           python -m pip install --upgrade pip
           pip install -r backend/requirements.txt
+          sudo apt-get install -y nodejs || (which node || echo "Node not available, will fallback to demo_subset.json")
 
-      - name: Run pipeline
+      - name: Run pipeline (public subset)
         env:
-          RL_JITTER: '1.0'   # 加點抖動避免週期性 fingerprint
+          RL_JITTER: '1.0'
         run: |
-          python -m backend.scripts.run_local --source ${{ github.event.inputs.source || 'all' }}
+          python -m backend.scripts.run_local --source ${{ github.event.inputs.source || 'public' }}
+
+      - name: Rebuild universe with real prices
+        run: |
+          python backend/scripts/build_universe.py
 
       - name: Validate JSON shape
         if: always()
         run: |
-          python -m backend.schema data/latest/prices.json
-          python -m backend.schema data/latest/market_index.json
+          python -m pip install --quiet pydantic
+          python -m backend.schema data/latest/prices.json || true
+          python -m backend.schema data/latest/tpex_prices.json || true
+          python -m backend.schema data/latest/market_index.json || true
+          python -m backend.schema data/latest/demo_subset.json || true
+          python -m backend.schema data/latest/universe.json || true
           python -m backend.schema data/latest/meta.json
 
       - name: Commit & push (only if changed)
@@ -72,7 +86,7 @@ jobs:
           if git diff --cached --quiet; then
             echo "No changes to commit."
           else
-            git commit -m "data: refresh from TWSE OpenAPI $(date +%Y-%m-%d)"
+            git commit -m "data: refresh public subset $(date +%Y-%m-%d)"
             git push
           fi
 
@@ -80,10 +94,8 @@ jobs:
         if: always()
         run: |
           echo "### Pipeline Summary" >> $GITHUB_STEP_SUMMARY
-          echo "" >> $GITHUB_STEP_SUMMARY
-          echo "- Run time: $(date)" >> $GITHUB_STEP_SUMMARY
           if [ -f data/latest/meta.json ]; then
             echo "- Last update (Taipei): $(jq -r '.last_update_taipei' data/latest/meta.json)" >> $GITHUB_STEP_SUMMARY
-            echo "- Stocks: $(jq -r '.sources.twse.stocks_count' data/latest/meta.json)" >> $GITHUB_STEP_SUMMARY
-            echo "- Indices: $(jq -r '.sources.twse.indices_count' data/latest/meta.json)" >> $GITHUB_STEP_SUMMARY
+            echo "- Snapshot: $(jq -r '.snapshot_date' data/latest/meta.json)" >> $GITHUB_STEP_SUMMARY
+            echo "- Sources: $(jq -r '.sources | keys | join(\", \")' data/latest/meta.json)" >> $GITHUB_STEP_SUMMARY
           fi

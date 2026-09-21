@@ -1,0 +1,54 @@
+version: '3.8'
+
+# docker compose for chip-resonance pipeline
+# 用法：
+#   cp backend/.env.example backend/.env && vi backend/.env
+#   docker compose build
+#   docker compose up -d                  # 啟動 cron 容器
+#   docker compose logs -f                # 查看排程輸出
+#   docker compose exec chip-resonance python -m backend.scripts.auth_setup --site pyramid
+
+services:
+  chip-resonance:
+    build: .
+    image: chip-resonance:latest
+    container_name: chip-resonance-cron
+    restart: unless-stopped
+    environment:
+      - TZ=Asia/Taipei
+      - CHIP_RESONANCE_ENV=/app/backend/.env
+    env_file:
+      - ./backend/.env
+    volumes:
+      # 持久化資料快照
+      - ./data:/app/data
+      # 持久化 session cookies（Playwright 用）
+      - ./backend/.sessions:/app/backend/.sessions
+      # Pipeline debug 用 raw HTML
+      - chip-resonance-debug:/app/backend/data/local
+      # 讓 host 可以直接 git push（可選）
+      - ${HOME}/.gitconfig:/root/.gitconfig:ro
+      - ${HOME}/.ssh:/root/.ssh:ro
+    command: >
+      sh -c "
+        echo 'chip-resonance pipeline started at $$(date)' &&
+        # 每小時檢查是否為收盤後（13:30-14:00 台北時間）
+        # 簡化版：每天 13:30 與 14:30 各跑一次
+        while true; do
+          HOUR=$$(date +%H)
+          MIN=$$(date +%M)
+          if [ $$HOUR -eq 13 ] && [ $$MIN -ge 30 ] && [ $$MIN -le 35 ]; then
+            echo '[cron] Running public subset at $$(date)'
+            python3 -m backend.scripts.run_local --source public 2>&1 | tee /app/data/cron.log
+          fi
+          if [ $$HOUR -eq 14 ] && [ $$MIN -ge 30 ] && [ $$MIN -le 35 ] && [ $$(date +%u) -eq 5 ]; then
+            # 週五 14:30 跑完整 pipeline（含 Playwright 源）
+            echo '[cron] Running full pipeline at $$(date)'
+            python3 -m backend.scripts.run_local --source all 2>&1 | tee /app/data/cron.log
+          fi
+          sleep 60
+        done
+      "
+
+volumes:
+  chip-resonance-debug:

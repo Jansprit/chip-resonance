@@ -10818,5 +10818,8915 @@
     "volume_lots": 2733414,
     "turnover": 254615093,
     "date": "2026-09-18"
+  },
+  {
+    "code": "1240",
+    "name": "茂生農經",
+    "exchange": "TPEx",
+    "price": 0.0,
+    "change": 0.0,
+    "volume_lots": 451,
+    "turnover": 25028,
+    "date": "2026-09-21"
+  },
+  {
+    "code": "1259",
+    "name": "安心",
+    "exchange": "TPEx",
+    "price": 68.0,
+    "change": 0.0,
+    "volume_lots": 60369,
+    "turnover": 4103382,
+    "date": "2026-09-21"
+  },
+  {
+    "code": "1264",
+    "name": "德麥",
+    "exchange": "TPEx",
+    "price": 245.5,
+    "change": 1.5,
+    "volume_lots": 13181,
+    "turnover": 3227583,
+    "date": "2026-09-21"
+  },
+  {
+    "code": "1268",
+    "name": "漢來美食",
+    "exchange": "TPEx",
+    "price": 174.0,
+    "change": 0.0,
+    "volume_lots": 29722,
+    "turnover": 5137831,
+    "date": "2026-09-21"
+  },
+  {
+    "code": "1294",
+    "name": "漢田生技",
+    "exchange": "TPEx",
+    "price": 51.5,
+    "change": 0.0,
+    "volume_lots": 14620,
+    "turnover": 748111,
+    "date": "2026-09-21"
+  },
+  {
+    "code": "1295",
+    "name": "生合",
+    "exchange": "TPEx",
+    "price": 45.0,
+    "change": 0.55,
+    "volume_lots": 29687,
+    "turnover": 1332885,
+    "date": "2026-09-21"
+  },
+  {
+    "code": "1336",
+    "name": "台翰",
+    "exchange": "TPEx",
+    "price": 16.95,
+    "change": -0.4,
+    "volume_lots": 310596,
+    "turnover": 5346323,
+    "date": "2026-09-21"
+  },
+  {
+    "code": "1565",
+    "name": "精華",
+    "exchange": "TPEx",
+    "price": 96.7,
+    "change": -1.3,
+    "volume_lots": 104055,
+    "turnover": 10043497,
+    "date": "2026-09-21"
+  },
+  {
+    "code": "1569",
+    "name": "濱川",
+    "exchange": "TPEx",
+    "price": 61.0,
+    "change": 5.5,
+    "volume_lots": 8829655,
+    "turnover": 533664328,
+    "date": "2026-09-21"
+  },
+  {
+    "code": "1570",
+    "name": "力肯",
+    "exchange": "TPEx",
+    "price": 32.4,
+    "change": 0.1,
+    "volume_lots": 30410,
+    "turnover": 980488,
+    "date": "2026-09-21"
+  },
+  {
+    "code": "1580",
+    "name": "新麥",
+    "exchange": "TPEx",
+    "price": 97.3,
+    "change": -1.1,
+    "volume_lots": 64668,
+    "turnover": 6296670,
+    "date": "2026-09-21"
+  },
+  {
+    "code": "1584",
+    "name": "精剛",
+    "exchange": "TPEx",
+    "price": 18.25,
+    "change": 0.05,
+    "volume_lots": 231224,
+    "turnover": 4202617,
+    "date": "2026-09-21"
+  },
+  {
+    "code": "1586",
+    "name": "和勤",
+    "exchange": "TPEx",
+    "price": 18.0,
+    "change": 0.0,
+    "volume_lots": 175919,
+    "turnover": 3149340,
+    "date": "2026-09-21"
+  },
+  {
+    "code": "1591",
+    "name": "駿吉-KY",
+    "exchange": "TPEx",
+    "price": 41.25,
+    "change": -0.45,
+    "volume_lots": 309599,
+    "turnover": 12898254,
+    "date": "2026-09-21"
+  },
+  {
+    "code": "1593",
+    "name": "祺驊",
+    "exchange": "TPEx",
+    "price": 31.95,
+    "change": 0.05,
+    "volume_lots": 32880,
+    "turnover": 1050185,
+    "date": "2026-09-21"
+  },
+  {
+    "code": "1595",
+    "name": "川寶",
+    "exchange": "TPEx",
+    "price": 68.5,
+    "change": 2.8,
+    "volume_lots": 235744,
+    "turnover": 15850371,
+    "date": "2026-09-21"
+  },
+  {
+    "code": "1599",
+    "name": "宏佳騰",
+    "exchange": "TPEx",
+    "price": 23.2,
+    "change": 0.1,
+    "volume_lots": 18454,
+    "turnover": 424934,
+    "date": "2026-09-21"
+  },
+  {
+    "code": "1742",
+    "name": "台蠟",
+    "exchange": "TPEx",
+    "price": 17.5,
+    "change": -0.05,
+    "volume_lots": 116450,
+    "turnover": 2040235,
+    "date": "2026-09-21"
+  },
+  {
+    "code": "1777",
+    "name": "生泰",
+    "exchange": "TPEx",
+    "price": 74.5,
+    "change": 0.2,
+    "volume_lots": 17236,
+    "turnover": 1280964,
+    "date": "2026-09-21"
+  },
+  {
+    "code": "1780",
+    "name": "立弘",
+    "exchange": "TPEx",
+    "price": 25.15,
+    "change": 0.0,
+    "volume_lots": 73909,
+    "turnover": 1845329,
+    "date": "2026-09-21"
+  },
+  {
+    "code": "1781",
+    "name": "合世",
+    "exchange": "TPEx",
+    "price": 10.2,
+    "change": 0.05,
+    "volume_lots": 16013,
+    "turnover": 162178,
+    "date": "2026-09-21"
+  },
+  {
+    "code": "1784",
+    "name": "訊聯",
+    "exchange": "TPEx",
+    "price": 58.4,
+    "change": 0.4,
+    "volume_lots": 45506,
+    "turnover": 2650458,
+    "date": "2026-09-21"
+  },
+  {
+    "code": "1785",
+    "name": "光洋科",
+    "exchange": "TPEx",
+    "price": 97.4,
+    "change": 0.6,
+    "volume_lots": 4476894,
+    "turnover": 434058252,
+    "date": "2026-09-21"
+  },
+  {
+    "code": "1788",
+    "name": "杏昌",
+    "exchange": "TPEx",
+    "price": 128.0,
+    "change": 0.0,
+    "volume_lots": 15397,
+    "turnover": 1970582,
+    "date": "2026-09-21"
+  },
+  {
+    "code": "1796",
+    "name": "金穎生技",
+    "exchange": "TPEx",
+    "price": 29.8,
+    "change": 0.2,
+    "volume_lots": 8001,
+    "turnover": 238229,
+    "date": "2026-09-21"
+  },
+  {
+    "code": "1799",
+    "name": "易威",
+    "exchange": "TPEx",
+    "price": 29.1,
+    "change": 0.25,
+    "volume_lots": 105098,
+    "turnover": 3041512,
+    "date": "2026-09-21"
+  },
+  {
+    "code": "1813",
+    "name": "寶利徠",
+    "exchange": "TPEx",
+    "price": 11.25,
+    "change": -0.1,
+    "volume_lots": 20253,
+    "turnover": 227927,
+    "date": "2026-09-21"
+  },
+  {
+    "code": "1815",
+    "name": "富喬",
+    "exchange": "TPEx",
+    "price": 121.0,
+    "change": 1.5,
+    "volume_lots": 66579392,
+    "turnover": 8142390152,
+    "date": "2026-09-21"
+  },
+  {
+    "code": "2035",
+    "name": "唐榮",
+    "exchange": "TPEx",
+    "price": 26.5,
+    "change": -0.5,
+    "volume_lots": 22084,
+    "turnover": 594878,
+    "date": "2026-09-21"
+  },
+  {
+    "code": "2061",
+    "name": "風青",
+    "exchange": "TPEx",
+    "price": 54.0,
+    "change": 1.6,
+    "volume_lots": 2002047,
+    "turnover": 108178622,
+    "date": "2026-09-21"
+  },
+  {
+    "code": "2063",
+    "name": "世鎧",
+    "exchange": "TPEx",
+    "price": 23.8,
+    "change": -0.1,
+    "volume_lots": 17005,
+    "turnover": 403170,
+    "date": "2026-09-21"
+  },
+  {
+    "code": "2064",
+    "name": "晉椿",
+    "exchange": "TPEx",
+    "price": 11.75,
+    "change": 0.0,
+    "volume_lots": 5093,
+    "turnover": 59845,
+    "date": "2026-09-21"
+  },
+  {
+    "code": "2065",
+    "name": "世豐",
+    "exchange": "TPEx",
+    "price": 35.15,
+    "change": 0.0,
+    "volume_lots": 48022,
+    "turnover": 1688320,
+    "date": "2026-09-21"
+  },
+  {
+    "code": "2066",
+    "name": "世德",
+    "exchange": "TPEx",
+    "price": 52.0,
+    "change": -0.7,
+    "volume_lots": 13412,
+    "turnover": 699554,
+    "date": "2026-09-21"
+  },
+  {
+    "code": "2067",
+    "name": "嘉鋼",
+    "exchange": "TPEx",
+    "price": 5.08,
+    "change": -0.02,
+    "volume_lots": 8205,
+    "turnover": 42355,
+    "date": "2026-09-21"
+  },
+  {
+    "code": "2070",
+    "name": "精湛",
+    "exchange": "TPEx",
+    "price": 61.2,
+    "change": -0.4,
+    "volume_lots": 83273,
+    "turnover": 5122294,
+    "date": "2026-09-21"
+  },
+  {
+    "code": "2073",
+    "name": "雄順",
+    "exchange": "TPEx",
+    "price": 25.0,
+    "change": -1.0,
+    "volume_lots": 5000,
+    "turnover": 125200,
+    "date": "2026-09-21"
+  },
+  {
+    "code": "2221",
+    "name": "大甲",
+    "exchange": "TPEx",
+    "price": 140.0,
+    "change": 12.5,
+    "volume_lots": 2954680,
+    "turnover": 407373200,
+    "date": "2026-09-21"
+  },
+  {
+    "code": "2230",
+    "name": "泰茂",
+    "exchange": "TPEx",
+    "price": 21.05,
+    "change": -0.35,
+    "volume_lots": 465385,
+    "turnover": 9876409,
+    "date": "2026-09-21"
+  },
+  {
+    "code": "2235",
+    "name": "謚源",
+    "exchange": "TPEx",
+    "price": 28.4,
+    "change": 0.1,
+    "volume_lots": 1050,
+    "turnover": 29825,
+    "date": "2026-09-21"
+  },
+  {
+    "code": "2596",
+    "name": "綠意",
+    "exchange": "TPEx",
+    "price": 34.95,
+    "change": -0.15,
+    "volume_lots": 33750,
+    "turnover": 1173224,
+    "date": "2026-09-21"
+  },
+  {
+    "code": "2640",
+    "name": "大車隊",
+    "exchange": "TPEx",
+    "price": 166.0,
+    "change": -4.5,
+    "volume_lots": 85059,
+    "turnover": 13993342,
+    "date": "2026-09-21"
+  },
+  {
+    "code": "2641",
+    "name": "正德",
+    "exchange": "TPEx",
+    "price": 17.75,
+    "change": 0.2,
+    "volume_lots": 1209280,
+    "turnover": 21356483,
+    "date": "2026-09-21"
+  },
+  {
+    "code": "2643",
+    "name": "捷迅",
+    "exchange": "TPEx",
+    "price": 63.0,
+    "change": 0.5,
+    "volume_lots": 11116,
+    "turnover": 694194,
+    "date": "2026-09-21"
+  },
+  {
+    "code": "2718",
+    "name": "全心投控",
+    "exchange": "TPEx",
+    "price": 41.1,
+    "change": 0.4,
+    "volume_lots": 24485,
+    "turnover": 1003454,
+    "date": "2026-09-21"
+  },
+  {
+    "code": "2719",
+    "name": "燦星旅",
+    "exchange": "TPEx",
+    "price": 19.65,
+    "change": 0.15,
+    "volume_lots": 9022,
+    "turnover": 176135,
+    "date": "2026-09-21"
+  },
+  {
+    "code": "2724",
+    "name": "藝舍-KY",
+    "exchange": "TPEx",
+    "price": 11.85,
+    "change": 0.2,
+    "volume_lots": 4069,
+    "turnover": 47700,
+    "date": "2026-09-21"
+  },
+  {
+    "code": "2726",
+    "name": "雅茗-KY",
+    "exchange": "TPEx",
+    "price": 8.05,
+    "change": 0.0,
+    "volume_lots": 21495,
+    "turnover": 172887,
+    "date": "2026-09-21"
+  },
+  {
+    "code": "2729",
+    "name": "瓦城",
+    "exchange": "TPEx",
+    "price": 159.0,
+    "change": 2.5,
+    "volume_lots": 74388,
+    "turnover": 11802405,
+    "date": "2026-09-21"
+  },
+  {
+    "code": "2732",
+    "name": "六角",
+    "exchange": "TPEx",
+    "price": 63.3,
+    "change": 1.0,
+    "volume_lots": 13799,
+    "turnover": 862077,
+    "date": "2026-09-21"
+  },
+  {
+    "code": "2734",
+    "name": "易飛網",
+    "exchange": "TPEx",
+    "price": 14.45,
+    "change": -0.05,
+    "volume_lots": 45149,
+    "turnover": 653205,
+    "date": "2026-09-21"
+  },
+  {
+    "code": "2736",
+    "name": "富野",
+    "exchange": "TPEx",
+    "price": 11.35,
+    "change": -0.05,
+    "volume_lots": 45114,
+    "turnover": 512653,
+    "date": "2026-09-21"
+  },
+  {
+    "code": "2740",
+    "name": "華軒",
+    "exchange": "TPEx",
+    "price": 31.15,
+    "change": -0.35,
+    "volume_lots": 1101,
+    "turnover": 34238,
+    "date": "2026-09-21"
+  },
+  {
+    "code": "2743",
+    "name": "山富",
+    "exchange": "TPEx",
+    "price": 54.5,
+    "change": 0.3,
+    "volume_lots": 43515,
+    "turnover": 2371526,
+    "date": "2026-09-21"
+  },
+  {
+    "code": "2745",
+    "name": "五福",
+    "exchange": "TPEx",
+    "price": 84.1,
+    "change": -0.5,
+    "volume_lots": 52844,
+    "turnover": 4447954,
+    "date": "2026-09-21"
+  },
+  {
+    "code": "2751",
+    "name": "王座",
+    "exchange": "TPEx",
+    "price": 53.4,
+    "change": 0.0,
+    "volume_lots": 2891,
+    "turnover": 154265,
+    "date": "2026-09-21"
+  },
+  {
+    "code": "2752",
+    "name": "豆府",
+    "exchange": "TPEx",
+    "price": 180.0,
+    "change": 2.0,
+    "volume_lots": 3146,
+    "turnover": 564169,
+    "date": "2026-09-21"
+  },
+  {
+    "code": "2754",
+    "name": "亞洲藏壽司",
+    "exchange": "TPEx",
+    "price": 68.5,
+    "change": -0.4,
+    "volume_lots": 30462,
+    "turnover": 2091261,
+    "date": "2026-09-21"
+  },
+  {
+    "code": "2755",
+    "name": "揚秦",
+    "exchange": "TPEx",
+    "price": 98.7,
+    "change": 0.3,
+    "volume_lots": 19023,
+    "turnover": 1875075,
+    "date": "2026-09-21"
+  },
+  {
+    "code": "2756",
+    "name": "聯發國際",
+    "exchange": "TPEx",
+    "price": 63.0,
+    "change": 0.7,
+    "volume_lots": 7241,
+    "turnover": 453831,
+    "date": "2026-09-21"
+  },
+  {
+    "code": "2916",
+    "name": "滿心",
+    "exchange": "TPEx",
+    "price": 40.7,
+    "change": 0.15,
+    "volume_lots": 27116,
+    "turnover": 1101250,
+    "date": "2026-09-21"
+  },
+  {
+    "code": "2924",
+    "name": "宏太-KY",
+    "exchange": "TPEx",
+    "price": 17.75,
+    "change": -0.2,
+    "volume_lots": 1070,
+    "turnover": 18915,
+    "date": "2026-09-21"
+  },
+  {
+    "code": "2926",
+    "name": "誠品生活",
+    "exchange": "TPEx",
+    "price": 0.0,
+    "change": 0.0,
+    "volume_lots": 0,
+    "turnover": 0,
+    "date": "2026-09-21"
+  },
+  {
+    "code": "2937",
+    "name": "集雅社",
+    "exchange": "TPEx",
+    "price": 44.75,
+    "change": 0.25,
+    "volume_lots": 2001,
+    "turnover": 89290,
+    "date": "2026-09-21"
+  },
+  {
+    "code": "2938",
+    "name": "床的世界",
+    "exchange": "TPEx",
+    "price": 18.5,
+    "change": 0.4,
+    "volume_lots": 302451,
+    "turnover": 5572574,
+    "date": "2026-09-21"
+  },
+  {
+    "code": "2941",
+    "name": "米斯特",
+    "exchange": "TPEx",
+    "price": 31.95,
+    "change": 1.05,
+    "volume_lots": 1008,
+    "turnover": 32190,
+    "date": "2026-09-21"
+  },
+  {
+    "code": "2947",
+    "name": "振宇五金",
+    "exchange": "TPEx",
+    "price": 60.5,
+    "change": 0.3,
+    "volume_lots": 9158,
+    "turnover": 553206,
+    "date": "2026-09-21"
+  },
+  {
+    "code": "2948",
+    "name": "寶陞",
+    "exchange": "TPEx",
+    "price": 36.65,
+    "change": -0.2,
+    "volume_lots": 1288,
+    "turnover": 47219,
+    "date": "2026-09-21"
+  },
+  {
+    "code": "2949",
+    "name": "欣新網",
+    "exchange": "TPEx",
+    "price": 0.0,
+    "change": 0.0,
+    "volume_lots": 0,
+    "turnover": 0,
+    "date": "2026-09-21"
+  },
+  {
+    "code": "3064",
+    "name": "泰偉",
+    "exchange": "TPEx",
+    "price": 17.2,
+    "change": 0.2,
+    "volume_lots": 2375,
+    "turnover": 40798,
+    "date": "2026-09-21"
+  },
+  {
+    "code": "3066",
+    "name": "李洲",
+    "exchange": "TPEx",
+    "price": 28.7,
+    "change": -1.2,
+    "volume_lots": 3310012,
+    "turnover": 96514508,
+    "date": "2026-09-21"
+  },
+  {
+    "code": "3067",
+    "name": "全域",
+    "exchange": "TPEx",
+    "price": 0.0,
+    "change": 0.0,
+    "volume_lots": 81,
+    "turnover": 1355,
+    "date": "2026-09-21"
+  },
+  {
+    "code": "3071",
+    "name": "協禧",
+    "exchange": "TPEx",
+    "price": 23.7,
+    "change": 0.3,
+    "volume_lots": 128073,
+    "turnover": 3001597,
+    "date": "2026-09-21"
+  },
+  {
+    "code": "3073",
+    "name": "天方能源",
+    "exchange": "TPEx",
+    "price": 20.8,
+    "change": 0.25,
+    "volume_lots": 83060,
+    "turnover": 1741639,
+    "date": "2026-09-21"
+  },
+  {
+    "code": "3078",
+    "name": "僑威",
+    "exchange": "TPEx",
+    "price": 46.2,
+    "change": 1.7,
+    "volume_lots": 1013026,
+    "turnover": 46356876,
+    "date": "2026-09-21"
+  },
+  {
+    "code": "3081",
+    "name": "聯亞",
+    "exchange": "TPEx",
+    "price": 2875.0,
+    "change": -5.0,
+    "volume_lots": 2735599,
+    "turnover": 7863300860,
+    "date": "2026-09-21"
+  },
+  {
+    "code": "3083",
+    "name": "網龍",
+    "exchange": "TPEx",
+    "price": 22.7,
+    "change": 0.3,
+    "volume_lots": 34024,
+    "turnover": 764987,
+    "date": "2026-09-21"
+  },
+  {
+    "code": "3085",
+    "name": "新零售",
+    "exchange": "TPEx",
+    "price": 11.6,
+    "change": -0.05,
+    "volume_lots": 2271,
+    "turnover": 26237,
+    "date": "2026-09-21"
+  },
+  {
+    "code": "3086",
+    "name": "華義*",
+    "exchange": "TPEx",
+    "price": 28.9,
+    "change": 0.0,
+    "volume_lots": 50871,
+    "turnover": 1473841,
+    "date": "2026-09-21"
+  },
+  {
+    "code": "3088",
+    "name": "艾訊",
+    "exchange": "TPEx",
+    "price": 129.0,
+    "change": 2.5,
+    "volume_lots": 835862,
+    "turnover": 107565557,
+    "date": "2026-09-21"
+  },
+  {
+    "code": "3093",
+    "name": "港建*",
+    "exchange": "TPEx",
+    "price": 45.4,
+    "change": 0.65,
+    "volume_lots": 233013,
+    "turnover": 10533771,
+    "date": "2026-09-21"
+  },
+  {
+    "code": "3095",
+    "name": "及成",
+    "exchange": "TPEx",
+    "price": 34.2,
+    "change": -0.4,
+    "volume_lots": 9683,
+    "turnover": 330183,
+    "date": "2026-09-21"
+  },
+  {
+    "code": "3105",
+    "name": "穩懋",
+    "exchange": "TPEx",
+    "price": 490.5,
+    "change": -9.5,
+    "volume_lots": 23656194,
+    "turnover": 11686527996,
+    "date": "2026-09-21"
+  },
+  {
+    "code": "3114",
+    "name": "好德",
+    "exchange": "TPEx",
+    "price": 31.95,
+    "change": 0.8,
+    "volume_lots": 220342,
+    "turnover": 6936108,
+    "date": "2026-09-21"
+  },
+  {
+    "code": "3115",
+    "name": "富榮綱",
+    "exchange": "TPEx",
+    "price": 8.08,
+    "change": 0.09,
+    "volume_lots": 9190,
+    "turnover": 73627,
+    "date": "2026-09-21"
+  },
+  {
+    "code": "3118",
+    "name": "進階",
+    "exchange": "TPEx",
+    "price": 31.55,
+    "change": -0.1,
+    "volume_lots": 8380,
+    "turnover": 264271,
+    "date": "2026-09-21"
+  },
+  {
+    "code": "3122",
+    "name": "笙泉",
+    "exchange": "TPEx",
+    "price": 24.25,
+    "change": -0.05,
+    "volume_lots": 56161,
+    "turnover": 1330297,
+    "date": "2026-09-21"
+  },
+  {
+    "code": "3128",
+    "name": "昇銳",
+    "exchange": "TPEx",
+    "price": 20.45,
+    "change": 0.0,
+    "volume_lots": 50043,
+    "turnover": 1026295,
+    "date": "2026-09-21"
+  },
+  {
+    "code": "3131",
+    "name": "弘塑",
+    "exchange": "TPEx",
+    "price": 2465.0,
+    "change": 20.0,
+    "volume_lots": 404704,
+    "turnover": 1006300420,
+    "date": "2026-09-21"
+  },
+  {
+    "code": "3141",
+    "name": "晶宏",
+    "exchange": "TPEx",
+    "price": 92.8,
+    "change": -0.9,
+    "volume_lots": 4934721,
+    "turnover": 471769680,
+    "date": "2026-09-21"
+  },
+  {
+    "code": "3147",
+    "name": "大綜",
+    "exchange": "TPEx",
+    "price": 238.0,
+    "change": -4.5,
+    "volume_lots": 624227,
+    "turnover": 149642349,
+    "date": "2026-09-21"
+  },
+  {
+    "code": "3152",
+    "name": "璟德",
+    "exchange": "TPEx",
+    "price": 223.0,
+    "change": -1.0,
+    "volume_lots": 52357,
+    "turnover": 11712022,
+    "date": "2026-09-21"
+  },
+  {
+    "code": "3158",
+    "name": "嘉實",
+    "exchange": "TPEx",
+    "price": 85.8,
+    "change": -0.4,
+    "volume_lots": 8282,
+    "turnover": 713715,
+    "date": "2026-09-21"
+  },
+  {
+    "code": "3162",
+    "name": "精確",
+    "exchange": "TPEx",
+    "price": 76.0,
+    "change": -0.9,
+    "volume_lots": 975231,
+    "turnover": 74340679,
+    "date": "2026-09-21"
+  },
+  {
+    "code": "3163",
+    "name": "波若威",
+    "exchange": "TPEx",
+    "price": 667.0,
+    "change": 2.0,
+    "volume_lots": 1227521,
+    "turnover": 828540681,
+    "date": "2026-09-21"
+  },
+  {
+    "code": "3169",
+    "name": "亞信",
+    "exchange": "TPEx",
+    "price": 105.0,
+    "change": 1.5,
+    "volume_lots": 136185,
+    "turnover": 14242846,
+    "date": "2026-09-21"
+  },
+  {
+    "code": "3171",
+    "name": "炎洲流通",
+    "exchange": "TPEx",
+    "price": 58.4,
+    "change": -1.2,
+    "volume_lots": 15420,
+    "turnover": 902619,
+    "date": "2026-09-21"
+  },
+  {
+    "code": "3176",
+    "name": "基亞",
+    "exchange": "TPEx",
+    "price": 38.0,
+    "change": -0.2,
+    "volume_lots": 359836,
+    "turnover": 13693462,
+    "date": "2026-09-21"
+  },
+  {
+    "code": "3178",
+    "name": "公準",
+    "exchange": "TPEx",
+    "price": 75.9,
+    "change": 6.9,
+    "volume_lots": 2174465,
+    "turnover": 160764073,
+    "date": "2026-09-21"
+  },
+  {
+    "code": "3188",
+    "name": "鑫龍騰",
+    "exchange": "TPEx",
+    "price": 23.7,
+    "change": -0.3,
+    "volume_lots": 136443,
+    "turnover": 3244110,
+    "date": "2026-09-21"
+  },
+  {
+    "code": "3191",
+    "name": "雲嘉南",
+    "exchange": "TPEx",
+    "price": 17.0,
+    "change": 0.35,
+    "volume_lots": 14494,
+    "turnover": 246344,
+    "date": "2026-09-21"
+  },
+  {
+    "code": "3205",
+    "name": "佰研",
+    "exchange": "TPEx",
+    "price": 46.65,
+    "change": -0.35,
+    "volume_lots": 32058,
+    "turnover": 1503237,
+    "date": "2026-09-21"
+  },
+  {
+    "code": "3206",
+    "name": "志豐",
+    "exchange": "TPEx",
+    "price": 35.3,
+    "change": 0.3,
+    "volume_lots": 52527,
+    "turnover": 1841791,
+    "date": "2026-09-21"
+  },
+  {
+    "code": "3207",
+    "name": "耀勝",
+    "exchange": "TPEx",
+    "price": 38.25,
+    "change": -0.9,
+    "volume_lots": 168422,
+    "turnover": 6493178,
+    "date": "2026-09-21"
+  },
+  {
+    "code": "3211",
+    "name": "順達",
+    "exchange": "TPEx",
+    "price": 387.5,
+    "change": 19.5,
+    "volume_lots": 8930051,
+    "turnover": 3469477263,
+    "date": "2026-09-21"
+  },
+  {
+    "code": "3213",
+    "name": "茂訊",
+    "exchange": "TPEx",
+    "price": 126.0,
+    "change": 1.5,
+    "volume_lots": 124096,
+    "turnover": 15594015,
+    "date": "2026-09-21"
+  },
+  {
+    "code": "3217",
+    "name": "優群",
+    "exchange": "TPEx",
+    "price": 131.0,
+    "change": 0.5,
+    "volume_lots": 151872,
+    "turnover": 19819955,
+    "date": "2026-09-21"
+  },
+  {
+    "code": "3218",
+    "name": "大學光",
+    "exchange": "TPEx",
+    "price": 134.0,
+    "change": 0.0,
+    "volume_lots": 86167,
+    "turnover": 11603941,
+    "date": "2026-09-21"
+  },
+  {
+    "code": "3219",
+    "name": "倚強科",
+    "exchange": "TPEx",
+    "price": 98.7,
+    "change": 8.9,
+    "volume_lots": 2692989,
+    "turnover": 262465987,
+    "date": "2026-09-21"
+  },
+  {
+    "code": "3221",
+    "name": "台嘉碩",
+    "exchange": "TPEx",
+    "price": 48.65,
+    "change": 1.15,
+    "volume_lots": 2060851,
+    "turnover": 101252247,
+    "date": "2026-09-21"
+  },
+  {
+    "code": "3224",
+    "name": "三顧",
+    "exchange": "TPEx",
+    "price": 32.0,
+    "change": 0.0,
+    "volume_lots": 20581,
+    "turnover": 658979,
+    "date": "2026-09-21"
+  },
+  {
+    "code": "3226",
+    "name": "龍鋒",
+    "exchange": "TPEx",
+    "price": 57.5,
+    "change": 0.6,
+    "volume_lots": 66440,
+    "turnover": 3778743,
+    "date": "2026-09-21"
+  },
+  {
+    "code": "3227",
+    "name": "原相",
+    "exchange": "TPEx",
+    "price": 184.0,
+    "change": -2.0,
+    "volume_lots": 550243,
+    "turnover": 101525422,
+    "date": "2026-09-21"
+  },
+  {
+    "code": "3228",
+    "name": "金麗科",
+    "exchange": "TPEx",
+    "price": 174.0,
+    "change": 7.0,
+    "volume_lots": 332129,
+    "turnover": 57290120,
+    "date": "2026-09-21"
+  },
+  {
+    "code": "3230",
+    "name": "錦明",
+    "exchange": "TPEx",
+    "price": 41.25,
+    "change": -0.55,
+    "volume_lots": 373978,
+    "turnover": 15578426,
+    "date": "2026-09-21"
+  },
+  {
+    "code": "3232",
+    "name": "昱捷",
+    "exchange": "TPEx",
+    "price": 21.2,
+    "change": 0.05,
+    "volume_lots": 56066,
+    "turnover": 1173499,
+    "date": "2026-09-21"
+  },
+  {
+    "code": "3234",
+    "name": "光環",
+    "exchange": "TPEx",
+    "price": 178.5,
+    "change": -1.5,
+    "volume_lots": 2136801,
+    "turnover": 387853462,
+    "date": "2026-09-21"
+  },
+  {
+    "code": "3236",
+    "name": "千如",
+    "exchange": "TPEx",
+    "price": 43.65,
+    "change": 0.3,
+    "volume_lots": 969078,
+    "turnover": 42531986,
+    "date": "2026-09-21"
+  },
+  {
+    "code": "3252",
+    "name": "海灣",
+    "exchange": "TPEx",
+    "price": 15.3,
+    "change": 0.0,
+    "volume_lots": 70066,
+    "turnover": 1073993,
+    "date": "2026-09-21"
+  },
+  {
+    "code": "3259",
+    "name": "鑫創",
+    "exchange": "TPEx",
+    "price": 10.2,
+    "change": -0.55,
+    "volume_lots": 40818,
+    "turnover": 408296,
+    "date": "2026-09-21"
+  },
+  {
+    "code": "3260",
+    "name": "威剛",
+    "exchange": "TPEx",
+    "price": 389.0,
+    "change": 0.0,
+    "volume_lots": 4765216,
+    "turnover": 1846910985,
+    "date": "2026-09-21"
+  },
+  {
+    "code": "3264",
+    "name": "欣銓",
+    "exchange": "TPEx",
+    "price": 284.0,
+    "change": 15.5,
+    "volume_lots": 27190269,
+    "turnover": 7489515103,
+    "date": "2026-09-21"
+  },
+  {
+    "code": "3265",
+    "name": "台星科",
+    "exchange": "TPEx",
+    "price": 181.0,
+    "change": 1.0,
+    "volume_lots": 1890609,
+    "turnover": 343317844,
+    "date": "2026-09-21"
+  },
+  {
+    "code": "3268",
+    "name": "海德威",
+    "exchange": "TPEx",
+    "price": 19.8,
+    "change": 1.3,
+    "volume_lots": 89716,
+    "turnover": 1741492,
+    "date": "2026-09-21"
+  },
+  {
+    "code": "3272",
+    "name": "東碩",
+    "exchange": "TPEx",
+    "price": 14.0,
+    "change": -0.1,
+    "volume_lots": 21601,
+    "turnover": 301332,
+    "date": "2026-09-21"
+  },
+  {
+    "code": "3276",
+    "name": "宇環",
+    "exchange": "TPEx",
+    "price": 14.0,
+    "change": 0.05,
+    "volume_lots": 35440,
+    "turnover": 494127,
+    "date": "2026-09-21"
+  },
+  {
+    "code": "3284",
+    "name": "太普高",
+    "exchange": "TPEx",
+    "price": 19.85,
+    "change": -0.5,
+    "volume_lots": 115023,
+    "turnover": 2294660,
+    "date": "2026-09-21"
+  },
+  {
+    "code": "3285",
+    "name": "微端",
+    "exchange": "TPEx",
+    "price": 43.2,
+    "change": 2.45,
+    "volume_lots": 270115,
+    "turnover": 11836744,
+    "date": "2026-09-21"
+  },
+  {
+    "code": "3287",
+    "name": "廣寰科",
+    "exchange": "TPEx",
+    "price": 42.1,
+    "change": -0.25,
+    "volume_lots": 3717974,
+    "turnover": 161937094,
+    "date": "2026-09-21"
+  },
+  {
+    "code": "3288",
+    "name": "點晶",
+    "exchange": "TPEx",
+    "price": 22.2,
+    "change": 2.0,
+    "volume_lots": 139473,
+    "turnover": 3046233,
+    "date": "2026-09-21"
+  },
+  {
+    "code": "3289",
+    "name": "宜特",
+    "exchange": "TPEx",
+    "price": 136.5,
+    "change": 0.0,
+    "volume_lots": 255911,
+    "turnover": 34964229,
+    "date": "2026-09-21"
+  },
+  {
+    "code": "3290",
+    "name": "東浦",
+    "exchange": "TPEx",
+    "price": 46.6,
+    "change": 0.3,
+    "volume_lots": 120292,
+    "turnover": 5603509,
+    "date": "2026-09-21"
+  },
+  {
+    "code": "3293",
+    "name": "鈊象",
+    "exchange": "TPEx",
+    "price": 724.0,
+    "change": -5.0,
+    "volume_lots": 1111363,
+    "turnover": 799255888,
+    "date": "2026-09-21"
+  },
+  {
+    "code": "3294",
+    "name": "英濟",
+    "exchange": "TPEx",
+    "price": 30.8,
+    "change": 0.5,
+    "volume_lots": 276787,
+    "turnover": 8477523,
+    "date": "2026-09-21"
+  },
+  {
+    "code": "3297",
+    "name": "杭特",
+    "exchange": "TPEx",
+    "price": 36.4,
+    "change": 3.3,
+    "volume_lots": 1088117,
+    "turnover": 38851988,
+    "date": "2026-09-21"
+  },
+  {
+    "code": "3303",
+    "name": "岱稜",
+    "exchange": "TPEx",
+    "price": 48.6,
+    "change": -0.5,
+    "volume_lots": 141587,
+    "turnover": 6899925,
+    "date": "2026-09-21"
+  },
+  {
+    "code": "3306",
+    "name": "鼎天",
+    "exchange": "TPEx",
+    "price": 45.0,
+    "change": 0.0,
+    "volume_lots": 47365,
+    "turnover": 2129435,
+    "date": "2026-09-21"
+  },
+  {
+    "code": "3310",
+    "name": "佳穎",
+    "exchange": "TPEx",
+    "price": 68.5,
+    "change": -0.3,
+    "volume_lots": 14137,
+    "turnover": 966034,
+    "date": "2026-09-21"
+  },
+  {
+    "code": "3313",
+    "name": "斐成",
+    "exchange": "TPEx",
+    "price": 10.45,
+    "change": -0.2,
+    "volume_lots": 105703,
+    "turnover": 1113979,
+    "date": "2026-09-21"
+  },
+  {
+    "code": "3317",
+    "name": "尼克森",
+    "exchange": "TPEx",
+    "price": 56.2,
+    "change": 0.0,
+    "volume_lots": 265481,
+    "turnover": 14915796,
+    "date": "2026-09-21"
+  },
+  {
+    "code": "3322",
+    "name": "建舜電",
+    "exchange": "TPEx",
+    "price": 11.1,
+    "change": 0.15,
+    "volume_lots": 177611,
+    "turnover": 1962637,
+    "date": "2026-09-21"
+  },
+  {
+    "code": "3323",
+    "name": "加百裕",
+    "exchange": "TPEx",
+    "price": 27.85,
+    "change": 0.65,
+    "volume_lots": 326875,
+    "turnover": 9092760,
+    "date": "2026-09-21"
+  },
+  {
+    "code": "3324",
+    "name": "雙鴻",
+    "exchange": "TPEx",
+    "price": 1520.0,
+    "change": 40.0,
+    "volume_lots": 4072868,
+    "turnover": 6116503675,
+    "date": "2026-09-21"
+  },
+  {
+    "code": "3325",
+    "name": "旭品",
+    "exchange": "TPEx",
+    "price": 12.3,
+    "change": 1.1,
+    "volume_lots": 361137,
+    "turnover": 4241296,
+    "date": "2026-09-21"
+  },
+  {
+    "code": "3332",
+    "name": "幸康",
+    "exchange": "TPEx",
+    "price": 60.0,
+    "change": -0.7,
+    "volume_lots": 3132,
+    "turnover": 188390,
+    "date": "2026-09-21"
+  },
+  {
+    "code": "3339",
+    "name": "泰谷",
+    "exchange": "TPEx",
+    "price": 48.5,
+    "change": 3.15,
+    "volume_lots": 6385764,
+    "turnover": 305792616,
+    "date": "2026-09-21"
+  },
+  {
+    "code": "3349",
+    "name": "寶德",
+    "exchange": "TPEx",
+    "price": 20.0,
+    "change": 0.0,
+    "volume_lots": 67112,
+    "turnover": 1329065,
+    "date": "2026-09-21"
+  },
+  {
+    "code": "3354",
+    "name": "律勝",
+    "exchange": "TPEx",
+    "price": 30.4,
+    "change": 1.2,
+    "volume_lots": 2493363,
+    "turnover": 75967529,
+    "date": "2026-09-21"
+  },
+  {
+    "code": "3357",
+    "name": "臺慶科",
+    "exchange": "TPEx",
+    "price": 209.0,
+    "change": 1.5,
+    "volume_lots": 1047395,
+    "turnover": 217912869,
+    "date": "2026-09-21"
+  },
+  {
+    "code": "3360",
+    "name": "尚立",
+    "exchange": "TPEx",
+    "price": 15.15,
+    "change": 0.35,
+    "volume_lots": 424482,
+    "turnover": 6382618,
+    "date": "2026-09-21"
+  },
+  {
+    "code": "3362",
+    "name": "先進光",
+    "exchange": "TPEx",
+    "price": 174.5,
+    "change": -4.0,
+    "volume_lots": 1120117,
+    "turnover": 198130011,
+    "date": "2026-09-21"
+  },
+  {
+    "code": "3363",
+    "name": "上詮",
+    "exchange": "TPEx",
+    "price": 661.0,
+    "change": -22.0,
+    "volume_lots": 2386374,
+    "turnover": 1601826822,
+    "date": "2026-09-21"
+  },
+  {
+    "code": "3372",
+    "name": "典範",
+    "exchange": "TPEx",
+    "price": 16.55,
+    "change": 0.15,
+    "volume_lots": 1435375,
+    "turnover": 24005433,
+    "date": "2026-09-21"
+  },
+  {
+    "code": "3373",
+    "name": "熱映",
+    "exchange": "TPEx",
+    "price": 16.0,
+    "change": 0.1,
+    "volume_lots": 28174,
+    "turnover": 451471,
+    "date": "2026-09-21"
+  },
+  {
+    "code": "3374",
+    "name": "精材",
+    "exchange": "TPEx",
+    "price": 443.0,
+    "change": -1.5,
+    "volume_lots": 10028683,
+    "turnover": 4420993950,
+    "date": "2026-09-21"
+  },
+  {
+    "code": "3379",
+    "name": "彬台",
+    "exchange": "TPEx",
+    "price": 28.3,
+    "change": 1.0,
+    "volume_lots": 140114,
+    "turnover": 3898649,
+    "date": "2026-09-21"
+  },
+  {
+    "code": "3388",
+    "name": "崇越電",
+    "exchange": "TPEx",
+    "price": 83.7,
+    "change": 2.1,
+    "volume_lots": 737989,
+    "turnover": 61603444,
+    "date": "2026-09-21"
+  },
+  {
+    "code": "3390",
+    "name": "旭軟",
+    "exchange": "TPEx",
+    "price": 22.0,
+    "change": -0.2,
+    "volume_lots": 320399,
+    "turnover": 6998847,
+    "date": "2026-09-21"
+  },
+  {
+    "code": "3402",
+    "name": "漢科",
+    "exchange": "TPEx",
+    "price": 127.0,
+    "change": -2.0,
+    "volume_lots": 144325,
+    "turnover": 18411632,
+    "date": "2026-09-21"
+  },
+  {
+    "code": "3430",
+    "name": "奇鈦科",
+    "exchange": "TPEx",
+    "price": 106.0,
+    "change": 2.5,
+    "volume_lots": 394790,
+    "turnover": 42203955,
+    "date": "2026-09-21"
+  },
+  {
+    "code": "3434",
+    "name": "哲固",
+    "exchange": "TPEx",
+    "price": 33.6,
+    "change": 1.0,
+    "volume_lots": 334965,
+    "turnover": 11219948,
+    "date": "2026-09-21"
+  },
+  {
+    "code": "3438",
+    "name": "類比科",
+    "exchange": "TPEx",
+    "price": 63.3,
+    "change": 0.1,
+    "volume_lots": 41080,
+    "turnover": 2617227,
+    "date": "2026-09-21"
+  },
+  {
+    "code": "3441",
+    "name": "聯一光",
+    "exchange": "TPEx",
+    "price": 177.5,
+    "change": -8.0,
+    "volume_lots": 1946631,
+    "turnover": 353539677,
+    "date": "2026-09-21"
+  },
+  {
+    "code": "3444",
+    "name": "利機",
+    "exchange": "TPEx",
+    "price": 83.2,
+    "change": 1.0,
+    "volume_lots": 171649,
+    "turnover": 14307438,
+    "date": "2026-09-21"
+  },
+  {
+    "code": "3455",
+    "name": "由田",
+    "exchange": "TPEx",
+    "price": 256.5,
+    "change": 1.0,
+    "volume_lots": 2147522,
+    "turnover": 551220242,
+    "date": "2026-09-21"
+  },
+  {
+    "code": "3465",
+    "name": "進泰電子",
+    "exchange": "TPEx",
+    "price": 29.0,
+    "change": -0.25,
+    "volume_lots": 13001,
+    "turnover": 377278,
+    "date": "2026-09-21"
+  },
+  {
+    "code": "3466",
+    "name": "德晉",
+    "exchange": "TPEx",
+    "price": 24.35,
+    "change": -0.1,
+    "volume_lots": 190842,
+    "turnover": 4650208,
+    "date": "2026-09-21"
+  },
+  {
+    "code": "3467",
+    "name": "台灣精材",
+    "exchange": "TPEx",
+    "price": 77.4,
+    "change": 0.0,
+    "volume_lots": 788143,
+    "turnover": 60641031,
+    "date": "2026-09-21"
+  },
+  {
+    "code": "3479",
+    "name": "安勤",
+    "exchange": "TPEx",
+    "price": 131.5,
+    "change": 0.0,
+    "volume_lots": 479328,
+    "turnover": 63449335,
+    "date": "2026-09-21"
+  },
+  {
+    "code": "3483",
+    "name": "力致",
+    "exchange": "TPEx",
+    "price": 74.2,
+    "change": -1.0,
+    "volume_lots": 302627,
+    "turnover": 22415505,
+    "date": "2026-09-21"
+  },
+  {
+    "code": "3484",
+    "name": "崧騰",
+    "exchange": "TPEx",
+    "price": 45.8,
+    "change": -0.95,
+    "volume_lots": 137442,
+    "turnover": 6306231,
+    "date": "2026-09-21"
+  },
+  {
+    "code": "3485",
+    "name": "敘豐",
+    "exchange": "TPEx",
+    "price": 196.5,
+    "change": -2.0,
+    "volume_lots": 59519,
+    "turnover": 11802752,
+    "date": "2026-09-21"
+  },
+  {
+    "code": "3489",
+    "name": "森寶",
+    "exchange": "TPEx",
+    "price": 22.3,
+    "change": 0.05,
+    "volume_lots": 148421,
+    "turnover": 3339689,
+    "date": "2026-09-21"
+  },
+  {
+    "code": "3490",
+    "name": "單井",
+    "exchange": "TPEx",
+    "price": 45.2,
+    "change": 0.85,
+    "volume_lots": 3224912,
+    "turnover": 146014662,
+    "date": "2026-09-21"
+  },
+  {
+    "code": "3491",
+    "name": "昇達科",
+    "exchange": "TPEx",
+    "price": 1520.0,
+    "change": -45.0,
+    "volume_lots": 1364176,
+    "turnover": 2101360195,
+    "date": "2026-09-21"
+  },
+  {
+    "code": "3492",
+    "name": "長盛",
+    "exchange": "TPEx",
+    "price": 19.2,
+    "change": 0.2,
+    "volume_lots": 15006,
+    "turnover": 286164,
+    "date": "2026-09-21"
+  },
+  {
+    "code": "3498",
+    "name": "陽程",
+    "exchange": "TPEx",
+    "price": 196.0,
+    "change": 1.0,
+    "volume_lots": 1870168,
+    "turnover": 369791524,
+    "date": "2026-09-21"
+  },
+  {
+    "code": "3499",
+    "name": "環天科",
+    "exchange": "TPEx",
+    "price": 13.8,
+    "change": 0.5,
+    "volume_lots": 52793,
+    "turnover": 719841,
+    "date": "2026-09-21"
+  },
+  {
+    "code": "3508",
+    "name": "位速",
+    "exchange": "TPEx",
+    "price": 26.1,
+    "change": 2.35,
+    "volume_lots": 1521930,
+    "turnover": 38961721,
+    "date": "2026-09-21"
+  },
+  {
+    "code": "3511",
+    "name": "矽瑪",
+    "exchange": "TPEx",
+    "price": 19.6,
+    "change": 0.6,
+    "volume_lots": 88880,
+    "turnover": 1724479,
+    "date": "2026-09-21"
+  },
+  {
+    "code": "3512",
+    "name": "皇龍",
+    "exchange": "TPEx",
+    "price": 19.3,
+    "change": 0.15,
+    "volume_lots": 25804,
+    "turnover": 496089,
+    "date": "2026-09-21"
+  },
+  {
+    "code": "3516",
+    "name": "亞帝歐",
+    "exchange": "TPEx",
+    "price": 25.2,
+    "change": 0.2,
+    "volume_lots": 29767,
+    "turnover": 746640,
+    "date": "2026-09-21"
+  },
+  {
+    "code": "3520",
+    "name": "華盈",
+    "exchange": "TPEx",
+    "price": 17.5,
+    "change": 0.0,
+    "volume_lots": 67051,
+    "turnover": 1172885,
+    "date": "2026-09-21"
+  },
+  {
+    "code": "3521",
+    "name": "台鋼建設",
+    "exchange": "TPEx",
+    "price": 11.95,
+    "change": -0.05,
+    "volume_lots": 39316,
+    "turnover": 469883,
+    "date": "2026-09-21"
+  },
+  {
+    "code": "3522",
+    "name": "御嵿",
+    "exchange": "TPEx",
+    "price": 13.1,
+    "change": -0.2,
+    "volume_lots": 202384,
+    "turnover": 2638640,
+    "date": "2026-09-21"
+  },
+  {
+    "code": "3523",
+    "name": "迎輝",
+    "exchange": "TPEx",
+    "price": 15.0,
+    "change": 0.0,
+    "volume_lots": 17356,
+    "turnover": 260307,
+    "date": "2026-09-21"
+  },
+  {
+    "code": "3526",
+    "name": "凡甲",
+    "exchange": "TPEx",
+    "price": 270.5,
+    "change": -0.5,
+    "volume_lots": 163529,
+    "turnover": 44250391,
+    "date": "2026-09-21"
+  },
+  {
+    "code": "3527",
+    "name": "聚積",
+    "exchange": "TPEx",
+    "price": 51.5,
+    "change": 1.5,
+    "volume_lots": 115170,
+    "turnover": 5912822,
+    "date": "2026-09-21"
+  },
+  {
+    "code": "3529",
+    "name": "力旺",
+    "exchange": "TPEx",
+    "price": 2830.0,
+    "change": -15.0,
+    "volume_lots": 914462,
+    "turnover": 2624363895,
+    "date": "2026-09-21"
+  },
+  {
+    "code": "3531",
+    "name": "先益",
+    "exchange": "TPEx",
+    "price": 21.2,
+    "change": -0.05,
+    "volume_lots": 1279,
+    "turnover": 27112,
+    "date": "2026-09-21"
+  },
+  {
+    "code": "3537",
+    "name": "堡達",
+    "exchange": "TPEx",
+    "price": 53.9,
+    "change": 0.6,
+    "volume_lots": 163384,
+    "turnover": 8739058,
+    "date": "2026-09-21"
+  },
+  {
+    "code": "3540",
+    "name": "曜越",
+    "exchange": "TPEx",
+    "price": 23.45,
+    "change": 0.1,
+    "volume_lots": 426727,
+    "turnover": 10099658,
+    "date": "2026-09-21"
+  },
+  {
+    "code": "3541",
+    "name": "西柏",
+    "exchange": "TPEx",
+    "price": 22.4,
+    "change": 0.25,
+    "volume_lots": 26410,
+    "turnover": 588810,
+    "date": "2026-09-21"
+  },
+  {
+    "code": "3546",
+    "name": "宇峻",
+    "exchange": "TPEx",
+    "price": 73.4,
+    "change": -0.6,
+    "volume_lots": 84425,
+    "turnover": 6170974,
+    "date": "2026-09-21"
+  },
+  {
+    "code": "3548",
+    "name": "兆利",
+    "exchange": "TPEx",
+    "price": 80.0,
+    "change": -0.6,
+    "volume_lots": 132163,
+    "turnover": 10549124,
+    "date": "2026-09-21"
+  },
+  {
+    "code": "3551",
+    "name": "世禾",
+    "exchange": "TPEx",
+    "price": 186.5,
+    "change": -1.0,
+    "volume_lots": 1890691,
+    "turnover": 354546465,
+    "date": "2026-09-21"
+  },
+  {
+    "code": "3552",
+    "name": "同致",
+    "exchange": "TPEx",
+    "price": 39.3,
+    "change": 0.0,
+    "volume_lots": 1051841,
+    "turnover": 41376478,
+    "date": "2026-09-21"
+  },
+  {
+    "code": "3555",
+    "name": "博士旺",
+    "exchange": "TPEx",
+    "price": 174.0,
+    "change": -1.0,
+    "volume_lots": 29556,
+    "turnover": 5121246,
+    "date": "2026-09-21"
+  },
+  {
+    "code": "3556",
+    "name": "禾瑞亞",
+    "exchange": "TPEx",
+    "price": 57.7,
+    "change": 0.1,
+    "volume_lots": 93729,
+    "turnover": 5393756,
+    "date": "2026-09-21"
+  },
+  {
+    "code": "3558",
+    "name": "神準",
+    "exchange": "TPEx",
+    "price": 124.0,
+    "change": 3.0,
+    "volume_lots": 85551,
+    "turnover": 10606548,
+    "date": "2026-09-21"
+  },
+  {
+    "code": "3564",
+    "name": "其陽",
+    "exchange": "TPEx",
+    "price": 50.4,
+    "change": 0.55,
+    "volume_lots": 286416,
+    "turnover": 14523514,
+    "date": "2026-09-21"
+  },
+  {
+    "code": "3567",
+    "name": "逸昌",
+    "exchange": "TPEx",
+    "price": 25.35,
+    "change": 0.05,
+    "volume_lots": 16517,
+    "turnover": 418255,
+    "date": "2026-09-21"
+  },
+  {
+    "code": "3570",
+    "name": "大塚",
+    "exchange": "TPEx",
+    "price": 169.5,
+    "change": -1.0,
+    "volume_lots": 16962,
+    "turnover": 2874671,
+    "date": "2026-09-21"
+  },
+  {
+    "code": "3577",
+    "name": "泓格",
+    "exchange": "TPEx",
+    "price": 117.0,
+    "change": -2.0,
+    "volume_lots": 262413,
+    "turnover": 30961404,
+    "date": "2026-09-21"
+  },
+  {
+    "code": "3580",
+    "name": "友威科",
+    "exchange": "TPEx",
+    "price": 100.5,
+    "change": 3.7,
+    "volume_lots": 1728821,
+    "turnover": 174305245,
+    "date": "2026-09-21"
+  },
+  {
+    "code": "3581",
+    "name": "博磊",
+    "exchange": "TPEx",
+    "price": 103.5,
+    "change": 1.5,
+    "volume_lots": 288907,
+    "turnover": 30327450,
+    "date": "2026-09-21"
+  },
+  {
+    "code": "3587",
+    "name": "閎康",
+    "exchange": "TPEx",
+    "price": 239.5,
+    "change": -2.0,
+    "volume_lots": 226901,
+    "turnover": 54372594,
+    "date": "2026-09-21"
+  },
+  {
+    "code": "3594",
+    "name": "磐儀",
+    "exchange": "TPEx",
+    "price": 47.0,
+    "change": 0.25,
+    "volume_lots": 402984,
+    "turnover": 19011235,
+    "date": "2026-09-21"
+  },
+  {
+    "code": "3597",
+    "name": "映興",
+    "exchange": "TPEx",
+    "price": 26.35,
+    "change": 0.1,
+    "volume_lots": 16044,
+    "turnover": 424608,
+    "date": "2026-09-21"
+  },
+  {
+    "code": "3609",
+    "name": "三一東林",
+    "exchange": "TPEx",
+    "price": 24.05,
+    "change": 2.15,
+    "volume_lots": 235819,
+    "turnover": 5516454,
+    "date": "2026-09-21"
+  },
+  {
+    "code": "3611",
+    "name": "鼎翰",
+    "exchange": "TPEx",
+    "price": 182.5,
+    "change": 0.0,
+    "volume_lots": 24939,
+    "turnover": 4538079,
+    "date": "2026-09-21"
+  },
+  {
+    "code": "3615",
+    "name": "安可",
+    "exchange": "TPEx",
+    "price": 37.75,
+    "change": 0.85,
+    "volume_lots": 975554,
+    "turnover": 37053198,
+    "date": "2026-09-21"
+  },
+  {
+    "code": "3623",
+    "name": "富晶通",
+    "exchange": "TPEx",
+    "price": 28.05,
+    "change": 0.3,
+    "volume_lots": 285151,
+    "turnover": 8041702,
+    "date": "2026-09-21"
+  },
+  {
+    "code": "3624",
+    "name": "光頡",
+    "exchange": "TPEx",
+    "price": 132.5,
+    "change": 6.5,
+    "volume_lots": 33266491,
+    "turnover": 4462556087,
+    "date": "2026-09-21"
+  },
+  {
+    "code": "3625",
+    "name": "西勝",
+    "exchange": "TPEx",
+    "price": 11.4,
+    "change": -0.1,
+    "volume_lots": 171483,
+    "turnover": 1936844,
+    "date": "2026-09-21"
+  },
+  {
+    "code": "3628",
+    "name": "盈正",
+    "exchange": "TPEx",
+    "price": 72.7,
+    "change": -0.8,
+    "volume_lots": 81102,
+    "turnover": 5919372,
+    "date": "2026-09-21"
+  },
+  {
+    "code": "3629",
+    "name": "地心引力",
+    "exchange": "TPEx",
+    "price": 18.2,
+    "change": 0.0,
+    "volume_lots": 4738,
+    "turnover": 87489,
+    "date": "2026-09-21"
+  },
+  {
+    "code": "3630",
+    "name": "新鉅科",
+    "exchange": "TPEx",
+    "price": 26.25,
+    "change": 0.4,
+    "volume_lots": 299596,
+    "turnover": 7851005,
+    "date": "2026-09-21"
+  },
+  {
+    "code": "3631",
+    "name": "晟楠",
+    "exchange": "TPEx",
+    "price": 40.75,
+    "change": 0.6,
+    "volume_lots": 271634,
+    "turnover": 11107999,
+    "date": "2026-09-21"
+  },
+  {
+    "code": "3632",
+    "name": "研勤",
+    "exchange": "TPEx",
+    "price": 7.07,
+    "change": -0.01,
+    "volume_lots": 7833,
+    "turnover": 55715,
+    "date": "2026-09-21"
+  },
+  {
+    "code": "3646",
+    "name": "艾恩特",
+    "exchange": "TPEx",
+    "price": 24.8,
+    "change": 0.0,
+    "volume_lots": 23358,
+    "turnover": 575156,
+    "date": "2026-09-21"
+  },
+  {
+    "code": "3663",
+    "name": "鑫科",
+    "exchange": "TPEx",
+    "price": 62.1,
+    "change": 0.9,
+    "volume_lots": 558929,
+    "turnover": 34857551,
+    "date": "2026-09-21"
+  },
+  {
+    "code": "3664",
+    "name": "安瑞-KY",
+    "exchange": "TPEx",
+    "price": 8.5,
+    "change": 0.1,
+    "volume_lots": 49001,
+    "turnover": 414738,
+    "date": "2026-09-21"
+  },
+  {
+    "code": "3666",
+    "name": "光耀",
+    "exchange": "TPEx",
+    "price": 25.1,
+    "change": 0.1,
+    "volume_lots": 45162,
+    "turnover": 1129948,
+    "date": "2026-09-21"
+  },
+  {
+    "code": "3672",
+    "name": "康聯訊",
+    "exchange": "TPEx",
+    "price": 12.0,
+    "change": -0.05,
+    "volume_lots": 36065,
+    "turnover": 434524,
+    "date": "2026-09-21"
+  },
+  {
+    "code": "3675",
+    "name": "德微",
+    "exchange": "TPEx",
+    "price": 294.5,
+    "change": 0.5,
+    "volume_lots": 1044384,
+    "turnover": 307989829,
+    "date": "2026-09-21"
+  },
+  {
+    "code": "3680",
+    "name": "家登",
+    "exchange": "TPEx",
+    "price": 548.0,
+    "change": 15.0,
+    "volume_lots": 2047803,
+    "turnover": 1114946391,
+    "date": "2026-09-21"
+  },
+  {
+    "code": "3684",
+    "name": "榮昌",
+    "exchange": "TPEx",
+    "price": 54.0,
+    "change": -0.2,
+    "volume_lots": 6470,
+    "turnover": 349610,
+    "date": "2026-09-21"
+  },
+  {
+    "code": "3685",
+    "name": "元創精密",
+    "exchange": "TPEx",
+    "price": 36.0,
+    "change": 0.1,
+    "volume_lots": 378408,
+    "turnover": 13644895,
+    "date": "2026-09-21"
+  },
+  {
+    "code": "3687",
+    "name": "歐買尬",
+    "exchange": "TPEx",
+    "price": 61.3,
+    "change": 0.3,
+    "volume_lots": 53515,
+    "turnover": 3284207,
+    "date": "2026-09-21"
+  },
+  {
+    "code": "3689",
+    "name": "湧德",
+    "exchange": "TPEx",
+    "price": 109.5,
+    "change": 0.0,
+    "volume_lots": 315184,
+    "turnover": 34566948,
+    "date": "2026-09-21"
+  },
+  {
+    "code": "3691",
+    "name": "碩禾",
+    "exchange": "TPEx",
+    "price": 100.5,
+    "change": 3.0,
+    "volume_lots": 1070507,
+    "turnover": 109386561,
+    "date": "2026-09-21"
+  },
+  {
+    "code": "3693",
+    "name": "營邦",
+    "exchange": "TPEx",
+    "price": 702.0,
+    "change": -2.0,
+    "volume_lots": 1060865,
+    "turnover": 745891730,
+    "date": "2026-09-21"
+  },
+  {
+    "code": "3707",
+    "name": "漢磊",
+    "exchange": "TPEx",
+    "price": 63.4,
+    "change": 0.5,
+    "volume_lots": 2326573,
+    "turnover": 147559039,
+    "date": "2026-09-21"
+  },
+  {
+    "code": "3709",
+    "name": "鑫聯大投控",
+    "exchange": "TPEx",
+    "price": 63.9,
+    "change": 0.5,
+    "volume_lots": 170333,
+    "turnover": 10832356,
+    "date": "2026-09-21"
+  },
+  {
+    "code": "3710",
+    "name": "連展投控",
+    "exchange": "TPEx",
+    "price": 7.6,
+    "change": -0.72,
+    "volume_lots": 651623,
+    "turnover": 5213347,
+    "date": "2026-09-21"
+  },
+  {
+    "code": "3713",
+    "name": "新晶投控",
+    "exchange": "TPEx",
+    "price": 14.2,
+    "change": 0.1,
+    "volume_lots": 32006,
+    "turnover": 453584,
+    "date": "2026-09-21"
+  },
+  {
+    "code": "3718",
+    "name": "中光電投控",
+    "exchange": "TPEx",
+    "price": 67.1,
+    "change": 0.0,
+    "volume_lots": 2748188,
+    "turnover": 185142233,
+    "date": "2026-09-21"
+  },
+  {
+    "code": "4102",
+    "name": "永日",
+    "exchange": "TPEx",
+    "price": 18.85,
+    "change": 0.05,
+    "volume_lots": 10606,
+    "turnover": 198829,
+    "date": "2026-09-21"
+  },
+  {
+    "code": "4105",
+    "name": "東洋",
+    "exchange": "TPEx",
+    "price": 79.1,
+    "change": 0.7,
+    "volume_lots": 603283,
+    "turnover": 47506923,
+    "date": "2026-09-21"
+  },
+  {
+    "code": "4107",
+    "name": "邦特",
+    "exchange": "TPEx",
+    "price": 111.0,
+    "change": -1.0,
+    "volume_lots": 53794,
+    "turnover": 5983858,
+    "date": "2026-09-21"
+  },
+  {
+    "code": "4109",
+    "name": "加捷生醫",
+    "exchange": "TPEx",
+    "price": 11.25,
+    "change": 0.0,
+    "volume_lots": 85012,
+    "turnover": 948822,
+    "date": "2026-09-21"
+  },
+  {
+    "code": "4111",
+    "name": "濟生",
+    "exchange": "TPEx",
+    "price": 28.85,
+    "change": 0.05,
+    "volume_lots": 29511,
+    "turnover": 850523,
+    "date": "2026-09-21"
+  },
+  {
+    "code": "4113",
+    "name": "聯上",
+    "exchange": "TPEx",
+    "price": 15.55,
+    "change": 0.1,
+    "volume_lots": 690289,
+    "turnover": 10767969,
+    "date": "2026-09-21"
+  },
+  {
+    "code": "4114",
+    "name": "健喬",
+    "exchange": "TPEx",
+    "price": 29.6,
+    "change": -0.2,
+    "volume_lots": 407736,
+    "turnover": 12078832,
+    "date": "2026-09-21"
+  },
+  {
+    "code": "4116",
+    "name": "明基醫",
+    "exchange": "TPEx",
+    "price": 39.5,
+    "change": 0.1,
+    "volume_lots": 23265,
+    "turnover": 922178,
+    "date": "2026-09-21"
+  },
+  {
+    "code": "4120",
+    "name": "友華",
+    "exchange": "TPEx",
+    "price": 45.9,
+    "change": 0.1,
+    "volume_lots": 7628,
+    "turnover": 348332,
+    "date": "2026-09-21"
+  },
+  {
+    "code": "4121",
+    "name": "優盛",
+    "exchange": "TPEx",
+    "price": 12.75,
+    "change": 0.0,
+    "volume_lots": 25331,
+    "turnover": 321405,
+    "date": "2026-09-21"
+  },
+  {
+    "code": "4123",
+    "name": "晟德",
+    "exchange": "TPEx",
+    "price": 30.75,
+    "change": -0.15,
+    "volume_lots": 943566,
+    "turnover": 28936046,
+    "date": "2026-09-21"
+  },
+  {
+    "code": "4126",
+    "name": "太醫",
+    "exchange": "TPEx",
+    "price": 77.5,
+    "change": -0.2,
+    "volume_lots": 30285,
+    "turnover": 2353954,
+    "date": "2026-09-21"
+  },
+  {
+    "code": "4127",
+    "name": "天良",
+    "exchange": "TPEx",
+    "price": 60.0,
+    "change": -1.4,
+    "volume_lots": 153327,
+    "turnover": 9370197,
+    "date": "2026-09-21"
+  },
+  {
+    "code": "4128",
+    "name": "中天",
+    "exchange": "TPEx",
+    "price": 14.65,
+    "change": 0.05,
+    "volume_lots": 754900,
+    "turnover": 11032307,
+    "date": "2026-09-21"
+  },
+  {
+    "code": "4129",
+    "name": "聯合",
+    "exchange": "TPEx",
+    "price": 82.5,
+    "change": -0.5,
+    "volume_lots": 33457,
+    "turnover": 2756407,
+    "date": "2026-09-21"
+  },
+  {
+    "code": "4131",
+    "name": "浩泰",
+    "exchange": "TPEx",
+    "price": 31.2,
+    "change": -0.2,
+    "volume_lots": 11001,
+    "turnover": 338581,
+    "date": "2026-09-21"
+  },
+  {
+    "code": "4138",
+    "name": "曜亞",
+    "exchange": "TPEx",
+    "price": 54.6,
+    "change": 0.7,
+    "volume_lots": 25671,
+    "turnover": 1390990,
+    "date": "2026-09-21"
+  },
+  {
+    "code": "4139",
+    "name": "馬光-KY",
+    "exchange": "TPEx",
+    "price": 40.75,
+    "change": -1.25,
+    "volume_lots": 28495,
+    "turnover": 1173300,
+    "date": "2026-09-21"
+  },
+  {
+    "code": "4147",
+    "name": "中裕",
+    "exchange": "TPEx",
+    "price": 64.1,
+    "change": 1.2,
+    "volume_lots": 1385041,
+    "turnover": 88093796,
+    "date": "2026-09-21"
+  },
+  {
+    "code": "4153",
+    "name": "鈺緯",
+    "exchange": "TPEx",
+    "price": 32.3,
+    "change": 0.35,
+    "volume_lots": 11204,
+    "turnover": 358333,
+    "date": "2026-09-21"
+  },
+  {
+    "code": "4154",
+    "name": "樂威科-KY",
+    "exchange": "TPEx",
+    "price": 11.65,
+    "change": 0.0,
+    "volume_lots": 1055,
+    "turnover": 12255,
+    "date": "2026-09-21"
+  },
+  {
+    "code": "4157",
+    "name": "太景*-KY",
+    "exchange": "TPEx",
+    "price": 8.99,
+    "change": -0.07,
+    "volume_lots": 505478,
+    "turnover": 4541433,
+    "date": "2026-09-21"
+  },
+  {
+    "code": "4160",
+    "name": "訊聯基因",
+    "exchange": "TPEx",
+    "price": 39.15,
+    "change": 0.0,
+    "volume_lots": 8284,
+    "turnover": 323774,
+    "date": "2026-09-21"
+  },
+  {
+    "code": "4161",
+    "name": "聿新科",
+    "exchange": "TPEx",
+    "price": 22.2,
+    "change": -0.05,
+    "volume_lots": 24757,
+    "turnover": 548040,
+    "date": "2026-09-21"
+  },
+  {
+    "code": "4162",
+    "name": "智擎",
+    "exchange": "TPEx",
+    "price": 55.8,
+    "change": 0.2,
+    "volume_lots": 193445,
+    "turnover": 10823738,
+    "date": "2026-09-21"
+  },
+  {
+    "code": "4163",
+    "name": "鐿鈦",
+    "exchange": "TPEx",
+    "price": 133.0,
+    "change": 0.5,
+    "volume_lots": 8612,
+    "turnover": 1146733,
+    "date": "2026-09-21"
+  },
+  {
+    "code": "4166",
+    "name": "友霖",
+    "exchange": "TPEx",
+    "price": 24.3,
+    "change": -0.2,
+    "volume_lots": 19125,
+    "turnover": 466394,
+    "date": "2026-09-21"
+  },
+  {
+    "code": "4167",
+    "name": "松瑞藥",
+    "exchange": "TPEx",
+    "price": 19.65,
+    "change": 0.0,
+    "volume_lots": 531229,
+    "turnover": 10379289,
+    "date": "2026-09-21"
+  },
+  {
+    "code": "4168",
+    "name": "醣聯",
+    "exchange": "TPEx",
+    "price": 21.8,
+    "change": -0.15,
+    "volume_lots": 38601,
+    "turnover": 841196,
+    "date": "2026-09-21"
+  },
+  {
+    "code": "4171",
+    "name": "瑞基",
+    "exchange": "TPEx",
+    "price": 16.4,
+    "change": -0.05,
+    "volume_lots": 25478,
+    "turnover": 419309,
+    "date": "2026-09-21"
+  },
+  {
+    "code": "4173",
+    "name": "久裕",
+    "exchange": "TPEx",
+    "price": 17.4,
+    "change": 0.05,
+    "volume_lots": 43025,
+    "turnover": 748763,
+    "date": "2026-09-21"
+  },
+  {
+    "code": "4174",
+    "name": "浩鼎",
+    "exchange": "TPEx",
+    "price": 29.9,
+    "change": 2.7,
+    "volume_lots": 1194377,
+    "turnover": 34923472,
+    "date": "2026-09-21"
+  },
+  {
+    "code": "4175",
+    "name": "杏一",
+    "exchange": "TPEx",
+    "price": 51.4,
+    "change": 0.2,
+    "volume_lots": 7742,
+    "turnover": 396916,
+    "date": "2026-09-21"
+  },
+  {
+    "code": "4183",
+    "name": "福永生技",
+    "exchange": "TPEx",
+    "price": 14.35,
+    "change": 1.3,
+    "volume_lots": 61403,
+    "turnover": 878421,
+    "date": "2026-09-21"
+  },
+  {
+    "code": "4188",
+    "name": "安克",
+    "exchange": "TPEx",
+    "price": 13.7,
+    "change": -0.3,
+    "volume_lots": 86379,
+    "turnover": 1190911,
+    "date": "2026-09-21"
+  },
+  {
+    "code": "4192",
+    "name": "杏國",
+    "exchange": "TPEx",
+    "price": 18.6,
+    "change": 0.3,
+    "volume_lots": 6698,
+    "turnover": 123791,
+    "date": "2026-09-21"
+  },
+  {
+    "code": "4198",
+    "name": "欣大健康",
+    "exchange": "TPEx",
+    "price": 49.4,
+    "change": -0.05,
+    "volume_lots": 6363,
+    "turnover": 311379,
+    "date": "2026-09-21"
+  },
+  {
+    "code": "4205",
+    "name": "中華食",
+    "exchange": "TPEx",
+    "price": 69.0,
+    "change": 0.2,
+    "volume_lots": 16168,
+    "turnover": 1112873,
+    "date": "2026-09-21"
+  },
+  {
+    "code": "4207",
+    "name": "環泰",
+    "exchange": "TPEx",
+    "price": 19.4,
+    "change": 0.0,
+    "volume_lots": 35944,
+    "turnover": 697217,
+    "date": "2026-09-21"
+  },
+  {
+    "code": "4303",
+    "name": "信立",
+    "exchange": "TPEx",
+    "price": 35.2,
+    "change": -0.5,
+    "volume_lots": 464232,
+    "turnover": 16426523,
+    "date": "2026-09-21"
+  },
+  {
+    "code": "4304",
+    "name": "勝昱",
+    "exchange": "TPEx",
+    "price": 18.95,
+    "change": 1.7,
+    "volume_lots": 174787,
+    "turnover": 3312209,
+    "date": "2026-09-21"
+  },
+  {
+    "code": "4305",
+    "name": "世坤",
+    "exchange": "TPEx",
+    "price": 42.15,
+    "change": -0.55,
+    "volume_lots": 2000,
+    "turnover": 84100,
+    "date": "2026-09-21"
+  },
+  {
+    "code": "4401",
+    "name": "東隆興",
+    "exchange": "TPEx",
+    "price": 14.1,
+    "change": 0.0,
+    "volume_lots": 25500,
+    "turnover": 358665,
+    "date": "2026-09-21"
+  },
+  {
+    "code": "4402",
+    "name": "郡都開發",
+    "exchange": "TPEx",
+    "price": 14.0,
+    "change": -0.05,
+    "volume_lots": 44095,
+    "turnover": 625041,
+    "date": "2026-09-21"
+  },
+  {
+    "code": "4406",
+    "name": "新昕纖",
+    "exchange": "TPEx",
+    "price": 10.35,
+    "change": 0.15,
+    "volume_lots": 153000,
+    "turnover": 1591200,
+    "date": "2026-09-21"
+  },
+  {
+    "code": "4413",
+    "name": "飛寶企業",
+    "exchange": "TPEx",
+    "price": 18.85,
+    "change": -0.45,
+    "volume_lots": 32000,
+    "turnover": 598350,
+    "date": "2026-09-21"
+  },
+  {
+    "code": "4416",
+    "name": "三圓",
+    "exchange": "TPEx",
+    "price": 13.35,
+    "change": 1.2,
+    "volume_lots": 2297337,
+    "turnover": 29497522,
+    "date": "2026-09-21"
+  },
+  {
+    "code": "4417",
+    "name": "金洲",
+    "exchange": "TPEx",
+    "price": 50.0,
+    "change": -0.2,
+    "volume_lots": 32184,
+    "turnover": 1607323,
+    "date": "2026-09-21"
+  },
+  {
+    "code": "4419",
+    "name": "皇家美食",
+    "exchange": "TPEx",
+    "price": 47.55,
+    "change": 1.6,
+    "volume_lots": 3011,
+    "turnover": 142979,
+    "date": "2026-09-21"
+  },
+  {
+    "code": "4420",
+    "name": "光明",
+    "exchange": "TPEx",
+    "price": 35.85,
+    "change": -0.25,
+    "volume_lots": 61088,
+    "turnover": 2175089,
+    "date": "2026-09-21"
+  },
+  {
+    "code": "4430",
+    "name": "耀億",
+    "exchange": "TPEx",
+    "price": 17.35,
+    "change": 0.1,
+    "volume_lots": 11186,
+    "turnover": 193930,
+    "date": "2026-09-21"
+  },
+  {
+    "code": "4432",
+    "name": "銘旺實",
+    "exchange": "TPEx",
+    "price": 15.5,
+    "change": -0.1,
+    "volume_lots": 47130,
+    "turnover": 728159,
+    "date": "2026-09-21"
+  },
+  {
+    "code": "4433",
+    "name": "興采",
+    "exchange": "TPEx",
+    "price": 17.9,
+    "change": -0.2,
+    "volume_lots": 84020,
+    "turnover": 1511375,
+    "date": "2026-09-21"
+  },
+  {
+    "code": "4442",
+    "name": "竣邦-KY",
+    "exchange": "TPEx",
+    "price": 54.5,
+    "change": 0.0,
+    "volume_lots": 21187,
+    "turnover": 1157042,
+    "date": "2026-09-21"
+  },
+  {
+    "code": "4502",
+    "name": "健信",
+    "exchange": "TPEx",
+    "price": 0.0,
+    "change": 0.0,
+    "volume_lots": 236,
+    "turnover": 3583,
+    "date": "2026-09-21"
+  },
+  {
+    "code": "4503",
+    "name": "金雨",
+    "exchange": "TPEx",
+    "price": 23.55,
+    "change": 0.4,
+    "volume_lots": 69689,
+    "turnover": 1644623,
+    "date": "2026-09-21"
+  },
+  {
+    "code": "4506",
+    "name": "崇友",
+    "exchange": "TPEx",
+    "price": 119.0,
+    "change": -0.5,
+    "volume_lots": 19668,
+    "turnover": 2349163,
+    "date": "2026-09-21"
+  },
+  {
+    "code": "4510",
+    "name": "高鋒",
+    "exchange": "TPEx",
+    "price": 44.5,
+    "change": 0.05,
+    "volume_lots": 616986,
+    "turnover": 27597157,
+    "date": "2026-09-21"
+  },
+  {
+    "code": "4513",
+    "name": "福裕",
+    "exchange": "TPEx",
+    "price": 16.55,
+    "change": 0.35,
+    "volume_lots": 364242,
+    "turnover": 6033498,
+    "date": "2026-09-21"
+  },
+  {
+    "code": "4523",
+    "name": "永彰",
+    "exchange": "TPEx",
+    "price": 24.2,
+    "change": -0.55,
+    "volume_lots": 83596,
+    "turnover": 2030526,
+    "date": "2026-09-21"
+  },
+  {
+    "code": "4527",
+    "name": "方土霖",
+    "exchange": "TPEx",
+    "price": 40.75,
+    "change": 0.05,
+    "volume_lots": 8583,
+    "turnover": 351995,
+    "date": "2026-09-21"
+  },
+  {
+    "code": "4528",
+    "name": "江興鍛",
+    "exchange": "TPEx",
+    "price": 14.9,
+    "change": 0.05,
+    "volume_lots": 15641,
+    "turnover": 233477,
+    "date": "2026-09-21"
+  },
+  {
+    "code": "4529",
+    "name": "淳紳",
+    "exchange": "TPEx",
+    "price": 3.45,
+    "change": 0.01,
+    "volume_lots": 16003,
+    "turnover": 55209,
+    "date": "2026-09-21"
+  },
+  {
+    "code": "4530",
+    "name": "天意能創",
+    "exchange": "TPEx",
+    "price": 24.85,
+    "change": 2.15,
+    "volume_lots": 38235,
+    "turnover": 882675,
+    "date": "2026-09-21"
+  },
+  {
+    "code": "4533",
+    "name": "協易機",
+    "exchange": "TPEx",
+    "price": 25.2,
+    "change": -0.1,
+    "volume_lots": 451133,
+    "turnover": 11360784,
+    "date": "2026-09-21"
+  },
+  {
+    "code": "4534",
+    "name": "慶騰",
+    "exchange": "TPEx",
+    "price": 32.25,
+    "change": 2.9,
+    "volume_lots": 2575021,
+    "turnover": 81314776,
+    "date": "2026-09-21"
+  },
+  {
+    "code": "4535",
+    "name": "至興",
+    "exchange": "TPEx",
+    "price": 27.2,
+    "change": 0.1,
+    "volume_lots": 28245,
+    "turnover": 772893,
+    "date": "2026-09-21"
+  },
+  {
+    "code": "4538",
+    "name": "大詠城",
+    "exchange": "TPEx",
+    "price": 17.4,
+    "change": 0.15,
+    "volume_lots": 14640,
+    "turnover": 253553,
+    "date": "2026-09-21"
+  },
+  {
+    "code": "4541",
+    "name": "晟田",
+    "exchange": "TPEx",
+    "price": 60.7,
+    "change": -1.3,
+    "volume_lots": 1195970,
+    "turnover": 73100944,
+    "date": "2026-09-21"
+  },
+  {
+    "code": "4542",
+    "name": "科嶠",
+    "exchange": "TPEx",
+    "price": 302.5,
+    "change": 27.5,
+    "volume_lots": 1074326,
+    "turnover": 320137678,
+    "date": "2026-09-21"
+  },
+  {
+    "code": "4543",
+    "name": "萬在",
+    "exchange": "TPEx",
+    "price": 29.0,
+    "change": 0.4,
+    "volume_lots": 81988,
+    "turnover": 2384150,
+    "date": "2026-09-21"
+  },
+  {
+    "code": "4549",
+    "name": "桓達",
+    "exchange": "TPEx",
+    "price": 97.7,
+    "change": 0.7,
+    "volume_lots": 31733,
+    "turnover": 3096343,
+    "date": "2026-09-21"
+  },
+  {
+    "code": "4550",
+    "name": "長佳",
+    "exchange": "TPEx",
+    "price": 24.15,
+    "change": -0.05,
+    "volume_lots": 14000,
+    "turnover": 338000,
+    "date": "2026-09-21"
+  },
+  {
+    "code": "4554",
+    "name": "橙的",
+    "exchange": "TPEx",
+    "price": 28.45,
+    "change": 0.0,
+    "volume_lots": 10020,
+    "turnover": 285072,
+    "date": "2026-09-21"
+  },
+  {
+    "code": "4556",
+    "name": "旭然",
+    "exchange": "TPEx",
+    "price": 87.3,
+    "change": 4.1,
+    "volume_lots": 1391471,
+    "turnover": 124138544,
+    "date": "2026-09-21"
+  },
+  {
+    "code": "4558",
+    "name": "寶緯",
+    "exchange": "TPEx",
+    "price": 17.2,
+    "change": -0.55,
+    "volume_lots": 41000,
+    "turnover": 708150,
+    "date": "2026-09-21"
+  },
+  {
+    "code": "4561",
+    "name": "健椿",
+    "exchange": "TPEx",
+    "price": 41.45,
+    "change": 0.35,
+    "volume_lots": 64680,
+    "turnover": 2659853,
+    "date": "2026-09-21"
+  },
+  {
+    "code": "4563",
+    "name": "百德",
+    "exchange": "TPEx",
+    "price": 47.0,
+    "change": 0.0,
+    "volume_lots": 134534,
+    "turnover": 6337445,
+    "date": "2026-09-21"
+  },
+  {
+    "code": "4568",
+    "name": "科際精密",
+    "exchange": "TPEx",
+    "price": 40.2,
+    "change": 0.6,
+    "volume_lots": 9000,
+    "turnover": 355800,
+    "date": "2026-09-21"
+  },
+  {
+    "code": "4577",
+    "name": "達航科技",
+    "exchange": "TPEx",
+    "price": 86.6,
+    "change": -0.3,
+    "volume_lots": 305777,
+    "turnover": 26822486,
+    "date": "2026-09-21"
+  },
+  {
+    "code": "4580",
+    "name": "捷流閥業",
+    "exchange": "TPEx",
+    "price": 81.4,
+    "change": 0.1,
+    "volume_lots": 29926,
+    "turnover": 2437344,
+    "date": "2026-09-21"
+  },
+  {
+    "code": "4584",
+    "name": "君帆",
+    "exchange": "TPEx",
+    "price": 37.5,
+    "change": 0.5,
+    "volume_lots": 3009,
+    "turnover": 111834,
+    "date": "2026-09-21"
+  },
+  {
+    "code": "4609",
+    "name": "唐鋒",
+    "exchange": "TPEx",
+    "price": 4.17,
+    "change": -0.07,
+    "volume_lots": 5504,
+    "turnover": 23100,
+    "date": "2026-09-21"
+  },
+  {
+    "code": "4702",
+    "name": "中美實",
+    "exchange": "TPEx",
+    "price": 9.36,
+    "change": -0.02,
+    "volume_lots": 73571,
+    "turnover": 687762,
+    "date": "2026-09-21"
+  },
+  {
+    "code": "4706",
+    "name": "大恭",
+    "exchange": "TPEx",
+    "price": 33.95,
+    "change": 0.45,
+    "volume_lots": 11202,
+    "turnover": 388022,
+    "date": "2026-09-21"
+  },
+  {
+    "code": "4707",
+    "name": "磐亞",
+    "exchange": "TPEx",
+    "price": 29.1,
+    "change": 1.1,
+    "volume_lots": 3934233,
+    "turnover": 116142229,
+    "date": "2026-09-21"
+  },
+  {
+    "code": "4711",
+    "name": "永純",
+    "exchange": "TPEx",
+    "price": 16.5,
+    "change": 0.05,
+    "volume_lots": 7036,
+    "turnover": 116294,
+    "date": "2026-09-21"
+  },
+  {
+    "code": "4714",
+    "name": "永捷",
+    "exchange": "TPEx",
+    "price": 12.45,
+    "change": 0.35,
+    "volume_lots": 4829627,
+    "turnover": 59212048,
+    "date": "2026-09-21"
+  },
+  {
+    "code": "4716",
+    "name": "大立",
+    "exchange": "TPEx",
+    "price": 16.9,
+    "change": -0.1,
+    "volume_lots": 501194,
+    "turnover": 8475709,
+    "date": "2026-09-21"
+  },
+  {
+    "code": "4721",
+    "name": "美琪瑪",
+    "exchange": "TPEx",
+    "price": 75.5,
+    "change": 1.5,
+    "volume_lots": 476263,
+    "turnover": 35787556,
+    "date": "2026-09-21"
+  },
+  {
+    "code": "4726",
+    "name": "永昕",
+    "exchange": "TPEx",
+    "price": 22.95,
+    "change": -0.05,
+    "volume_lots": 56442,
+    "turnover": 1295878,
+    "date": "2026-09-21"
+  },
+  {
+    "code": "4728",
+    "name": "雙美",
+    "exchange": "TPEx",
+    "price": 399.5,
+    "change": -6.5,
+    "volume_lots": 60213,
+    "turnover": 24368368,
+    "date": "2026-09-21"
+  },
+  {
+    "code": "4729",
+    "name": "熒茂",
+    "exchange": "TPEx",
+    "price": 18.9,
+    "change": 0.05,
+    "volume_lots": 99323,
+    "turnover": 1884995,
+    "date": "2026-09-21"
+  },
+  {
+    "code": "4735",
+    "name": "豪展",
+    "exchange": "TPEx",
+    "price": 36.15,
+    "change": 0.2,
+    "volume_lots": 21132,
+    "turnover": 760704,
+    "date": "2026-09-21"
+  },
+  {
+    "code": "4741",
+    "name": "泓瀚",
+    "exchange": "TPEx",
+    "price": 39.0,
+    "change": 0.65,
+    "volume_lots": 38178,
+    "turnover": 1480666,
+    "date": "2026-09-21"
+  },
+  {
+    "code": "4743",
+    "name": "合一",
+    "exchange": "TPEx",
+    "price": 44.75,
+    "change": 0.75,
+    "volume_lots": 765945,
+    "turnover": 34092845,
+    "date": "2026-09-21"
+  },
+  {
+    "code": "4744",
+    "name": "皇將",
+    "exchange": "TPEx",
+    "price": 29.1,
+    "change": -0.5,
+    "volume_lots": 70906,
+    "turnover": 2090001,
+    "date": "2026-09-21"
+  },
+  {
+    "code": "4745",
+    "name": "合富-KY",
+    "exchange": "TPEx",
+    "price": 11.85,
+    "change": 0.1,
+    "volume_lots": 20135,
+    "turnover": 237399,
+    "date": "2026-09-21"
+  },
+  {
+    "code": "4747",
+    "name": "強生*",
+    "exchange": "TPEx",
+    "price": 23.75,
+    "change": -0.3,
+    "volume_lots": 63986,
+    "turnover": 1521279,
+    "date": "2026-09-21"
+  },
+  {
+    "code": "4749",
+    "name": "新應材",
+    "exchange": "TPEx",
+    "price": 735.0,
+    "change": -6.0,
+    "volume_lots": 520946,
+    "turnover": 385962952,
+    "date": "2026-09-21"
+  },
+  {
+    "code": "4754",
+    "name": "國碳科",
+    "exchange": "TPEx",
+    "price": 37.6,
+    "change": 0.15,
+    "volume_lots": 5557,
+    "turnover": 208220,
+    "date": "2026-09-21"
+  },
+  {
+    "code": "4760",
+    "name": "勤凱",
+    "exchange": "TPEx",
+    "price": 266.0,
+    "change": 0.5,
+    "volume_lots": 238085,
+    "turnover": 63578174,
+    "date": "2026-09-21"
+  },
+  {
+    "code": "4767",
+    "name": "誠泰科技",
+    "exchange": "TPEx",
+    "price": 27.9,
+    "change": -0.1,
+    "volume_lots": 20108,
+    "turnover": 564372,
+    "date": "2026-09-21"
+  },
+  {
+    "code": "4768",
+    "name": "晶呈科技",
+    "exchange": "TPEx",
+    "price": 317.5,
+    "change": 2.5,
+    "volume_lots": 542046,
+    "turnover": 175184738,
+    "date": "2026-09-21"
+  },
+  {
+    "code": "4772",
+    "name": "台特化",
+    "exchange": "TPEx",
+    "price": 244.5,
+    "change": -5.5,
+    "volume_lots": 371197,
+    "turnover": 91839513,
+    "date": "2026-09-21"
+  },
+  {
+    "code": "4806",
+    "name": "桂田文創",
+    "exchange": "TPEx",
+    "price": 9.5,
+    "change": 0.16,
+    "volume_lots": 27881,
+    "turnover": 257122,
+    "date": "2026-09-21"
+  },
+  {
+    "code": "4903",
+    "name": "聯光通",
+    "exchange": "TPEx",
+    "price": 41.35,
+    "change": 3.75,
+    "volume_lots": 3170610,
+    "turnover": 130737397,
+    "date": "2026-09-21"
+  },
+  {
+    "code": "4905",
+    "name": "台聯電",
+    "exchange": "TPEx",
+    "price": 77.2,
+    "change": -1.2,
+    "volume_lots": 25163,
+    "turnover": 1951568,
+    "date": "2026-09-21"
+  },
+  {
+    "code": "4907",
+    "name": "富宇",
+    "exchange": "TPEx",
+    "price": 45.75,
+    "change": 0.25,
+    "volume_lots": 28424,
+    "turnover": 1292704,
+    "date": "2026-09-21"
+  },
+  {
+    "code": "4908",
+    "name": "前鼎",
+    "exchange": "TPEx",
+    "price": 232.0,
+    "change": -11.5,
+    "volume_lots": 4396317,
+    "turnover": 1045334640,
+    "date": "2026-09-21"
+  },
+  {
+    "code": "4909",
+    "name": "新復興",
+    "exchange": "TPEx",
+    "price": 35.15,
+    "change": -0.15,
+    "volume_lots": 376380,
+    "turnover": 13204256,
+    "date": "2026-09-21"
+  },
+  {
+    "code": "4911",
+    "name": "德英",
+    "exchange": "TPEx",
+    "price": 28.8,
+    "change": -0.2,
+    "volume_lots": 2830,
+    "turnover": 81702,
+    "date": "2026-09-21"
+  },
+  {
+    "code": "4923",
+    "name": "力士",
+    "exchange": "TPEx",
+    "price": 62.4,
+    "change": 1.6,
+    "volume_lots": 3198091,
+    "turnover": 205410595,
+    "date": "2026-09-21"
+  },
+  {
+    "code": "4924",
+    "name": "欣厚-KY",
+    "exchange": "TPEx",
+    "price": 17.05,
+    "change": 1.55,
+    "volume_lots": 777682,
+    "turnover": 13092543,
+    "date": "2026-09-21"
+  },
+  {
+    "code": "4931",
+    "name": "新盛力",
+    "exchange": "TPEx",
+    "price": 239.5,
+    "change": 2.0,
+    "volume_lots": 4324057,
+    "turnover": 1047177825,
+    "date": "2026-09-21"
+  },
+  {
+    "code": "4933",
+    "name": "友輝",
+    "exchange": "TPEx",
+    "price": 52.7,
+    "change": 0.7,
+    "volume_lots": 101418,
+    "turnover": 5342955,
+    "date": "2026-09-21"
+  },
+  {
+    "code": "4939",
+    "name": "亞電",
+    "exchange": "TPEx",
+    "price": 78.8,
+    "change": 0.5,
+    "volume_lots": 5343710,
+    "turnover": 424717316,
+    "date": "2026-09-21"
+  },
+  {
+    "code": "4946",
+    "name": "辣椒",
+    "exchange": "TPEx",
+    "price": 93.9,
+    "change": 3.8,
+    "volume_lots": 17041,
+    "turnover": 1576881,
+    "date": "2026-09-21"
+  },
+  {
+    "code": "4950",
+    "name": "金耘國際",
+    "exchange": "TPEx",
+    "price": 15.5,
+    "change": -0.5,
+    "volume_lots": 19007,
+    "turnover": 296808,
+    "date": "2026-09-21"
+  },
+  {
+    "code": "4951",
+    "name": "精拓科",
+    "exchange": "TPEx",
+    "price": 99.7,
+    "change": 9.0,
+    "volume_lots": 268662,
+    "turnover": 26785575,
+    "date": "2026-09-21"
+  },
+  {
+    "code": "4953",
+    "name": "緯致",
+    "exchange": "TPEx",
+    "price": 120.0,
+    "change": -3.0,
+    "volume_lots": 339416,
+    "turnover": 40895443,
+    "date": "2026-09-21"
+  },
+  {
+    "code": "4966",
+    "name": "譜瑞-KY",
+    "exchange": "TPEx",
+    "price": 567.0,
+    "change": -1.0,
+    "volume_lots": 692835,
+    "turnover": 393691276,
+    "date": "2026-09-21"
+  },
+  {
+    "code": "4971",
+    "name": "IET-KY",
+    "exchange": "TPEx",
+    "price": 581.0,
+    "change": -11.0,
+    "volume_lots": 1637221,
+    "turnover": 957006589,
+    "date": "2026-09-21"
+  },
+  {
+    "code": "4972",
+    "name": "湯石照明",
+    "exchange": "TPEx",
+    "price": 16.4,
+    "change": 0.1,
+    "volume_lots": 46830,
+    "turnover": 768981,
+    "date": "2026-09-21"
+  },
+  {
+    "code": "4973",
+    "name": "廣穎",
+    "exchange": "TPEx",
+    "price": 138.5,
+    "change": -1.0,
+    "volume_lots": 504335,
+    "turnover": 70405910,
+    "date": "2026-09-21"
+  },
+  {
+    "code": "4974",
+    "name": "亞泰",
+    "exchange": "TPEx",
+    "price": 71.4,
+    "change": -0.4,
+    "volume_lots": 78909,
+    "turnover": 5636201,
+    "date": "2026-09-21"
+  },
+  {
+    "code": "4979",
+    "name": "華星光",
+    "exchange": "TPEx",
+    "price": 618.0,
+    "change": 7.0,
+    "volume_lots": 14728528,
+    "turnover": 9250445436,
+    "date": "2026-09-21"
+  },
+  {
+    "code": "4991",
+    "name": "環宇-KY",
+    "exchange": "TPEx",
+    "price": 498.0,
+    "change": 24.0,
+    "volume_lots": 8186923,
+    "turnover": 4051887722,
+    "date": "2026-09-21"
+  },
+  {
+    "code": "4995",
+    "name": "晶達",
+    "exchange": "TPEx",
+    "price": 50.7,
+    "change": -0.4,
+    "volume_lots": 7928,
+    "turnover": 404448,
+    "date": "2026-09-21"
+  },
+  {
+    "code": "5009",
+    "name": "榮剛",
+    "exchange": "TPEx",
+    "price": 32.05,
+    "change": 0.05,
+    "volume_lots": 944619,
+    "turnover": 30211278,
+    "date": "2026-09-21"
+  },
+  {
+    "code": "5011",
+    "name": "久陽",
+    "exchange": "TPEx",
+    "price": 18.1,
+    "change": 0.05,
+    "volume_lots": 127083,
+    "turnover": 2294660,
+    "date": "2026-09-21"
+  },
+  {
+    "code": "5013",
+    "name": "強新",
+    "exchange": "TPEx",
+    "price": 32.1,
+    "change": 2.9,
+    "volume_lots": 184824,
+    "turnover": 5823953,
+    "date": "2026-09-21"
+  },
+  {
+    "code": "5014",
+    "name": "建錩",
+    "exchange": "TPEx",
+    "price": 9.88,
+    "change": 0.0,
+    "volume_lots": 84144,
+    "turnover": 831983,
+    "date": "2026-09-21"
+  },
+  {
+    "code": "5015",
+    "name": "華祺",
+    "exchange": "TPEx",
+    "price": 22.0,
+    "change": 0.3,
+    "volume_lots": 2370,
+    "turnover": 52051,
+    "date": "2026-09-21"
+  },
+  {
+    "code": "5016",
+    "name": "松和",
+    "exchange": "TPEx",
+    "price": 24.55,
+    "change": -0.1,
+    "volume_lots": 2011,
+    "turnover": 49267,
+    "date": "2026-09-21"
+  },
+  {
+    "code": "5201",
+    "name": "凱衛",
+    "exchange": "TPEx",
+    "price": 29.0,
+    "change": 0.2,
+    "volume_lots": 125169,
+    "turnover": 3616198,
+    "date": "2026-09-21"
+  },
+  {
+    "code": "5202",
+    "name": "力新",
+    "exchange": "TPEx",
+    "price": 15.15,
+    "change": -0.25,
+    "volume_lots": 3205781,
+    "turnover": 48997196,
+    "date": "2026-09-21"
+  },
+  {
+    "code": "5205",
+    "name": "中茂",
+    "exchange": "TPEx",
+    "price": 17.3,
+    "change": -1.35,
+    "volume_lots": 12312,
+    "turnover": 216354,
+    "date": "2026-09-21"
+  },
+  {
+    "code": "5206",
+    "name": "坤悅",
+    "exchange": "TPEx",
+    "price": 22.8,
+    "change": 0.5,
+    "volume_lots": 405911,
+    "turnover": 9227666,
+    "date": "2026-09-21"
+  },
+  {
+    "code": "5209",
+    "name": "新鼎",
+    "exchange": "TPEx",
+    "price": 170.5,
+    "change": -4.0,
+    "volume_lots": 199882,
+    "turnover": 34169924,
+    "date": "2026-09-21"
+  },
+  {
+    "code": "5210",
+    "name": "寶碩",
+    "exchange": "TPEx",
+    "price": 29.3,
+    "change": 0.0,
+    "volume_lots": 174499,
+    "turnover": 5149189,
+    "date": "2026-09-21"
+  },
+  {
+    "code": "5211",
+    "name": "蒙恬",
+    "exchange": "TPEx",
+    "price": 20.55,
+    "change": 0.0,
+    "volume_lots": 26344,
+    "turnover": 544430,
+    "date": "2026-09-21"
+  },
+  {
+    "code": "5212",
+    "name": "凌網",
+    "exchange": "TPEx",
+    "price": 47.85,
+    "change": -0.75,
+    "volume_lots": 3048,
+    "turnover": 145549,
+    "date": "2026-09-21"
+  },
+  {
+    "code": "5213",
+    "name": "亞昕",
+    "exchange": "TPEx",
+    "price": 20.85,
+    "change": 0.55,
+    "volume_lots": 277798,
+    "turnover": 5734176,
+    "date": "2026-09-21"
+  },
+  {
+    "code": "5220",
+    "name": "萬達光電",
+    "exchange": "TPEx",
+    "price": 19.9,
+    "change": 0.15,
+    "volume_lots": 22198,
+    "turnover": 440686,
+    "date": "2026-09-21"
+  },
+  {
+    "code": "5223",
+    "name": "安力-KY",
+    "exchange": "TPEx",
+    "price": 22.7,
+    "change": -0.35,
+    "volume_lots": 19011,
+    "turnover": 431150,
+    "date": "2026-09-21"
+  },
+  {
+    "code": "5227",
+    "name": "立凱-KY",
+    "exchange": "TPEx",
+    "price": 30.85,
+    "change": -0.75,
+    "volume_lots": 183406,
+    "turnover": 5752489,
+    "date": "2026-09-21"
+  },
+  {
+    "code": "5228",
+    "name": "鈺鎧",
+    "exchange": "TPEx",
+    "price": 40.55,
+    "change": 0.2,
+    "volume_lots": 137328,
+    "turnover": 5616131,
+    "date": "2026-09-21"
+  },
+  {
+    "code": "5230",
+    "name": "雷笛克光學",
+    "exchange": "TPEx",
+    "price": 21.15,
+    "change": 0.6,
+    "volume_lots": 3028581,
+    "turnover": 64812462,
+    "date": "2026-09-21"
+  },
+  {
+    "code": "5245",
+    "name": "智晶",
+    "exchange": "TPEx",
+    "price": 20.65,
+    "change": -0.05,
+    "volume_lots": 123320,
+    "turnover": 2550277,
+    "date": "2026-09-21"
+  },
+  {
+    "code": "5251",
+    "name": "天鉞電",
+    "exchange": "TPEx",
+    "price": 31.7,
+    "change": 0.0,
+    "volume_lots": 748960,
+    "turnover": 23807710,
+    "date": "2026-09-21"
+  },
+  {
+    "code": "5263",
+    "name": "智崴",
+    "exchange": "TPEx",
+    "price": 88.2,
+    "change": -1.7,
+    "volume_lots": 282438,
+    "turnover": 25038641,
+    "date": "2026-09-21"
+  },
+  {
+    "code": "5272",
+    "name": "笙科",
+    "exchange": "TPEx",
+    "price": 17.1,
+    "change": 0.3,
+    "volume_lots": 121501,
+    "turnover": 2074652,
+    "date": "2026-09-21"
+  },
+  {
+    "code": "5274",
+    "name": "信驊",
+    "exchange": "TPEx",
+    "price": 19820.0,
+    "change": 530.0,
+    "volume_lots": 160938,
+    "turnover": 3139913885,
+    "date": "2026-09-21"
+  },
+  {
+    "code": "5276",
+    "name": "達輝-KY",
+    "exchange": "TPEx",
+    "price": 0.0,
+    "change": 0.0,
+    "volume_lots": 0,
+    "turnover": 0,
+    "date": "2026-09-21"
+  },
+  {
+    "code": "5278",
+    "name": "尚凡*",
+    "exchange": "TPEx",
+    "price": 23.85,
+    "change": 0.0,
+    "volume_lots": 37737,
+    "turnover": 900576,
+    "date": "2026-09-21"
+  },
+  {
+    "code": "5287",
+    "name": "數字",
+    "exchange": "TPEx",
+    "price": 137.0,
+    "change": -2.0,
+    "volume_lots": 48642,
+    "turnover": 6670658,
+    "date": "2026-09-21"
+  },
+  {
+    "code": "5289",
+    "name": "宜鼎",
+    "exchange": "TPEx",
+    "price": 1295.0,
+    "change": -20.0,
+    "volume_lots": 1215534,
+    "turnover": 1593346050,
+    "date": "2026-09-21"
+  },
+  {
+    "code": "5291",
+    "name": "邑昇",
+    "exchange": "TPEx",
+    "price": 58.4,
+    "change": 0.1,
+    "volume_lots": 255749,
+    "turnover": 14909221,
+    "date": "2026-09-21"
+  },
+  {
+    "code": "5299",
+    "name": "杰力",
+    "exchange": "TPEx",
+    "price": 96.2,
+    "change": -0.5,
+    "volume_lots": 127572,
+    "turnover": 12286642,
+    "date": "2026-09-21"
+  },
+  {
+    "code": "5301",
+    "name": "寶得利",
+    "exchange": "TPEx",
+    "price": 4.95,
+    "change": -0.22,
+    "volume_lots": 86292,
+    "turnover": 430551,
+    "date": "2026-09-21"
+  },
+  {
+    "code": "5302",
+    "name": "太欣",
+    "exchange": "TPEx",
+    "price": 9.85,
+    "change": 0.1,
+    "volume_lots": 203219,
+    "turnover": 1989399,
+    "date": "2026-09-21"
+  },
+  {
+    "code": "5309",
+    "name": "系統電",
+    "exchange": "TPEx",
+    "price": 52.1,
+    "change": 0.6,
+    "volume_lots": 916116,
+    "turnover": 47586500,
+    "date": "2026-09-21"
+  },
+  {
+    "code": "5310",
+    "name": "天剛",
+    "exchange": "TPEx",
+    "price": 25.5,
+    "change": 0.7,
+    "volume_lots": 93093,
+    "turnover": 2333182,
+    "date": "2026-09-21"
+  },
+  {
+    "code": "5312",
+    "name": "寶島科",
+    "exchange": "TPEx",
+    "price": 91.0,
+    "change": 0.0,
+    "volume_lots": 19100,
+    "turnover": 1741614,
+    "date": "2026-09-21"
+  },
+  {
+    "code": "5314",
+    "name": "世紀*",
+    "exchange": "TPEx",
+    "price": 29.05,
+    "change": 0.0,
+    "volume_lots": 137060788,
+    "turnover": 4206424791,
+    "date": "2026-09-21"
+  },
+  {
+    "code": "5315",
+    "name": "光聯",
+    "exchange": "TPEx",
+    "price": 19.25,
+    "change": 0.5,
+    "volume_lots": 487518,
+    "turnover": 9315714,
+    "date": "2026-09-21"
+  },
+  {
+    "code": "5321",
+    "name": "美而快",
+    "exchange": "TPEx",
+    "price": 70.3,
+    "change": -1.7,
+    "volume_lots": 338168,
+    "turnover": 23939986,
+    "date": "2026-09-21"
+  },
+  {
+    "code": "5324",
+    "name": "士開",
+    "exchange": "TPEx",
+    "price": 12.75,
+    "change": 0.45,
+    "volume_lots": 236460,
+    "turnover": 2992280,
+    "date": "2026-09-21"
+  },
+  {
+    "code": "5328",
+    "name": "華容",
+    "exchange": "TPEx",
+    "price": 52.3,
+    "change": -0.8,
+    "volume_lots": 2228423,
+    "turnover": 118482504,
+    "date": "2026-09-21"
+  },
+  {
+    "code": "5340",
+    "name": "建榮",
+    "exchange": "TPEx",
+    "price": 82.0,
+    "change": -1.1,
+    "volume_lots": 1612064,
+    "turnover": 133331602,
+    "date": "2026-09-21"
+  },
+  {
+    "code": "5344",
+    "name": "立衛",
+    "exchange": "TPEx",
+    "price": 13.1,
+    "change": 0.05,
+    "volume_lots": 31555,
+    "turnover": 411705,
+    "date": "2026-09-21"
+  },
+  {
+    "code": "5345",
+    "name": "馥鴻",
+    "exchange": "TPEx",
+    "price": 21.4,
+    "change": -0.7,
+    "volume_lots": 6378,
+    "turnover": 135361,
+    "date": "2026-09-21"
+  },
+  {
+    "code": "5347",
+    "name": "世界",
+    "exchange": "TPEx",
+    "price": 172.0,
+    "change": 0.0,
+    "volume_lots": 16305989,
+    "turnover": 2785518313,
+    "date": "2026-09-21"
+  },
+  {
+    "code": "5348",
+    "name": "正能量智能",
+    "exchange": "TPEx",
+    "price": 16.6,
+    "change": 0.2,
+    "volume_lots": 1100,
+    "turnover": 18240,
+    "date": "2026-09-21"
+  },
+  {
+    "code": "5351",
+    "name": "鈺創",
+    "exchange": "TPEx",
+    "price": 109.5,
+    "change": -4.0,
+    "volume_lots": 9627753,
+    "turnover": 1065477521,
+    "date": "2026-09-21"
+  },
+  {
+    "code": "5353",
+    "name": "台林",
+    "exchange": "TPEx",
+    "price": 27.7,
+    "change": 0.1,
+    "volume_lots": 148404,
+    "turnover": 4110024,
+    "date": "2026-09-21"
+  },
+  {
+    "code": "5355",
+    "name": "佳總",
+    "exchange": "TPEx",
+    "price": 6.99,
+    "change": 0.0,
+    "volume_lots": 88332,
+    "turnover": 607444,
+    "date": "2026-09-21"
+  },
+  {
+    "code": "5356",
+    "name": "協益",
+    "exchange": "TPEx",
+    "price": 25.95,
+    "change": -0.05,
+    "volume_lots": 38190,
+    "turnover": 989979,
+    "date": "2026-09-21"
+  },
+  {
+    "code": "5364",
+    "name": "力麗店",
+    "exchange": "TPEx",
+    "price": 8.42,
+    "change": 0.07,
+    "volume_lots": 32669,
+    "turnover": 274756,
+    "date": "2026-09-21"
+  },
+  {
+    "code": "5381",
+    "name": "光譜",
+    "exchange": "TPEx",
+    "price": 23.8,
+    "change": 0.7,
+    "volume_lots": 491184,
+    "turnover": 11658541,
+    "date": "2026-09-21"
+  },
+  {
+    "code": "5386",
+    "name": "青雲",
+    "exchange": "TPEx",
+    "price": 287.5,
+    "change": -6.5,
+    "volume_lots": 792087,
+    "turnover": 229296212,
+    "date": "2026-09-21"
+  },
+  {
+    "code": "5392",
+    "name": "能率",
+    "exchange": "TPEx",
+    "price": 40.2,
+    "change": 0.0,
+    "volume_lots": 553008,
+    "turnover": 22297398,
+    "date": "2026-09-21"
+  },
+  {
+    "code": "5398",
+    "name": "慕康生醫",
+    "exchange": "TPEx",
+    "price": 14.0,
+    "change": 0.1,
+    "volume_lots": 34108,
+    "turnover": 476161,
+    "date": "2026-09-21"
+  },
+  {
+    "code": "5403",
+    "name": "中菲",
+    "exchange": "TPEx",
+    "price": 93.0,
+    "change": 0.0,
+    "volume_lots": 28060,
+    "turnover": 2607595,
+    "date": "2026-09-21"
+  },
+  {
+    "code": "5410",
+    "name": "國眾",
+    "exchange": "TPEx",
+    "price": 33.3,
+    "change": 0.05,
+    "volume_lots": 110970,
+    "turnover": 3682665,
+    "date": "2026-09-21"
+  },
+  {
+    "code": "5425",
+    "name": "台半",
+    "exchange": "TPEx",
+    "price": 93.3,
+    "change": 0.7,
+    "volume_lots": 3222830,
+    "turnover": 299333601,
+    "date": "2026-09-21"
+  },
+  {
+    "code": "5426",
+    "name": "振發",
+    "exchange": "TPEx",
+    "price": 29.4,
+    "change": 0.05,
+    "volume_lots": 610185,
+    "turnover": 17938487,
+    "date": "2026-09-21"
+  },
+  {
+    "code": "5432",
+    "name": "新門",
+    "exchange": "TPEx",
+    "price": 161.0,
+    "change": 1.0,
+    "volume_lots": 367901,
+    "turnover": 61120878,
+    "date": "2026-09-21"
+  },
+  {
+    "code": "5438",
+    "name": "東友",
+    "exchange": "TPEx",
+    "price": 16.4,
+    "change": 0.1,
+    "volume_lots": 55370,
+    "turnover": 915068,
+    "date": "2026-09-21"
+  },
+  {
+    "code": "5439",
+    "name": "高技",
+    "exchange": "TPEx",
+    "price": 245.0,
+    "change": -2.0,
+    "volume_lots": 932910,
+    "turnover": 228642528,
+    "date": "2026-09-21"
+  },
+  {
+    "code": "5443",
+    "name": "均豪",
+    "exchange": "TPEx",
+    "price": 109.0,
+    "change": 0.0,
+    "volume_lots": 948091,
+    "turnover": 103600203,
+    "date": "2026-09-21"
+  },
+  {
+    "code": "5450",
+    "name": "南良",
+    "exchange": "TPEx",
+    "price": 14.65,
+    "change": 0.05,
+    "volume_lots": 137907,
+    "turnover": 2045155,
+    "date": "2026-09-21"
+  },
+  {
+    "code": "5452",
+    "name": "佶優",
+    "exchange": "TPEx",
+    "price": 27.9,
+    "change": 0.6,
+    "volume_lots": 710118,
+    "turnover": 19731291,
+    "date": "2026-09-21"
+  },
+  {
+    "code": "5455",
+    "name": "昇益",
+    "exchange": "TPEx",
+    "price": 30.5,
+    "change": 0.0,
+    "volume_lots": 5000,
+    "turnover": 153000,
+    "date": "2026-09-21"
+  },
+  {
+    "code": "5457",
+    "name": "宣德",
+    "exchange": "TPEx",
+    "price": 24.0,
+    "change": 0.7,
+    "volume_lots": 2707696,
+    "turnover": 65526882,
+    "date": "2026-09-21"
+  },
+  {
+    "code": "5460",
+    "name": "同協",
+    "exchange": "TPEx",
+    "price": 17.15,
+    "change": -0.25,
+    "volume_lots": 69029,
+    "turnover": 1186741,
+    "date": "2026-09-21"
+  },
+  {
+    "code": "5464",
+    "name": "霖宏",
+    "exchange": "TPEx",
+    "price": 90.6,
+    "change": -2.1,
+    "volume_lots": 521508,
+    "turnover": 47984840,
+    "date": "2026-09-21"
+  },
+  {
+    "code": "5465",
+    "name": "富驊",
+    "exchange": "TPEx",
+    "price": 29.35,
+    "change": 2.65,
+    "volume_lots": 662106,
+    "turnover": 19432795,
+    "date": "2026-09-21"
+  },
+  {
+    "code": "5468",
+    "name": "凱鈺",
+    "exchange": "TPEx",
+    "price": 24.9,
+    "change": 0.1,
+    "volume_lots": 221460,
+    "turnover": 5516498,
+    "date": "2026-09-21"
+  },
+  {
+    "code": "5474",
+    "name": "聰泰",
+    "exchange": "TPEx",
+    "price": 168.5,
+    "change": 6.0,
+    "volume_lots": 598281,
+    "turnover": 100542060,
+    "date": "2026-09-21"
+  },
+  {
+    "code": "5475",
+    "name": "德宏",
+    "exchange": "TPEx",
+    "price": 179.0,
+    "change": 0.0,
+    "volume_lots": 2326581,
+    "turnover": 411214762,
+    "date": "2026-09-21"
+  },
+  {
+    "code": "5478",
+    "name": "智冠",
+    "exchange": "TPEx",
+    "price": 97.3,
+    "change": -0.2,
+    "volume_lots": 47071,
+    "turnover": 4589534,
+    "date": "2026-09-21"
+  },
+  {
+    "code": "5481",
+    "name": "新華",
+    "exchange": "TPEx",
+    "price": 21.9,
+    "change": -0.25,
+    "volume_lots": 223816,
+    "turnover": 4900879,
+    "date": "2026-09-21"
+  },
+  {
+    "code": "5483",
+    "name": "中美晶",
+    "exchange": "TPEx",
+    "price": 186.5,
+    "change": -1.0,
+    "volume_lots": 11450170,
+    "turnover": 2150836264,
+    "date": "2026-09-21"
+  },
+  {
+    "code": "5487",
+    "name": "通泰",
+    "exchange": "TPEx",
+    "price": 29.8,
+    "change": 0.15,
+    "volume_lots": 31575,
+    "turnover": 939914,
+    "date": "2026-09-21"
+  },
+  {
+    "code": "5488",
+    "name": "松普",
+    "exchange": "TPEx",
+    "price": 11.8,
+    "change": -0.05,
+    "volume_lots": 146589,
+    "turnover": 1731513,
+    "date": "2026-09-21"
+  },
+  {
+    "code": "5489",
+    "name": "彩富",
+    "exchange": "TPEx",
+    "price": 45.35,
+    "change": 4.1,
+    "volume_lots": 273393,
+    "turnover": 12263146,
+    "date": "2026-09-21"
+  },
+  {
+    "code": "5490",
+    "name": "同亨",
+    "exchange": "TPEx",
+    "price": 25.75,
+    "change": 0.35,
+    "volume_lots": 256110,
+    "turnover": 6565571,
+    "date": "2026-09-21"
+  },
+  {
+    "code": "5493",
+    "name": "三聯",
+    "exchange": "TPEx",
+    "price": 91.5,
+    "change": 4.6,
+    "volume_lots": 401415,
+    "turnover": 36361545,
+    "date": "2026-09-21"
+  },
+  {
+    "code": "5498",
+    "name": "凱崴",
+    "exchange": "TPEx",
+    "price": 52.4,
+    "change": 0.6,
+    "volume_lots": 1464993,
+    "turnover": 77161995,
+    "date": "2026-09-21"
+  },
+  {
+    "code": "5508",
+    "name": "永信建",
+    "exchange": "TPEx",
+    "price": 54.3,
+    "change": -1.7,
+    "volume_lots": 528015,
+    "turnover": 28931161,
+    "date": "2026-09-21"
+  },
+  {
+    "code": "5511",
+    "name": "德昌",
+    "exchange": "TPEx",
+    "price": 69.5,
+    "change": -0.8,
+    "volume_lots": 42761,
+    "turnover": 2977012,
+    "date": "2026-09-21"
+  },
+  {
+    "code": "5512",
+    "name": "力麒",
+    "exchange": "TPEx",
+    "price": 7.74,
+    "change": 0.25,
+    "volume_lots": 1327785,
+    "turnover": 10150392,
+    "date": "2026-09-21"
+  },
+  {
+    "code": "5514",
+    "name": "三豐",
+    "exchange": "TPEx",
+    "price": 14.85,
+    "change": -0.15,
+    "volume_lots": 2551,
+    "turnover": 37596,
+    "date": "2026-09-21"
+  },
+  {
+    "code": "5516",
+    "name": "雙喜",
+    "exchange": "TPEx",
+    "price": 11.85,
+    "change": 0.0,
+    "volume_lots": 28000,
+    "turnover": 332850,
+    "date": "2026-09-21"
+  },
+  {
+    "code": "5520",
+    "name": "力泰",
+    "exchange": "TPEx",
+    "price": 0.0,
+    "change": 0.0,
+    "volume_lots": 28,
+    "turnover": 2296,
+    "date": "2026-09-21"
+  },
+  {
+    "code": "5523",
+    "name": "豐謙",
+    "exchange": "TPEx",
+    "price": 30.35,
+    "change": 0.0,
+    "volume_lots": 2192,
+    "turnover": 66517,
+    "date": "2026-09-21"
+  },
+  {
+    "code": "5529",
+    "name": "鉅陞",
+    "exchange": "TPEx",
+    "price": 26.0,
+    "change": 0.0,
+    "volume_lots": 81873,
+    "turnover": 2110676,
+    "date": "2026-09-21"
+  },
+  {
+    "code": "5530",
+    "name": "龍巖",
+    "exchange": "TPEx",
+    "price": 49.05,
+    "change": 0.15,
+    "volume_lots": 209510,
+    "turnover": 10303305,
+    "date": "2026-09-21"
+  },
+  {
+    "code": "5536",
+    "name": "聖暉*",
+    "exchange": "TPEx",
+    "price": 865.0,
+    "change": -23.0,
+    "volume_lots": 825610,
+    "turnover": 721853568,
+    "date": "2026-09-21"
+  },
+  {
+    "code": "5543",
+    "name": "桓鼎-KY",
+    "exchange": "TPEx",
+    "price": 27.25,
+    "change": 0.75,
+    "volume_lots": 6000,
+    "turnover": 159600,
+    "date": "2026-09-21"
+  },
+  {
+    "code": "5547",
+    "name": "久舜",
+    "exchange": "TPEx",
+    "price": 20.0,
+    "change": 0.05,
+    "volume_lots": 31338,
+    "turnover": 627572,
+    "date": "2026-09-21"
+  },
+  {
+    "code": "5548",
+    "name": "安倉",
+    "exchange": "TPEx",
+    "price": 20.2,
+    "change": 0.05,
+    "volume_lots": 33559,
+    "turnover": 679160,
+    "date": "2026-09-21"
+  },
+  {
+    "code": "5601",
+    "name": "台聯櫃",
+    "exchange": "TPEx",
+    "price": 30.55,
+    "change": -0.1,
+    "volume_lots": 10000,
+    "turnover": 301000,
+    "date": "2026-09-21"
+  },
+  {
+    "code": "5603",
+    "name": "陸海",
+    "exchange": "TPEx",
+    "price": 13.5,
+    "change": 0.0,
+    "volume_lots": 70286,
+    "turnover": 949909,
+    "date": "2026-09-21"
+  },
+  {
+    "code": "5604",
+    "name": "中連",
+    "exchange": "TPEx",
+    "price": 31.1,
+    "change": 0.05,
+    "volume_lots": 17572,
+    "turnover": 546582,
+    "date": "2026-09-21"
+  },
+  {
+    "code": "5609",
+    "name": "中菲行",
+    "exchange": "TPEx",
+    "price": 78.8,
+    "change": -0.4,
+    "volume_lots": 97911,
+    "turnover": 7714755,
+    "date": "2026-09-21"
+  },
+  {
+    "code": "5701",
+    "name": "劍湖山",
+    "exchange": "TPEx",
+    "price": 4.3,
+    "change": 0.04,
+    "volume_lots": 142584,
+    "turnover": 589277,
+    "date": "2026-09-21"
+  },
+  {
+    "code": "5703",
+    "name": "亞都",
+    "exchange": "TPEx",
+    "price": 13.9,
+    "change": 0.2,
+    "volume_lots": 2001,
+    "turnover": 27714,
+    "date": "2026-09-21"
+  },
+  {
+    "code": "5704",
+    "name": "老爺知",
+    "exchange": "TPEx",
+    "price": 22.7,
+    "change": -0.2,
+    "volume_lots": 69867,
+    "turnover": 1574585,
+    "date": "2026-09-21"
+  },
+  {
+    "code": "5864",
+    "name": "致和證",
+    "exchange": "TPEx",
+    "price": 36.65,
+    "change": 1.5,
+    "volume_lots": 4859642,
+    "turnover": 177195049,
+    "date": "2026-09-21"
+  },
+  {
+    "code": "5878",
+    "name": "台名",
+    "exchange": "TPEx",
+    "price": 0.0,
+    "change": 0.0,
+    "volume_lots": 365,
+    "turnover": 13943,
+    "date": "2026-09-21"
+  },
+  {
+    "code": "5902",
+    "name": "德記",
+    "exchange": "TPEx",
+    "price": 34.4,
+    "change": -0.05,
+    "volume_lots": 27000,
+    "turnover": 923400,
+    "date": "2026-09-21"
+  },
+  {
+    "code": "5903",
+    "name": "全家",
+    "exchange": "TPEx",
+    "price": 185.0,
+    "change": 0.5,
+    "volume_lots": 24367,
+    "turnover": 4499683,
+    "date": "2026-09-21"
+  },
+  {
+    "code": "5904",
+    "name": "寶雅*",
+    "exchange": "TPEx",
+    "price": 71.3,
+    "change": -0.8,
+    "volume_lots": 4907233,
+    "turnover": 350531552,
+    "date": "2026-09-21"
+  },
+  {
+    "code": "5905",
+    "name": "南仁湖",
+    "exchange": "TPEx",
+    "price": 7.32,
+    "change": -0.06,
+    "volume_lots": 372032,
+    "turnover": 2723428,
+    "date": "2026-09-21"
+  },
+  {
+    "code": "6015",
+    "name": "宏遠證",
+    "exchange": "TPEx",
+    "price": 17.85,
+    "change": 0.25,
+    "volume_lots": 5645040,
+    "turnover": 101105569,
+    "date": "2026-09-21"
+  },
+  {
+    "code": "6016",
+    "name": "康和證",
+    "exchange": "TPEx",
+    "price": 23.65,
+    "change": 0.65,
+    "volume_lots": 7105252,
+    "turnover": 167781822,
+    "date": "2026-09-21"
+  },
+  {
+    "code": "6020",
+    "name": "大展證",
+    "exchange": "TPEx",
+    "price": 20.75,
+    "change": 0.2,
+    "volume_lots": 64037,
+    "turnover": 1322111,
+    "date": "2026-09-21"
+  },
+  {
+    "code": "6021",
+    "name": "美好證",
+    "exchange": "TPEx",
+    "price": 45.4,
+    "change": -0.05,
+    "volume_lots": 524746,
+    "turnover": 23756809,
+    "date": "2026-09-21"
+  },
+  {
+    "code": "6023",
+    "name": "元大期",
+    "exchange": "TPEx",
+    "price": 87.9,
+    "change": 0.4,
+    "volume_lots": 614943,
+    "turnover": 53870972,
+    "date": "2026-09-21"
+  },
+  {
+    "code": "6026",
+    "name": "福邦證",
+    "exchange": "TPEx",
+    "price": 15.8,
+    "change": 0.3,
+    "volume_lots": 2031274,
+    "turnover": 31976340,
+    "date": "2026-09-21"
+  },
+  {
+    "code": "6028",
+    "name": "公勝保經",
+    "exchange": "TPEx",
+    "price": 97.1,
+    "change": 0.6,
+    "volume_lots": 8515,
+    "turnover": 823808,
+    "date": "2026-09-21"
+  },
+  {
+    "code": "6101",
+    "name": "寬魚國際",
+    "exchange": "TPEx",
+    "price": 38.55,
+    "change": 0.15,
+    "volume_lots": 253375,
+    "turnover": 9751227,
+    "date": "2026-09-21"
+  },
+  {
+    "code": "6103",
+    "name": "合邦",
+    "exchange": "TPEx",
+    "price": 37.6,
+    "change": -1.35,
+    "volume_lots": 41158,
+    "turnover": 1529434,
+    "date": "2026-09-21"
+  },
+  {
+    "code": "6104",
+    "name": "創惟",
+    "exchange": "TPEx",
+    "price": 91.3,
+    "change": 0.9,
+    "volume_lots": 385252,
+    "turnover": 35012537,
+    "date": "2026-09-21"
+  },
+  {
+    "code": "6109",
+    "name": "亞元",
+    "exchange": "TPEx",
+    "price": 10.5,
+    "change": 0.1,
+    "volume_lots": 110869,
+    "turnover": 1151889,
+    "date": "2026-09-21"
+  },
+  {
+    "code": "6111",
+    "name": "光聚晶電",
+    "exchange": "TPEx",
+    "price": 36.35,
+    "change": 0.55,
+    "volume_lots": 136627,
+    "turnover": 4900596,
+    "date": "2026-09-21"
+  },
+  {
+    "code": "6113",
+    "name": "亞矽",
+    "exchange": "TPEx",
+    "price": 22.6,
+    "change": 0.3,
+    "volume_lots": 83501,
+    "turnover": 1890653,
+    "date": "2026-09-21"
+  },
+  {
+    "code": "6114",
+    "name": "久威",
+    "exchange": "TPEx",
+    "price": 23.15,
+    "change": -0.15,
+    "volume_lots": 20111,
+    "turnover": 465098,
+    "date": "2026-09-21"
+  },
+  {
+    "code": "6118",
+    "name": "建達",
+    "exchange": "TPEx",
+    "price": 15.5,
+    "change": 0.35,
+    "volume_lots": 166574,
+    "turnover": 2555042,
+    "date": "2026-09-21"
+  },
+  {
+    "code": "6121",
+    "name": "新普",
+    "exchange": "TPEx",
+    "price": 373.5,
+    "change": 2.0,
+    "volume_lots": 603944,
+    "turnover": 225455436,
+    "date": "2026-09-21"
+  },
+  {
+    "code": "6122",
+    "name": "擎邦",
+    "exchange": "TPEx",
+    "price": 51.7,
+    "change": 0.5,
+    "volume_lots": 417431,
+    "turnover": 21581473,
+    "date": "2026-09-21"
+  },
+  {
+    "code": "6123",
+    "name": "上奇",
+    "exchange": "TPEx",
+    "price": 43.25,
+    "change": 0.1,
+    "volume_lots": 42662,
+    "turnover": 1838489,
+    "date": "2026-09-21"
+  },
+  {
+    "code": "6124",
+    "name": "業強",
+    "exchange": "TPEx",
+    "price": 26.8,
+    "change": -0.3,
+    "volume_lots": 6046,
+    "turnover": 162210,
+    "date": "2026-09-21"
+  },
+  {
+    "code": "6125",
+    "name": "廣運",
+    "exchange": "TPEx",
+    "price": 49.7,
+    "change": -0.5,
+    "volume_lots": 326457,
+    "turnover": 16219486,
+    "date": "2026-09-21"
+  },
+  {
+    "code": "6126",
+    "name": "信音",
+    "exchange": "TPEx",
+    "price": 30.75,
+    "change": -0.55,
+    "volume_lots": 648275,
+    "turnover": 20019052,
+    "date": "2026-09-21"
+  },
+  {
+    "code": "6127",
+    "name": "九豪",
+    "exchange": "TPEx",
+    "price": 48.9,
+    "change": 0.05,
+    "volume_lots": 1689474,
+    "turnover": 83264718,
+    "date": "2026-09-21"
+  },
+  {
+    "code": "6129",
+    "name": "普誠",
+    "exchange": "TPEx",
+    "price": 15.45,
+    "change": 0.75,
+    "volume_lots": 791454,
+    "turnover": 11979667,
+    "date": "2026-09-21"
+  },
+  {
+    "code": "6130",
+    "name": "上亞科技",
+    "exchange": "TPEx",
+    "price": 23.75,
+    "change": -0.1,
+    "volume_lots": 65182,
+    "turnover": 1548004,
+    "date": "2026-09-21"
+  },
+  {
+    "code": "6134",
+    "name": "萬旭",
+    "exchange": "TPEx",
+    "price": 29.5,
+    "change": 0.55,
+    "volume_lots": 287081,
+    "turnover": 8430016,
+    "date": "2026-09-21"
+  },
+  {
+    "code": "6138",
+    "name": "茂達",
+    "exchange": "TPEx",
+    "price": 272.5,
+    "change": -3.5,
+    "volume_lots": 309223,
+    "turnover": 84601433,
+    "date": "2026-09-21"
+  },
+  {
+    "code": "6140",
+    "name": "訊達",
+    "exchange": "TPEx",
+    "price": 23.95,
+    "change": 2.15,
+    "volume_lots": 2657797,
+    "turnover": 63302981,
+    "date": "2026-09-21"
+  },
+  {
+    "code": "6143",
+    "name": "振曜",
+    "exchange": "TPEx",
+    "price": 83.0,
+    "change": 0.2,
+    "volume_lots": 126409,
+    "turnover": 10460820,
+    "date": "2026-09-21"
+  },
+  {
+    "code": "6144",
+    "name": "得利影",
+    "exchange": "TPEx",
+    "price": 12.6,
+    "change": -0.25,
+    "volume_lots": 29302,
+    "turnover": 373978,
+    "date": "2026-09-21"
+  },
+  {
+    "code": "6146",
+    "name": "耕興",
+    "exchange": "TPEx",
+    "price": 180.0,
+    "change": 1.5,
+    "volume_lots": 129161,
+    "turnover": 23176133,
+    "date": "2026-09-21"
+  },
+  {
+    "code": "6147",
+    "name": "頎邦",
+    "exchange": "TPEx",
+    "price": 224.0,
+    "change": -5.0,
+    "volume_lots": 41149853,
+    "turnover": 9290494889,
+    "date": "2026-09-21"
+  },
+  {
+    "code": "6148",
+    "name": "驊宏資",
+    "exchange": "TPEx",
+    "price": 40.0,
+    "change": 0.15,
+    "volume_lots": 14884357,
+    "turnover": 599844361,
+    "date": "2026-09-21"
+  },
+  {
+    "code": "6150",
+    "name": "撼訊",
+    "exchange": "TPEx",
+    "price": 61.8,
+    "change": 0.5,
+    "volume_lots": 172696,
+    "turnover": 10677072,
+    "date": "2026-09-21"
+  },
+  {
+    "code": "6151",
+    "name": "晉倫",
+    "exchange": "TPEx",
+    "price": 35.2,
+    "change": -0.25,
+    "volume_lots": 41908,
+    "turnover": 1478593,
+    "date": "2026-09-21"
+  },
+  {
+    "code": "6154",
+    "name": "順發",
+    "exchange": "TPEx",
+    "price": 14.15,
+    "change": 0.05,
+    "volume_lots": 19468,
+    "turnover": 275160,
+    "date": "2026-09-21"
+  },
+  {
+    "code": "6156",
+    "name": "松上",
+    "exchange": "TPEx",
+    "price": 21.05,
+    "change": 0.4,
+    "volume_lots": 423275,
+    "turnover": 8856053,
+    "date": "2026-09-21"
+  },
+  {
+    "code": "6158",
+    "name": "禾昌",
+    "exchange": "TPEx",
+    "price": 17.2,
+    "change": 0.0,
+    "volume_lots": 36613,
+    "turnover": 627651,
+    "date": "2026-09-21"
+  },
+  {
+    "code": "6160",
+    "name": "欣技",
+    "exchange": "TPEx",
+    "price": 14.15,
+    "change": -0.3,
+    "volume_lots": 97743,
+    "turnover": 1382318,
+    "date": "2026-09-21"
+  },
+  {
+    "code": "6161",
+    "name": "捷波",
+    "exchange": "TPEx",
+    "price": 49.05,
+    "change": 0.25,
+    "volume_lots": 39353,
+    "turnover": 1925587,
+    "date": "2026-09-21"
+  },
+  {
+    "code": "6163",
+    "name": "華電網",
+    "exchange": "TPEx",
+    "price": 42.25,
+    "change": 0.7,
+    "volume_lots": 1215469,
+    "turnover": 51688335,
+    "date": "2026-09-21"
+  },
+  {
+    "code": "6167",
+    "name": "久正",
+    "exchange": "TPEx",
+    "price": 10.3,
+    "change": 0.0,
+    "volume_lots": 169063,
+    "turnover": 1738387,
+    "date": "2026-09-21"
+  },
+  {
+    "code": "6169",
+    "name": "昱泉",
+    "exchange": "TPEx",
+    "price": 11.85,
+    "change": -0.2,
+    "volume_lots": 6828,
+    "turnover": 80634,
+    "date": "2026-09-21"
+  },
+  {
+    "code": "6170",
+    "name": "統振",
+    "exchange": "TPEx",
+    "price": 48.15,
+    "change": 0.25,
+    "volume_lots": 120471,
+    "turnover": 5767249,
+    "date": "2026-09-21"
+  },
+  {
+    "code": "6171",
+    "name": "大城地產",
+    "exchange": "TPEx",
+    "price": 26.0,
+    "change": 0.55,
+    "volume_lots": 41496,
+    "turnover": 1074798,
+    "date": "2026-09-21"
+  },
+  {
+    "code": "6173",
+    "name": "信昌電",
+    "exchange": "TPEx",
+    "price": 308.0,
+    "change": -6.0,
+    "volume_lots": 13526569,
+    "turnover": 4225099465,
+    "date": "2026-09-21"
+  },
+  {
+    "code": "6174",
+    "name": "安碁",
+    "exchange": "TPEx",
+    "price": 44.3,
+    "change": -0.65,
+    "volume_lots": 769184,
+    "turnover": 35121643,
+    "date": "2026-09-21"
+  },
+  {
+    "code": "6175",
+    "name": "立敦",
+    "exchange": "TPEx",
+    "price": 71.4,
+    "change": 1.7,
+    "volume_lots": 935305,
+    "turnover": 66650563,
+    "date": "2026-09-21"
+  },
+  {
+    "code": "6179",
+    "name": "亞通",
+    "exchange": "TPEx",
+    "price": 37.35,
+    "change": -0.55,
+    "volume_lots": 17841713,
+    "turnover": 684845961,
+    "date": "2026-09-21"
+  },
+  {
+    "code": "6180",
+    "name": "橘子",
+    "exchange": "TPEx",
+    "price": 40.8,
+    "change": 0.1,
+    "volume_lots": 267482,
+    "turnover": 10885780,
+    "date": "2026-09-21"
+  },
+  {
+    "code": "6182",
+    "name": "合晶",
+    "exchange": "TPEx",
+    "price": 115.0,
+    "change": -1.0,
+    "volume_lots": 46173978,
+    "turnover": 5347372720,
+    "date": "2026-09-21"
+  },
+  {
+    "code": "6185",
+    "name": "幃翔",
+    "exchange": "TPEx",
+    "price": 12.7,
+    "change": 0.25,
+    "volume_lots": 114902,
+    "turnover": 1450336,
+    "date": "2026-09-21"
+  },
+  {
+    "code": "6186",
+    "name": "新潤",
+    "exchange": "TPEx",
+    "price": 29.75,
+    "change": -0.2,
+    "volume_lots": 1065047,
+    "turnover": 31530874,
+    "date": "2026-09-21"
+  },
+  {
+    "code": "6187",
+    "name": "萬潤",
+    "exchange": "TPEx",
+    "price": 1235.0,
+    "change": -15.0,
+    "volume_lots": 1526102,
+    "turnover": 1875060505,
+    "date": "2026-09-21"
+  },
+  {
+    "code": "6188",
+    "name": "廣明",
+    "exchange": "TPEx",
+    "price": 62.7,
+    "change": 0.1,
+    "volume_lots": 476885,
+    "turnover": 30036333,
+    "date": "2026-09-21"
+  },
+  {
+    "code": "6190",
+    "name": "萬泰科",
+    "exchange": "TPEx",
+    "price": 70.2,
+    "change": 0.8,
+    "volume_lots": 3694667,
+    "turnover": 259695064,
+    "date": "2026-09-21"
+  },
+  {
+    "code": "6194",
+    "name": "育富",
+    "exchange": "TPEx",
+    "price": 30.45,
+    "change": 0.0,
+    "volume_lots": 43023,
+    "turnover": 1309849,
+    "date": "2026-09-21"
+  },
+  {
+    "code": "6195",
+    "name": "詩肯",
+    "exchange": "TPEx",
+    "price": 27.8,
+    "change": 0.1,
+    "volume_lots": 18831,
+    "turnover": 522462,
+    "date": "2026-09-21"
+  },
+  {
+    "code": "6198",
+    "name": "瑞築",
+    "exchange": "TPEx",
+    "price": 0.0,
+    "change": 0.0,
+    "volume_lots": 2,
+    "turnover": 37,
+    "date": "2026-09-21"
+  },
+  {
+    "code": "6199",
+    "name": "天品",
+    "exchange": "TPEx",
+    "price": 114.5,
+    "change": 1.5,
+    "volume_lots": 8110682,
+    "turnover": 910106677,
+    "date": "2026-09-21"
+  },
+  {
+    "code": "6203",
+    "name": "海韻電",
+    "exchange": "TPEx",
+    "price": 60.0,
+    "change": 0.4,
+    "volume_lots": 35853,
+    "turnover": 2139441,
+    "date": "2026-09-21"
+  },
+  {
+    "code": "6204",
+    "name": "艾華",
+    "exchange": "TPEx",
+    "price": 108.0,
+    "change": -2.0,
+    "volume_lots": 1725027,
+    "turnover": 196711662,
+    "date": "2026-09-21"
+  },
+  {
+    "code": "6207",
+    "name": "雷科",
+    "exchange": "TPEx",
+    "price": 117.0,
+    "change": 1.5,
+    "volume_lots": 8289995,
+    "turnover": 984206797,
+    "date": "2026-09-21"
+  },
+  {
+    "code": "6208",
+    "name": "日揚",
+    "exchange": "TPEx",
+    "price": 76.3,
+    "change": 0.9,
+    "volume_lots": 167210,
+    "turnover": 12808448,
+    "date": "2026-09-21"
+  },
+  {
+    "code": "6210",
+    "name": "慶生",
+    "exchange": "TPEx",
+    "price": 17.25,
+    "change": -0.3,
+    "volume_lots": 13119,
+    "turnover": 226466,
+    "date": "2026-09-21"
+  },
+  {
+    "code": "6212",
+    "name": "理銘",
+    "exchange": "TPEx",
+    "price": 0.0,
+    "change": 0.0,
+    "volume_lots": 22,
+    "turnover": 715,
+    "date": "2026-09-21"
+  },
+  {
+    "code": "6217",
+    "name": "中探針",
+    "exchange": "TPEx",
+    "price": 175.5,
+    "change": -3.0,
+    "volume_lots": 5540321,
+    "turnover": 974933648,
+    "date": "2026-09-21"
+  },
+  {
+    "code": "6218",
+    "name": "豪勉",
+    "exchange": "TPEx",
+    "price": 67.7,
+    "change": 6.1,
+    "volume_lots": 2170078,
+    "turnover": 145827497,
+    "date": "2026-09-21"
+  },
+  {
+    "code": "6219",
+    "name": "富旺",
+    "exchange": "TPEx",
+    "price": 12.25,
+    "change": -0.05,
+    "volume_lots": 33684,
+    "turnover": 410703,
+    "date": "2026-09-21"
+  },
+  {
+    "code": "6220",
+    "name": "岳豐",
+    "exchange": "TPEx",
+    "price": 25.15,
+    "change": 0.1,
+    "volume_lots": 240299,
+    "turnover": 6029035,
+    "date": "2026-09-21"
+  },
+  {
+    "code": "6221",
+    "name": "晉泰",
+    "exchange": "TPEx",
+    "price": 31.0,
+    "change": -0.5,
+    "volume_lots": 3406718,
+    "turnover": 98718353,
+    "date": "2026-09-21"
+  },
+  {
+    "code": "6222",
+    "name": "立軒",
+    "exchange": "TPEx",
+    "price": 18.85,
+    "change": -0.75,
+    "volume_lots": 40001,
+    "turnover": 755868,
+    "date": "2026-09-21"
+  },
+  {
+    "code": "6223",
+    "name": "旺矽",
+    "exchange": "TPEx",
+    "price": 5495.0,
+    "change": -305.0,
+    "volume_lots": 1178248,
+    "turnover": 6555009575,
+    "date": "2026-09-21"
+  },
+  {
+    "code": "6227",
+    "name": "茂綸",
+    "exchange": "TPEx",
+    "price": 132.0,
+    "change": 0.0,
+    "volume_lots": 995304,
+    "turnover": 131073555,
+    "date": "2026-09-21"
+  },
+  {
+    "code": "6228",
+    "name": "全譜",
+    "exchange": "TPEx",
+    "price": 16.4,
+    "change": -0.9,
+    "volume_lots": 4000,
+    "turnover": 65350,
+    "date": "2026-09-21"
+  },
+  {
+    "code": "6229",
+    "name": "研通",
+    "exchange": "TPEx",
+    "price": 23.7,
+    "change": 0.2,
+    "volume_lots": 58029,
+    "turnover": 1376828,
+    "date": "2026-09-21"
+  },
+  {
+    "code": "6231",
+    "name": "系微",
+    "exchange": "TPEx",
+    "price": 223.5,
+    "change": 1.0,
+    "volume_lots": 289765,
+    "turnover": 64747708,
+    "date": "2026-09-21"
+  },
+  {
+    "code": "6233",
+    "name": "旺玖",
+    "exchange": "TPEx",
+    "price": 21.3,
+    "change": 0.6,
+    "volume_lots": 177923,
+    "turnover": 3792064,
+    "date": "2026-09-21"
+  },
+  {
+    "code": "6234",
+    "name": "高僑",
+    "exchange": "TPEx",
+    "price": 42.35,
+    "change": 3.85,
+    "volume_lots": 3355073,
+    "turnover": 137538619,
+    "date": "2026-09-21"
+  },
+  {
+    "code": "6236",
+    "name": "中湛",
+    "exchange": "TPEx",
+    "price": 17.5,
+    "change": 1.5,
+    "volume_lots": 11413,
+    "turnover": 167695,
+    "date": "2026-09-21"
+  },
+  {
+    "code": "6237",
+    "name": "驊訊",
+    "exchange": "TPEx",
+    "price": 34.7,
+    "change": 0.7,
+    "volume_lots": 185274,
+    "turnover": 6450737,
+    "date": "2026-09-21"
+  },
+  {
+    "code": "6240",
+    "name": "松崗",
+    "exchange": "TPEx",
+    "price": 24.35,
+    "change": -0.65,
+    "volume_lots": 111154,
+    "turnover": 2727464,
+    "date": "2026-09-21"
+  },
+  {
+    "code": "6241",
+    "name": "鑫永洋",
+    "exchange": "TPEx",
+    "price": 15.95,
+    "change": 0.05,
+    "volume_lots": 30589,
+    "turnover": 490299,
+    "date": "2026-09-21"
+  },
+  {
+    "code": "6242",
+    "name": "立康",
+    "exchange": "TPEx",
+    "price": 33.95,
+    "change": 0.0,
+    "volume_lots": 4117,
+    "turnover": 139772,
+    "date": "2026-09-21"
+  },
+  {
+    "code": "6244",
+    "name": "茂迪",
+    "exchange": "TPEx",
+    "price": 24.0,
+    "change": 1.1,
+    "volume_lots": 10936451,
+    "turnover": 263792468,
+    "date": "2026-09-21"
+  },
+  {
+    "code": "6245",
+    "name": "立端",
+    "exchange": "TPEx",
+    "price": 88.4,
+    "change": 2.8,
+    "volume_lots": 2302253,
+    "turnover": 202866097,
+    "date": "2026-09-21"
+  },
+  {
+    "code": "6246",
+    "name": "臺龍",
+    "exchange": "TPEx",
+    "price": 12.95,
+    "change": 0.3,
+    "volume_lots": 15010,
+    "turnover": 192577,
+    "date": "2026-09-21"
+  },
+  {
+    "code": "6248",
+    "name": "沛波",
+    "exchange": "TPEx",
+    "price": 16.85,
+    "change": 0.0,
+    "volume_lots": 66348,
+    "turnover": 1110323,
+    "date": "2026-09-21"
+  },
+  {
+    "code": "6259",
+    "name": "百徽",
+    "exchange": "TPEx",
+    "price": 29.6,
+    "change": 0.35,
+    "volume_lots": 217442,
+    "turnover": 6470560,
+    "date": "2026-09-21"
+  },
+  {
+    "code": "6261",
+    "name": "久元",
+    "exchange": "TPEx",
+    "price": 79.3,
+    "change": 0.1,
+    "volume_lots": 620173,
+    "turnover": 49555310,
+    "date": "2026-09-21"
+  },
+  {
+    "code": "6263",
+    "name": "普萊德",
+    "exchange": "TPEx",
+    "price": 158.5,
+    "change": 1.0,
+    "volume_lots": 82516,
+    "turnover": 13026890,
+    "date": "2026-09-21"
+  },
+  {
+    "code": "6264",
+    "name": "富裔",
+    "exchange": "TPEx",
+    "price": 6.02,
+    "change": 0.01,
+    "volume_lots": 42106,
+    "turnover": 252206,
+    "date": "2026-09-21"
+  },
+  {
+    "code": "6265",
+    "name": "方土昶",
+    "exchange": "TPEx",
+    "price": 48.5,
+    "change": -0.75,
+    "volume_lots": 1147681,
+    "turnover": 55945062,
+    "date": "2026-09-21"
+  },
+  {
+    "code": "6266",
+    "name": "泰詠",
+    "exchange": "TPEx",
+    "price": 25.0,
+    "change": 0.15,
+    "volume_lots": 123486,
+    "turnover": 3080710,
+    "date": "2026-09-21"
+  },
+  {
+    "code": "6270",
+    "name": "倍微",
+    "exchange": "TPEx",
+    "price": 29.95,
+    "change": 0.65,
+    "volume_lots": 229076,
+    "turnover": 6843040,
+    "date": "2026-09-21"
+  },
+  {
+    "code": "6274",
+    "name": "台燿",
+    "exchange": "TPEx",
+    "price": 1435.0,
+    "change": 65.0,
+    "volume_lots": 11543152,
+    "turnover": 16028920395,
+    "date": "2026-09-21"
+  },
+  {
+    "code": "6275",
+    "name": "元山",
+    "exchange": "TPEx",
+    "price": 46.0,
+    "change": 0.9,
+    "volume_lots": 172259,
+    "turnover": 7849180,
+    "date": "2026-09-21"
+  },
+  {
+    "code": "6276",
+    "name": "安鈦克",
+    "exchange": "TPEx",
+    "price": 19.65,
+    "change": -0.2,
+    "volume_lots": 4464,
+    "turnover": 88203,
+    "date": "2026-09-21"
+  },
+  {
+    "code": "6279",
+    "name": "胡連",
+    "exchange": "TPEx",
+    "price": 112.5,
+    "change": -1.0,
+    "volume_lots": 394094,
+    "turnover": 44367528,
+    "date": "2026-09-21"
+  },
+  {
+    "code": "6284",
+    "name": "佳邦",
+    "exchange": "TPEx",
+    "price": 75.8,
+    "change": -0.2,
+    "volume_lots": 491513,
+    "turnover": 37403958,
+    "date": "2026-09-21"
+  },
+  {
+    "code": "6290",
+    "name": "良維",
+    "exchange": "TPEx",
+    "price": 281.0,
+    "change": -1.5,
+    "volume_lots": 3188908,
+    "turnover": 894943449,
+    "date": "2026-09-21"
+  },
+  {
+    "code": "6291",
+    "name": "沛亨",
+    "exchange": "TPEx",
+    "price": 508.0,
+    "change": -16.0,
+    "volume_lots": 1216296,
+    "turnover": 622787565,
+    "date": "2026-09-21"
+  },
+  {
+    "code": "6292",
+    "name": "迅德",
+    "exchange": "TPEx",
+    "price": 68.0,
+    "change": 0.7,
+    "volume_lots": 421412,
+    "turnover": 28374119,
+    "date": "2026-09-21"
+  },
+  {
+    "code": "6294",
+    "name": "智基",
+    "exchange": "TPEx",
+    "price": 28.65,
+    "change": 0.0,
+    "volume_lots": 8535,
+    "turnover": 242963,
+    "date": "2026-09-21"
+  },
+  {
+    "code": "6411",
+    "name": "晶焱",
+    "exchange": "TPEx",
+    "price": 79.4,
+    "change": 0.6,
+    "volume_lots": 202117,
+    "turnover": 15961519,
+    "date": "2026-09-21"
+  },
+  {
+    "code": "6417",
+    "name": "韋僑",
+    "exchange": "TPEx",
+    "price": 102.5,
+    "change": -1.5,
+    "volume_lots": 37290,
+    "turnover": 3852539,
+    "date": "2026-09-21"
+  },
+  {
+    "code": "6418",
+    "name": "詠昇",
+    "exchange": "TPEx",
+    "price": 35.3,
+    "change": 0.75,
+    "volume_lots": 76203,
+    "turnover": 2655365,
+    "date": "2026-09-21"
+  },
+  {
+    "code": "6419",
+    "name": "京晨科",
+    "exchange": "TPEx",
+    "price": 152.0,
+    "change": -1.5,
+    "volume_lots": 115883,
+    "turnover": 17830209,
+    "date": "2026-09-21"
+  },
+  {
+    "code": "6423",
+    "name": "億而得",
+    "exchange": "TPEx",
+    "price": 86.6,
+    "change": 4.8,
+    "volume_lots": 99584,
+    "turnover": 8527848,
+    "date": "2026-09-21"
+  },
+  {
+    "code": "6425",
+    "name": "易發",
+    "exchange": "TPEx",
+    "price": 75.0,
+    "change": 6.8,
+    "volume_lots": 4115710,
+    "turnover": 302556544,
+    "date": "2026-09-21"
+  },
+  {
+    "code": "6432",
+    "name": "今展科",
+    "exchange": "TPEx",
+    "price": 61.4,
+    "change": 2.6,
+    "volume_lots": 1329131,
+    "turnover": 80578148,
+    "date": "2026-09-21"
+  },
+  {
+    "code": "6435",
+    "name": "大中",
+    "exchange": "TPEx",
+    "price": 244.5,
+    "change": -1.5,
+    "volume_lots": 169356,
+    "turnover": 41337003,
+    "date": "2026-09-21"
+  },
+  {
+    "code": "6441",
+    "name": "廣錠",
+    "exchange": "TPEx",
+    "price": 25.15,
+    "change": 2.25,
+    "volume_lots": 426311,
+    "turnover": 10509938,
+    "date": "2026-09-21"
+  },
+  {
+    "code": "6461",
+    "name": "益得",
+    "exchange": "TPEx",
+    "price": 24.8,
+    "change": -0.4,
+    "volume_lots": 24943,
+    "turnover": 621868,
+    "date": "2026-09-21"
+  },
+  {
+    "code": "6462",
+    "name": "神盾",
+    "exchange": "TPEx",
+    "price": 98.7,
+    "change": 1.6,
+    "volume_lots": 228307,
+    "turnover": 22327648,
+    "date": "2026-09-21"
+  },
+  {
+    "code": "6465",
+    "name": "威潤",
+    "exchange": "TPEx",
+    "price": 43.15,
+    "change": 0.65,
+    "volume_lots": 108213,
+    "turnover": 4635387,
+    "date": "2026-09-21"
+  },
+  {
+    "code": "6469",
+    "name": "大樹",
+    "exchange": "TPEx",
+    "price": 64.5,
+    "change": -0.9,
+    "volume_lots": 269286,
+    "turnover": 17436284,
+    "date": "2026-09-21"
+  },
+  {
+    "code": "6470",
+    "name": "宇智",
+    "exchange": "TPEx",
+    "price": 43.0,
+    "change": 0.0,
+    "volume_lots": 13370,
+    "turnover": 574114,
+    "date": "2026-09-21"
+  },
+  {
+    "code": "6474",
+    "name": "華豫寧",
+    "exchange": "TPEx",
+    "price": 35.4,
+    "change": -0.2,
+    "volume_lots": 13206,
+    "turnover": 470632,
+    "date": "2026-09-21"
+  },
+  {
+    "code": "6482",
+    "name": "弘煜科",
+    "exchange": "TPEx",
+    "price": 24.05,
+    "change": -0.1,
+    "volume_lots": 12000,
+    "turnover": 290100,
+    "date": "2026-09-21"
+  },
+  {
+    "code": "6485",
+    "name": "點序",
+    "exchange": "TPEx",
+    "price": 71.8,
+    "change": 6.5,
+    "volume_lots": 1260296,
+    "turnover": 87351729,
+    "date": "2026-09-21"
+  },
+  {
+    "code": "6486",
+    "name": "互動",
+    "exchange": "TPEx",
+    "price": 81.5,
+    "change": 0.8,
+    "volume_lots": 57362,
+    "turnover": 4649095,
+    "date": "2026-09-21"
+  },
+  {
+    "code": "6488",
+    "name": "環球晶",
+    "exchange": "TPEx",
+    "price": 931.0,
+    "change": -13.0,
+    "volume_lots": 6946339,
+    "turnover": 6510994689,
+    "date": "2026-09-21"
+  },
+  {
+    "code": "6492",
+    "name": "生華科",
+    "exchange": "TPEx",
+    "price": 34.2,
+    "change": 0.5,
+    "volume_lots": 147577,
+    "turnover": 5041507,
+    "date": "2026-09-21"
+  },
+  {
+    "code": "6494",
+    "name": "九齊",
+    "exchange": "TPEx",
+    "price": 51.1,
+    "change": -0.4,
+    "volume_lots": 141757,
+    "turnover": 7309861,
+    "date": "2026-09-21"
+  },
+  {
+    "code": "6496",
+    "name": "科懋",
+    "exchange": "TPEx",
+    "price": 24.05,
+    "change": -0.6,
+    "volume_lots": 16899,
+    "turnover": 407651,
+    "date": "2026-09-21"
+  },
+  {
+    "code": "6498",
+    "name": "久禾光",
+    "exchange": "TPEx",
+    "price": 68.3,
+    "change": 1.4,
+    "volume_lots": 125313,
+    "turnover": 8468338,
+    "date": "2026-09-21"
+  },
+  {
+    "code": "6499",
+    "name": "益安",
+    "exchange": "TPEx",
+    "price": 75.1,
+    "change": 0.6,
+    "volume_lots": 504694,
+    "turnover": 38368543,
+    "date": "2026-09-21"
+  },
+  {
+    "code": "6506",
+    "name": "雙邦",
+    "exchange": "TPEx",
+    "price": 18.05,
+    "change": 0.0,
+    "volume_lots": 42224,
+    "turnover": 760069,
+    "date": "2026-09-21"
+  },
+  {
+    "code": "6508",
+    "name": "惠光",
+    "exchange": "TPEx",
+    "price": 29.15,
+    "change": 2.65,
+    "volume_lots": 1225332,
+    "turnover": 35454908,
+    "date": "2026-09-21"
+  },
+  {
+    "code": "6509",
+    "name": "聚和",
+    "exchange": "TPEx",
+    "price": 47.2,
+    "change": 0.75,
+    "volume_lots": 822336,
+    "turnover": 38586010,
+    "date": "2026-09-21"
+  },
+  {
+    "code": "6510",
+    "name": "精測",
+    "exchange": "TPEx",
+    "price": 3485.0,
+    "change": -35.0,
+    "volume_lots": 1404601,
+    "turnover": 4932894690,
+    "date": "2026-09-21"
+  },
+  {
+    "code": "6512",
+    "name": "啟發電",
+    "exchange": "TPEx",
+    "price": 20.2,
+    "change": -0.35,
+    "volume_lots": 6698,
+    "turnover": 135461,
+    "date": "2026-09-21"
+  },
+  {
+    "code": "6516",
+    "name": "勤崴國際",
+    "exchange": "TPEx",
+    "price": 58.3,
+    "change": -0.3,
+    "volume_lots": 23309,
+    "turnover": 1365025,
+    "date": "2026-09-21"
+  },
+  {
+    "code": "6517",
+    "name": "保勝光學",
+    "exchange": "TPEx",
+    "price": 66.2,
+    "change": 1.2,
+    "volume_lots": 329987,
+    "turnover": 21883089,
+    "date": "2026-09-21"
+  },
+  {
+    "code": "6523",
+    "name": "達爾膚",
+    "exchange": "TPEx",
+    "price": 89.5,
+    "change": -0.2,
+    "volume_lots": 16674,
+    "turnover": 1492483,
+    "date": "2026-09-21"
+  },
+  {
+    "code": "6527",
+    "name": "明達醫",
+    "exchange": "TPEx",
+    "price": 75.0,
+    "change": 0.5,
+    "volume_lots": 12001,
+    "turnover": 900374,
+    "date": "2026-09-21"
+  },
+  {
+    "code": "6530",
+    "name": "創威",
+    "exchange": "TPEx",
+    "price": 100.0,
+    "change": -0.5,
+    "volume_lots": 2227724,
+    "turnover": 224666235,
+    "date": "2026-09-21"
+  },
+  {
+    "code": "6532",
+    "name": "瑞耘",
+    "exchange": "TPEx",
+    "price": 100.0,
+    "change": 0.7,
+    "volume_lots": 856377,
+    "turnover": 86321694,
+    "date": "2026-09-21"
+  },
+  {
+    "code": "6535",
+    "name": "順藥",
+    "exchange": "TPEx",
+    "price": 78.2,
+    "change": -0.7,
+    "volume_lots": 166588,
+    "turnover": 12928993,
+    "date": "2026-09-21"
+  },
+  {
+    "code": "6538",
+    "name": "倉和",
+    "exchange": "TPEx",
+    "price": 426.5,
+    "change": 38.5,
+    "volume_lots": 2526171,
+    "turnover": 1055945056,
+    "date": "2026-09-21"
+  },
+  {
+    "code": "6542",
+    "name": "隆中",
+    "exchange": "TPEx",
+    "price": 41.4,
+    "change": -0.45,
+    "volume_lots": 12000,
+    "turnover": 499200,
+    "date": "2026-09-21"
+  },
+  {
+    "code": "6546",
+    "name": "正基",
+    "exchange": "TPEx",
+    "price": 60.6,
+    "change": 0.6,
+    "volume_lots": 167674,
+    "turnover": 10174285,
+    "date": "2026-09-21"
+  },
+  {
+    "code": "6547",
+    "name": "高端疫苗",
+    "exchange": "TPEx",
+    "price": 58.8,
+    "change": -0.9,
+    "volume_lots": 2651679,
+    "turnover": 158340309,
+    "date": "2026-09-21"
+  },
+  {
+    "code": "6548",
+    "name": "長科*",
+    "exchange": "TPEx",
+    "price": 73.3,
+    "change": -1.5,
+    "volume_lots": 4478893,
+    "turnover": 334183154,
+    "date": "2026-09-21"
+  },
+  {
+    "code": "6556",
+    "name": "勝品",
+    "exchange": "TPEx",
+    "price": 61.5,
+    "change": 0.4,
+    "volume_lots": 2000,
+    "turnover": 123200,
+    "date": "2026-09-21"
+  },
+  {
+    "code": "6560",
+    "name": "欣普羅",
+    "exchange": "TPEx",
+    "price": 33.6,
+    "change": -1.25,
+    "volume_lots": 44858,
+    "turnover": 1538740,
+    "date": "2026-09-21"
+  },
+  {
+    "code": "6561",
+    "name": "是方",
+    "exchange": "TPEx",
+    "price": 315.5,
+    "change": -1.5,
+    "volume_lots": 33405,
+    "turnover": 10504888,
+    "date": "2026-09-21"
+  },
+  {
+    "code": "6568",
+    "name": "宏觀",
+    "exchange": "TPEx",
+    "price": 145.0,
+    "change": 2.5,
+    "volume_lots": 78956,
+    "turnover": 11390910,
+    "date": "2026-09-21"
+  },
+  {
+    "code": "6569",
+    "name": "醫揚",
+    "exchange": "TPEx",
+    "price": 92.0,
+    "change": 0.9,
+    "volume_lots": 26105,
+    "turnover": 2392817,
+    "date": "2026-09-21"
+  },
+  {
+    "code": "6570",
+    "name": "維田",
+    "exchange": "TPEx",
+    "price": 47.35,
+    "change": -0.1,
+    "volume_lots": 79092,
+    "turnover": 3745876,
+    "date": "2026-09-21"
+  },
+  {
+    "code": "6574",
+    "name": "霈方",
+    "exchange": "TPEx",
+    "price": 122.0,
+    "change": 1.5,
+    "volume_lots": 42270,
+    "turnover": 5143944,
+    "date": "2026-09-21"
+  },
+  {
+    "code": "6576",
+    "name": "逸達",
+    "exchange": "TPEx",
+    "price": 81.2,
+    "change": 0.8,
+    "volume_lots": 62172,
+    "turnover": 5019791,
+    "date": "2026-09-21"
+  },
+  {
+    "code": "6577",
+    "name": "勁豐",
+    "exchange": "TPEx",
+    "price": 79.1,
+    "change": 0.1,
+    "volume_lots": 31775,
+    "turnover": 2517833,
+    "date": "2026-09-21"
+  },
+  {
+    "code": "6578",
+    "name": "達邦蛋白",
+    "exchange": "TPEx",
+    "price": 16.9,
+    "change": -0.05,
+    "volume_lots": 63301,
+    "turnover": 1067648,
+    "date": "2026-09-21"
+  },
+  {
+    "code": "6584",
+    "name": "南俊國際",
+    "exchange": "TPEx",
+    "price": 560.0,
+    "change": -16.0,
+    "volume_lots": 351769,
+    "turnover": 198827905,
+    "date": "2026-09-21"
+  },
+  {
+    "code": "6588",
+    "name": "東典光電",
+    "exchange": "TPEx",
+    "price": 113.5,
+    "change": -4.0,
+    "volume_lots": 1192692,
+    "turnover": 138105523,
+    "date": "2026-09-21"
+  },
+  {
+    "code": "6590",
+    "name": "普鴻",
+    "exchange": "TPEx",
+    "price": 67.9,
+    "change": -0.4,
+    "volume_lots": 16883,
+    "turnover": 1127312,
+    "date": "2026-09-21"
+  },
+  {
+    "code": "6593",
+    "name": "台灣銘板",
+    "exchange": "TPEx",
+    "price": 32.3,
+    "change": 0.45,
+    "volume_lots": 37825,
+    "turnover": 1210081,
+    "date": "2026-09-21"
+  },
+  {
+    "code": "6596",
+    "name": "寬宏藝術",
+    "exchange": "TPEx",
+    "price": 97.3,
+    "change": 0.3,
+    "volume_lots": 188475,
+    "turnover": 18342100,
+    "date": "2026-09-21"
+  },
+  {
+    "code": "6597",
+    "name": "立誠",
+    "exchange": "TPEx",
+    "price": 68.0,
+    "change": -2.1,
+    "volume_lots": 5000,
+    "turnover": 340000,
+    "date": "2026-09-21"
+  },
+  {
+    "code": "6603",
+    "name": "富強鑫",
+    "exchange": "TPEx",
+    "price": 28.75,
+    "change": 0.2,
+    "volume_lots": 4209926,
+    "turnover": 121136800,
+    "date": "2026-09-21"
+  },
+  {
+    "code": "6609",
+    "name": "瀧澤科",
+    "exchange": "TPEx",
+    "price": 40.0,
+    "change": 0.9,
+    "volume_lots": 103544,
+    "turnover": 4110474,
+    "date": "2026-09-21"
+  },
+  {
+    "code": "6612",
+    "name": "奈米醫材",
+    "exchange": "TPEx",
+    "price": 71.1,
+    "change": 0.1,
+    "volume_lots": 9642,
+    "turnover": 688867,
+    "date": "2026-09-21"
+  },
+  {
+    "code": "6613",
+    "name": "朋億*",
+    "exchange": "TPEx",
+    "price": 267.0,
+    "change": -3.0,
+    "volume_lots": 161258,
+    "turnover": 43185465,
+    "date": "2026-09-21"
+  },
+  {
+    "code": "6615",
+    "name": "慧智",
+    "exchange": "TPEx",
+    "price": 0.0,
+    "change": 0.0,
+    "volume_lots": 762,
+    "turnover": 26360,
+    "date": "2026-09-21"
+  },
+  {
+    "code": "6616",
+    "name": "特昇-KY",
+    "exchange": "TPEx",
+    "price": 8.3,
+    "change": -0.2,
+    "volume_lots": 5010,
+    "turnover": 41653,
+    "date": "2026-09-21"
+  },
+  {
+    "code": "6617",
+    "name": "共信-KY",
+    "exchange": "TPEx",
+    "price": 141.0,
+    "change": -2.0,
+    "volume_lots": 457040,
+    "turnover": 64312455,
+    "date": "2026-09-21"
+  },
+  {
+    "code": "6620",
+    "name": "漢達",
+    "exchange": "TPEx",
+    "price": 137.5,
+    "change": -11.5,
+    "volume_lots": 6199199,
+    "turnover": 873312067,
+    "date": "2026-09-21"
+  },
+  {
+    "code": "6624",
+    "name": "萬年清",
+    "exchange": "TPEx",
+    "price": 38.35,
+    "change": 0.35,
+    "volume_lots": 9104,
+    "turnover": 348765,
+    "date": "2026-09-21"
+  },
+  {
+    "code": "6629",
+    "name": "泰金-KY",
+    "exchange": "TPEx",
+    "price": 104.5,
+    "change": 0.5,
+    "volume_lots": 24002,
+    "turnover": 2497220,
+    "date": "2026-09-21"
+  },
+  {
+    "code": "6637",
+    "name": "醫影",
+    "exchange": "TPEx",
+    "price": 54.6,
+    "change": 0.0,
+    "volume_lots": 9418,
+    "turnover": 512469,
+    "date": "2026-09-21"
+  },
+  {
+    "code": "6640",
+    "name": "均華",
+    "exchange": "TPEx",
+    "price": 1110.0,
+    "change": -70.0,
+    "volume_lots": 326152,
+    "turnover": 372295845,
+    "date": "2026-09-21"
+  },
+  {
+    "code": "6642",
+    "name": "富致",
+    "exchange": "TPEx",
+    "price": 79.2,
+    "change": 1.0,
+    "volume_lots": 55041,
+    "turnover": 4321843,
+    "date": "2026-09-21"
+  },
+  {
+    "code": "6643",
+    "name": "M31",
+    "exchange": "TPEx",
+    "price": 478.0,
+    "change": 20.0,
+    "volume_lots": 1107544,
+    "turnover": 523941240,
+    "date": "2026-09-21"
+  },
+  {
+    "code": "6649",
+    "name": "台生材",
+    "exchange": "TPEx",
+    "price": 35.45,
+    "change": -0.3,
+    "volume_lots": 21031,
+    "turnover": 745155,
+    "date": "2026-09-21"
+  },
+  {
+    "code": "6651",
+    "name": "全宇昕",
+    "exchange": "TPEx",
+    "price": 154.0,
+    "change": 7.5,
+    "volume_lots": 485174,
+    "turnover": 73872802,
+    "date": "2026-09-21"
+  },
+  {
+    "code": "6654",
+    "name": "天正國際",
+    "exchange": "TPEx",
+    "price": 208.0,
+    "change": 10.5,
+    "volume_lots": 49959,
+    "turnover": 10115527,
+    "date": "2026-09-21"
+  },
+  {
+    "code": "6661",
+    "name": "威健生技",
+    "exchange": "TPEx",
+    "price": 16.05,
+    "change": -0.6,
+    "volume_lots": 12065,
+    "turnover": 194046,
+    "date": "2026-09-21"
+  },
+  {
+    "code": "6662",
+    "name": "樂斯科",
+    "exchange": "TPEx",
+    "price": 28.2,
+    "change": -0.3,
+    "volume_lots": 1000,
+    "turnover": 28200,
+    "date": "2026-09-21"
+  },
+  {
+    "code": "6664",
+    "name": "群翊",
+    "exchange": "TPEx",
+    "price": 340.5,
+    "change": 1.0,
+    "volume_lots": 166926,
+    "turnover": 56730050,
+    "date": "2026-09-21"
+  },
+  {
+    "code": "6667",
+    "name": "信紘科",
+    "exchange": "TPEx",
+    "price": 259.5,
+    "change": -2.5,
+    "volume_lots": 1460382,
+    "turnover": 383176797,
+    "date": "2026-09-21"
+  },
+  {
+    "code": "6679",
+    "name": "鈺太",
+    "exchange": "TPEx",
+    "price": 199.5,
+    "change": 2.0,
+    "volume_lots": 140651,
+    "turnover": 28019784,
+    "date": "2026-09-21"
+  },
+  {
+    "code": "6680",
+    "name": "鑫創電子",
+    "exchange": "TPEx",
+    "price": 55.0,
+    "change": 1.1,
+    "volume_lots": 1628,
+    "turnover": 88976,
+    "date": "2026-09-21"
+  },
+  {
+    "code": "6683",
+    "name": "雍智科技",
+    "exchange": "TPEx",
+    "price": 1675.0,
+    "change": 5.0,
+    "volume_lots": 2228061,
+    "turnover": 3773476400,
+    "date": "2026-09-21"
+  },
+  {
+    "code": "6684",
+    "name": "安格",
+    "exchange": "TPEx",
+    "price": 50.0,
+    "change": 0.95,
+    "volume_lots": 161675,
+    "turnover": 8056636,
+    "date": "2026-09-21"
+  },
+  {
+    "code": "6690",
+    "name": "安碁資訊",
+    "exchange": "TPEx",
+    "price": 180.5,
+    "change": -6.0,
+    "volume_lots": 342716,
+    "turnover": 62401862,
+    "date": "2026-09-21"
+  },
+  {
+    "code": "6692",
+    "name": "進能服",
+    "exchange": "TPEx",
+    "price": 23.7,
+    "change": 0.15,
+    "volume_lots": 9102,
+    "turnover": 214358,
+    "date": "2026-09-21"
+  },
+  {
+    "code": "6693",
+    "name": "廣閎科",
+    "exchange": "TPEx",
+    "price": 178.0,
+    "change": -5.5,
+    "volume_lots": 727205,
+    "turnover": 130186644,
+    "date": "2026-09-21"
+  },
+  {
+    "code": "6697",
+    "name": "東捷資訊",
+    "exchange": "TPEx",
+    "price": 41.55,
+    "change": 0.0,
+    "volume_lots": 31038,
+    "turnover": 1289721,
+    "date": "2026-09-21"
+  },
+  {
+    "code": "6703",
+    "name": "軒郁",
+    "exchange": "TPEx",
+    "price": 101.0,
+    "change": 0.0,
+    "volume_lots": 9959,
+    "turnover": 1005058,
+    "date": "2026-09-21"
+  },
+  {
+    "code": "6708",
+    "name": "天擎",
+    "exchange": "TPEx",
+    "price": 39.4,
+    "change": -0.3,
+    "volume_lots": 74001,
+    "turnover": 2908689,
+    "date": "2026-09-21"
+  },
+  {
+    "code": "6712",
+    "name": "長聖",
+    "exchange": "TPEx",
+    "price": 158.0,
+    "change": -0.5,
+    "volume_lots": 59173,
+    "turnover": 9374241,
+    "date": "2026-09-21"
+  },
+  {
+    "code": "6716",
+    "name": "應廣",
+    "exchange": "TPEx",
+    "price": 116.0,
+    "change": -3.5,
+    "volume_lots": 497724,
+    "turnover": 58787259,
+    "date": "2026-09-21"
+  },
+  {
+    "code": "6720",
+    "name": "久昌",
+    "exchange": "TPEx",
+    "price": 127.0,
+    "change": -2.0,
+    "volume_lots": 13442,
+    "turnover": 1709855,
+    "date": "2026-09-21"
+  },
+  {
+    "code": "6721",
+    "name": "信實",
+    "exchange": "TPEx",
+    "price": 51.0,
+    "change": 0.0,
+    "volume_lots": 14319,
+    "turnover": 730009,
+    "date": "2026-09-21"
+  },
+  {
+    "code": "6725",
+    "name": "矽科宏晟",
+    "exchange": "TPEx",
+    "price": 220.0,
+    "change": -3.0,
+    "volume_lots": 56620,
+    "turnover": 12779181,
+    "date": "2026-09-21"
+  },
+  {
+    "code": "6727",
+    "name": "亞泰金屬",
+    "exchange": "TPEx",
+    "price": 478.0,
+    "change": -9.0,
+    "volume_lots": 1143005,
+    "turnover": 540813342,
+    "date": "2026-09-21"
+  },
+  {
+    "code": "6728",
+    "name": "上洋",
+    "exchange": "TPEx",
+    "price": 108.0,
+    "change": 0.0,
+    "volume_lots": 7158,
+    "turnover": 772148,
+    "date": "2026-09-21"
+  },
+  {
+    "code": "6730",
+    "name": "常廣",
+    "exchange": "TPEx",
+    "price": 32.0,
+    "change": 0.2,
+    "volume_lots": 7000,
+    "turnover": 224000,
+    "date": "2026-09-21"
+  },
+  {
+    "code": "6732",
+    "name": "昇佳電子",
+    "exchange": "TPEx",
+    "price": 149.0,
+    "change": -1.0,
+    "volume_lots": 53340,
+    "turnover": 7977776,
+    "date": "2026-09-21"
+  },
+  {
+    "code": "6733",
+    "name": "博晟生醫",
+    "exchange": "TPEx",
+    "price": 25.05,
+    "change": -0.45,
+    "volume_lots": 53861,
+    "turnover": 1361746,
+    "date": "2026-09-21"
+  },
+  {
+    "code": "6735",
+    "name": "美達科技",
+    "exchange": "TPEx",
+    "price": 63.8,
+    "change": 1.0,
+    "volume_lots": 63360,
+    "turnover": 4009057,
+    "date": "2026-09-21"
+  },
+  {
+    "code": "6739",
+    "name": "竹陞科技",
+    "exchange": "TPEx",
+    "price": 1100.0,
+    "change": -50.0,
+    "volume_lots": 291745,
+    "turnover": 325371030,
+    "date": "2026-09-21"
+  },
+  {
+    "code": "6741",
+    "name": "91APP*-KY",
+    "exchange": "TPEx",
+    "price": 57.5,
+    "change": -1.3,
+    "volume_lots": 191291,
+    "turnover": 11078799,
+    "date": "2026-09-21"
+  },
+  {
+    "code": "6751",
+    "name": "智聯服務",
+    "exchange": "TPEx",
+    "price": 43.8,
+    "change": 1.0,
+    "volume_lots": 13799,
+    "turnover": 603047,
+    "date": "2026-09-21"
+  },
+  {
+    "code": "6752",
+    "name": "叡揚",
+    "exchange": "TPEx",
+    "price": 96.5,
+    "change": -0.7,
+    "volume_lots": 21364,
+    "turnover": 2074071,
+    "date": "2026-09-21"
+  },
+  {
+    "code": "6761",
+    "name": "穩得",
+    "exchange": "TPEx",
+    "price": 166.5,
+    "change": -1.0,
+    "volume_lots": 93308,
+    "turnover": 15551247,
+    "date": "2026-09-21"
+  },
+  {
+    "code": "6762",
+    "name": "達亞",
+    "exchange": "TPEx",
+    "price": 0.0,
+    "change": 0.0,
+    "volume_lots": 0,
+    "turnover": 0,
+    "date": "2026-09-21"
+  },
+  {
+    "code": "6763",
+    "name": "綠界科技*",
+    "exchange": "TPEx",
+    "price": 41.35,
+    "change": 0.0,
+    "volume_lots": 141496,
+    "turnover": 5856914,
+    "date": "2026-09-21"
+  },
+  {
+    "code": "6767",
+    "name": "台微醫",
+    "exchange": "TPEx",
+    "price": 25.0,
+    "change": 0.9,
+    "volume_lots": 10020,
+    "turnover": 250064,
+    "date": "2026-09-21"
+  },
+  {
+    "code": "6785",
+    "name": "昱展新藥",
+    "exchange": "TPEx",
+    "price": 99.5,
+    "change": 0.5,
+    "volume_lots": 46758,
+    "turnover": 4620602,
+    "date": "2026-09-21"
+  },
+  {
+    "code": "6788",
+    "name": "華景電",
+    "exchange": "TPEx",
+    "price": 341.5,
+    "change": 0.0,
+    "volume_lots": 228647,
+    "turnover": 77506732,
+    "date": "2026-09-21"
+  },
+  {
+    "code": "6791",
+    "name": "虎門科技",
+    "exchange": "TPEx",
+    "price": 100.0,
+    "change": -1.0,
+    "volume_lots": 11097,
+    "turnover": 1119796,
+    "date": "2026-09-21"
+  },
+  {
+    "code": "6803",
+    "name": "崑鼎",
+    "exchange": "TPEx",
+    "price": 266.5,
+    "change": -0.5,
+    "volume_lots": 67843,
+    "turnover": 18110021,
+    "date": "2026-09-21"
+  },
+  {
+    "code": "6804",
+    "name": "明係",
+    "exchange": "TPEx",
+    "price": 18.3,
+    "change": 0.15,
+    "volume_lots": 66141,
+    "turnover": 1207715,
+    "date": "2026-09-21"
+  },
+  {
+    "code": "6811",
+    "name": "宏碁資訊",
+    "exchange": "TPEx",
+    "price": 256.5,
+    "change": -10.0,
+    "volume_lots": 616719,
+    "turnover": 160040863,
+    "date": "2026-09-21"
+  },
+  {
+    "code": "6821",
+    "name": "聯寶",
+    "exchange": "TPEx",
+    "price": 41.3,
+    "change": 0.7,
+    "volume_lots": 89110,
+    "turnover": 3661366,
+    "date": "2026-09-21"
+  },
+  {
+    "code": "6823",
+    "name": "濾能",
+    "exchange": "TPEx",
+    "price": 59.7,
+    "change": 0.5,
+    "volume_lots": 20100,
+    "turnover": 1205800,
+    "date": "2026-09-21"
+  },
+  {
+    "code": "6829",
+    "name": "千附精密",
+    "exchange": "TPEx",
+    "price": 217.5,
+    "change": -7.0,
+    "volume_lots": 713580,
+    "turnover": 155451582,
+    "date": "2026-09-21"
+  },
+  {
+    "code": "6840",
+    "name": "東研信超",
+    "exchange": "TPEx",
+    "price": 106.5,
+    "change": -1.5,
+    "volume_lots": 613829,
+    "turnover": 66844454,
+    "date": "2026-09-21"
+  },
+  {
+    "code": "6841",
+    "name": "長佳智能",
+    "exchange": "TPEx",
+    "price": 53.3,
+    "change": -1.1,
+    "volume_lots": 92940,
+    "turnover": 4961094,
+    "date": "2026-09-21"
+  },
+  {
+    "code": "6843",
+    "name": "進典",
+    "exchange": "TPEx",
+    "price": 39.3,
+    "change": 0.05,
+    "volume_lots": 10580,
+    "turnover": 415815,
+    "date": "2026-09-21"
+  },
+  {
+    "code": "6844",
+    "name": "諾貝兒",
+    "exchange": "TPEx",
+    "price": 57.0,
+    "change": -0.6,
+    "volume_lots": 37124,
+    "turnover": 2104283,
+    "date": "2026-09-21"
+  },
+  {
+    "code": "6846",
+    "name": "綠茵",
+    "exchange": "TPEx",
+    "price": 59.2,
+    "change": 0.2,
+    "volume_lots": 15001,
+    "turnover": 884257,
+    "date": "2026-09-21"
+  },
+  {
+    "code": "6855",
+    "name": "數泓科",
+    "exchange": "TPEx",
+    "price": 113.0,
+    "change": -1.5,
+    "volume_lots": 3167,
+    "turnover": 362763,
+    "date": "2026-09-21"
+  },
+  {
+    "code": "6856",
+    "name": "鑫傳",
+    "exchange": "TPEx",
+    "price": 42.0,
+    "change": 0.0,
+    "volume_lots": 9012,
+    "turnover": 374502,
+    "date": "2026-09-21"
+  },
+  {
+    "code": "6859",
+    "name": "伯特光",
+    "exchange": "TPEx",
+    "price": 121.0,
+    "change": 0.0,
+    "volume_lots": 38948,
+    "turnover": 4740857,
+    "date": "2026-09-21"
+  },
+  {
+    "code": "6865",
+    "name": "偉康科技",
+    "exchange": "TPEx",
+    "price": 27.5,
+    "change": 0.5,
+    "volume_lots": 2984,
+    "turnover": 82009,
+    "date": "2026-09-21"
+  },
+  {
+    "code": "6870",
+    "name": "騰雲",
+    "exchange": "TPEx",
+    "price": 312.0,
+    "change": 0.0,
+    "volume_lots": 103043,
+    "turnover": 32160339,
+    "date": "2026-09-21"
+  },
+  {
+    "code": "6872",
+    "name": "浩宇生醫",
+    "exchange": "TPEx",
+    "price": 23.2,
+    "change": 2.1,
+    "volume_lots": 361562,
+    "turnover": 8050553,
+    "date": "2026-09-21"
+  },
+  {
+    "code": "6874",
+    "name": "倍力",
+    "exchange": "TPEx",
+    "price": 69.0,
+    "change": -0.1,
+    "volume_lots": 14086,
+    "turnover": 973679,
+    "date": "2026-09-21"
+  },
+  {
+    "code": "6875",
+    "name": "國邑*",
+    "exchange": "TPEx",
+    "price": 35.9,
+    "change": 2.9,
+    "volume_lots": 618316,
+    "turnover": 22147542,
+    "date": "2026-09-21"
+  },
+  {
+    "code": "6877",
+    "name": "鏵友益",
+    "exchange": "TPEx",
+    "price": 121.0,
+    "change": 1.5,
+    "volume_lots": 38304,
+    "turnover": 4630362,
+    "date": "2026-09-21"
+  },
+  {
+    "code": "6881",
+    "name": "潤德",
+    "exchange": "TPEx",
+    "price": 215.5,
+    "change": 0.5,
+    "volume_lots": 3502,
+    "turnover": 753220,
+    "date": "2026-09-21"
+  },
+  {
+    "code": "6884",
+    "name": "海柏特",
+    "exchange": "TPEx",
+    "price": 31.9,
+    "change": 0.9,
+    "volume_lots": 3017,
+    "turnover": 94210,
+    "date": "2026-09-21"
+  },
+  {
+    "code": "6894",
+    "name": "衛司特",
+    "exchange": "TPEx",
+    "price": 370.5,
+    "change": 9.0,
+    "volume_lots": 132335,
+    "turnover": 48860768,
+    "date": "2026-09-21"
+  },
+  {
+    "code": "6895",
+    "name": "宏碩系統",
+    "exchange": "TPEx",
+    "price": 140.0,
+    "change": -3.0,
+    "volume_lots": 57853,
+    "turnover": 8220675,
+    "date": "2026-09-21"
+  },
+  {
+    "code": "6899",
+    "name": "創為精密",
+    "exchange": "TPEx",
+    "price": 51.0,
+    "change": 1.0,
+    "volume_lots": 39440,
+    "turnover": 2037881,
+    "date": "2026-09-21"
+  },
+  {
+    "code": "6903",
+    "name": "巨漢",
+    "exchange": "TPEx",
+    "price": 305.0,
+    "change": -4.0,
+    "volume_lots": 136585,
+    "turnover": 41788857,
+    "date": "2026-09-21"
+  },
+  {
+    "code": "6904",
+    "name": "伯鑫",
+    "exchange": "TPEx",
+    "price": 120.0,
+    "change": 1.0,
+    "volume_lots": 1025,
+    "turnover": 123000,
+    "date": "2026-09-21"
+  },
+  {
+    "code": "6907",
+    "name": "雅特力-KY",
+    "exchange": "TPEx",
+    "price": 183.0,
+    "change": -3.5,
+    "volume_lots": 628315,
+    "turnover": 115541978,
+    "date": "2026-09-21"
+  },
+  {
+    "code": "6910",
+    "name": "德鴻",
+    "exchange": "TPEx",
+    "price": 25.35,
+    "change": -0.4,
+    "volume_lots": 39142,
+    "turnover": 999002,
+    "date": "2026-09-21"
+  },
+  {
+    "code": "6913",
+    "name": "鴻呈",
+    "exchange": "TPEx",
+    "price": 130.0,
+    "change": -0.5,
+    "volume_lots": 160346,
+    "turnover": 20817499,
+    "date": "2026-09-21"
+  },
+  {
+    "code": "6922",
+    "name": "宸曜",
+    "exchange": "TPEx",
+    "price": 206.5,
+    "change": 18.5,
+    "volume_lots": 353651,
+    "turnover": 71763151,
+    "date": "2026-09-21"
+  },
+  {
+    "code": "6925",
+    "name": "意藍",
+    "exchange": "TPEx",
+    "price": 57.8,
+    "change": -2.1,
+    "volume_lots": 278132,
+    "turnover": 16141156,
+    "date": "2026-09-21"
+  },
+  {
+    "code": "6929",
+    "name": "佑全",
+    "exchange": "TPEx",
+    "price": 0.0,
+    "change": 0.0,
+    "volume_lots": 20,
+    "turnover": 420,
+    "date": "2026-09-21"
+  },
+  {
+    "code": "6945",
+    "name": "圓祥生技",
+    "exchange": "TPEx",
+    "price": 135.0,
+    "change": 3.0,
+    "volume_lots": 962362,
+    "turnover": 125809687,
+    "date": "2026-09-21"
+  },
+  {
+    "code": "6953",
+    "name": "家碩",
+    "exchange": "TPEx",
+    "price": 242.0,
+    "change": 4.0,
+    "volume_lots": 87675,
+    "turnover": 21081396,
+    "date": "2026-09-21"
+  },
+  {
+    "code": "6961",
+    "name": "旅天下",
+    "exchange": "TPEx",
+    "price": 47.55,
+    "change": -0.45,
+    "volume_lots": 25021,
+    "turnover": 1192550,
+    "date": "2026-09-21"
+  },
+  {
+    "code": "6967",
+    "name": "汎瑋材料",
+    "exchange": "TPEx",
+    "price": 66.1,
+    "change": -0.1,
+    "volume_lots": 252492,
+    "turnover": 16754632,
+    "date": "2026-09-21"
+  },
+  {
+    "code": "6968",
+    "name": "萬達寵物",
+    "exchange": "TPEx",
+    "price": 41.55,
+    "change": 0.05,
+    "volume_lots": 64125,
+    "turnover": 2657292,
+    "date": "2026-09-21"
+  },
+  {
+    "code": "6971",
+    "name": "惠民實業",
+    "exchange": "TPEx",
+    "price": 23.8,
+    "change": -0.6,
+    "volume_lots": 64717,
+    "turnover": 1561427,
+    "date": "2026-09-21"
+  },
+  {
+    "code": "6982",
+    "name": "大井泵浦",
+    "exchange": "TPEx",
+    "price": 44.2,
+    "change": -0.3,
+    "volume_lots": 19451,
+    "turnover": 862142,
+    "date": "2026-09-21"
+  },
+  {
+    "code": "6983",
+    "name": "華洋精機",
+    "exchange": "TPEx",
+    "price": 351.0,
+    "change": -4.0,
+    "volume_lots": 58901,
+    "turnover": 21015481,
+    "date": "2026-09-21"
+  },
+  {
+    "code": "6986",
+    "name": "和迅",
+    "exchange": "TPEx",
+    "price": 44.2,
+    "change": 4.0,
+    "volume_lots": 217601,
+    "turnover": 9408586,
+    "date": "2026-09-21"
+  },
+  {
+    "code": "6996",
+    "name": "力領科技",
+    "exchange": "TPEx",
+    "price": 170.5,
+    "change": -2.5,
+    "volume_lots": 23029,
+    "turnover": 3947946,
+    "date": "2026-09-21"
+  },
+  {
+    "code": "6997",
+    "name": "博弘",
+    "exchange": "TPEx",
+    "price": 69.3,
+    "change": 2.3,
+    "volume_lots": 1004,
+    "turnover": 69568,
+    "date": "2026-09-21"
+  },
+  {
+    "code": "7402",
+    "name": "邑錡",
+    "exchange": "TPEx",
+    "price": 101.0,
+    "change": 0.0,
+    "volume_lots": 130516,
+    "turnover": 13273485,
+    "date": "2026-09-21"
+  },
+  {
+    "code": "7547",
+    "name": "碩網",
+    "exchange": "TPEx",
+    "price": 50.7,
+    "change": 0.75,
+    "volume_lots": 25270,
+    "turnover": 1269805,
+    "date": "2026-09-21"
+  },
+  {
+    "code": "7556",
+    "name": "意德士",
+    "exchange": "TPEx",
+    "price": 259.5,
+    "change": -2.5,
+    "volume_lots": 48996,
+    "turnover": 12644302,
+    "date": "2026-09-21"
+  },
+  {
+    "code": "7584",
+    "name": "樂意",
+    "exchange": "TPEx",
+    "price": 28.65,
+    "change": -0.15,
+    "volume_lots": 2550,
+    "turnover": 71845,
+    "date": "2026-09-21"
+  },
+  {
+    "code": "7642",
+    "name": "昶瑞機電",
+    "exchange": "TPEx",
+    "price": 68.8,
+    "change": -2.5,
+    "volume_lots": 48160,
+    "turnover": 3308707,
+    "date": "2026-09-21"
+  },
+  {
+    "code": "7703",
+    "name": "銳澤",
+    "exchange": "TPEx",
+    "price": 200.0,
+    "change": -3.0,
+    "volume_lots": 49117,
+    "turnover": 9878358,
+    "date": "2026-09-21"
+  },
+  {
+    "code": "7704",
+    "name": "明遠精密",
+    "exchange": "TPEx",
+    "price": 62.7,
+    "change": 0.6,
+    "volume_lots": 41215,
+    "turnover": 2568780,
+    "date": "2026-09-21"
+  },
+  {
+    "code": "7708",
+    "name": "全家餐飲",
+    "exchange": "TPEx",
+    "price": 0.0,
+    "change": 0.0,
+    "volume_lots": 23,
+    "turnover": 2138,
+    "date": "2026-09-21"
+  },
+  {
+    "code": "7709",
+    "name": "榮田",
+    "exchange": "TPEx",
+    "price": 89.9,
+    "change": 8.1,
+    "volume_lots": 168715,
+    "turnover": 14872477,
+    "date": "2026-09-21"
+  },
+  {
+    "code": "7712",
+    "name": "博盛半導體",
+    "exchange": "TPEx",
+    "price": 159.0,
+    "change": 1.0,
+    "volume_lots": 234379,
+    "turnover": 37283101,
+    "date": "2026-09-21"
+  },
+  {
+    "code": "7713",
+    "name": "威力德生醫",
+    "exchange": "TPEx",
+    "price": 74.9,
+    "change": 1.1,
+    "volume_lots": 4019,
+    "turnover": 300399,
+    "date": "2026-09-21"
+  },
+  {
+    "code": "7714",
+    "name": "創泓科技",
+    "exchange": "TPEx",
+    "price": 174.5,
+    "change": -5.0,
+    "volume_lots": 260513,
+    "turnover": 45498560,
+    "date": "2026-09-21"
+  },
+  {
+    "code": "7715",
+    "name": "裕山",
+    "exchange": "TPEx",
+    "price": 28.35,
+    "change": 0.35,
+    "volume_lots": 10230,
+    "turnover": 288978,
+    "date": "2026-09-21"
+  },
+  {
+    "code": "7716",
+    "name": "昱臺國際",
+    "exchange": "TPEx",
+    "price": 24.0,
+    "change": 0.5,
+    "volume_lots": 17000,
+    "turnover": 405900,
+    "date": "2026-09-21"
+  },
+  {
+    "code": "7717",
+    "name": "萊德光電-KY",
+    "exchange": "TPEx",
+    "price": 592.0,
+    "change": -8.0,
+    "volume_lots": 1463546,
+    "turnover": 871082155,
+    "date": "2026-09-21"
+  },
+  {
+    "code": "7718",
+    "name": "友鋮",
+    "exchange": "TPEx",
+    "price": 45.85,
+    "change": -0.05,
+    "volume_lots": 32005,
+    "turnover": 1470079,
+    "date": "2026-09-21"
+  },
+  {
+    "code": "7723",
+    "name": "築間",
+    "exchange": "TPEx",
+    "price": 18.55,
+    "change": -0.25,
+    "volume_lots": 108858,
+    "turnover": 2007112,
+    "date": "2026-09-21"
+  },
+  {
+    "code": "7728",
+    "name": "光焱科技",
+    "exchange": "TPEx",
+    "price": 586.0,
+    "change": 2.0,
+    "volume_lots": 46629,
+    "turnover": 27307785,
+    "date": "2026-09-21"
+  },
+  {
+    "code": "7734",
+    "name": "印能科技",
+    "exchange": "TPEx",
+    "price": 2585.0,
+    "change": -85.0,
+    "volume_lots": 235007,
+    "turnover": 613742510,
+    "date": "2026-09-21"
+  },
+  {
+    "code": "7738",
+    "name": "東聯互動",
+    "exchange": "TPEx",
+    "price": 160.0,
+    "change": -3.0,
+    "volume_lots": 13201,
+    "turnover": 2113785,
+    "date": "2026-09-21"
+  },
+  {
+    "code": "7743",
+    "name": "金利食安",
+    "exchange": "TPEx",
+    "price": 25.0,
+    "change": 0.0,
+    "volume_lots": 44431,
+    "turnover": 1109951,
+    "date": "2026-09-21"
+  },
+  {
+    "code": "7744",
+    "name": "崴寶",
+    "exchange": "TPEx",
+    "price": 523.0,
+    "change": -8.0,
+    "volume_lots": 77327,
+    "turnover": 40194925,
+    "date": "2026-09-21"
+  },
+  {
+    "code": "7747",
+    "name": "昕奇雲端",
+    "exchange": "TPEx",
+    "price": 113.0,
+    "change": -1.0,
+    "volume_lots": 7034,
+    "turnover": 789550,
+    "date": "2026-09-21"
+  },
+  {
+    "code": "7751",
+    "name": "竑騰",
+    "exchange": "TPEx",
+    "price": 1445.0,
+    "change": -40.0,
+    "volume_lots": 78155,
+    "turnover": 113866115,
+    "date": "2026-09-21"
+  },
+  {
+    "code": "7753",
+    "name": "星亞",
+    "exchange": "TPEx",
+    "price": 35.5,
+    "change": -0.45,
+    "volume_lots": 29028,
+    "turnover": 1030400,
+    "date": "2026-09-21"
+  },
+  {
+    "code": "7757",
+    "name": "金色三麥",
+    "exchange": "TPEx",
+    "price": 89.9,
+    "change": -0.1,
+    "volume_lots": 11610,
+    "turnover": 1035481,
+    "date": "2026-09-21"
+  },
+  {
+    "code": "7767",
+    "name": "仁大資訊",
+    "exchange": "TPEx",
+    "price": 46.5,
+    "change": 0.1,
+    "volume_lots": 30048,
+    "turnover": 1412747,
+    "date": "2026-09-21"
+  },
+  {
+    "code": "7770",
+    "name": "君曜",
+    "exchange": "TPEx",
+    "price": 40.1,
+    "change": -0.4,
+    "volume_lots": 7180,
+    "turnover": 288756,
+    "date": "2026-09-21"
+  },
+  {
+    "code": "7772",
+    "name": "耀穎",
+    "exchange": "TPEx",
+    "price": 171.0,
+    "change": 15.5,
+    "volume_lots": 2136410,
+    "turnover": 346568244,
+    "date": "2026-09-21"
+  },
+  {
+    "code": "7777",
+    "name": "能率亞洲",
+    "exchange": "TPEx",
+    "price": 35.9,
+    "change": -0.05,
+    "volume_lots": 1234310,
+    "turnover": 44270043,
+    "date": "2026-09-21"
+  },
+  {
+    "code": "7782",
+    "name": "光速火箭",
+    "exchange": "TPEx",
+    "price": 25.8,
+    "change": 0.0,
+    "volume_lots": 10119,
+    "turnover": 266493,
+    "date": "2026-09-21"
+  },
+  {
+    "code": "7792",
+    "name": "安葆",
+    "exchange": "TPEx",
+    "price": 344.0,
+    "change": 5.0,
+    "volume_lots": 1073824,
+    "turnover": 362857038,
+    "date": "2026-09-21"
+  },
+  {
+    "code": "7794",
+    "name": "宏碁智新",
+    "exchange": "TPEx",
+    "price": 30.85,
+    "change": -0.15,
+    "volume_lots": 30011,
+    "turnover": 931838,
+    "date": "2026-09-21"
+  },
+  {
+    "code": "7805",
+    "name": "威聯通",
+    "exchange": "TPEx",
+    "price": 498.5,
+    "change": -1.0,
+    "volume_lots": 26478,
+    "turnover": 13246129,
+    "date": "2026-09-21"
+  },
+  {
+    "code": "7810",
+    "name": "捷創科技",
+    "exchange": "TPEx",
+    "price": 222.0,
+    "change": 3.5,
+    "volume_lots": 37260,
+    "turnover": 8259732,
+    "date": "2026-09-21"
+  },
+  {
+    "code": "7811",
+    "name": "民盛",
+    "exchange": "TPEx",
+    "price": 73.0,
+    "change": 0.0,
+    "volume_lots": 3026,
+    "turnover": 220898,
+    "date": "2026-09-21"
+  },
+  {
+    "code": "7814",
+    "name": "海昌生技",
+    "exchange": "TPEx",
+    "price": 28.5,
+    "change": -0.05,
+    "volume_lots": 13542,
+    "turnover": 384081,
+    "date": "2026-09-21"
+  },
+  {
+    "code": "7819",
+    "name": "精誠金融",
+    "exchange": "TPEx",
+    "price": 34.35,
+    "change": 0.0,
+    "volume_lots": 9341,
+    "turnover": 324057,
+    "date": "2026-09-21"
+  },
+  {
+    "code": "7820",
+    "name": "立盈",
+    "exchange": "TPEx",
+    "price": 104.0,
+    "change": 0.0,
+    "volume_lots": 6691,
+    "turnover": 701384,
+    "date": "2026-09-21"
+  },
+  {
+    "code": "7825",
+    "name": "和亞智慧",
+    "exchange": "TPEx",
+    "price": 76.1,
+    "change": -3.6,
+    "volume_lots": 456175,
+    "turnover": 35156419,
+    "date": "2026-09-21"
+  },
+  {
+    "code": "7828",
+    "name": "創新服務",
+    "exchange": "TPEx",
+    "price": 2040.0,
+    "change": -85.0,
+    "volume_lots": 303130,
+    "turnover": 627014095,
+    "date": "2026-09-21"
+  },
+  {
+    "code": "7839",
+    "name": "達人網",
+    "exchange": "TPEx",
+    "price": 43.3,
+    "change": 0.0,
+    "volume_lots": 7024,
+    "turnover": 303439,
+    "date": "2026-09-21"
+  },
+  {
+    "code": "7842",
+    "name": "天能綠電",
+    "exchange": "TPEx",
+    "price": 96.7,
+    "change": 0.3,
+    "volume_lots": 9393,
+    "turnover": 898257,
+    "date": "2026-09-21"
+  },
+  {
+    "code": "8024",
+    "name": "佑華",
+    "exchange": "TPEx",
+    "price": 12.8,
+    "change": 0.05,
+    "volume_lots": 55004,
+    "turnover": 697848,
+    "date": "2026-09-21"
+  },
+  {
+    "code": "8027",
+    "name": "鈦昇",
+    "exchange": "TPEx",
+    "price": 179.5,
+    "change": -0.5,
+    "volume_lots": 1893299,
+    "turnover": 340050918,
+    "date": "2026-09-21"
+  },
+  {
+    "code": "8032",
+    "name": "光菱",
+    "exchange": "TPEx",
+    "price": 36.1,
+    "change": 0.7,
+    "volume_lots": 75503,
+    "turnover": 2734038,
+    "date": "2026-09-21"
+  },
+  {
+    "code": "8034",
+    "name": "榮群",
+    "exchange": "TPEx",
+    "price": 20.5,
+    "change": 0.5,
+    "volume_lots": 169332,
+    "turnover": 3424200,
+    "date": "2026-09-21"
+  },
+  {
+    "code": "8038",
+    "name": "長園科",
+    "exchange": "TPEx",
+    "price": 32.45,
+    "change": 0.55,
+    "volume_lots": 161264,
+    "turnover": 5210180,
+    "date": "2026-09-21"
+  },
+  {
+    "code": "8040",
+    "name": "九暘",
+    "exchange": "TPEx",
+    "price": 83.5,
+    "change": 0.8,
+    "volume_lots": 3065003,
+    "turnover": 259011623,
+    "date": "2026-09-21"
+  },
+  {
+    "code": "8042",
+    "name": "金山電",
+    "exchange": "TPEx",
+    "price": 113.5,
+    "change": 0.5,
+    "volume_lots": 3811629,
+    "turnover": 437538143,
+    "date": "2026-09-21"
+  },
+  {
+    "code": "8043",
+    "name": "蜜望實",
+    "exchange": "TPEx",
+    "price": 132.5,
+    "change": -0.5,
+    "volume_lots": 1298993,
+    "turnover": 175001442,
+    "date": "2026-09-21"
+  },
+  {
+    "code": "8044",
+    "name": "網家",
+    "exchange": "TPEx",
+    "price": 24.05,
+    "change": 0.55,
+    "volume_lots": 858607,
+    "turnover": 20681813,
+    "date": "2026-09-21"
+  },
+  {
+    "code": "8047",
+    "name": "星雲",
+    "exchange": "TPEx",
+    "price": 45.8,
+    "change": 0.7,
+    "volume_lots": 17069,
+    "turnover": 758719,
+    "date": "2026-09-21"
+  },
+  {
+    "code": "8048",
+    "name": "德勝",
+    "exchange": "TPEx",
+    "price": 49.5,
+    "change": -0.1,
+    "volume_lots": 101665,
+    "turnover": 5067322,
+    "date": "2026-09-21"
+  },
+  {
+    "code": "8049",
+    "name": "晶采",
+    "exchange": "TPEx",
+    "price": 24.45,
+    "change": -0.1,
+    "volume_lots": 184150,
+    "turnover": 4507864,
+    "date": "2026-09-21"
+  },
+  {
+    "code": "8050",
+    "name": "廣積",
+    "exchange": "TPEx",
+    "price": 59.1,
+    "change": -0.2,
+    "volume_lots": 796483,
+    "turnover": 47246665,
+    "date": "2026-09-21"
+  },
+  {
+    "code": "8054",
+    "name": "安國",
+    "exchange": "TPEx",
+    "price": 84.9,
+    "change": 0.5,
+    "volume_lots": 662249,
+    "turnover": 56096389,
+    "date": "2026-09-21"
+  },
+  {
+    "code": "8059",
+    "name": "凱碩",
+    "exchange": "TPEx",
+    "price": 20.15,
+    "change": -2.2,
+    "volume_lots": 360416,
+    "turnover": 7321811,
+    "date": "2026-09-21"
+  },
+  {
+    "code": "8064",
+    "name": "東捷",
+    "exchange": "TPEx",
+    "price": 138.0,
+    "change": 2.0,
+    "volume_lots": 17086858,
+    "turnover": 2355357280,
+    "date": "2026-09-21"
+  },
+  {
+    "code": "8066",
+    "name": "來思達",
+    "exchange": "TPEx",
+    "price": 14.9,
+    "change": -0.45,
+    "volume_lots": 34296,
+    "turnover": 510424,
+    "date": "2026-09-21"
+  },
+  {
+    "code": "8067",
+    "name": "志旭",
+    "exchange": "TPEx",
+    "price": 11.85,
+    "change": 0.3,
+    "volume_lots": 5093,
+    "turnover": 58961,
+    "date": "2026-09-21"
+  },
+  {
+    "code": "8068",
+    "name": "全達",
+    "exchange": "TPEx",
+    "price": 16.05,
+    "change": -0.1,
+    "volume_lots": 56669,
+    "turnover": 911225,
+    "date": "2026-09-21"
+  },
+  {
+    "code": "8069",
+    "name": "元太",
+    "exchange": "TPEx",
+    "price": 144.5,
+    "change": -2.0,
+    "volume_lots": 5338636,
+    "turnover": 773608788,
+    "date": "2026-09-21"
+  },
+  {
+    "code": "8071",
+    "name": "能率網通",
+    "exchange": "TPEx",
+    "price": 22.1,
+    "change": 0.1,
+    "volume_lots": 167078,
+    "turnover": 3702781,
+    "date": "2026-09-21"
+  },
+  {
+    "code": "8074",
+    "name": "鉅橡",
+    "exchange": "TPEx",
+    "price": 50.9,
+    "change": 0.8,
+    "volume_lots": 305718,
+    "turnover": 15667932,
+    "date": "2026-09-21"
+  },
+  {
+    "code": "8076",
+    "name": "伍豐",
+    "exchange": "TPEx",
+    "price": 21.6,
+    "change": 0.2,
+    "volume_lots": 311626,
+    "turnover": 6693969,
+    "date": "2026-09-21"
+  },
+  {
+    "code": "8077",
+    "name": "洛碁",
+    "exchange": "TPEx",
+    "price": 0.0,
+    "change": 0.0,
+    "volume_lots": 76,
+    "turnover": 3292,
+    "date": "2026-09-21"
+  },
+  {
+    "code": "8080",
+    "name": "泰霖",
+    "exchange": "TPEx",
+    "price": 28.85,
+    "change": 0.1,
+    "volume_lots": 15175,
+    "turnover": 429585,
+    "date": "2026-09-21"
+  },
+  {
+    "code": "8083",
+    "name": "瑞穎",
+    "exchange": "TPEx",
+    "price": 156.5,
+    "change": -1.5,
+    "volume_lots": 33078,
+    "turnover": 5197717,
+    "date": "2026-09-21"
+  },
+  {
+    "code": "8084",
+    "name": "巨虹",
+    "exchange": "TPEx",
+    "price": 40.6,
+    "change": -1.15,
+    "volume_lots": 582513,
+    "turnover": 23772771,
+    "date": "2026-09-21"
+  },
+  {
+    "code": "8085",
+    "name": "福華",
+    "exchange": "TPEx",
+    "price": 14.45,
+    "change": 0.05,
+    "volume_lots": 136012,
+    "turnover": 1977473,
+    "date": "2026-09-21"
+  },
+  {
+    "code": "8086",
+    "name": "宏捷科",
+    "exchange": "TPEx",
+    "price": 109.5,
+    "change": -1.5,
+    "volume_lots": 1663032,
+    "turnover": 183459053,
+    "date": "2026-09-21"
+  },
+  {
+    "code": "8087",
+    "name": "麗升能源",
+    "exchange": "TPEx",
+    "price": 24.3,
+    "change": 0.8,
+    "volume_lots": 14004,
+    "turnover": 340243,
+    "date": "2026-09-21"
+  },
+  {
+    "code": "8088",
+    "name": "品安",
+    "exchange": "TPEx",
+    "price": 43.35,
+    "change": 0.65,
+    "volume_lots": 315760,
+    "turnover": 13670156,
+    "date": "2026-09-21"
+  },
+  {
+    "code": "8089",
+    "name": "康全電訊",
+    "exchange": "TPEx",
+    "price": 19.95,
+    "change": 1.35,
+    "volume_lots": 580421,
+    "turnover": 11409357,
+    "date": "2026-09-21"
+  },
+  {
+    "code": "8091",
+    "name": "翔名",
+    "exchange": "TPEx",
+    "price": 215.5,
+    "change": 0.5,
+    "volume_lots": 204433,
+    "turnover": 44330925,
+    "date": "2026-09-21"
+  },
+  {
+    "code": "8092",
+    "name": "建暐",
+    "exchange": "TPEx",
+    "price": 12.7,
+    "change": -0.05,
+    "volume_lots": 28009,
+    "turnover": 357512,
+    "date": "2026-09-21"
+  },
+  {
+    "code": "8093",
+    "name": "保銳",
+    "exchange": "TPEx",
+    "price": 24.5,
+    "change": -0.65,
+    "volume_lots": 31846,
+    "turnover": 776766,
+    "date": "2026-09-21"
+  },
+  {
+    "code": "8096",
+    "name": "擎亞",
+    "exchange": "TPEx",
+    "price": 86.5,
+    "change": -1.7,
+    "volume_lots": 2565265,
+    "turnover": 224236654,
+    "date": "2026-09-21"
+  },
+  {
+    "code": "8097",
+    "name": "常珵",
+    "exchange": "TPEx",
+    "price": 49.65,
+    "change": 0.5,
+    "volume_lots": 393531,
+    "turnover": 19804574,
+    "date": "2026-09-21"
+  },
+  {
+    "code": "8099",
+    "name": "大世科",
+    "exchange": "TPEx",
+    "price": 59.9,
+    "change": -0.1,
+    "volume_lots": 44663,
+    "turnover": 2670837,
+    "date": "2026-09-21"
+  },
+  {
+    "code": "8102",
+    "name": "傑霖科技",
+    "exchange": "TPEx",
+    "price": 61.0,
+    "change": -1.9,
+    "volume_lots": 3000,
+    "turnover": 183000,
+    "date": "2026-09-21"
+  },
+  {
+    "code": "8107",
+    "name": "大億金茂",
+    "exchange": "TPEx",
+    "price": 12.2,
+    "change": 0.15,
+    "volume_lots": 77050,
+    "turnover": 939851,
+    "date": "2026-09-21"
+  },
+  {
+    "code": "8109",
+    "name": "博大",
+    "exchange": "TPEx",
+    "price": 133.5,
+    "change": -0.5,
+    "volume_lots": 129358,
+    "turnover": 17304385,
+    "date": "2026-09-21"
+  },
+  {
+    "code": "8111",
+    "name": "立碁",
+    "exchange": "TPEx",
+    "price": 80.6,
+    "change": 2.6,
+    "volume_lots": 35498403,
+    "turnover": 2896256249,
+    "date": "2026-09-21"
+  },
+  {
+    "code": "8121",
+    "name": "越峰",
+    "exchange": "TPEx",
+    "price": 27.7,
+    "change": -0.2,
+    "volume_lots": 294970,
+    "turnover": 8194569,
+    "date": "2026-09-21"
+  },
+  {
+    "code": "8147",
+    "name": "正淩",
+    "exchange": "TPEx",
+    "price": 135.5,
+    "change": 1.5,
+    "volume_lots": 114373,
+    "turnover": 15462530,
+    "date": "2026-09-21"
+  },
+  {
+    "code": "8155",
+    "name": "博智",
+    "exchange": "TPEx",
+    "price": 327.5,
+    "change": 4.5,
+    "volume_lots": 343578,
+    "turnover": 112362413,
+    "date": "2026-09-21"
+  },
+  {
+    "code": "8171",
+    "name": "天宇",
+    "exchange": "TPEx",
+    "price": 20.3,
+    "change": 0.25,
+    "volume_lots": 120104,
+    "turnover": 2423522,
+    "date": "2026-09-21"
+  },
+  {
+    "code": "8176",
+    "name": "智捷",
+    "exchange": "TPEx",
+    "price": 9.87,
+    "change": 0.04,
+    "volume_lots": 56886,
+    "turnover": 561406,
+    "date": "2026-09-21"
+  },
+  {
+    "code": "8182",
+    "name": "加高",
+    "exchange": "TPEx",
+    "price": 39.55,
+    "change": 0.05,
+    "volume_lots": 614266,
+    "turnover": 24565162,
+    "date": "2026-09-21"
+  },
+  {
+    "code": "8183",
+    "name": "精星",
+    "exchange": "TPEx",
+    "price": 28.9,
+    "change": 0.85,
+    "volume_lots": 2945678,
+    "turnover": 88179230,
+    "date": "2026-09-21"
+  },
+  {
+    "code": "8227",
+    "name": "巨有科技",
+    "exchange": "TPEx",
+    "price": 287.5,
+    "change": 8.5,
+    "volume_lots": 970150,
+    "turnover": 275227529,
+    "date": "2026-09-21"
+  },
+  {
+    "code": "8234",
+    "name": "新漢",
+    "exchange": "TPEx",
+    "price": 62.5,
+    "change": 0.0,
+    "volume_lots": 177842,
+    "turnover": 11076242,
+    "date": "2026-09-21"
+  },
+  {
+    "code": "8240",
+    "name": "華宏",
+    "exchange": "TPEx",
+    "price": 51.1,
+    "change": 0.1,
+    "volume_lots": 327105,
+    "turnover": 16690729,
+    "date": "2026-09-21"
+  },
+  {
+    "code": "8255",
+    "name": "朋程",
+    "exchange": "TPEx",
+    "price": 137.5,
+    "change": 1.5,
+    "volume_lots": 266332,
+    "turnover": 36654672,
+    "date": "2026-09-21"
+  },
+  {
+    "code": "8272",
+    "name": "全景軟體",
+    "exchange": "TPEx",
+    "price": 64.3,
+    "change": -0.6,
+    "volume_lots": 5310,
+    "turnover": 345667,
+    "date": "2026-09-21"
+  },
+  {
+    "code": "8277",
+    "name": "商丞",
+    "exchange": "TPEx",
+    "price": 16.85,
+    "change": -1.8,
+    "volume_lots": 308006,
+    "turnover": 5302409,
+    "date": "2026-09-21"
+  },
+  {
+    "code": "8279",
+    "name": "生展",
+    "exchange": "TPEx",
+    "price": 78.6,
+    "change": -0.3,
+    "volume_lots": 15002,
+    "turnover": 1182060,
+    "date": "2026-09-21"
+  },
+  {
+    "code": "8284",
+    "name": "三竹",
+    "exchange": "TPEx",
+    "price": 68.8,
+    "change": 0.0,
+    "volume_lots": 6868,
+    "turnover": 473160,
+    "date": "2026-09-21"
+  },
+  {
+    "code": "8289",
+    "name": "泰藝",
+    "exchange": "TPEx",
+    "price": 44.25,
+    "change": 0.05,
+    "volume_lots": 578511,
+    "turnover": 26343305,
+    "date": "2026-09-21"
+  },
+  {
+    "code": "8291",
+    "name": "尚茂",
+    "exchange": "TPEx",
+    "price": 29.45,
+    "change": -2.25,
+    "volume_lots": 17091,
+    "turnover": 511825,
+    "date": "2026-09-21"
+  },
+  {
+    "code": "8299",
+    "name": "群聯",
+    "exchange": "TPEx",
+    "price": 2150.0,
+    "change": 10.0,
+    "volume_lots": 4591782,
+    "turnover": 9897220015,
+    "date": "2026-09-21"
+  },
+  {
+    "code": "8342",
+    "name": "益張",
+    "exchange": "TPEx",
+    "price": 83.5,
+    "change": 0.0,
+    "volume_lots": 3287,
+    "turnover": 277492,
+    "date": "2026-09-21"
+  },
+  {
+    "code": "8349",
+    "name": "恒耀",
+    "exchange": "TPEx",
+    "price": 38.0,
+    "change": 0.1,
+    "volume_lots": 48326,
+    "turnover": 1826968,
+    "date": "2026-09-21"
+  },
+  {
+    "code": "8354",
+    "name": "冠好",
+    "exchange": "TPEx",
+    "price": 16.85,
+    "change": -0.15,
+    "volume_lots": 26038,
+    "turnover": 440533,
+    "date": "2026-09-21"
+  },
+  {
+    "code": "8358",
+    "name": "金居",
+    "exchange": "TPEx",
+    "price": 491.5,
+    "change": -8.0,
+    "volume_lots": 2345558,
+    "turnover": 1147737885,
+    "date": "2026-09-21"
+  },
+  {
+    "code": "8383",
+    "name": "千附",
+    "exchange": "TPEx",
+    "price": 67.0,
+    "change": -1.5,
+    "volume_lots": 931330,
+    "turnover": 62915484,
+    "date": "2026-09-21"
+  },
+  {
+    "code": "8390",
+    "name": "金益鼎",
+    "exchange": "TPEx",
+    "price": 91.8,
+    "change": 0.0,
+    "volume_lots": 136524,
+    "turnover": 12580998,
+    "date": "2026-09-21"
+  },
+  {
+    "code": "8401",
+    "name": "白紗科",
+    "exchange": "TPEx",
+    "price": 22.8,
+    "change": 0.05,
+    "volume_lots": 42640,
+    "turnover": 964645,
+    "date": "2026-09-21"
+  },
+  {
+    "code": "8403",
+    "name": "盛弘",
+    "exchange": "TPEx",
+    "price": 18.9,
+    "change": -0.1,
+    "volume_lots": 59508,
+    "turnover": 1124076,
+    "date": "2026-09-21"
+  },
+  {
+    "code": "8409",
+    "name": "商之器",
+    "exchange": "TPEx",
+    "price": 18.0,
+    "change": -0.1,
+    "volume_lots": 3110,
+    "turnover": 56022,
+    "date": "2026-09-21"
+  },
+  {
+    "code": "8410",
+    "name": "森田",
+    "exchange": "TPEx",
+    "price": 29.0,
+    "change": -0.5,
+    "volume_lots": 74494,
+    "turnover": 2158446,
+    "date": "2026-09-21"
+  },
+  {
+    "code": "8415",
+    "name": "大國鋼",
+    "exchange": "TPEx",
+    "price": 35.0,
+    "change": 0.65,
+    "volume_lots": 684168,
+    "turnover": 23936161,
+    "date": "2026-09-21"
+  },
+  {
+    "code": "8416",
+    "name": "實威",
+    "exchange": "TPEx",
+    "price": 170.5,
+    "change": 0.0,
+    "volume_lots": 6678,
+    "turnover": 1140357,
+    "date": "2026-09-21"
+  },
+  {
+    "code": "8421",
+    "name": "旭源",
+    "exchange": "TPEx",
+    "price": 13.05,
+    "change": 0.05,
+    "volume_lots": 107222,
+    "turnover": 1405656,
+    "date": "2026-09-21"
+  },
+  {
+    "code": "8423",
+    "name": "保綠-KY",
+    "exchange": "TPEx",
+    "price": 18.0,
+    "change": 0.15,
+    "volume_lots": 5270,
+    "turnover": 94867,
+    "date": "2026-09-21"
+  },
+  {
+    "code": "8424",
+    "name": "惠普",
+    "exchange": "TPEx",
+    "price": 69.0,
+    "change": -0.3,
+    "volume_lots": 4249,
+    "turnover": 293990,
+    "date": "2026-09-21"
+  },
+  {
+    "code": "8426",
+    "name": "紅木-KY",
+    "exchange": "TPEx",
+    "price": 20.6,
+    "change": 0.0,
+    "volume_lots": 8073,
+    "turnover": 165248,
+    "date": "2026-09-21"
+  },
+  {
+    "code": "8431",
+    "name": "匯鑽科",
+    "exchange": "TPEx",
+    "price": 64.4,
+    "change": 1.9,
+    "volume_lots": 4230843,
+    "turnover": 278658173,
+    "date": "2026-09-21"
+  },
+  {
+    "code": "8432",
+    "name": "東生華",
+    "exchange": "TPEx",
+    "price": 50.5,
+    "change": -0.1,
+    "volume_lots": 21134,
+    "turnover": 1066547,
+    "date": "2026-09-21"
+  },
+  {
+    "code": "8433",
+    "name": "弘帆",
+    "exchange": "TPEx",
+    "price": 53.2,
+    "change": -0.2,
+    "volume_lots": 23010,
+    "turnover": 1226035,
+    "date": "2026-09-21"
+  },
+  {
+    "code": "8435",
+    "name": "鉅邁",
+    "exchange": "TPEx",
+    "price": 53.1,
+    "change": 0.0,
+    "volume_lots": 20134,
+    "turnover": 1069086,
+    "date": "2026-09-21"
+  },
+  {
+    "code": "8436",
+    "name": "大江",
+    "exchange": "TPEx",
+    "price": 104.0,
+    "change": 0.5,
+    "volume_lots": 352995,
+    "turnover": 36583313,
+    "date": "2026-09-21"
+  },
+  {
+    "code": "8437",
+    "name": "大地-KY",
+    "exchange": "TPEx",
+    "price": 9.12,
+    "change": 0.02,
+    "volume_lots": 13347,
+    "turnover": 120990,
+    "date": "2026-09-21"
+  },
+  {
+    "code": "8440",
+    "name": "綠電",
+    "exchange": "TPEx",
+    "price": 20.0,
+    "change": -0.05,
+    "volume_lots": 77464,
+    "turnover": 1546211,
+    "date": "2026-09-21"
+  },
+  {
+    "code": "8444",
+    "name": "綠河-KY",
+    "exchange": "TPEx",
+    "price": 0.0,
+    "change": 0.0,
+    "volume_lots": 78,
+    "turnover": 357,
+    "date": "2026-09-21"
+  },
+  {
+    "code": "8446",
+    "name": "華研",
+    "exchange": "TPEx",
+    "price": 84.6,
+    "change": -0.1,
+    "volume_lots": 8587,
+    "turnover": 727455,
+    "date": "2026-09-21"
+  },
+  {
+    "code": "8450",
+    "name": "霹靂",
+    "exchange": "TPEx",
+    "price": 14.15,
+    "change": 0.0,
+    "volume_lots": 26489,
+    "turnover": 374794,
+    "date": "2026-09-21"
+  },
+  {
+    "code": "8455",
+    "name": "大拓-KY",
+    "exchange": "TPEx",
+    "price": 22.7,
+    "change": 0.0,
+    "volume_lots": 3000,
+    "turnover": 68100,
+    "date": "2026-09-21"
+  },
+  {
+    "code": "8472",
+    "name": "納維康",
+    "exchange": "TPEx",
+    "price": 77.8,
+    "change": 1.8,
+    "volume_lots": 5009,
+    "turnover": 391882,
+    "date": "2026-09-21"
+  },
+  {
+    "code": "8477",
+    "name": "創業家",
+    "exchange": "TPEx",
+    "price": 14.95,
+    "change": -0.05,
+    "volume_lots": 29440,
+    "turnover": 441672,
+    "date": "2026-09-21"
+  },
+  {
+    "code": "8489",
+    "name": "三貝德",
+    "exchange": "TPEx",
+    "price": 21.5,
+    "change": -0.1,
+    "volume_lots": 44071,
+    "turnover": 946039,
+    "date": "2026-09-21"
+  },
+  {
+    "code": "8905",
+    "name": "裕國",
+    "exchange": "TPEx",
+    "price": 35.25,
+    "change": 0.4,
+    "volume_lots": 12854,
+    "turnover": 452182,
+    "date": "2026-09-21"
+  },
+  {
+    "code": "8906",
+    "name": "花王",
+    "exchange": "TPEx",
+    "price": 30.0,
+    "change": 0.5,
+    "volume_lots": 5107,
+    "turnover": 149003,
+    "date": "2026-09-21"
+  },
+  {
+    "code": "8908",
+    "name": "欣雄",
+    "exchange": "TPEx",
+    "price": 40.45,
+    "change": 0.3,
+    "volume_lots": 50581,
+    "turnover": 2044725,
+    "date": "2026-09-21"
+  },
+  {
+    "code": "8916",
+    "name": "光隆",
+    "exchange": "TPEx",
+    "price": 40.85,
+    "change": -0.15,
+    "volume_lots": 27739,
+    "turnover": 1135908,
+    "date": "2026-09-21"
+  },
+  {
+    "code": "8917",
+    "name": "欣泰",
+    "exchange": "TPEx",
+    "price": 54.0,
+    "change": 1.8,
+    "volume_lots": 4001,
+    "turnover": 216054,
+    "date": "2026-09-21"
+  },
+  {
+    "code": "8921",
+    "name": "沈氏",
+    "exchange": "TPEx",
+    "price": 16.9,
+    "change": 0.05,
+    "volume_lots": 1000,
+    "turnover": 16900,
+    "date": "2026-09-21"
+  },
+  {
+    "code": "8923",
+    "name": "時報",
+    "exchange": "TPEx",
+    "price": 18.7,
+    "change": 0.2,
+    "volume_lots": 11001,
+    "turnover": 203668,
+    "date": "2026-09-21"
+  },
+  {
+    "code": "8924",
+    "name": "大田",
+    "exchange": "TPEx",
+    "price": 49.75,
+    "change": -0.35,
+    "volume_lots": 74542,
+    "turnover": 3696017,
+    "date": "2026-09-21"
+  },
+  {
+    "code": "8927",
+    "name": "北基",
+    "exchange": "TPEx",
+    "price": 19.15,
+    "change": 0.75,
+    "volume_lots": 256731,
+    "turnover": 4827327,
+    "date": "2026-09-21"
+  },
+  {
+    "code": "8928",
+    "name": "鉅明",
+    "exchange": "TPEx",
+    "price": 22.85,
+    "change": -0.15,
+    "volume_lots": 14100,
+    "turnover": 323300,
+    "date": "2026-09-21"
+  },
+  {
+    "code": "8929",
+    "name": "富堡",
+    "exchange": "TPEx",
+    "price": 12.9,
+    "change": -0.1,
+    "volume_lots": 25477,
+    "turnover": 328589,
+    "date": "2026-09-21"
+  },
+  {
+    "code": "8930",
+    "name": "青鋼",
+    "exchange": "TPEx",
+    "price": 28.75,
+    "change": -0.05,
+    "volume_lots": 12192,
+    "turnover": 351035,
+    "date": "2026-09-21"
+  },
+  {
+    "code": "8931",
+    "name": "大汽電",
+    "exchange": "TPEx",
+    "price": 43.0,
+    "change": 0.0,
+    "volume_lots": 128501,
+    "turnover": 5548993,
+    "date": "2026-09-21"
+  },
+  {
+    "code": "8932",
+    "name": "智通*",
+    "exchange": "TPEx",
+    "price": 94.9,
+    "change": 2.0,
+    "volume_lots": 2274734,
+    "turnover": 215148253,
+    "date": "2026-09-21"
+  },
+  {
+    "code": "8933",
+    "name": "愛地雅",
+    "exchange": "TPEx",
+    "price": 4.44,
+    "change": -0.13,
+    "volume_lots": 49744,
+    "turnover": 221703,
+    "date": "2026-09-21"
+  },
+  {
+    "code": "8935",
+    "name": "邦泰",
+    "exchange": "TPEx",
+    "price": 17.6,
+    "change": -0.1,
+    "volume_lots": 71786,
+    "turnover": 1253271,
+    "date": "2026-09-21"
+  },
+  {
+    "code": "8936",
+    "name": "國統",
+    "exchange": "TPEx",
+    "price": 52.4,
+    "change": 0.3,
+    "volume_lots": 842178,
+    "turnover": 44017643,
+    "date": "2026-09-21"
+  },
+  {
+    "code": "8937",
+    "name": "合騏*",
+    "exchange": "TPEx",
+    "price": 28.85,
+    "change": 0.25,
+    "volume_lots": 75990,
+    "turnover": 2203655,
+    "date": "2026-09-21"
+  },
+  {
+    "code": "8938",
+    "name": "明安",
+    "exchange": "TPEx",
+    "price": 52.4,
+    "change": 2.0,
+    "volume_lots": 84811,
+    "turnover": 4408420,
+    "date": "2026-09-21"
+  },
+  {
+    "code": "8941",
+    "name": "關中",
+    "exchange": "TPEx",
+    "price": 44.0,
+    "change": 0.2,
+    "volume_lots": 2100,
+    "turnover": 92364,
+    "date": "2026-09-21"
+  },
+  {
+    "code": "8942",
+    "name": "森鉅",
+    "exchange": "TPEx",
+    "price": 40.75,
+    "change": 0.45,
+    "volume_lots": 155875,
+    "turnover": 6359153,
+    "date": "2026-09-21"
+  },
+  {
+    "code": "9949",
+    "name": "琉園",
+    "exchange": "TPEx",
+    "price": 24.0,
+    "change": 0.0,
+    "volume_lots": 50062,
+    "turnover": 1208445,
+    "date": "2026-09-21"
+  },
+  {
+    "code": "9950",
+    "name": "萬國通",
+    "exchange": "TPEx",
+    "price": 10.25,
+    "change": -0.05,
+    "volume_lots": 35462,
+    "turnover": 362038,
+    "date": "2026-09-21"
+  },
+  {
+    "code": "9951",
+    "name": "皇田",
+    "exchange": "TPEx",
+    "price": 48.35,
+    "change": -0.1,
+    "volume_lots": 8785,
+    "turnover": 425450,
+    "date": "2026-09-21"
+  },
+  {
+    "code": "9960",
+    "name": "邁達康",
+    "exchange": "TPEx",
+    "price": 32.15,
+    "change": 0.35,
+    "volume_lots": 67439,
+    "turnover": 2167905,
+    "date": "2026-09-21"
+  },
+  {
+    "code": "9962",
+    "name": "有益",
+    "exchange": "TPEx",
+    "price": 10.0,
+    "change": 0.0,
+    "volume_lots": 52007,
+    "turnover": 525764,
+    "date": "2026-09-21"
   }
 ]

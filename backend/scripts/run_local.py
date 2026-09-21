@@ -2,8 +2,10 @@
 scripts/run_local.py — 本地手動跑（包裝 pipeline.py）
 
 用法：
-    python -m backend.scripts.run_local
-    python -m backend.scripts.run_local --source twse
+    python -m backend.scripts.run_local                            # 跑全部
+    python -m backend.scripts.run_local --source public            # 只跑公開源
+    python -m backend.scripts.run_local --source twse tpex finmind
+    python -m backend.scripts.run_local --source pyramid          # 單一 Playwright 源
 """
 
 import argparse
@@ -18,10 +20,10 @@ from pipeline import main
 
 if __name__ == "__main__":
     p = argparse.ArgumentParser(description="Run chip-resonance pipeline locally")
-    p.add_argument("--source", default="all", choices=["all", "twse"])
+    p.add_argument("--source", default="all",
+                   help="all | public | private | <space-separated sources>")
     p.add_argument("--out-dir", default="data/latest")
-    p.add_argument("--repo", default=None,
-                   help="Repo root path (default: parent of backend/)")
+    p.add_argument("--repo", default=None)
     args = p.parse_args()
 
     repo = Path(args.repo) if args.repo else Path(__file__).resolve().parents[2]

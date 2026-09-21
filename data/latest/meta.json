@@ -1,7 +1,7 @@
 {
-  "last_update_taipei": "2026-09-21T00:30:41.849111+08:00",
-  "snapshot_date": "2026-09-21",
-  "previous_snapshot_date": "2026-09-21",
+  "last_update_taipei": "2026-09-22T00:11:57.127067+08:00",
+  "snapshot_date": "2026-09-22",
+  "previous_snapshot_date": "2026-09-22",
   "data_freshness_hours": 0,
   "sources": {
     "twse": {
@@ -11,14 +11,43 @@
       "min_interval_sec": 3,
       "daily_quota": 500
     },
-    "build_universe": {
+    "tpex": {
       "status": "ok",
-      "log": [
-        "  Wrote E:\\MiniMax_Desktop\\Work01\\chip_resonance\\data\\latest\\universe.json (1082 stocks)",
-        "",
-        "NOTE: 3 demo stocks not found in TWSE: ['5347', '4743', '4128']"
-      ]
+      "stocks_count": 891,
+      "min_interval_sec": 3,
+      "daily_quota": 500
+    },
+    "finmind": {
+      "status": "skipped",
+      "reason": "FINMIND_TOKEN not set",
+      "min_interval_sec": 5,
+      "daily_quota": 200
+    },
+    "mops": {
+      "status": "skipped",
+      "min_interval_sec": 8,
+      "daily_quota": 100,
+      "rows_count": 0,
+      "reason": "MOPS endpoint migrated in 2024; pending new URL"
     }
   },
-  "notes": "Real TWSE prices + indices. Demo subset merged with real prices for 40 of 43 stocks; 3 (5347, 4743, 4128) are TPEx-only or delisted. Chip-related factors remain illustrative until P2/P3 (集保/MOPS)."
+  "credentials": {
+    "finnhub": false,
+    "finmind": false,
+    "alpha_vantage": false,
+    "twelve_data": false,
+    "fred": false,
+    "sec_user_agent": false,
+    "goodinfo_proxy": false,
+    "pyramid_credentials": false,
+    "goodinfo_credentials": false
+  },
+  "us_markets_credentials": {
+    "FINNHUB_API_KEY": false,
+    "ALPHA_VANTAGE_API_KEY": false,
+    "TWELVE_DATA_API_KEY": false,
+    "FRED_API_KEY": false,
+    "SEC_USER_AGENT": false
+  },
+  "notes": "Real TWSE + TPEx + FinMind + MOPS + (optionally) 集保/神秘金字塔/Goodinfo. Browser-based sources require auth_setup.py first; otherwise gracefully skipped."
 }

@@ -689,6 +689,7 @@ function showMetaBanner() {
       padding: 8px 14px; border-radius: 8px; font-size: 12px;
       background: var(--bg-card); border: 1px solid var(--border);
       color: var(--text-secondary); box-shadow: 0 4px 12px rgba(0,0,0,0.3);
+      max-width: 320px;
     `;
     document.body.appendChild(banner);
   }
@@ -696,22 +697,38 @@ function showMetaBanner() {
   if (err || !meta) {
     banner.innerHTML = `
       <strong style="color:var(--red);">⚠ 資料載入失敗</strong><br>
-      <span style="font-size:11px;">${err || 'fetch /data/latest/_meta.json 失敗'}</span>
+      <span style="font-size:11px;">${err || 'fetch /data/latest/meta.json 失敗'}</span>
     `;
     return;
   }
 
   const upd = meta.last_update_taipei || '—';
-  const stockCount = (meta.sources && meta.sources.twse && meta.sources.twse.stocks_count) || 0;
   const freshnessH = meta.data_freshness_hours || 0;
-  const stale = freshnessH > 168; // 超過 7 天
+  const stale = freshnessH > 168;
+  const sources = meta.sources || {};
+  const srcStatus = (name) => {
+    const s = sources[name];
+    if (!s) return '?';
+    if (s.status === 'ok') return '✓';
+    if (s.status === 'skipped') return '⏭';
+    if (s.status === 'failed' || s.status === 'disabled') return '✗';
+    return '?';
+  };
+  const twseCount = (sources.twse && sources.twse.stocks_count) || 0;
+  const tpexCount = (sources.tpex && sources.tpex.stocks_count) || 0;
 
   banner.innerHTML = `
-    <strong>📊 真實資料來源：TWSE OpenAPI</strong><br>
+    <strong>📊 多源即時資料</strong>
+    <span style="font-size:11px; color:var(--gold);">
+      TWSE ${srcStatus('twse')} ${twseCount} · TPEx ${srcStatus('tpex')} ${tpexCount}
+      · FinMind ${srcStatus('finmind')} · MOPS ${srcStatus('mops')}
+      · TDCC ${srcStatus('tdcc')} · Pyramid ${srcStatus('pyramid')}
+      · Goodinfo ${srcStatus('goodinfo')}
+    </span>
+    <br>
     <span style="font-size:11px;">
-      最後更新：${upd}<br>
-      上市個股：${stockCount} 檔
-      ${stale ? '<span style="color:var(--yellow);"> ⚠ 資料已過期</span>' : ''}
+      最後更新：${upd}
+      ${stale ? '<span style="color:var(--yellow);"> ⚠ 過期</span>' : ''}
     </span>
   `;
 }

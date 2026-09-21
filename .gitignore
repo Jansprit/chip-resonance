@@ -30,6 +30,16 @@ venv/
 .env.local
 .env.*.local
 
+# Backend secrets — session cookies, local-only data
+backend/.env
+backend/.env.*
+backend/.sessions/
+backend/.sessions/**
+backend/data/local/      # 私有完整資料（僅本機）
+backend/data/local/**
+data/local/             # 私有資料快照
+data/local/**
+
 # Build outputs (in case bundler is added later)
 dist/
 build/

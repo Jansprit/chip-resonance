@@ -21,17 +21,25 @@ jobs:
           missing=0
           for f in LICENSE README.md \
                    index.html factors.html scoring.html backtest.html \
-                   app.js data.js styles.css .gitignore \
+                   app.js data.js styles.css .gitignore .nojekyll \
                    backend/scrapers/base.py backend/scrapers/twse.py \
-                   backend/pipeline.py backend/schema.py backend/requirements.txt \
+                   backend/scrapers/tpex.py backend/scrapers/finmind.py \
+                   backend/scrapers/mops.py backend/scrapers/tdcc.py \
+                   backend/scrapers/pyramid.py backend/scrapers/goodinfo.py \
+                   backend/scrapers/us_markets.py \
+                   backend/pipeline.py backend/normalize.py backend/schema.py \
+                   backend/requirements.txt backend/.env.example \
                    backend/tests/test_rate_limiter.py \
-                   .github/workflows/scrape.yml; do
+                   backend/scripts/run_local.py backend/scripts/build_universe.py \
+                   backend/scripts/auth_setup.py backend/scripts/windows_task.ps1 \
+                   .github/workflows/scrape.yml .github/workflows/ci.yml \
+                   Dockerfile docker-compose.yml; do
             if [ ! -s "$f" ]; then
               echo "::error::Missing or empty file: $f"
               missing=1
             else
               size=$(stat -c%s "$f")
-              printf "  %-40s %8d bytes\n" "$f" "$size"
+              printf "  %-50s %8d bytes\n" "$f" "$size"
             fi
           done
           if [ $missing -ne 0 ]; then
