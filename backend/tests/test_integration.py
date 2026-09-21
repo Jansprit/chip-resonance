@@ -95,9 +95,11 @@ def test_source_health_disables_on_403():
 
 def test_rate_limiter_rejects_low_interval():
     """RateLimiter 不接受 < 0.5s 的間隔。"""
-    import pytest
-    with pytest.raises(ValueError):
+    try:
         RateLimiter(min_interval=0.1)
+    except ValueError:
+        return  # 預期拋出
+    raise AssertionError("expected ValueError for min_interval < 0.5")
 
 
 def test_taipei_today_format():
