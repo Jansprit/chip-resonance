@@ -93,12 +93,27 @@ copy backend\.env.example backend\.env
 notepad backend\.env
 ```
 
-| 變數 | 來源 | 影響 |
-|---|---|---|
-| `FINMIND_TOKEN` | https://finmindtrade.com/ 申請 | 啟用 FinMind 月營收、財報、歷史價格 |
-| `PYRAMID_USERNAME/PASSWORD` | 神秘金字塔 | 啟用大戶持股週資料（自動登入） |
-| `GOODINFO_USERNAME/PASSWORD` | Goodinfo 付費會員 | 啟用董監加碼明細、融資券 |
-| `GOODINFO_PROXY_URL` | 住宅代理 | 避免本機 IP 被擋 |
+| 變數 | 來源 | 影響 | 是否必填 |
+|---|---|---|---|
+| `FINMIND_TOKEN` | [FinMind 官網](https://finmindtrade.com/) 申請 | 提升 rate limit（600/hr）| 否（沒 token 也能跑，但速率較低）|
+| `FINMIND_PAID` | FinMind 付費訂閱 | 解鎖 `TaiwanStockShareholding` 大戶持股分級 | 否（付費才有 F1/F4/F6 真實值）|
+| `PYRAMID_USERNAME/PASSWORD` | 神秘金字塔 免費會員 | 啟用大戶持股週資料 | ⚠️ 是（神秘金字塔全部資料需登入）|
+| `GOODINFO_USERNAME/PASSWORD` | Goodinfo 免費會員 | 啟用董監加碼、融資券、當沖比 | ⚠️ 是（進階資料需登入）|
+| `GOODINFO_PROXY_URL` | 住宅代理 | 避免本機 IP 被擋 | 否（看您網路環境）|
+
+### 哪些來源不必登入？
+
+- **TWSE OpenAPI** — 全部公開
+- **TPEx OpenAPI** — 全部公開
+- **集保中心 (TDCC)** — 週資料公開可下載
+- **FinMind 免費層** — 價格、月營收、財報、股利、三大法人都可不登入抓
+
+### 哪些來源必須登入？
+
+- **神秘金字塔** — 任何資料（**全會員制**）
+- **Goodinfo** — 進階資料（董監加碼、融資券、當沖比；基本股價公開）
+- **FinMind `TaiwanStockShareholding`** — 必須**付費**訂閱才有大戶分級
+- **MOPS 董監事申報** — 需「公司內部人」自然人憑證 / 工商憑證（一般投資人拿不到）
 
 **沒設定也沒關係**——pipeline 會自動 skip 沒憑證的來源，繼續抓其他公開源。
 
@@ -390,7 +405,23 @@ MOPS 改用 ajax 端點 `/mops/web/ajax_*`，本系統目前 `mops.py` 標 grace
 
 ### Q: FinMind token 怎麼拿？
 
-到 [FinMind 官網](https://finmindtrade.com/) 註冊即可。免費方案有每小時 request 上限（適合週末回測）。
+到 [FinMind 官網](https://finmindtrade.com/) 註冊即可。**免費 token** 即可大幅提升 rate limit（每小時 600+ 次）。但若想要 `TaiwanStockShareholding`（大戶 400/600/800/1000 張持股分級）來填 F1/F4/F6 三個關鍵因子，則需**付費訂閱**（約 NTD $1,200/月）。
+
+### Q: 三個來源（神秘金字塔 / Goodinfo / FinMind 大戶分級）真的都要付費嗎？
+
+不一定。詳情：
+
+| 來源 | 免費層 | 付費層 |
+|---|---|---|
+| **TWSE + TPEx OpenAPI** | ✅ 全部資料 | — |
+| **集保中心 週資料** | ✅ 全市場週分布 | — |
+| **FinMind 價格/營收/財報/股利** | ✅ 免費 token 即可 | — |
+| **FinMind 大戶持股分級** | ❌ 需付費 | NTD ~$1,200/月 |
+| **神秘金字塔** | ⚠️ 免費會員（需登入，額度有限）| 付費會員（無限額度）|
+| **Goodinfo** | ⚠️ 免費會員（需登入）| 付費會員（更多資料）|
+| **MOPS 董監事申報** | ❌ 需公司內部人憑證（一般投資人無權）| — |
+
+**最低配置就能跑**：TWSE + TPEx + 集保（公開）+ FinMind 免費 token = F1/F4/F6 之外的 5 個因子都有真實值，F1/F4/F6 暫用集保的 400 張以上分布近似。
 
 ---
 
