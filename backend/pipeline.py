@@ -67,6 +67,7 @@ from backend.scrapers.goodinfo import (
     save_latest as goodinfo_save_latest,
 )
 from backend.scrapers.us_markets import credentials_status as us_creds_status
+from backend.scrapers import wantgoo as wantgoo_scraper
 
 
 def _taipei_now() -> datetime:
@@ -283,6 +284,61 @@ async def run_goodinfo_async(out_dir: Path) -> dict:
     return await _run_playwright_source("goodinfo", _fetch, out_dir)
 
 
+async def run_wantgoo_async(out_dir: Path) -> dict:
+    """玩股網 (wantgoo.com.tw) — 免登入但需 Playwright 過 Cloudflare。
+
+    提供：
+    - 融資券變化（F9 價籌背離懲罰）
+    - 法人買賣超（F8 回調籌碼守穩 / F10 利空籌碼修復）
+    - 當沖比（F9）
+
+    8 秒/次節流，單日 200 次上限。
+    """
+    status = {
+        "status": "ok",
+        "min_interval_sec": 8, "daily_quota": 200, "rows_count": 0,
+    }
+    if not wantgoo_scraper.is_available():
+        status["status"] = "skipped"
+        status["reason"] = "wantgoo unavailable"
+        return status
+    try:
+        # 從 universe.json 抓前 5 檔（MVP，避免 Playwright 來源耗時過長）
+        try:
+            universe = json.loads((out_dir / "latest" / "universe.json").read_text(encoding="utf-8"))
+            codes = [s["code"] for s in universe[:5]]
+        except Exception:
+            codes = ["2330", "2454", "2317", "2884", "2882"]
+
+        results = {"balance_sheet": [], "institutional": [], "main": []}
+        session = wantgoo_scraper.create_wantgoo_session()
+        await session.start()
+        try:
+            for code in codes:
+                try:
+                    results["balance_sheet"].append({"code": code, "html": await wantgoo_scraper.fetch_balance_sheet(code, session=session)})
+                    results["institutional"].append({"code": code, "html": await wantgoo_scraper.fetch_institutional(code, session=session)})
+                    results["main"].append({"code": code, "html": await wantgoo_scraper.fetch_main_page(code, session=session)})
+                except Exception as e:
+                    results["balance_sheet"].append({"code": code, "error": str(e)})
+        finally:
+            await session.close()
+
+        # 存 raw HTML 供 parser 之後 tune selector
+        for category, items in results.items():
+            wantgoo_scraper.save_latest(out_dir, category, items)
+
+        status["rows_count"] = sum(len(v) for v in results.values())
+        status["note"] = "Raw HTML stored; parsing needs selector tuning"
+        return status
+    except Exception as e:
+        import traceback as _tb
+        status["status"] = "failed"
+        status["error"] = str(e)
+        status["trace"] = _tb.format_exc()
+        return status
+
+
 # ============ main ============
 
 async def _main_async(repo: Path | None, source: str, out_dir_name: str) -> int:
@@ -299,38 +355,43 @@ async def _main_async(repo: Path | None, source: str, out_dir_name: str) -> int:
 
     # 同步源（先跑，避免 Playwright 來源失敗時已建立的資料被覆蓋）
     if source in ("all", "public", "twse"):
-        print("[1/7] TWSE OpenAPI ...")
+        print("[1/8] TWSE OpenAPI ...")
         sources_status["twse"] = run_twse(out_dir)
         print(f"    {sources_status['twse']}")
 
     if source in ("all", "public", "tpex"):
-        print("[2/7] TPEx OpenAPI ...")
+        print("[2/8] TPEx OpenAPI ...")
         sources_status["tpex"] = run_tpex(out_dir)
         print(f"    {sources_status['tpex']}")
 
     if source in ("all", "public", "finmind"):
-        print("[3/7] FinMind ...")
+        print("[3/8] FinMind ...")
         sources_status["finmind"] = run_finmind(out_dir)
         print(f"    {sources_status['finmind']}")
 
     if source in ("all", "public", "mops"):
-        print("[4/7] MOPS ...")
+        print("[4/8] MOPS ...")
         sources_status["mops"] = run_mops(out_dir)
         print(f"    {sources_status['mops']}")
 
-    # Playwright 源（async）
+    if source in ("all", "public", "wantgoo"):
+        print("[5/8] Wantgoo (玩股網 — 融資券/當沖比/法人) ...")
+        sources_status["wantgoo"] = await run_wantgoo_async(out_dir)
+        print(f"    {sources_status['wantgoo']}")
+
+    # Playwright 源（async, 免登入但需 Playwright 過 Cloudflare）
     if source in ("all", "private", "tdcc"):
-        print("[5/7] TDCC (集保) ...")
+        print("[6/8] TDCC (集保) ...")
         sources_status["tdcc"] = await run_tdcc_async(out_dir)
         print(f"    {sources_status['tdcc']}")
 
     if source in ("all", "private", "pyramid"):
-        print("[6/7] Pyramid (神秘金字塔) ...")
+        print("[7/8] Pyramid (神秘金字塔 — 免登入) ...")
         sources_status["pyramid"] = await run_pyramid_async(out_dir)
         print(f"    {sources_status['pyramid']}")
 
     if source in ("all", "private", "goodinfo"):
-        print("[7/7] Goodinfo ...")
+        print("[8/8] Goodinfo ...")
         sources_status["goodinfo"] = await run_goodinfo_async(out_dir)
         print(f"    {sources_status['goodinfo']}")
 

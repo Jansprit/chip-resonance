@@ -1,5 +1,5 @@
 {
-  "last_update_taipei": "2026-09-22T18:07:36.052255+08:00",
+  "last_update_taipei": "2026-09-22T17:53:18.613287+08:00",
   "snapshot_date": "2026-09-22",
   "previous_snapshot_date": "2026-09-22",
   "data_freshness_hours": 0,
@@ -29,6 +29,14 @@
       "daily_quota": 100,
       "rows_count": 0,
       "reason": "MOPS endpoint migrated in 2024; pending new URL"
+    },
+    "wantgoo": {
+      "status": "failed",
+      "min_interval_sec": 8,
+      "daily_quota": 200,
+      "rows_count": 0,
+      "error": "No session for wantgoo; run auth_setup.py first",
+      "trace": "Traceback (most recent call last):\n  File \"E:\\MiniMax_Desktop\\Work01\\chip_resonance\\backend\\pipeline.py\", line 315, in run_wantgoo_async\n    await session.start()\n  File \"E:\\MiniMax_Desktop\\Work01\\chip_resonance\\backend\\scrapers\\base.py\", line 538, in start\n    self._storage_state = self.store.load(self.site)\n                          ~~~~~~~~~~~~~~~^^^^^^^^^^^\n  File \"E:\\MiniMax_Desktop\\Work01\\chip_resonance\\backend\\scrapers\\base.py\", line 421, in load\n    raise SessionNotFound(f\"No session for {site}; run auth_setup.py first\")\nbackend.scrapers.base.SessionNotFound: No session for wantgoo; run auth_setup.py first\n"
     }
   },
   "credentials": {

@@ -505,12 +505,14 @@ class BrowserSession:
         session_store: Optional[SessionStore] = None,
         proxy_url: Optional[str] = None,
         headless: bool = True,
+        require_session: bool = True,
     ):
         self.site = site
         self.cred = credential_manager or CredentialManager()
         self.store = session_store or SessionStore()
         self.proxy_url = proxy_url
         self.headless = headless
+        self.require_session = require_session
         self._playwright = None
         self._browser = None
         self._context = None
@@ -533,15 +535,16 @@ class BrowserSession:
             launch_kwargs["proxy"] = {"server": self.proxy_url}
         self._browser = await self._playwright.chromium.launch(**launch_kwargs)
 
-        # 載入 session
-        try:
-            self._storage_state = self.store.load(self.site)
-        except (SessionNotFound, SessionExpired) as e:
-            await self._browser.close()
-            await self._playwright.stop()
-            self._browser = None
-            self._playwright = None
-            raise
+        # 載入 session（只在 require_session=True 時需要）
+        if self.require_session:
+            try:
+                self._storage_state = self.store.load(self.site)
+            except (SessionNotFound, SessionExpired) as e:
+                await self._browser.close()
+                await self._playwright.stop()
+                self._browser = None
+                self._playwright = None
+                raise
 
         # 隨機指紋
         ua = random.choice(COMMON_BROWSER_UAS)
@@ -555,8 +558,9 @@ class BrowserSession:
             "viewport": viewport,
             "locale": "zh-TW",
             "timezone_id": "Asia/Taipei",
-            "storage_state": self._storage_state,
         }
+        if self._storage_state:
+            context_kwargs["storage_state"] = self._storage_state
         self._context = await self._browser.new_context(**context_kwargs)
 
     async def close(self) -> None:

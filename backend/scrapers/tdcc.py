@@ -36,7 +36,7 @@ def create_tdcc_session(
     cred: CredentialManager | None = None,
     headless: bool = True,
 ) -> BrowserSession:
-    """建立 TDCC 用的 BrowserSession（需先 auth_setup.py 登入）。"""
+    """建立 TDCC 用的 BrowserSession（**免登入**——集保週資料公開可下載，只需 Playwright 過 Cloudflare）。"""
     if cred is None:
         cred = CredentialManager()
     return BrowserSession(
@@ -44,6 +44,7 @@ def create_tdcc_session(
         credential_manager=cred,
         session_store=SessionStore(),
         headless=headless,
+        require_session=False,  # 集保基本週資料免登入
     )
 
 

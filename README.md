@@ -22,7 +22,7 @@
 
 ## 系統簡介
 
-本系統整合 7 個資料源（TWSE 上市、TPEx 上櫃、FinMind、MOPS、集保、神秘金字塔、Goodinfo），抓取真實的台股籌碼與行情資料，以 **9 大因子 + 6 條硬性過濾層** 組成可量化、可回測驗證的台股選股模型。
+本系統整合 8 個資料源（TWSE 上市、TPEx 上櫃、FinMind、MOPS、玩股網、集保、神秘金字塔、Goodinfo），抓取真實的台股籌碼與行情資料，以 **9 大因子 + 6 條硬性過濾層** 組成可量化、可回測驗證的台股選股模型。**其中 5 個來源完全免登入**（TWSE / TPEx / 集保 / 玩股網 / 神秘金字塔），僅 Goodinfo 進階資料與 FinMind 大戶分級需登入。
 
 ### 三大核心原則
 
@@ -97,23 +97,25 @@ notepad backend\.env
 |---|---|---|---|
 | `FINMIND_TOKEN` | [FinMind 官網](https://finmindtrade.com/) 申請 | 提升 rate limit（600/hr）| 否（沒 token 也能跑，但速率較低）|
 | `FINMIND_PAID` | FinMind 付費訂閱 | 解鎖 `TaiwanStockShareholding` 大戶持股分級 | 否（付費才有 F1/F4/F6 真實值）|
-| `PYRAMID_USERNAME/PASSWORD` | 神秘金字塔 免費會員 | 啟用大戶持股週資料 | ⚠️ 是（神秘金字塔全部資料需登入）|
-| `GOODINFO_USERNAME/PASSWORD` | Goodinfo 免費會員 | 啟用董監加碼、融資券、當沖比 | ⚠️ 是（進階資料需登入）|
+| `PYRAMID_USERNAME/PASSWORD` | ~~神秘金字塔~~ | **2026-09 修正：不需登入**，基本資料免登入可看 | 否 |
+| `GOODINFO_USERNAME/PASSWORD` | Goodinfo 免費會員 | 登入後能看到董監加碼明細等進階資料 | 否（基本免登入）|
 | `GOODINFO_PROXY_URL` | 住宅代理 | 避免本機 IP 被擋 | 否（看您網路環境）|
 
 ### 哪些來源不必登入？
 
-- **TWSE OpenAPI** — 全部公開
-- **TPEx OpenAPI** — 全部公開
-- **集保中心 (TDCC)** — 週資料公開可下載
-- **FinMind 免費層** — 價格、月營收、財報、股利、三大法人都可不登入抓
+> ⚠️ **2026-09 重要修正**：先前以為「神秘金字塔必須登入」其實是錯的。
 
-### 哪些來源必須登入？
-
-- **神秘金字塔** — 任何資料（**全會員制**）
-- **Goodinfo** — 進階資料（董監加碼、融資券、當沖比；基本股價公開）
-- **FinMind `TaiwanStockShareholding`** — 必須**付費**訂閱才有大戶分級
-- **MOPS 董監事申報** — 需「公司內部人」自然人憑證 / 工商憑證（一般投資人拿不到）
+| 來源 | 登入需求 | 備註 |
+|---|---|---|
+| **TWSE OpenAPI** | ❌ | 全部公開 |
+| **TPEx OpenAPI** | ❌ | 全部公開 |
+| **集保中心 (TDCC)** | ❌ | 週資料公開可下載 |
+| **FinMind 免費層** | ❌ | 價格、月營收、財報、股利、三大法人 |
+| **神秘金字塔 (Pyramid)** | ⚠️ **修正：免登入** | 400/600/800/1000 張大戶分級、董監持股都可免登入瀏覽器查看；只是有 Cloudflare 防護需用 Playwright |
+| **玩股網 (Wantgoo)** | ❌ | 融資券、當沖比、法人買賣超都免登入；同樣需 Playwright 過 Cloudflare |
+| **Goodinfo** | ❌（基本免登入）| 基本個股資料免登入；登入後能看到董監加碼、融資券、當沖比明細 |
+| **FinMind `TaiwanStockShareholding`** | ❌ 登入，但 ✅ **付費訂閱**才能看 | 真正的大戶 400/600/800/1000 張歷史分級 |
+| **MOPS 董監事申報** | ⚠️ 需「公司內部人」自然人憑證 / 工商憑證 | 一般投資人拿不到 |
 
 **沒設定也沒關係**——pipeline 會自動 skip 沒憑證的來源，繼續抓其他公開源。
 
@@ -144,12 +146,14 @@ python -m backend.scripts.run_local --source pyramid
 === done (2026-09-22T...) ===
 ```
 
-#### 步驟 4：（可選）登入需 Playwright 的網站
+#### 步驟 4：（可選）登入需登入的網站
 
-神秘金字塔、Goodinfo、集保需要登入。**首次跑需要手動登入一次**：
+> ⚠️ **2026-09 修正**：神秘金字塔與玩股網**免登入**就能用 Playwright 抓。只有**部分** Goodinfo 進階功能才需登入。
+
+Goodinfo 進階資料需要登入時，**首次跑需要手動登入一次**：
 
 ```powershell
-python -m backend.scripts.auth_setup --site pyramid
+python -m backend.scripts.auth_setup --site goodinfo
 # 開啟瀏覽器 → 手動登入 → session 自動存到 backend/.sessions/
 ```
 
@@ -332,13 +336,14 @@ chip-resonance/
 │   │   ├── tpex.py             櫃買中心 OpenAPI（891 檔）
 │   │   ├── finmind.py          FinMind REST（可選 token）
 │   │   ├── mops.py             公開資訊觀測站（2024 graceful skip）
-│   │   ├── tdcc.py             集保中心（Playwright）
-│   │   ├── pyramid.py          神秘金字塔（Playwright + session）
+│   │   ├── wantgoo.py          玩股網（融資券/當沖比/法人買賣超，**免登入**）
+│   │   ├── tdcc.py             集保中心（Playwright，**免登入**）
+│   │   ├── pyramid.py          神秘金字塔（Playwright，**免登入**）
 │   │   ├── goodinfo.py         Goodinfo（Playwright + 可選代理）
 │   │   └── us_markets.py       美股 hook（FINNHUB/AV/FRED）
 │   ├── normalize.py            欄位對齊 + 行業歸類
 │   ├── schema.py               pydantic models
-│   ├── pipeline.py             7 源 orchestrator
+│   ├── pipeline.py             8 源 orchestrator
 │   ├── scripts/
 │   │   ├── run_local.py        CLI 入口
 │   │   ├── build_universe.py   合併 TWSE + TPEx

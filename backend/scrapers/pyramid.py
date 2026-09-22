@@ -2,9 +2,17 @@
 scrapers/pyramid.py — 神秘金字塔（MoneyDJ / 基金會）大戶持股分級抓取器
 
 神秘金字塔網址：https://www.moneydj.com/ 或 https://funddj.com/
-- 需登入會員（免費或付費）
-- 提供 400/600/800/1000 張以上持股分級 + 連續多週歷史
-- 屬於反爬蟲敏感站（會偵測 bot、限流嚴格），必須 Playwright + stealth
+
+**重要修正（2026-09-22）**：先前以為神秘金字塔需登入會員才能看，**這是錯的**。
+400/600/800/1000 張大戶分級與董監持股歷史在瀏覽器中**免登入即可看到**。
+
+但因 MoneyDJ 有 Cloudflare 與 anti-bot 機制，純 requests / web_fetch 會被擋。
+必須用 **Playwright + stealth** 才能成功抓取（這就是「瀏覽器代理工具」的實作）。
+
+提供：
+- 400/600/800/1000 張大戶持股分級（F1, F4, F6, F8, F10 來源）
+- 董監持股歷史（F3 來源）
+- 連續多週變化趨勢
 
 節流：10 秒/次，單日上限 200 次。
 """
@@ -17,17 +25,14 @@ from typing import Any
 
 from .base import (
     BrowserSession,
-    RateLimiter,
-    SourceHealth,
     CredentialManager,
     SessionStore,
-    SessionNotFound,
-    SessionExpired,
     write_json,
+    taipei_today,
 )
 
 
-# 神秘金字塔相關網址（實際 URL 取決於登入後看到的）
+# 神秘金字塔相關網址
 PYRAMID_BASE = "https://www.moneydj.com"
 
 
@@ -35,7 +40,7 @@ def create_pyramid_session(
     cred: CredentialManager | None = None,
     headless: bool = True,
 ) -> BrowserSession:
-    """建立神秘金字塔用的 BrowserSession（需先 auth_setup.py 登入）。"""
+    """建立神秘金字塔用的 BrowserSession（**免登入**——只要有 Playwright + Chromium 就能跑）。"""
     if cred is None:
         cred = CredentialManager()
     return BrowserSession(
@@ -43,7 +48,16 @@ def create_pyramid_session(
         credential_manager=cred,
         session_store=SessionStore(),
         headless=headless,
+        require_session=False,  # 神秘金字塔免登入
     )
+
+
+def is_available() -> bool:
+    """神秘金字塔基本資料免登入；只要 Playwright + Chromium 就能跑。
+
+    若日後需要用到付費會員限定資料（更深層歷史），再改為檢查 session。
+    """
+    return True
 
 
 async def fetch_chip_holders(
@@ -58,15 +72,11 @@ async def fetch_chip_holders(
     own_session = session is None
     if own_session:
         session = create_pyramid_session()
-
-    if own_session:
         await session.start()
-
-    results = {}
     try:
         codes = stock_codes or []
+        results = {}
         for code in codes:
-            # 神秘金字塔的個股大戶頁面結構（需依登入後實際頁面調整）
             url = f"{PYRAMID_BASE}/funddj/individual/holder/{code}"
             html = await session.fetch(
                 url,
@@ -75,7 +85,6 @@ async def fetch_chip_holders(
                 max_delay=15.0,
             )
             results[code] = html
-            # 存 debug HTML
             debug_dir = Path(__file__).resolve().parents[1] / "data" / "local" / "raw" / "pyramid"
             debug_dir.mkdir(parents=True, exist_ok=True)
             (debug_dir / f"{code}.html").write_text(html, encoding="utf-8")
@@ -89,7 +98,7 @@ def parse_chip_holders_html(html: str, stock_code: str) -> dict[str, Any]:
     """
     解析神秘金字塔個股大戶持股 HTML。
 
-    預期回傳（每檔）：
+    預期回傳：
         {
             'code': '2330',
             'date': '2026-09-15',
@@ -101,24 +110,21 @@ def parse_chip_holders_html(html: str, stock_code: str) -> dict[str, Any]:
             'avg_lot_change_8w': 3.5,
         }
 
-    注意：神秘金字塔的 DOM 結構需實際測試後調整。
+    注意：神秘金字塔 DOM 結構需實際測試後調整。
     """
-    # TODO: 實作解析（用 BeautifulSoup）
-    # 預留 placeholder
     raise NotImplementedError(
-        "Pyramid HTML parser needs tuning. Run auth_setup.py to log in, "
-        "then inspect data/local/raw/pyramid/<code>.html and update this function."
+        "Pyramid HTML parser needs tuning. "
+        "Run a sample scrape, inspect data/local/raw/pyramid/<code>.html, "
+        "and update this function."
     )
 
 
 def save_latest(out_dir: Path, parsed: list[dict[str, Any]], *, snapshot_date: str = "") -> dict[str, str]:
     """寫入 out_dir/pyramid_chip.json 與快照。"""
-    from .base import taipei_today
     written = {}
     snapshot_date = snapshot_date or taipei_today()
     out_dir.mkdir(parents=True, exist_ok=True)
-    # Save dated snapshot to data/<YYYY-MM-DD>/ (sibling of data/latest/)
-    snapshot_dir = out_dir.parent.parent / snapshot_date
+    snapshot_dir = out_dir.parent / snapshot_date
     snapshot_dir.mkdir(parents=True, exist_ok=True)
     name = "pyramid_chip.json"
     latest_path = out_dir / name
@@ -135,8 +141,8 @@ if __name__ == "__main__":
             htmls = await fetch_chip_holders(["2330", "2454"])
             for code, html in htmls.items():
                 print(f"  {code}: {len(html)} bytes")
-        except SessionNotFound as e:
+        except Exception as e:
             print(f"[pyramid] {e}")
-            print("Please run: python -m backend.scripts.auth_setup --site pyramid")
 
+    print(f"is_available: {is_available()}")
     asyncio.run(_test())
