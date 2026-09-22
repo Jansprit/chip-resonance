@@ -1,19 +1,19 @@
 {
-  "last_update_taipei": "2026-09-22T01:09:20.327024+08:00",
+  "last_update_taipei": "2026-09-22T18:07:36.052255+08:00",
   "snapshot_date": "2026-09-22",
   "previous_snapshot_date": "2026-09-22",
   "data_freshness_hours": 0,
   "sources": {
     "twse": {
       "status": "ok",
-      "stocks_count": 1082,
-      "indices_count": 135,
+      "stocks_count": 1085,
+      "indices_count": 130,
       "min_interval_sec": 3,
       "daily_quota": 500
     },
     "tpex": {
       "status": "ok",
-      "stocks_count": 891,
+      "stocks_count": 892,
       "min_interval_sec": 3,
       "daily_quota": 500
     },
