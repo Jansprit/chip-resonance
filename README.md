@@ -390,7 +390,7 @@ MOPS 改用 ajax 端點 `/mops/web/ajax_*`，本系統目前 `mops.py` 標 grace
 
 ### Q: FinMind token 怎麼拿？
 
-到 https://finmindtrade.com/finmind/register/ 註冊即可。免費方案有每小時 request 上限（適合週末回測）。
+到 [FinMind 官網](https://finmindtrade.com/) 註冊即可。免費方案有每小時 request 上限（適合週末回測）。
 
 ---
 
