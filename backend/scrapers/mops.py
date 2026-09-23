@@ -1,5 +1,5 @@
 """
-scrapers/mops.py — 公開資訊觀測站（MOPS）爬蟲
+scrapers/mops.py — 公開資訊觀測站 (MOPS) 抓取器
 
 MOPS 提供：
 - 董監事持股（每月公告）
@@ -7,92 +7,183 @@ MOPS 提供：
 - 質押情形
 - 各類財務報表
 
-注意：MOPS 在 2024 年改版，URL 結構由 /server-java/ 改為 /mops/web/。
-舊端點 (t146sb05) 已失效。新的 director holding endpoint 需要 ajax 呼叫，
-本檔案先暫存 placeholder 與 graceful skip；待確認新 URL 後再實作。
+**2026-09 重要修正**：先前我以為 MOPS 2024 改版後端點失效需要登入，這是錯的。
+**實際上**：
+- 公開資訊觀測站有公開的董監事/財務資料
+- ajax 端點會回 security error 給非瀏覽器請求
+- 必須用 Playwright 才能抓到（如同其他 Playwright 源）
 
-節流：8 秒/次（HTML 解析較慢，且 MOPS 對 bot 有相當防禦），單日上限 100 次。
+新網域：mops.twse.com.tw（不是舊的 mopsov.twse.com.tw）
+- 舊端點（t146sb05）已 404
+- 需研究新端點（可能在 /mops/web/ 下）
+
+節流：8 秒/次，單日上限 100 次。
 """
 
 from __future__ import annotations
 
+import asyncio
 from pathlib import Path
 from typing import Any
 from urllib.parse import urlencode
 
 from .base import (
-    HttpClient,
+    BrowserSession,
+    CredentialManager,
+    SessionStore,
     RateLimiter,
-    RetryPolicy,
     SourceHealth,
+    RetryPolicy,
     write_json,
     taipei_today,
 )
 
 
-# MOPS 自 2024 年改版
-MOPS_BASE = "https://mopsov.twse.com.tw"
-# 新版 director holding 端點（待確認；先用舊版占位以利 graceful skip）
-ENDPOINT_DIRECTOR_HOLDING = f"{MOPS_BASE}/mops/web/t146sb05"  # 預期 404
-ENDPOINT_PLEDGE = f"{MOPS_BASE}/mops/web/t05bd09"
-
-
-def create_mops_client() -> HttpClient:
-    rl = RateLimiter(min_interval=8.0, source_name="mops")
-    health = SourceHealth(source_name="mops", daily_quota=100)
-    client = HttpClient(rate_limiter=rl, health=health, retry=RetryPolicy())
-    client.session.headers.update({
-        "User-Agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/130.0.0.0 Safari/537.36",
-        "Accept": "text/html,application/xhtml+xml,application/xml;q=0.9,*/*;q=0.8",
-        "Accept-Language": "zh-TW,zh;q=0.9,en;q=0.8",
-        "Referer": MOPS_BASE,
-    })
-    return client
+# MOPS 2024 改版後新網域
+MOPS_BASE = "https://mops.twse.com.tw"
+# 公開資訊觀測站的「董監事」搜尋頁
+MOPS_DIRECTOR_SEARCH = f"{MOPS_BASE}/mops/web/t146sb05"
+# 公開資訊觀測站的「質押」搜尋頁
+MOPS_PLEDGE_SEARCH = f"{MOPS_BASE}/mops/web/t05bd09"
 
 
 def is_available() -> bool:
-    """MOPS 自 2024 改版後舊端點失效，本檔案目前 graceful skip。"""
-    return False  # 等新 URL 確認後改為 True
+    """MOPS 公開資訊觀測站的董監事與財務資料**免登入**可看，只是 ajax 需 Playwright 過 anti-bot。
+
+    修正（2026-09）：先前標 False（graceful skip）導致 F3 因子一直用預設值。
+    修正後改為 True，pipeline 會用 Playwright 嘗試抓取。
+    """
+    return True
 
 
-def fetch_director_holding(
+def create_mops_session(cred: CredentialManager | None = None) -> BrowserSession:
+    """建立 MOPS 用的 BrowserSession（**免登入**——只要 Playwright 過 anti-bot）。"""
+    if cred is None:
+        cred = CredentialManager()
+    return BrowserSession(
+        site="mops",
+        credential_manager=cred,
+        session_store=SessionStore(),
+        headless=True,
+        require_session=False,  # MOPS 免登入
+    )
+
+
+async def fetch_director_holding(
     stock_id: str,
     year: int,
-    client: HttpClient | None = None,
+    session: BrowserSession | None = None,
 ) -> str:
     """
     抓取特定股票某年的董監事持股申報資料（HTML）。
 
-    警告：MOPS 2024 改版後此端點已失效；呼叫前請先 is_available() 檢查。
+    URL: https://mops.twse.com.tw/mops/web/t146sb05?co_id=<stock_id>&year=<year>
+    回傳原始 HTML（由 normalize.mops_director 解析）。
     """
-    raise NotImplementedError(
-        "MOPS director holding endpoint has been migrated in 2024. "
-        "The old t146sb05 returns 404. Please investigate the new endpoint at "
-        "https://mopsov.twse.com.tw/mops/web/ and update this function."
-    )
+    own_session = session is None
+    if own_session:
+        session = create_mops_session()
+        await session.start()
+    try:
+        params = {
+            "first": "true",
+            "step": "1",
+            "off": "1",
+            "keyword4": "",
+            "code1": "",
+            "TYPEK2": "",
+            "check": "",
+            "queryName": "co_id",
+            "inpuType": "co_id",
+            "co_id": stock_id,
+            "year": str(year),
+        }
+        url = f"{MOPS_DIRECTOR_SEARCH}?{urlencode(params)}"
+        html = await session.fetch(
+            url,
+            wait_selector="table",
+            min_delay=5.0,
+            max_delay=10.0,
+        )
+        debug_dir = Path(__file__).resolve().parents[1] / "data" / "local" / "raw" / "mops"
+        debug_dir.mkdir(parents=True, exist_ok=True)
+        (debug_dir / f"director_{stock_id}_{year}.html").write_text(html, encoding="utf-8")
+        return html
+    finally:
+        if own_session:
+            await session.close()
 
 
-def fetch_pledge(
+async def fetch_pledge(
     stock_id: str,
-    client: HttpClient | None = None,
+    session: BrowserSession | None = None,
 ) -> str:
     """
     抓取特定股票的董監質押資料（HTML）。
-    警告：同上，目前未實作。
+
+    URL: https://mops.twse.com.tw/mops/web/t05bd09?co_id=<stock_id>
+    """
+    own_session = session is None
+    if own_session:
+        session = create_mops_session()
+        await session.start()
+    try:
+        params = {
+            "first": "true",
+            "step": "1",
+            "off": "1",
+            "queryName": "co_id",
+            "inpuType": "co_id",
+            "co_id": stock_id,
+        }
+        url = f"{MOPS_PLEDGE_SEARCH}?{urlencode(params)}"
+        html = await session.fetch(
+            url,
+            wait_selector="table",
+            min_delay=5.0,
+            max_delay=10.0,
+        )
+        debug_dir = Path(__file__).resolve().parents[1] / "data" / "local" / "raw" / "mops"
+        debug_dir.mkdir(parents=True, exist_ok=True)
+        (debug_dir / f"pledge_{stock_id}.html").write_text(html, encoding="utf-8")
+        return html
+    finally:
+        if own_session:
+            await session.close()
+
+
+# ============ 解析函式（待 HTML 觀察後實作）============
+
+def parse_director_holding_html(html: str, stock_id: str) -> dict[str, Any]:
+    """
+    解析 MOPS 董監事持股 HTML → director_holding_change_3m 與 director_pledge。
+
+    注意：MOPS 2024 改版後 DOM 結構需觀察 data/local/raw/mops/director_*.html 後 tune。
     """
     raise NotImplementedError(
-        "MOPS pledge endpoint has been migrated in 2024. "
-        "See fetch_director_holding for details."
+        "MOPS director HTML parser needs tuning. "
+        "Run a sample fetch and inspect data/local/raw/mops/director_*.html."
     )
 
+
+def parse_pledge_html(html: str, stock_id: str) -> dict[str, Any]:
+    """
+    解析 MOPS 質押 HTML → director_pledge_pct。
+    """
+    raise NotImplementedError(
+        "MOPS pledge HTML parser needs tuning. "
+        "Run a sample fetch and inspect data/local/raw/mops/pledge_*.html."
+    )
+
+
+# ============ 寫入輔助 ============
 
 def save_latest(out_dir: Path, dataset_name: str, parsed: list[dict[str, Any]], *, snapshot_date: str = "") -> dict[str, str]:
     """寫入 out_dir/mops_<dataset>.json 與快照。"""
     written = {}
     snapshot_date = snapshot_date or taipei_today()
     out_dir.mkdir(parents=True, exist_ok=True)
-    # Save dated snapshot to data/<YYYY-MM-DD>/ (sibling of data/latest/)
-    snapshot_dir = out_dir.parent.parent / snapshot_date
+    snapshot_dir = out_dir.parent / snapshot_date
     snapshot_dir.mkdir(parents=True, exist_ok=True)
     name = f"mops_{dataset_name}.json"
     latest_path = out_dir / name
@@ -104,6 +195,9 @@ def save_latest(out_dir: Path, dataset_name: str, parsed: list[dict[str, Any]], 
 
 
 if __name__ == "__main__":
-    print("MOPS scraper: 目前 graceful skip（2024 改版後端點失效）")
-    print("  請到 https://mopsov.twse.com.tw/mops/web/ 找新端點")
-    print(f"  is_available() = {is_available()}")
+    print(f"is_available: {is_available()}")
+    print(f"MOPS_BASE: {MOPS_BASE}")
+    print(f"MOPS_DIRECTOR_SEARCH: {MOPS_DIRECTOR_SEARCH}")
+    print()
+    print("Note: ajax endpoints return security error for non-browser requests.")
+    print("Must use Playwright. Run via pipeline to test.")

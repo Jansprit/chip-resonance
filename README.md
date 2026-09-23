@@ -22,7 +22,7 @@
 
 ## 系統簡介
 
-本系統整合 8 個資料源（TWSE 上市、TPEx 上櫃、FinMind、MOPS、玩股網、集保、神秘金字塔、Goodinfo），抓取真實的台股籌碼與行情資料，以 **9 大因子 + 6 條硬性過濾層** 組成可量化、可回測驗證的台股選股模型。**其中 5 個來源完全免登入**（TWSE / TPEx / 集保 / 玩股網 / 神秘金字塔），僅 Goodinfo 進階資料與 FinMind 大戶分級需登入。
+本系統整合 8 個資料源（TWSE 上市、TPEx 上櫃、FinMind、MOPS、玩股網、集保、神秘金字塔、Goodinfo），抓取真實的台股籌碼與行情資料，以 **9 大因子 + 6 條硬性過濾層** 組成可量化、可回測驗證的台股選股模型。**其中 6 個來源完全免登入**（TWSE / TPEx / MOPS / 集保 / 玩股網 / 神秘金字塔），僅 Goodinfo 進階資料與 FinMind 大戶分級需登入。
 
 ### 三大核心原則
 
@@ -115,7 +115,7 @@ notepad backend\.env
 | **玩股網 (Wantgoo)** | ❌ | 融資券、當沖比、法人買賣超都免登入；同樣需 Playwright 過 Cloudflare |
 | **Goodinfo** | ❌（基本免登入）| 基本個股資料免登入；登入後能看到董監加碼、融資券、當沖比明細 |
 | **FinMind `TaiwanStockShareholding`** | ❌ 登入，但 ✅ **付費訂閱**才能看 | 真正的大戶 400/600/800/1000 張歷史分級 |
-| **MOPS 董監事申報** | ⚠️ 需「公司內部人」自然人憑證 / 工商憑證 | 一般投資人拿不到 |
+| **MOPS 董監事申報** | ❌（**2026-09 修正：免登入**） | 公開資訊觀測站基本資料免登入可看；只是 ajax 端點需 Playwright 過 anti-bot |
 
 **沒設定也沒關係**——pipeline 會自動 skip 沒憑證的來源，繼續抓其他公開源。
 
@@ -335,7 +335,7 @@ chip-resonance/
 │   │   ├── twse.py             證交所 OpenAPI（1082 檔）
 │   │   ├── tpex.py             櫃買中心 OpenAPI（891 檔）
 │   │   ├── finmind.py          FinMind REST（可選 token）
-│   │   ├── mops.py             公開資訊觀測站（2024 graceful skip）
+│   │   ├── mops.py             公開資訊觀測站（董監事、質押；Playwright 過 anti-bot）|
 │   │   ├── wantgoo.py          玩股網（融資券/當沖比/法人買賣超，**免登入**）
 │   │   ├── tdcc.py             集保中心（Playwright，**免登入**）
 │   │   ├── pyramid.py          神秘金字塔（Playwright，**免登入**）
@@ -400,9 +400,15 @@ chip-resonance/
 2. 確認 `.env` 設了 `GOODINFO_PROXY_URL`（住宅代理）
 3. 隔天再跑（每日配額會 reset）
 
-### Q: MOPS 2024 改版後抓不到？
+### Q: MOPS 改版後怎麼抓？
 
-MOPS 改用 ajax 端點 `/mops/web/ajax_*`，本系統目前 `mops.py` 標 graceful skip。等日後確認新端點後更新即可。
+**2026-09 修正**：先前我以為 MOPS 2024 改版後端點失效要登入，這是錯的。
+事實上：
+- 新網域是 `mops.twse.com.tw`（不是舊的 `mopsov.twse.com.tw`）
+- 公開資訊觀測站的董監事、財務、月營收**免登入**可看
+- 只是 ajax 端點會回 security error 給非瀏覽器請求，所以**必須用 Playwright 抓**
+
+本系統的 `mops.py` 已改用 Playwright + 新網域，跑 pipeline 就會自動抓。
 
 ### Q: 怎麼切換到 Private repo？
 

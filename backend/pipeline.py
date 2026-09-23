@@ -197,16 +197,53 @@ def run_finmind(out_dir: Path) -> dict:
 
 
 def run_mops(out_dir: Path) -> dict:
-    """MOPS: 2024 rev endpoint unavailable, graceful skip for now."""
-    from backend.scrapers.mops import is_available as mops_avail
+    """MOPS 公開資訊觀測站：抓董監事與質押資料（2026-09 啟用）。"""
+    from backend.scrapers import mops as mops_scraper
     status = {
-        "status": "skipped" if not mops_avail() else "ok",
+        "status": "ok",
         "min_interval_sec": 8, "daily_quota": 100, "rows_count": 0,
     }
-    if not mops_avail():
-        status["reason"] = "MOPS endpoint migrated in 2024; pending new URL"
+    if not mops_scraper.is_available():
+        status["status"] = "skipped"
+        status["reason"] = "MOPS unavailable"
         return status
-    return status
+    try:
+        # 從 universe.json 抓前 5 檔
+        try:
+            universe = json.loads((out_dir / "latest" / "universe.json").read_text(encoding="utf-8"))
+            codes = [s["code"] for s in universe[:5]]
+        except Exception:
+            codes = ["2330", "2454", "2317", "2884", "2882"]
+        current_year = _taipei_now().year
+        director_results = []
+        pledge_results = []
+        session = mops_scraper.create_mops_session()
+        await session.start()
+        try:
+            for code in codes:
+                try:
+                    h_dir = await mops_scraper.fetch_director_holding(code, current_year, session=session)
+                    director_results.append({"code": code, "year": current_year, "html": h_dir})
+                except Exception as e:
+                    director_results.append({"code": code, "error": str(e)})
+                try:
+                    h_plg = await mops_scraper.fetch_pledge(code, session=session)
+                    pledge_results.append({"code": code, "html": h_plg})
+                except Exception as e:
+                    pledge_results.append({"code": code, "error": str(e)})
+        finally:
+            await session.close()
+        mops_scraper.save_latest(out_dir, "director", director_results)
+        mops_scraper.save_latest(out_dir, "pledge", pledge_results)
+        status["rows_count"] = len(director_results) + len(pledge_results)
+        status["note"] = "Raw HTML stored; parsing needs selector tuning"
+        return status
+    except Exception as e:
+        import traceback as _tb
+        status["status"] = "failed"
+        status["error"] = str(e)
+        status["trace"] = _tb.format_exc()
+        return status
 
 
 async def _run_playwright_source(site: str, fetch_fn, out_dir: Path) -> dict:
