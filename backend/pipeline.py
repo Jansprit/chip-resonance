@@ -50,8 +50,7 @@ from backend.scrapers.finmind import (
     save_latest as finmind_save_latest,
 )
 from backend.scrapers.mops import (
-    create_mops_client, fetch_director_holding,
-    save_latest as mops_save_latest,
+    is_available as mops_available,
 )
 from backend.scrapers.tdcc import (
     create_tdcc_session, fetch_daily_range,
@@ -196,7 +195,7 @@ def run_finmind(out_dir: Path) -> dict:
         return status
 
 
-def run_mops(out_dir: Path) -> dict:
+async def run_mops_async(out_dir: Path) -> dict:
     """MOPS 公開資訊觀測站：抓董監事與質押資料（2026-09 啟用）。"""
     from backend.scrapers import mops as mops_scraper
     status = {
@@ -208,7 +207,6 @@ def run_mops(out_dir: Path) -> dict:
         status["reason"] = "MOPS unavailable"
         return status
     try:
-        # 從 universe.json 抓前 5 檔
         try:
             universe = json.loads((out_dir / "latest" / "universe.json").read_text(encoding="utf-8"))
             codes = [s["code"] for s in universe[:5]]
@@ -408,7 +406,7 @@ async def _main_async(repo: Path | None, source: str, out_dir_name: str) -> int:
 
     if source in ("all", "public", "mops"):
         print("[4/8] MOPS ...")
-        sources_status["mops"] = run_mops(out_dir)
+        sources_status["mops"] = await run_mops_async(out_dir)
         print(f"    {sources_status['mops']}")
 
     if source in ("all", "public", "wantgoo"):

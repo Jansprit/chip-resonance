@@ -74,14 +74,16 @@ def test_run_finmind_skips_without_token():
         assert "FINMIND_TOKEN" in status["reason"]
 
 
-def test_run_mops_graceful_skip():
-    """MOPS 2024 改版後應該 graceful skip。"""
-    with tempfile.TemporaryDirectory() as tmp:
-        out_dir = Path(tmp) / "latest"
-        out_dir.mkdir(parents=True, exist_ok=True)
-        status = pipeline.run_mops(out_dir)
-        assert status["status"] == "skipped"
-        assert "MOPS" in status["reason"]
+def test_run_mops_now_uses_playwright():
+    """MOPS 公開資訊觀測站 — 2026-09 修正為免登入 Playwright 抓取。
+
+    由於是 async，這裡只驗證 is_available() 回 True 與函式存在。
+    實際抓取需網路且耗時，整合測試不做 e2e。
+    """
+    from backend.scrapers import mops as mops_scraper
+    assert mops_scraper.is_available() is True
+    # 確保 run_mops_async 在 pipeline 中存在
+    assert hasattr(pipeline, "run_mops_async")
 
 
 def test_source_health_disables_on_403():
@@ -159,8 +161,8 @@ if __name__ == "__main__":
     print("PASS: test_run_twse_writes_correctly")
     test_run_finmind_skips_without_token()
     print("PASS: test_run_finmind_skips_without_token")
-    test_run_mops_graceful_skip()
-    print("PASS: test_run_mops_graceful_skip")
+    test_run_mops_now_uses_playwright()
+    print("PASS: test_run_mops_now_uses_playwright")
     test_source_health_disables_on_403()
     print("PASS: test_source_health_disables_on_403")
     test_rate_limiter_rejects_low_interval()
