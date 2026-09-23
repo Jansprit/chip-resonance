@@ -52,10 +52,14 @@ from backend.scrapers.finmind import (
 from backend.scrapers.mops import (
     is_available as mops_available,
 )
+from backend.scrapers import tdcc_opendata
 from backend.scrapers.tdcc import (
     create_tdcc_session, fetch_daily_range,
     save_latest as tdcc_save_latest,
 )
+# 注意：tdcc.py 的 Playwright 抓取已被 tdcc_opendata 取代（CSV 更穩定）
+# 保留 import 以防有需要時用
+# 主要路徑請見 run_tdcc_opendata_async
 from backend.scrapers.pyramid import (
     create_pyramid_session, fetch_chip_holders,
     save_latest as pyramid_save_latest,
@@ -376,6 +380,69 @@ async def run_wantgoo_async(out_dir: Path) -> dict:
 
 # ============ main ============
 
+async def run_tdcc_opendata_async(repo: Path, out_dir: Path) -> dict:
+    """
+    TDCC 政府資料開放平台 — 完全免費、無需 API key。
+
+    提供：全市場 1-15 級持股分級（含 400/600/800/1000 張以上），
+    對應 F1 / F4 / F6 / F8 因子。
+
+    每週五盤後釋出當週 CSV；本函式會：
+    1. 下載當週 CSV
+    2. 解析為結構化 pct_400up / 600up / 800up / 1000up
+    3. 存到 data/latest/tdcc_chip.json
+    4. 累積存到 data/local/tdcc_history/<date>.json（4 週保留）
+    """
+    status = {
+        "status": "ok",
+        "min_interval_sec": 1,
+        "daily_quota": 100,
+        "rows_count": 0,
+        "stocks_count": 0,
+    }
+    if not tdcc_opendata.is_available():
+        status["status"] = "skipped"
+        status["reason"] = "TDCC opendata unavailable"
+        return status
+    try:
+        # 1. 下載 + 解析
+        client = tdcc_opendata.create_tdcc_opendata_client()
+        csv_text = tdcc_opendata.fetch_holder_distribution(client=client)
+        rows = tdcc_opendata.parse_holder_distribution_csv(csv_text)
+        # 2. 依 code 彙總
+        by_code = tdcc_opendata.parse_holder_csv_to_pct_per_stock(csv_text)
+        aggregated = list(by_code.values())
+        # 3. 存 data/latest/
+        tdcc_opendata.save_latest(out_dir, aggregated)
+        # 4. 累積存 data/local/tdcc_history/<date>.json
+        if aggregated:
+            first_date = aggregated[0].get("date")
+            tdcc_opendata.save_history(aggregated, repo, iso_date=first_date)
+        # 5. 計算多週趨勢
+        history = tdcc_opendata.load_history(repo, weeks=4)
+        if history:
+            codes = [r["code"] for r in aggregated]
+            for code in codes:
+                trend = tdcc_opendata.compute_multi_week_trend(history, code)
+                # 將 trend 合併進 aggregated
+                for r in aggregated:
+                    if r["code"] == code:
+                        r["pct_1000up_trend"] = trend["pct_1000up_trend"]
+                        r["pct_1000up_w1"] = trend["pct_1000up_w1"]
+                        r["pct_1000up_w2"] = trend["pct_1000up_w2"]
+                        r["pct_1000up_w3"] = trend["pct_1000up_w3"]
+                        break
+        status["rows_count"] = len(rows)
+        status["stocks_count"] = len(aggregated)
+        return status
+    except Exception as e:
+        import traceback as _tb
+        status["status"] = "failed"
+        status["error"] = str(e)
+        status["trace"] = _tb.format_exc()
+        return status
+
+
 async def _main_async(repo: Path | None, source: str, out_dir_name: str) -> int:
     repo = repo or Path(__file__).resolve().parents[1]
     out_dir = repo / out_dir_name
@@ -416,8 +483,8 @@ async def _main_async(repo: Path | None, source: str, out_dir_name: str) -> int:
 
     # Playwright 源（async, 免登入但需 Playwright 過 Cloudflare）
     if source in ("all", "private", "tdcc"):
-        print("[6/8] TDCC (集保) ...")
-        sources_status["tdcc"] = await run_tdcc_async(out_dir)
+        print("[6/8] TDCC 政府資料開放平台 (CSV, 免登入免費) ...")
+        sources_status["tdcc"] = await run_tdcc_opendata_async(repo, out_dir)
         print(f"    {sources_status['tdcc']}")
 
     if source in ("all", "private", "pyramid"):

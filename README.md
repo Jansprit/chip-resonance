@@ -337,7 +337,8 @@ chip-resonance/
 │   │   ├── finmind.py          FinMind REST（可選 token）
 │   │   ├── mops.py             公開資訊觀測站（董監事、質押；Playwright 過 anti-bot）|
 │   │   ├── wantgoo.py          玩股網（融資券/當沖比/法人買賣超，**免登入**）
-│   │   ├── tdcc.py             集保中心（Playwright，**免登入**）
+│   │   ├── tdcc.py             集保中心（Playwright，**備用**）
+│   │   ├── tdcc_opendata.py    集保 政府資料開放平台 CSV（**免登入、免費、主力**）
 │   │   ├── pyramid.py          神秘金字塔（Playwright，**免登入**）
 │   │   ├── goodinfo.py         Goodinfo（Playwright + 可選代理）
 │   │   └── us_markets.py       美股 hook（FINNHUB/AV/FRED）

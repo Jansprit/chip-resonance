@@ -128,16 +128,38 @@ async function fetchJSON(url) {
 }
 
 async function loadRealData() {
-  // 並行抓 meta + demo_subset，timeout 10s
+  // 並行抓 meta + demo_subset + tdcc_chip，timeout 15s
   const controller = new AbortController();
-  const timeout = setTimeout(() => controller.abort(), 10000);
+  const timeout = setTimeout(() => controller.abort(), 15000);
   try {
-    const [meta, demo] = await Promise.all([
+    const [meta, demo, tdcc] = await Promise.all([
       fetchJSON('data/latest/meta.json'),
       fetchJSON('data/latest/demo_subset.json'),
+      fetchJSON('data/latest/tdcc_chip.json').catch(() => null),
     ]);
     DATA_META = meta;
     DATA_LOADED = true;
+    // 如果 tdcc_chip 有資料，合併進 demo_subset
+    if (tdcc && Array.isArray(tdcc)) {
+      const tdcc_by_code = {};
+      for (const r of tdcc) tdcc_by_code[r.code] = r;
+      for (const s of demo) {
+        const t = tdcc_by_code[s.code];
+        if (t) {
+          s.pct_1000up_now = t.pct_1000up_now ?? s.pct_1000up_now;
+          s.pct_400up_now = t.pct_400up_now ?? s.pct_400up_now;
+          s.pct_600up_now = t.pct_600up_now;
+          s.pct_800up_now = t.pct_800up_now;
+          s.pct_1000up_trend = t.pct_1000up_trend ?? s.pct_1000up_trend;
+          s.pct_1000up_w1 = t.pct_1000up_w1;
+          s.pct_1000up_w2 = t.pct_1000up_w2;
+          s.pct_1000up_w3 = t.pct_1000up_w3;
+          s.people_1000up_now = t.people_1000up_now;
+          s.people_400up_now = t.people_400up_now;
+          s.date_chip = t.date;
+        }
+      }
+    }
     return demo;
   } catch (err) {
     DATA_LOAD_ERROR = err.message || String(err);
