@@ -16,7 +16,7 @@ import sys
 import tempfile
 from pathlib import Path
 
-sys.path.insert(0, str(Path(__file__).resolve().parents[1]))
+sys.path.insert(0, str(Path(__file__).resolve().parents[2]))
 
 from backend.scrapers.tdcc_opendata import (
     _roc_date_to_iso,
