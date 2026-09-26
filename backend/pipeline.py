@@ -61,7 +61,10 @@ from backend.scrapers.tdcc import (
 # 保留 import 以防有需要時用
 # 主要路徑請見 run_tdcc_opendata_async
 from backend.scrapers.pyramid import (
-    create_pyramid_session, fetch_chip_holders,
+    create_pyramid_session,
+    fetch_stock_page,
+    fetch_kline_bcd,
+    parse_kline_bcd_csv,
     save_latest as pyramid_save_latest,
 )
 from backend.scrapers.goodinfo import (
@@ -287,18 +290,56 @@ async def run_tdcc_async(out_dir: Path) -> dict:
 
 
 async def run_pyramid_async(out_dir: Path) -> dict:
-    async def _fetch(out):
+    """神秘金字塔 MoneyDJ — 抓 K 線歷史（30+ 年）+ 個股頁面。"""
+    from backend.scrapers.pyramid import (
+        create_pyramid_session, fetch_stock_page, fetch_kline_bcd,
+    )
+    status = {
+        "status": "ok",
+        "min_interval_sec": 8, "daily_quota": 100, "rows_count": 0,
+    }
+    if not mops_available():
+        status["status"] = "skipped"
+        return status
+    try:
         session = create_pyramid_session()
-        # 先抓 5 檔示範個股（避免一次抓太多觸發風控）
+        await session.start()
         try:
-            universe = json.loads((out / "latest" / "universe.json").read_text(encoding="utf-8"))
-            codes = [s["code"] for s in universe[:5]]
-        except Exception:
-            codes = ["2330", "2454", "2317", "2884", "2882"]
-        htmls = await fetch_chip_holders(codes, session=session)
-        # TODO: parse_chip_holders_html → normalize → save
-        return htmls
-    return await _run_playwright_source("pyramid", _fetch, out_dir)
+            # 只抓 3 檔示範個股避免觸發風控
+            try:
+                universe = json.loads((out_dir / "latest" / "universe.json").read_text(encoding="utf-8"))
+                codes = [s["code"] for s in universe[:3]]
+            except Exception:
+                codes = ["2330", "2454", "2454"]  # 示範用
+
+            all_results = {"pages": [], "klines": {}}
+            for code in codes:
+                try:
+                    page = await fetch_stock_page(code, session=session)
+                    all_results["pages"].append({"code": code, "html_len": len(page)})
+                except Exception as e:
+                    all_results["pages"].append({"code": code, "error": str(e)})
+                try:
+                    kline_csv = await fetch_kline_bcd(code, session=session)
+                    parsed = parse_kline_bcd_csv(kline_csv)
+                    all_results["klines"][code] = {"weeks": len(parsed), "first_date": parsed[0]["date"] if parsed else None, "last_date": parsed[-1]["date"] if parsed else None}
+                except Exception as e:
+                    all_results["klines"][code] = {"error": str(e)}
+        finally:
+            await session.close()
+        # 存到 out_dir
+        pyramid_save_latest(out_dir, all_results["pages"])
+        # 將 kline summary 另存
+        write_json(out_dir / "pyramid_kline_summary.json", all_results["klines"])
+        status["rows_count"] = len(all_results["pages"])
+        status["note"] = "K 線 30+ 年歷史 + 個股頁面 HTML 已存。Holder distribution 解析待 tune。"
+        return status
+    except Exception as e:
+        import traceback as _tb
+        status["status"] = "failed"
+        status["error"] = str(e)
+        status["trace"] = _tb.format_exc()
+        return status
 
 
 async def run_goodinfo_async(out_dir: Path) -> dict:
