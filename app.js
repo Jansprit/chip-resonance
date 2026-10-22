@@ -19,6 +19,24 @@ function getAllComputed() {
   return computeScores(window.STOCK_UNIVERSE || []);
 }
 
+// 共用：資料品質摘要（demo = 含示意值因子 / strict = 全部真實因子）
+// 對應 docs/2026-10-21-專案體檢報告.md BUG-14 / BUG-15
+function dataQualitySummary(results) {
+  const survivors = (results && results.survivors) || [];
+  const mode = (results && results.mode) || 'demo';
+  const realFactorSet = new Set();
+  survivors.forEach(s => {
+    ((s.data_quality && s.data_quality.real_factors) || []).forEach(f => realFactorSet.add(f));
+  });
+  return {
+    mode: mode,
+    real_factors: Array.from(realFactorSet).sort(),
+    real_factor_count: realFactorSet.size,
+    total_factors: 8,   // 8 個正分因子（F1/F2/F3/F4/F5/F6/F8/F10）
+    is_demo: mode !== 'strict',
+  };
+}
+
 // 共用：依 Tier 分組
 function groupByTier(results) {
   const groups = { A: [], B: [], C: [], D: [], FILTERED: [] };
@@ -123,7 +141,7 @@ function renderStockTable(targetSelector, opts = {}) {
           <td><div class="stock-name">${s.name}</div></td>
           <td><span class="industry-badge">${industryName(s.industry)}</span></td>
           <td>${s.price.toFixed(1)}</td>
-          <td colspan="8">
+          <td colspan="9">
             <span style="color:var(--red); font-weight:600;">已被硬性過濾排除</span>
             <div class="reason-list">${s._reasons.map(r => `<span class="filter-tag">${r}</span>`).join('')}</div>
           </td>
@@ -131,6 +149,12 @@ function renderStockTable(targetSelector, opts = {}) {
       `;
     }
     const scoreClass = s.score >= 75 ? 'score-high' : s.score >= 60 ? 'score-mid' : 'score-low';
+    // 資料品質徽章：顯示該股有幾個因子是「真實資料」（BUG-14 修正）
+    const dq = s.data_quality || { real_factors: [], total_factors: 8, mode: 'demo' };
+    const realCount = dq.real_factors.length;
+    const dqBadge = dq.mode === 'strict'
+      ? `<span style="color:var(--green); font-size:11px;" title="真實因子：${dq.real_factors.join(', ')}">${realCount}/${dq.total_factors} 真</span>`
+      : `<span style="color:var(--yellow); font-size:11px;" title="示範模式：部分因子仍為示意值">示範</span>`;
     return `
       <tr>
         <td><span class="stock-code">${s.code}</span></td>
@@ -148,6 +172,7 @@ function renderStockTable(targetSelector, opts = {}) {
         <td style="font-family:monospace;">${s.F8}</td>
         <td style="font-family:monospace;">${s.F10}</td>
         <td style="font-family:monospace; color:${s.F9_penalty > 0 ? 'var(--red)' : 'var(--text-muted)'};">−${s.F9_penalty}</td>
+        <td>${dqBadge}</td>
       </tr>
     `;
   }).join('');
@@ -172,6 +197,7 @@ function renderStockTable(targetSelector, opts = {}) {
             <th title="F8 回調籌碼守穩">F8</th>
             <th title="F10 利空籌碼修復">F10</th>
             <th title="F9 價籌背離懲罰">F9</th>
+            <th title="該股有多少因子的輸入是『真實資料』">資料品質</th>
           </tr>
         </thead>
         <tbody>${rows}</tbody>
@@ -717,14 +743,24 @@ function showMetaBanner() {
   const twseCount = (sources.twse && sources.twse.stocks_count) || 0;
   const tpexCount = (sources.tpex && sources.tpex.stocks_count) || 0;
 
+  // 資料品質（BUG-14 / BUG-15 修正）：誠實告知使用者這個分數有多可信
+  const quality = dataQualitySummary(computeScores(window.STOCK_UNIVERSE || []));
+  const qualityLine = quality.is_demo
+    ? `<span style="color:var(--yellow);">⚠ 示範模式</span>：` +
+      `<span style="font-size:11px;">${quality.real_factor_count}/${quality.total_factors} 個因子有真實資料，其餘為示意值</span>`
+    : `<span style="color:var(--green);">✓ 實戰模式</span>：` +
+      `<span style="font-size:11px;">真實因子 ${quality.real_factors.join(', ')}</span>`;
+
   banner.innerHTML = `
     <strong>📊 多源即時資料</strong>
     <span style="font-size:11px; color:var(--gold);">
       TWSE ${srcStatus('twse')} ${twseCount} · TPEx ${srcStatus('tpex')} ${tpexCount}
       · FinMind ${srcStatus('finmind')} · MOPS ${srcStatus('mops')}
-      · TDCC ${srcStatus('tdcc')} · Pyramid ${srcStatus('pyramid')}
+      · TDCC ${srcStatus('tdcc_opendata')} · Pyramid ${srcStatus('pyramid')}
       · Goodinfo ${srcStatus('goodinfo')}
     </span>
+    <br>
+    ${qualityLine}
     <br>
     <span style="font-size:11px;">
       最後更新：${upd}

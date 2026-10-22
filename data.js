@@ -139,24 +139,57 @@ async function loadRealData() {
     ]);
     DATA_META = meta;
     DATA_LOADED = true;
-    // 如果 tdcc_chip 有資料，合併進 demo_subset
+    // 合併 TDCC 資料（免費、免登入，權威來源）
+    //
+    // 關鍵設計（BUG-01 / BUG-14）：
+    // TDCC 開放資料只提供「當週」快照，沒有 w1/w2/w3。
+    // 若只覆寫 pct_1000up_now 而保留示意的 w3，會得到
+    //   84.7(真實) - 66.8(示意) = 17.9 → F1 恆為 100
+    // 這比 NaN 更危險，因為它「看起來合理」。
+    // 因此採用**原子式覆寫**：多週歷史不完整時，整組保持一致（不混用）。
     if (tdcc && Array.isArray(tdcc)) {
       const tdcc_by_code = {};
       for (const r of tdcc) tdcc_by_code[r.code] = r;
       for (const s of demo) {
         const t = tdcc_by_code[s.code];
-        if (t) {
-          s.pct_1000up_now = t.pct_1000up_now ?? s.pct_1000up_now;
-          s.pct_400up_now = t.pct_400up_now ?? s.pct_400up_now;
+        if (!t) continue;
+        s._provenance = s._provenance || {};
+
+        const hasFullHistory =
+          t.pct_1000up_w1 != null && t.pct_1000up_w2 != null && t.pct_1000up_w3 != null;
+
+        if (hasFullHistory) {
+          // 完整多週歷史 → 整組覆寫並標記為真實
+          s.pct_1000up_now = t.pct_1000up_now;
+          s.pct_400up_now = t.pct_400up_now;
           s.pct_600up_now = t.pct_600up_now;
           s.pct_800up_now = t.pct_800up_now;
-          s.pct_1000up_trend = t.pct_1000up_trend ?? s.pct_1000up_trend;
           s.pct_1000up_w1 = t.pct_1000up_w1;
           s.pct_1000up_w2 = t.pct_1000up_w2;
           s.pct_1000up_w3 = t.pct_1000up_w3;
+          s.pct_1000up_trend = t.pct_1000up_trend;
           s.people_1000up_now = t.people_1000up_now;
           s.people_400up_now = t.people_400up_now;
           s.date_chip = t.date;
+          ['pct_1000up_now', 'pct_400up_now', 'pct_600up_now', 'pct_800up_now',
+           'pct_1000up_w1', 'pct_1000up_w2', 'pct_1000up_w3', 'pct_1000up_trend',
+           'people_1000up_now', 'people_400up_now', 'date_chip'].forEach(k => {
+            s._provenance[k] = 'real';
+          });
+        } else {
+          // 只有當週：只覆寫「當週」欄位，**不動** w1/w2/w3（避免真假混用）
+          s.pct_1000up_now = t.pct_1000up_now;
+          s.pct_400up_now = t.pct_400up_now;
+          s.pct_600up_now = t.pct_600up_now;
+          s.pct_800up_now = t.pct_800up_now;
+          s.people_1000up_now = t.people_1000up_now;
+          s.people_400up_now = t.people_400up_now;
+          s.date_chip = t.date;
+          ['pct_1000up_now', 'pct_400up_now', 'pct_600up_now', 'pct_800up_now',
+           'people_1000up_now', 'people_400up_now', 'date_chip'].forEach(k => {
+            s._provenance[k] = 'real';
+          });
+          // w1/w2/w3 維持 illustrative → F1 因輸入混合而被判定不可用
         }
       }
     }
@@ -170,8 +203,62 @@ async function loadRealData() {
 }
 
 // =============================================================
-// 評分引擎（純函式，接受任何 universe）
+// 資料來源感知（Provenance-aware）評分引擎
 // =============================================================
+// 對應 docs/2026-10-21-專案體檢報告.md BUG-01 / BUG-14 / BUG-15
+//
+// 設計原則：
+// 1. 每個因子需要一組輸入欄位（見 FACTOR_INPUTS）。
+// 2. 只有當**所有**輸入欄位的來源都是 real 時，該因子才可計算。
+//    混合「真實 now」與「示意 history」會產生假 delta（例如 84.7 - 66.8 = 17.9
+//    → F1 恆為 100），比 NaN 更危險，因為它看起來合理。
+// 3. 不可用的因子，其權重按比例重新分配給該股可用的因子。
+// 4. 全程 NaN 防護：任何非有限值一律退化为中性 50，不讓污染擴散。
+// 5. 每檔股票輸出 data_quality，供 UI 誠實呈現「這個分數有多可信」。
+
+const FACTOR_INPUTS = {
+  F1:  ['pct_1000up_now', 'pct_1000up_w3'],
+  F2:  ['industry_ret_60d_med'],
+  F3:  ['director_holding_change_3m', 'ret_60d', 'industry_ret_60d_med'],
+  F4:  ['pct_400up_52w_high'],
+  F5:  ['div_years', 'yield_now', 'yield_5y_avg'],
+  F6:  ['holder_cnt_change_8w', 'avg_lot_change_8w'],
+  F8:  ['drawdown_120d', 'pct_1000up_now'],
+  F9:  ['is_60d_high', 'pct_1000up_now', 'pct_1000up_w1', 'pct_1000up_w3', 'margin_pct', 'dt_ratio'],
+  F10: ['crash_60d', 'pct_1000up_trend'],
+};
+
+// 正分因子的權重（沿用檔案頂部 FACTOR_WEIGHTS，排除 F9 扣分項）
+const POSITIVE_FACTORS = ['F1', 'F2', 'F3', 'F4', 'F5', 'F6', 'F8', 'F10'];
+
+// F9 為扣分項，權重 −20（封頂）
+const F9_MAX_PENALTY = 20;
+
+// 正分因子的權重總和（用於權重重新分配後的尺度換算）
+const TOTAL_POSITIVE_WEIGHT = POSITIVE_FACTORS.reduce(
+  (sum, fid) => sum + Math.abs(FACTOR_WEIGHTS[fid] || 0), 0); // 95
+// 原始公式 50 + rawSum/4 → 尺度係數
+const SCORE_SCALE = TOTAL_POSITIVE_WEIGHT / 4; // 23.75
+
+// 判斷某欄位對某股是否為真實資料
+function isRealField(stock, field) {
+  const prov = stock._provenance;
+  if (!prov) return false;           // 沒有 provenance → 一律視為非真實（保守）
+  return prov[field] === 'real';
+}
+
+// 判斷某因子對某股是否可用（所有輸入皆真實）
+function factorAvailable(stock, factor) {
+  const inputs = FACTOR_INPUTS[factor];
+  if (!inputs || inputs.length === 0) return false;
+  return inputs.every(f => isRealField(stock, f));
+}
+
+// 安全數值：非有限值一律退化为 fallback
+function safeNum(v, fallback = 0) {
+  const n = Number(v);
+  return Number.isFinite(n) ? n : fallback;
+}
 
 function computeScores(universe) {
   // 1. 硬性過濾
@@ -189,24 +276,29 @@ function computeScores(universe) {
     }
   });
 
-  // 2. 因子計算
+  // 2. 因子計算（值一律安全化；可用性另行判定）
   const factorValues = survivors.map(s => {
-    const pct_1000up_delta_3w = s.pct_1000up_now - s.pct_1000up_w3;
-    const pct_1000up_delta_2w = s.pct_1000up_w1 - s.pct_1000up_w3;
-    const ret_underperform = s.ret_60d < s.industry_ret_60d_med;
-    const dir_change_3m_ok = s.director_holding_change_3m > 0.5;
+    const pct_1000up_now = safeNum(s.pct_1000up_now, 50);
+    const pct_1000up_w1 = safeNum(s.pct_1000up_w1, pct_1000up_now);
+    const pct_1000up_w3 = safeNum(s.pct_1000up_w3, pct_1000up_now);
+    const pct_1000up_delta_3w = pct_1000up_now - pct_1000up_w3;
+    const pct_1000up_delta_2w = pct_1000up_w1 - pct_1000up_w3;
+    const ret_60d = safeNum(s.ret_60d, 0);
+    const industry_ret_60d_med = safeNum(s.industry_ret_60d_med, 0);
+    const ret_underperform = ret_60d < industry_ret_60d_med;
+    const dir_change_3m_ok = safeNum(s.director_holding_change_3m, 0) > 0.5;
 
     const F1_raw = pct_1000up_delta_3w >= 1.0 ? 100 : pct_1000up_delta_3w * 50 + 50;
-    const F2_raw = Math.max(0, Math.min(100, (s.industry_ret_60d_med - 0) * 50 + 50));
+    const F2_raw = Math.max(0, Math.min(100, industry_ret_60d_med * 50 + 50));
     const F3_raw = (dir_change_3m_ok && ret_underperform) ? 100 :
                    (dir_change_3m_ok ? 70 : (ret_underperform ? 50 : 30));
     const F4_raw = s.pct_400up_52w_high ? 100 : 50;
-    const F5_raw = (s.div_years >= 5 && s.yield_now > s.yield_5y_avg) ? 100 :
-                   (s.div_years >= 3 ? 70 : (s.div_years >= 1 ? 50 : 20));
-    const F6_raw = (s.holder_cnt_change_8w < -5 && s.avg_lot_change_8w > 5) ? 100 :
-                   (s.holder_cnt_change_8w < -3 && s.avg_lot_change_8w > 3) ? 75 :
-                   (s.holder_cnt_change_8w < 0 && s.avg_lot_change_8w > 0) ? 55 : 30;
-    const dd = s.drawdown_120d;
+    const F5_raw = (safeNum(s.div_years, 0) >= 5 && safeNum(s.yield_now, 0) > safeNum(s.yield_5y_avg, 0)) ? 100 :
+                   (safeNum(s.div_years, 0) >= 3 ? 70 : (safeNum(s.div_years, 0) >= 1 ? 50 : 20));
+    const F6_raw = (safeNum(s.holder_cnt_change_8w, 0) < -5 && safeNum(s.avg_lot_change_8w, 0) > 5) ? 100 :
+                   (safeNum(s.holder_cnt_change_8w, 0) < -3 && safeNum(s.avg_lot_change_8w, 0) > 3) ? 75 :
+                   (safeNum(s.holder_cnt_change_8w, 0) < 0 && safeNum(s.avg_lot_change_8w, 0) > 0) ? 55 : 30;
+    const dd = safeNum(s.drawdown_120d, 0);
     const in_drawdown = dd <= -10 && dd >= -25;
     const holder_support = pct_1000up_delta_3w >= 0;
     const F8_raw = (in_drawdown && holder_support) ? 100 :
@@ -215,57 +307,86 @@ function computeScores(universe) {
                     (s.crash_60d && s.pct_1000up_trend === '=') ? 70 :
                     s.crash_60d ? 50 : 0;
 
+    // F9 扣分（同樣安全化）
     let f9_penalty = 0;
     let f9_triggers = [];
     if (s.is_60d_high && pct_1000up_delta_2w < 0) {
       f9_penalty += 15;
       f9_triggers.push('價創 60 日新高但大戶連 2 週減少');
     }
-    if (s.dt_ratio > 40) {
+    if (safeNum(s.dt_ratio, 0) > 40) {
       f9_penalty += 10;
-      f9_triggers.push(`當沖比 ${s.dt_ratio.toFixed(1)}% > 40%`);
+      f9_triggers.push(`當沖比 ${safeNum(s.dt_ratio, 0).toFixed(1)}% > 40%`);
     }
-    if (s.margin_pct > 70) {
+    if (safeNum(s.margin_pct, 0) > 70) {
       f9_penalty += 10;
-      f9_triggers.push(`融資使用率 ${s.margin_pct.toFixed(1)}% > 70%`);
+      f9_triggers.push(`融資使用率 ${safeNum(s.margin_pct, 0).toFixed(1)}% > 70%`);
     }
-    if (s.margin_pct > 85) {
+    if (safeNum(s.margin_pct, 0) > 85) {
       f9_penalty += 5;
     }
-    f9_penalty = Math.min(20, f9_penalty);
+    f9_penalty = Math.min(F9_MAX_PENALTY, f9_penalty);
+
+    // 可用因子（輸入皆為真實資料）
+    const available = {};
+    Object.keys(FACTOR_WEIGHTS).forEach(f => { available[f] = factorAvailable(s, f); });
+    const f9_available = factorAvailable(s, 'F9');
 
     return {
       s, F1_raw, F2_raw, F3_raw, F4_raw, F5_raw, F6_raw, F8_raw, F10_raw,
       F9_penalty: f9_penalty, f9_triggers: f9_triggers,
-      pct_1000up_delta_3w, ret_underperform, dir_change_3m_ok
+      pct_1000up_delta_3w, ret_underperform, dir_change_3m_ok,
+      available, f9_available,
     };
   });
 
-  // 3. 因子橫截面標準化
+  // 3. 因子橫截面標準化（僅使用該因子可用的股票計算 mean/std）
   const factorKeys = ['F1_raw', 'F2_raw', 'F3_raw', 'F4_raw', 'F5_raw', 'F6_raw', 'F8_raw', 'F10_raw'];
+  const factorIdMap = { F1_raw: 'F1', F2_raw: 'F2', F3_raw: 'F3', F4_raw: 'F4', F5_raw: 'F5', F6_raw: 'F6', F8_raw: 'F8', F10_raw: 'F10' };
   factorKeys.forEach(key => {
-    const vals = factorValues.map(f => f[key]);
+    const fid = factorIdMap[key];
+    const usable = factorValues.filter(f => f.available[fid]);
+    const pool = usable.length > 0 ? usable : factorValues; // 全不可用時退回全體（避免空集合）
+    const vals = pool.map(f => safeNum(f[key], 50));
     const mean = vals.reduce((a, b) => a + b, 0) / vals.length;
-    const std = Math.sqrt(vals.reduce((a, b) => a + (b - mean) ** 2, 0) / vals.length) || 1;
-    factorValues.forEach(f => { f[key + '_z'] = (f[key] - mean) / std; });
+    const variance = vals.reduce((a, b) => a + Math.pow(b - mean, 2), 0) / vals.length;
+    const std = Math.sqrt(variance) || 1;
+    factorValues.forEach(f => { f[key + '_z'] = safeNum((safeNum(f[key], 50) - mean) / std, 0); });
   });
 
-  // 4. 加權合成
+  // 3.5 模式判定
+  //
+  // demo 模式：全場沒有任何因子具備完整真實輸入 → 目前的資料仍是示意值。
+  //            此時以全部因子計分（維持示範教學效果），但明確標記 mode='demo'。
+  // strict 模式：至少部分因子有真實輸入 → 嚴格模式，只用真實因子，
+  //            其餘因子權重重新分配，避免真假混用產生假 delta。
+  const anyRealFactor = factorValues.some(f => POSITIVE_FACTORS.some(fid => f.available[fid]));
+  const SCORING_MODE = anyRealFactor ? 'strict' : 'demo';
+
+  // 4. 加權合成（strict 模式下不可用因子的權重按比例重新分配）
   const out = factorValues.map(f => {
-    const weights = { F1: 20, F2: 10, F3: 15, F4: 10, F5: 10, F6: 15, F8: 10, F10: 5 };
-    const rawSum = (
-      f.F1_raw_z * weights.F1 +
-      f.F2_raw_z * weights.F2 +
-      f.F3_raw_z * weights.F3 +
-      f.F4_raw_z * weights.F4 +
-      f.F5_raw_z * weights.F5 +
-      f.F6_raw_z * weights.F6 +
-      f.F8_raw_z * weights.F8 +
-      f.F10_raw_z * weights.F10
-    );
-    let score = 50 + rawSum / 4;
-    score -= f.F9_penalty;
-    score = Math.max(0, Math.min(100, score));
+    let rawSum = 0;
+    let usedWeight = 0;
+    POSITIVE_FACTORS.forEach(fid => {
+      if (SCORING_MODE === 'strict' && !f.available[fid]) return;
+      const z = safeNum(f[fid + '_raw_z'], 0);
+      rawSum += z * Math.abs(FACTOR_WEIGHTS[fid] || 0);
+      usedWeight += Math.abs(FACTOR_WEIGHTS[fid] || 0);
+    });
+
+    let score;
+    if (usedWeight > 0) {
+      score = 50 + (rawSum / usedWeight) * SCORE_SCALE;
+    } else {
+      score = 50; // 完全無可用因子 → 中性分
+    }
+    if (f.f9_available || SCORING_MODE === 'demo') {
+      score -= f.F9_penalty;
+    } else {
+      f.F9_penalty = 0;
+      f.f9_triggers = [];
+    }
+    score = Math.max(0, Math.min(100, safeNum(score, 50)));
 
     let tier;
     if (score >= 75) tier = 'A';
@@ -277,27 +398,41 @@ function computeScores(universe) {
       tier = tier === 'A' ? 'B' : 'C';
     }
 
+    // 資料品質
+    const realFactors = POSITIVE_FACTORS.filter(fid => f.available[fid]);
+    const illustrativeFactors = POSITIVE_FACTORS.filter(fid => !f.available[fid]);
+    const dataQuality = {
+      mode: SCORING_MODE,
+      real_factors: realFactors,
+      illustrative_factors: illustrativeFactors,
+      f9_real: f.f9_available,
+      total_factors: POSITIVE_FACTORS.length,
+      reliable: SCORING_MODE === 'strict' && realFactors.length > 0,
+    };
+
     return {
       ...f.s,
       _filtered: false,
       _reasons: [],
       score: Math.round(score * 10) / 10,
       tier: tier,
-      F1: Math.round(f.F1_raw),
-      F2: Math.round(f.F2_raw),
-      F3: Math.round(f.F3_raw),
-      F4: Math.round(f.F4_raw),
-      F5: Math.round(f.F5_raw),
-      F6: Math.round(f.F6_raw),
-      F8: Math.round(f.F8_raw),
-      F10: Math.round(f.F10_raw),
+      F1: Math.round(safeNum(f.F1_raw, 50)),
+      F2: Math.round(safeNum(f.F2_raw, 50)),
+      F3: Math.round(safeNum(f.F3_raw, 50)),
+      F4: Math.round(safeNum(f.F4_raw, 50)),
+      F5: Math.round(safeNum(f.F5_raw, 50)),
+      F6: Math.round(safeNum(f.F6_raw, 50)),
+      F8: Math.round(safeNum(f.F8_raw, 50)),
+      F10: Math.round(safeNum(f.F10_raw, 50)),
       F9_penalty: f.F9_penalty,
       f9_triggers: f.f9_triggers,
-      rawSum: rawSum
+      rawSum: rawSum,
+      usedWeight: usedWeight,
+      data_quality: dataQuality,
     };
   });
 
-  return { survivors: out, rejected: rejected };
+  return { survivors: out, rejected: rejected, mode: SCORING_MODE };
 }
 
 // =============================================================

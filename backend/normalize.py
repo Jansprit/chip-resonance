@@ -42,6 +42,131 @@ import statistics
 from typing import Any
 
 
+# =============================================================
+# 資料來源政策（Provenance Policy）
+# =============================================================
+# 這是本專案最重要的設計約束：**每個欄位都必須知道自己是真實資料還是示意值**。
+#
+# 背景：v0.2.0 之前，demo_subset.json 的 21 個 chip 欄位是硬編碼示意值，
+# 卻與真實價格並列展示且無任何標記，導致「評分結果」看似精確實則無意義
+# （詳見 docs/2026-10-21-專案體檢報告.md BUG-14 / BUG-15）。
+#
+# 規則：
+#   FIELD_REAL_CAPABLE — 可由 pipeline 以真實資料覆寫的欄位
+#   FACTOR_INPUTS      — 每個因子計算所需的輸入欄位
+#                       只有當**所有**輸入欄位都是 real 時，該因子才可計算；
+#                       否則該因子對該股標記 unavailable，權重重新分配。
+# =============================================================
+
+FIELD_REAL_CAPABLE = {
+    # 行情
+    "price", "avg_volume", "date", "exchange",
+    # 大戶持股（TDCC / 神秘金字塔）
+    "pct_1000up_now", "pct_400up_now", "pct_600up_now", "pct_800up_now",
+    "pct_1000up_w1", "pct_1000up_w2", "pct_1000up_w3", "pct_1000up_trend",
+    "people_1000up_now", "people_400up_now", "date_chip",
+    # 融資券 / 當沖（玩股網）
+    "margin_pct", "dt_ratio",
+    # 價格衍生（FinMind）
+    "ret_60d", "drawdown_120d", "is_60d_high", "industry_ret_60d_med",
+    # 董監（MOPS / 神秘金字塔）
+    "director_holding_change_3m", "director_pledge",
+    # 基本面（FinMind / MOPS）
+    "eps_q4", "div_years", "yield_now", "yield_5y_avg",
+    # 集保
+    "holder_cnt_change_8w", "avg_lot_change_8w",
+    "pct_400up_52w_high", "crash_60d",
+}
+
+# 每個因子所需的輸入欄位
+FACTOR_INPUTS = {
+    "F1":  ["pct_1000up_now", "pct_1000up_w3"],
+    "F2":  ["industry_ret_60d_med"],
+    "F3":  ["director_holding_change_3m", "ret_60d", "industry_ret_60d_med"],
+    "F4":  ["pct_400up_52w_high"],
+    "F5":  ["div_years", "yield_now", "yield_5y_avg"],
+    "F6":  ["holder_cnt_change_8w", "avg_lot_change_8w"],
+    "F8":  ["drawdown_120d", "pct_1000up_now"],
+    "F9":  ["is_60d_high", "pct_1000up_now", "pct_1000up_w1", "pct_1000up_w3",
+             "margin_pct", "dt_ratio"],
+    "F10": ["crash_60d", "pct_1000up_trend"],
+}
+
+# 展示用：欄位顯示名稱（前端 tooltip 用）
+FIELD_LABELS = {
+    "pct_1000up_now": "1000 張以上大戶持股比例",
+    "pct_1000up_w1": "1000 張以上大戶持股比例（1 週前）",
+    "pct_1000up_w2": "1000 張以上大戶持股比例（2 週前）",
+    "pct_1000up_w3": "1000 張以上大戶持股比例（3 週前）",
+    "pct_400up_now": "400 張以上大戶持股比例",
+    "pct_600up_now": "600 張以上大戶持股比例",
+    "pct_800up_now": "800 張以上大戶持股比例",
+    "price": "收盤價",
+    "avg_volume": "成交量（張）",
+    "margin_pct": "融資使用率",
+    "dt_ratio": "當沖比",
+    "ret_60d": "60 日報酬率",
+    "drawdown_120d": "自 120 日高點回撤",
+    "is_60d_high": "是否創 60 日新高",
+    "industry_ret_60d_med": "同產業 60 日報酬中位數",
+    "director_holding_change_3m": "董監近 3 月持股變化",
+    "director_pledge": "董監質押率",
+    "eps_q4": "近四季累計 EPS",
+    "div_years": "連續配息年數",
+    "yield_now": "目前殖利率",
+    "yield_5y_avg": "5 年平均殖利率",
+    "holder_cnt_change_8w": "股東人數 8 週變化",
+    "avg_lot_change_8w": "平均持有張數 8 週變化",
+    "pct_400up_52w_high": "400 張以上是否創 52 週新高",
+    "crash_60d": "60 日內是否單週跌逾 15%",
+    "pct_1000up_trend": "大戶持股趨勢",
+    "list_year": "上市年數",
+    "warning": "是否警示股",
+    "code": "股票代號",
+    "name": "公司簡稱",
+    "industry": "產業別",
+    "date": "資料日期",
+    "exchange": "市場別",
+}
+
+
+def attach_provenance(
+    stock: dict[str, Any],
+    real_fields: set[str],
+) -> dict[str, Any]:
+    """
+    為個股附加 _provenance map，標示每個欄位的來源。
+
+    來源值：
+      real        — 來自真實資料源
+      illustrative— 示範用的示意值（無真實來源）
+    """
+    prov = {}
+    for key in stock:
+        if key.startswith("_"):
+            continue
+        prov[key] = "real" if key in real_fields else "illustrative"
+    stock["_provenance"] = prov
+    return stock
+
+
+def factor_is_available(
+    stock: dict[str, Any],
+    factor: str,
+) -> bool:
+    """
+    判斷某因子對某股是否可計算。
+
+    條件：該因子的**所有**輸入欄位都必須是真實資料。
+    混合真實與示意值會產生假 delta，因此一律視為不可用。
+    """
+    inputs = FACTOR_INPUTS.get(factor)
+    if not inputs:
+        return False
+    prov = stock.get("_provenance") or {}
+    return all(prov.get(f) == "real" for f in inputs)
+
+
 # ============ 預設值（避免前端拿到 NaN）============
 
 DEFAULTS = {
