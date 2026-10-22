@@ -19,10 +19,16 @@ import asyncio
 import sys
 from pathlib import Path
 
-# 確保 backend/ 在 import path
-sys.path.insert(0, str(Path(__file__).resolve().parents[1]))
+# 統一 import 策略：把 repo root 加入 sys.path，
+# 使 `python backend/scripts/auth_setup.py` 與
+# `python -m backend.scripts.auth_setup` 兩種呼叫都可用。
+# （見 docs/2026-10-21-專案體檢報告.md BUG-12：
+#   舊版用 parents[1] + `from scrapers.base import`，與其他腳本不一致）
+REPO_ROOT = Path(__file__).resolve().parents[2]
+if str(REPO_ROOT) not in sys.path:
+    sys.path.insert(0, str(REPO_ROOT))
 
-from scrapers.base import (
+from backend.scrapers.base import (
     BrowserSession,
     CredentialManager,
     SessionStore,

@@ -149,6 +149,12 @@ def merge_tdcc(stock: dict, chip: dict | None, real: set[str]) -> None:
             for g in group:
                 staged.pop(g, None)
 
+    # 趨勢本身也必須有多週資料才有意義：
+    # 歷史不足時 compute_multi_week_trend 會回 "="，
+    # 但那是「沒有資料」而不是「持平」，不能標成 real。
+    if any(g not in staged for g in ATOMIC_GROUPS[0]):
+        staged.pop("pct_1000up_trend", None)
+
     for field, value in staged.items():
         stock[field] = value
         real.add(field)

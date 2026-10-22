@@ -123,9 +123,10 @@ const results = {};
   results.t4_f1_value = r.F1;
 }
 
-/* ---- Test 5: 權重重新分配（strict 模式）——
-   A 的 F1 輸入全真實，B 的 F1 混合真實+示意 → 進入 strict 模式，
-   B 的 F1 被排除、權重重新分配 */
+/* ---- Test 5: 部分真實 → partial 模式，沒有真實因子的股票不參與排名 ----
+   A 的 F1 輸入全真實，B 的 F1 混合真實+示意（因此 B 完全沒有真實因子）。
+   2026-10 語意修正：舊版只要「有一檔」有真實因子就宣稱 strict，
+   會讓 43 檔裡只有 1 檔有真實資料時整個版面仍顯示「實戰模式」。 */
 {
   const a = mkStock({ code: 'A', pct_1000up_now: 90, pct_1000up_w3: 70 });
   a._provenance.pct_1000up_now = 'real';
@@ -135,15 +136,32 @@ const results = {};
   b._provenance.pct_1000up_w3 = 'illustrative';
   const out = computeScores([a, b]);
   const ra = out.survivors.find(x => x.code === 'A');
-  const rb = out.survivors.find(x => x.code === 'B');
+  const rb = (out.noData || []).find(x => x.code === 'B');
   results.t5_mode = out.mode;
-  results.t5_a_score = ra.score;
-  results.t5_b_score = rb.score;
-  results.t5_a_weight = ra.usedWeight;
-  results.t5_b_weight = rb.usedWeight;
-  results.t5_a_f1_real = ra.data_quality.real_factors.includes('F1');
-  results.t5_b_f1_real = rb.data_quality.real_factors.includes('F1');
+  results.t5_a_score = ra ? ra.score : null;
+  results.t5_b_score = rb ? rb.score : null;
+  results.t5_a_weight = ra ? ra.usedWeight : null;
+  results.t5_b_weight = rb ? rb.usedWeight : null;
+  results.t5_a_f1_real = ra ? ra.data_quality.real_factors.includes('F1') : null;
+  results.t5_b_f1_real = rb ? rb.data_quality.real_factors.includes('F1') : null;
+  results.t5_b_excluded = !out.survivors.some(x => x.code === 'B');
+  results.t5_coverage = out.coverage;
   results.t5_all_finite = out.survivors.every(x => Number.isFinite(x.score));
+}
+
+/* ---- Test 5c: 每檔都有真實因子 → strict 模式 ---- */
+{
+  const a = mkStock({ code: 'SA', pct_1000up_now: 90, pct_1000up_w3: 70 });
+  a._provenance.pct_1000up_now = 'real';
+  a._provenance.pct_1000up_w3 = 'real';
+  const b = mkStock({ code: 'SB', pct_1000up_now: 20, pct_1000up_w3: 60 });
+  b._provenance.pct_1000up_now = 'real';
+  b._provenance.pct_1000up_w3 = 'real';
+  const out = computeScores([a, b]);
+  results.t5c_mode = out.mode;
+  results.t5c_count = out.survivors.length;
+  results.t5c_no_data = (out.noData || []).length;
+  results.t5c_all_finite = out.survivors.every(x => Number.isFinite(x.score));
 }
 
 /* ---- Test 5b: demo 模式（無任何真實因子）→ 全部因子照算，但標記 mode=demo ---- */
@@ -239,18 +257,28 @@ def main() -> int:
     check("t4_f1_available", r.get("t4_f1_available") is True,
           f"F1={r.get('t4_f1_value')}")
 
-    # T5 — 權重重新分配（strict 模式）
-    check("t5_mode_strict", r.get("t5_mode") == "strict",
+    # T5 — 部分真實 → partial 模式，沒有真實因子的股票被排除
+    check("t5_mode_partial", r.get("t5_mode") == "partial",
           f"mode={r.get('t5_mode')}")
     check("t5_a_f1_real", r.get("t5_a_f1_real") is True)
     check("t5_b_f1_not_real", r.get("t5_b_f1_real") is False,
           f"b_f1_real={r.get('t5_b_f1_real')}")
-    check("t5_a_weight_gt_b", (r.get("t5_a_weight") or 0) > (r.get("t5_b_weight") or 0),
-          f"a={r.get('t5_a_weight')} b={r.get('t5_b_weight')}")
+    check("t5_b_excluded_from_ranking", r.get("t5_b_excluded") is True)
     check("t5_all_finite", r.get("t5_all_finite") is True)
     check("t5_scores_in_range",
           0 <= (r.get("t5_a_score") or -1) <= 100 and 0 <= (r.get("t5_b_score") or -1) <= 100,
           f"a={r.get('t5_a_score')} b={r.get('t5_b_score')}")
+    cov = r.get("t5_coverage") or {}
+    check("t5_coverage_counted",
+          cov.get("without_real_factors") == 1 and cov.get("with_real_factors") == 1,
+          f"coverage={cov}")
+
+    # T5c — 每檔都有真實因子 → strict
+    check("t5c_mode_strict", r.get("t5c_mode") == "strict",
+          f"mode={r.get('t5c_mode')}")
+    check("t5c_count", r.get("t5c_count") == 2, f"count={r.get('t5c_count')}")
+    check("t5c_no_data_zero", r.get("t5c_no_data") == 0)
+    check("t5c_all_finite", r.get("t5c_all_finite") is True)
 
     # T5b — demo 模式
     check("t5b_mode_demo", r.get("t5b_mode") == "demo",
@@ -269,7 +297,7 @@ def main() -> int:
         check("t7_has_provenance", r.get("t7_has_provenance") is True)
         check("t7_all_finite", r.get("t7_all_finite") is True,
               f"tier_a={r.get('t7_tier_a')} rejected={r.get('t7_rejected')}")
-        check("t7_mode_known", r.get("t7_mode") in ("demo", "strict"),
+        check("t7_mode_known", r.get("t7_mode") in ("demo", "strict", "partial"),
               f"mode={r.get('t7_mode')}")
         # 至少要能產生分層（demo 模式下應有 A 級示範股）
         if r.get("t7_mode") == "demo":

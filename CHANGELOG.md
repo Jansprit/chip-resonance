@@ -2,6 +2,79 @@
 
 All notable changes to the 籌碼共振選股系統 (Chip-Resonance Selection System).
 
+## [v0.3.0] — 2026-10-22 — 體檢報告修復 + 資料來源真正接通
+
+本版依 [docs/2026-10-21-專案體檢報告.md](docs/2026-10-21-專案體檢報告.md)
+逐項修復 15 個缺陷，並修掉報告本身沒看到的**森林層根因**。
+
+### 🔴 根因修復（森林層）
+
+- **資料來源從未進入評分引擎**
+  v0.2.0 的 `build_universe.py` 只合併 TWSE / TPEx 價格，
+  其餘 6 個來源抓回的資料全部停在各自的 JSON 裡 → 8/9 因子永遠是示意值。
+  現在每個來源都有欄位映射與 provenance：
+  集保開放平台 → `pct_1000up_*`、MOPS → `director_*`、MoneyDJ 週 K 線 → 價格衍生因子、
+  產業 60 日報酬中位數（只用真實 `ret_60d` 計算）。
+- **缺少資料來源契約**
+  每個欄位現在都標記 `_provenance`（`real` / `illustrative`），
+  只有輸入**全部**為真實的因子才能計算；
+  「真實 now 混著示意 history」會被判定為不可用（否則會算出假 delta）。
+- **缺少來源層驗證**
+  CI 原本只驗 JSON 形狀、從不驗內容；schema 驗證器改為依檔名挑模型、
+  驗證每一筆、未知型別直接 exit 1。
+
+### ✅ 已修復的缺陷
+
+| 編號 | 缺陷 | 修法 |
+|---|---|---|
+| BUG-01 | TDCC 合併把 `pct_1000up_w1/w2/w3` 覆寫成 `undefined` → 39/39 個股分數 NaN | 原子合併 + provenance 感知 + `safeNum()` + 權重重新分配 |
+| BUG-02 | MOPS 端點 `mops.twse.com.tw/.../t146sb05` → 302 → 65 bytes 錯誤頁 | 改用 `mopsov.twse.com.tw/mops/web/ajax_stapap1`，純 HTTP、不需 cookie，實作解析器 |
+| BUG-03 | 玩股網 4 個 URL 全部 404 | 修正頁面路徑；實作兩層表頭解析器；API 被封鎖時誠實回報而非填 0 |
+| BUG-04 | `tdcc_opendata` 從未在 CI 執行 | 納入 `public` 集合 |
+| BUG-05 | `requirements.txt` 缺 playwright | 補上 playwright / beautifulsoup4 / lxml |
+| BUG-06 | 905KB 私有 TDCC 歷史被提交進公開倉庫 | 移出版控 + `.gitignore` 全面加強 |
+| BUG-07 | 6 個 schema 驗證有 5 個帶 `\|\| true` | 移除 `\|\| true`，並強化驗證器本身 |
+| BUG-08 | cron 在 6 分鐘窗口內最多執行 6 次 | 改用日期命名的 lock 檔，每窗口每天只跑一次 |
+| BUG-09 | 缺 `.dockerignore` | 新增，排除 `.git` / 私有資料 / 大檔 |
+| BUG-10 | `meta.json` 只列有跑的來源 | 固定列出全部 8 來源，未跑的標 `not_run` |
+| BUG-11 | `parse_holder_csv_to_pct_per_stock` 靠變數遮蔽才剛好是 O(n) | 改成明確的 O(n) 契約 + 說明 |
+| BUG-12 | 兩套 sys.path 策略混用 | 全部統一為 repo root + `backend.*` |
+| BUG-13 | `PIPELINE_LIMIT` / `PYRAMID_*` / `GOODINFO_*` 死設定 | `PIPELINE_LIMIT` 真的接上；死憑證移除，改回報真實的 session 狀態 |
+| BUG-14 | 欄位沒有來源標記 | `_provenance` + 前端資料品質徽章 + demo/strict 橫幅 |
+| BUG-15 | 沒有可靠的真實/示意區分 | strict / demo 兩種評分模式 |
+| BUG-16 | README 宣稱「9 大因子完整實作」 | 因子表改成列出實際所需輸入、來源與實測狀態 |
+| BUG-17 | `build_universe.py` 讀自己的輸出 | 改讀 `backend/seed/demo_universe.json`（唯一母體）|
+
+### 🔧 其他修正
+
+- `_select_codes()` 路徑錯誤（讀 `data/latest/latest/universe.json`）→ 每次都靜默走 fallback 的 5 檔硬編碼
+- MoneyDJ BCD 是**欄位-major** 格式，舊 parser 當逐行 CSV 解析 → 只會得到 `values` 陣列
+  （已用 TWSE 官方收盤價交叉驗證：2026/10/21 2330 O2425 H2435 L2400 C2420 V27,095 完全吻合）
+- TDCC 趨勢在存檔**之後**才計算 → 最新快照永遠缺 `w1/w2/w3`
+- MoneyDJ BCD 端點已改為要求 SSO 登入（實測等 150 秒仍 302 → `/sso/signin`）
+- 設定解析統一：環境變數優先、其次 `backend/.env`
+  （舊版 `RL_JITTER` / `PIPELINE_LIMIT` 只讀 `os.environ`，`.env` 裡的值被靜默忽略）
+- `run_pyramid_async` 誤用 `mops_available()`（複製貼上錯誤）
+
+### ➕ 新增
+
+- `backend/seed/demo_universe.json` — 43 檔示範個股的唯一母體
+- `backend/tests/test_config_resolution.py`（18）、`test_mops.py`（14）、
+  `test_merge_layer.py`（13）、`test_wantgoo.py`（13）
+- 測試總數 28 → **83**（11 個測試檔）
+- MoneyDJ 週 K 線來源（純 HTTP，取代 Playwright）
+- 集保公開精簡歷史 `data/latest/tdcc_history_public.json`（讓 CI 也能累積多週趨勢）
+
+### ⚠️ 已知限制（誠實揭露）
+
+- 玩股網的個股 JSON API 目前對未登入訪客回 400（連站方自己的頁面請求也一樣）
+- MoneyDJ 週 K 線需要先 `python -m backend.scripts.auth_setup --site pyramid` 登入
+- FinMind 匿名存取已被站方封鎖，需 `FINMIND_TOKEN`
+- 因此 **F2 / F3 / F8 / F9 / F10 尚不能在 strict 模式計算**，
+  前端會顯示 demo 模式橫幅提醒
+
+---
+
 ## [v0.2.0] — 2026-09-22 — Real Data Pipeline
 
 ### Added

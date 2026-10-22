@@ -122,7 +122,9 @@ jobs:
         run: |
           git config user.name "github-actions[bot]"
           git config user.email "github-actions[bot]@users.noreply.github.com"
-          git add data/latest/ "data/$(date -d 'today' +%Y-%m-%d)/" 2>/dev/null || git add data/latest/
+          # 只提交 data/latest/：每日全市場快照留在本機（見 .gitignore），
+          # 否則公開倉庫會以每日數 MB 的速度膨脹。
+          git add data/latest/
           if git diff --cached --quiet; then
             echo "No changes to commit."
           else

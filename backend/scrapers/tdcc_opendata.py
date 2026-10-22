@@ -227,6 +227,10 @@ def aggregate_to_pct_400_1000(
     """
     把同一檔個股的多級距資料彙總為四個關鍵大戶分級比例。
 
+    **呼叫契約**：rows 必須是「只包含該 code 的列」。
+    傳入全部列會讓呼叫端變成 O(n²)（見 parse_holder_csv_to_pct_per_stock 的說明）。
+    為了安全起見，本函式仍然會過濾 code，行為不會因此改變。
+
     TDCC 開放資料的 1-15 級對應（股數）：
     - level 1-11: 散戶 (1-400,000 股)
     - level 12:    400,001-600,000 股 (400-600 張)
@@ -279,13 +283,26 @@ def parse_holder_csv_to_pct_per_stock(
 ) -> dict[str, dict[str, Any]]:
     """
     解析 CSV 為 { stock_code: aggregated_pct_dict } 結構。
+
+    **複雜度保證：O(n)**
+    舊版寫成：
+        {code: aggregate_to_pct_400_1000(rows, code) for code, rows in by_code.items()}
+    這裡的 `rows` **遮蔽**了外層的全域 rows，於是函式實際收到的是
+    「只屬於該 code 的那幾列」，複雜度剛好是 O(n)。
+    但這是巧合 —— 只要有人把變數改名的同時改成傳外層 rows，
+    就會變成 O(n²)（約 4,000 檔 × 250,000 列 ≈ 10 億次比較、60+ 秒）。
+    這裡改用不會遮蔽的變數名，把 O(n) 變成明確的契約。
     """
-    rows = parse_holder_distribution_csv(csv_text)
+    all_rows = parse_holder_distribution_csv(csv_text)
     by_code: dict[str, list[dict]] = {}
-    for r in rows:
+    for r in all_rows:
         by_code.setdefault(r["code"], []).append(r)
 
-    return {code: aggregate_to_pct_400_1000(rows, code) for code, rows in by_code.items()}
+    # 注意：傳的是「該 code 自己的列」，不是全部列。
+    return {
+        code: aggregate_to_pct_400_1000(code_rows, code)
+        for code, code_rows in by_code.items()
+    }
 
 
 # ============ 多週歷史支援（cache 在 data/local/tdcc_history/）============

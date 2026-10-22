@@ -665,12 +665,18 @@ class BrowserSession:
         wait_selector: Optional[str] = None,
         min_delay: float = 3.0,
         max_delay: float = 8.0,
+        wait_rows: bool = False,
+        rows_timeout_ms: int = 12000,
     ) -> str:
         """
         抓取 URL 並回傳 HTML。會自動：
         1. 隨機延遲（min_delay ~ max_delay 秒）
         2. 模擬人類行為（goto → 隨機 scroll → wait selector）
         3. 隨機滑鼠軌跡
+
+        wait_rows=True 時，額外等待表格出現「有內容」的資料列
+        （有些站點表頭是 server-side 渲染、資料列則是 JS 補上的）。
+        等不到不會拋例外 —— 空表格交由 parser 回報「無資料」。
         """
         if not self._context:
             raise RuntimeError("BrowserSession not started; call start() first")
@@ -691,6 +697,18 @@ class BrowserSession:
             # 等 selector
             if wait_selector:
                 await page.wait_for_selector(wait_selector, timeout=DEFAULT_TIMEOUT * 1000)
+
+            # 等資料列（表頭有、資料列由 JS 補上的站點需要）
+            if wait_rows:
+                try:
+                    await page.wait_for_function(
+                        """() => Array.from(document.querySelectorAll('tbody tr'))
+                                 .some(tr => (tr.innerText || '').trim().length > 0)""",
+                        timeout=rows_timeout_ms,
+                    )
+                except Exception:
+                    # 空表格不是致命錯誤，讓 parser 如實回報「無資料」
+                    pass
 
             # 隨機滑鼠移動
             await page.mouse.move(

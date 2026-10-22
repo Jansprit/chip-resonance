@@ -19,21 +19,32 @@ function getAllComputed() {
   return computeScores(window.STOCK_UNIVERSE || []);
 }
 
-// 共用：資料品質摘要（demo = 含示意值因子 / strict = 全部真實因子）
+// 共用：資料品質摘要
+// strict = 每檔都有真實因子；partial = 只有部分股票有；
+// demo = 全場都是示意值
 // 對應 docs/2026-10-21-專案體檢報告.md BUG-14 / BUG-15
 function dataQualitySummary(results) {
   const survivors = (results && results.survivors) || [];
+  const noData = (results && results.noData) || [];
   const mode = (results && results.mode) || 'demo';
   const realFactorSet = new Set();
   survivors.forEach(s => {
     ((s.data_quality && s.data_quality.real_factors) || []).forEach(f => realFactorSet.add(f));
   });
+  const coverage = (results && results.coverage) || {
+    total: survivors.length + noData.length,
+    with_real_factors: survivors.length,
+    without_real_factors: noData.length,
+  };
   return {
     mode: mode,
     real_factors: Array.from(realFactorSet).sort(),
     real_factor_count: realFactorSet.size,
     total_factors: 8,   // 8 個正分因子（F1/F2/F3/F4/F5/F6/F8/F10）
-    is_demo: mode !== 'strict',
+    is_demo: mode === 'demo',
+    is_partial: mode === 'partial',
+    coverage: coverage,
+    no_data_count: noData.length,
   };
 }
 
@@ -128,8 +139,20 @@ function renderStockTable(targetSelector, opts = {}) {
   const target = document.querySelector(targetSelector);
   if (!target) return;
 
+  // 資料覆蓋率提示（BUG-15）：partial 模式下，部分個股因沒有任何真實
+  // 因子而未列入排名 —— 使用者必須知道它們去哪了。
+  const noDataCount = (results.noData || []).length;
+  const coverageNote = noDataCount > 0
+    ? `<div style="padding:8px 12px; margin-bottom:8px; border-left:3px solid var(--orange);
+              background:rgba(234,179,8,.08); font-size:12px; color:var(--text-muted);">
+         ⚠ 有 <strong>${noDataCount}</strong> 檔個股的所有因子都沒有真實資料，
+         已排除於排名之外（避免用示意值算出看似合理的分數）。
+       </div>`
+    : '';
+
   if (all.length === 0) {
-    target.innerHTML = `<div style="text-align:center; padding:48px; color:var(--text-muted);">沒有符合條件的個股</div>`;
+    target.innerHTML = coverageNote +
+      `<div style="text-align:center; padding:48px; color:var(--text-muted);">沒有符合條件的個股</div>`;
     return;
   }
 
@@ -152,9 +175,9 @@ function renderStockTable(targetSelector, opts = {}) {
     // 資料品質徽章：顯示該股有幾個因子是「真實資料」（BUG-14 修正）
     const dq = s.data_quality || { real_factors: [], total_factors: 8, mode: 'demo' };
     const realCount = dq.real_factors.length;
-    const dqBadge = dq.mode === 'strict'
-      ? `<span style="color:var(--green); font-size:11px;" title="真實因子：${dq.real_factors.join(', ')}">${realCount}/${dq.total_factors} 真</span>`
-      : `<span style="color:var(--yellow); font-size:11px;" title="示範模式：部分因子仍為示意值">示範</span>`;
+    const dqBadge = dq.mode === 'demo'
+      ? `<span style="color:var(--yellow); font-size:11px;" title="示範模式：所有因子皆為示意值">示範</span>`
+      : `<span style="color:var(--green); font-size:11px;" title="真實因子：${dq.real_factors.join(', ')}｜其餘為示意值">${realCount}/${dq.total_factors} 真</span>`;
     return `
       <tr>
         <td><span class="stock-code">${s.code}</span></td>
@@ -178,6 +201,7 @@ function renderStockTable(targetSelector, opts = {}) {
   }).join('');
 
   target.innerHTML = `
+    ${coverageNote}
     <div style="overflow-x:auto;">
       <table class="stock-table">
         <thead>
@@ -745,11 +769,22 @@ function showMetaBanner() {
 
   // 資料品質（BUG-14 / BUG-15 修正）：誠實告知使用者這個分數有多可信
   const quality = dataQualitySummary(computeScores(window.STOCK_UNIVERSE || []));
-  const qualityLine = quality.is_demo
-    ? `<span style="color:var(--yellow);">⚠ 示範模式</span>：` +
-      `<span style="font-size:11px;">${quality.real_factor_count}/${quality.total_factors} 個因子有真實資料，其餘為示意值</span>`
-    : `<span style="color:var(--green);">✓ 實戰模式</span>：` +
-      `<span style="font-size:11px;">真實因子 ${quality.real_factors.join(', ')}</span>`;
+  let qualityLine;
+  if (quality.mode === 'strict') {
+    qualityLine = `<span style="color:var(--green);">✓ 實戰模式</span>：` +
+      `<span style="font-size:11px;">每檔股票都有真實因子（${quality.real_factors.join(', ')}）</span>`;
+  } else if (quality.mode === 'partial') {
+    qualityLine = `<span style="color:var(--orange);">◐ 部分真實</span>：` +
+      `<span style="font-size:11px;">` +
+      `${quality.coverage.with_real_factors}/${quality.coverage.total} 檔有真實因子` +
+      (quality.no_data_count > 0
+        ? `，其餘 ${quality.no_data_count} 檔未進入排名`
+        : '') +
+      `</span>`;
+  } else {
+    qualityLine = `<span style="color:var(--yellow);">⚠ 示範模式</span>：` +
+      `<span style="font-size:11px;">${quality.real_factor_count}/${quality.total_factors} 個因子有真實資料，其餘為示意值</span>`;
+  }
 
   banner.innerHTML = `
     <strong>📊 多源即時資料</strong>

@@ -45,6 +45,20 @@ data/local/
 data/local/**
 **/tdcc_history/
 **/.sessions/
+# 每日快照（data/YYYY-MM-DD/）：只留在本機。
+# 公開倉庫只維護 data/latest/ —— 每天提交一份全市場快照
+# （TDCC 1.4MB + 行情 585KB）會讓公開倉庫在一年內膨脹到數百 MB。
+# 歷史資料仍可從 git 對 data/latest/ 的每次提交還原。
+data/20*/
+data/20*/**
+# data/latest/ 裡只有網站真正會讀的三個檔需要進版控：
+#   demo_subset.json（網站資料）、tdcc_chip.json（集保）、
+#   tdcc_history_public.json（CI 累積多週趨勢用）、meta.json（banner）
+# 其餘是 pipeline 的中間產物（全市場行情檔），每天提交會讓
+# 公開倉庫以每日約 1 MB 的速度膨脹，故不進版控。
+data/latest/prices.json
+data/latest/tpex_prices.json
+data/latest/universe.json
 # Note: backend/.env.example is NOT ignored (it should be committed as template)
 
 # Build outputs (in case bundler is added later)

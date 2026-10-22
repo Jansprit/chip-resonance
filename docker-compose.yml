@@ -32,19 +32,30 @@ services:
     command: >
       sh -c "
         echo 'chip-resonance pipeline started at $$(date)' &&
-        # 每小時檢查是否為收盤後（13:30-14:00 台北時間）
-        # 簡化版：每天 13:30 與 14:30 各跑一次
         while true; do
           HOUR=$$(date +%H)
           MIN=$$(date +%M)
+          TODAY=$$(date +%Y%m%d)
+          # BUG-08 重入保護：
+          # 舊版用 MIN >= 30 && MIN <= 35 判斷，配合 sleep 60，
+          # 會在 6 分鐘窗口內重複執行最多 6 次（每天多打 5 次站台）。
+          # 改成「以日期命名的一次性 lock 檔」，每個窗口每天只會跑一次。
           if [ $$HOUR -eq 13 ] && [ $$MIN -ge 30 ] && [ $$MIN -le 35 ]; then
-            echo '[cron] Running public subset at $$(date)'
-            python3 -m backend.scripts.run_local --source public 2>&1 | tee /app/data/cron.log
+            LOCK=/app/data/.cron-$$TODAY-1330.lock
+            if [ ! -f $$LOCK ]; then
+              touch $$LOCK
+              echo '[cron] Running public subset at $$(date)'
+              python3 -m backend.scripts.run_local --source public 2>&1 | tee /app/data/cron.log
+            fi
           fi
           if [ $$HOUR -eq 14 ] && [ $$MIN -ge 30 ] && [ $$MIN -le 35 ] && [ $$(date +%u) -eq 5 ]; then
-            # 週五 14:30 跑完整 pipeline（含 Playwright 源）
-            echo '[cron] Running full pipeline at $$(date)'
-            python3 -m backend.scripts.run_local --source all 2>&1 | tee /app/data/cron.log
+            LOCK=/app/data/.cron-$$TODAY-1430.lock
+            if [ ! -f $$LOCK ]; then
+              touch $$LOCK
+              # 週五 14:30 跑完整 pipeline（含 Playwright 源）
+              echo '[cron] Running full pipeline at $$(date)'
+              python3 -m backend.scripts.run_local --source all 2>&1 | tee /app/data/cron.log
+            fi
           fi
           sleep 60
         done

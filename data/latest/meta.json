@@ -1,16 +1,46 @@
 {
-  "last_update_taipei": "2026-10-22T20:58:09.835317+08:00",
+  "last_update_taipei": "2026-10-22T23:16:44.033216+08:00",
   "snapshot_date": "2026-10-22",
   "previous_snapshot_date": "2026-10-22",
   "data_freshness_hours": 0,
   "sources": {
-    "pyramid": {
+    "twse": {
+      "status": "not_run",
+      "reason": "本次排程未包含此來源"
+    },
+    "tpex": {
+      "status": "not_run",
+      "reason": "本次排程未包含此來源"
+    },
+    "finmind": {
+      "status": "not_run",
+      "reason": "本次排程未包含此來源"
+    },
+    "mops": {
+      "status": "not_run",
+      "reason": "本次排程未包含此來源"
+    },
+    "tdcc": {
       "status": "ok",
-      "min_interval_sec": 8,
+      "min_interval_sec": 1,
       "daily_quota": 100,
-      "rows_count": 43,
-      "stocks_count": 43,
-      "note": "MoneyDJ 週 K 線：43/43 檔成功（1657 根週 bar）"
+      "rows_count": 61320,
+      "stocks_count": 4088,
+      "public_history": true,
+      "published_stocks": 43,
+      "trend_codes": 0
+    },
+    "wantgoo": {
+      "status": "not_run",
+      "reason": "本次排程未包含此來源"
+    },
+    "pyramid": {
+      "status": "not_run",
+      "reason": "本次排程未包含此來源"
+    },
+    "goodinfo": {
+      "status": "not_run",
+      "reason": "本次排程未包含此來源"
     }
   },
   "credentials": {
@@ -32,5 +62,5 @@
     "FRED_API_KEY": false,
     "SEC_USER_AGENT": false
   },
-  "notes": "Real TWSE + TPEx + FinMind + MOPS + (optionally) 集保/神秘金字塔/Goodinfo. Browser-based sources require auth_setup.py first; otherwise gracefully skipped."
+  "notes": "public = TWSE + TPEx + FinMind + MOPS + 集保開放平台（純 HTTP，CI 排程）。private = Wantgoo / MoneyDJ / Goodinfo（需瀏覽器或登入 session，本地跑）。"
 }

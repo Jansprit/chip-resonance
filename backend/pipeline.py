@@ -144,6 +144,11 @@ def _select_codes(out_dir: Path, default: int) -> list[str]:
 
 # ============ 來源狀態更新 ============
 
+# 所有已知來源（meta.json 一定要全部列出，
+# 沒跑到的標成 not_run —— 前端 banner 才不會對 3/8 來源顯示「?」）
+ALL_SOURCES = ("twse", "tpex", "finmind", "mops", "tdcc", "wantgoo", "pyramid", "goodinfo")
+
+
 def update_meta(out_dir: Path, sources_status: dict[str, Any], notes: str = "") -> None:
     """更新 data/latest/meta.json。"""
     now = _taipei_now()
@@ -163,13 +168,28 @@ def update_meta(out_dir: Path, sources_status: dict[str, Any], notes: str = "") 
         except Exception:
             freshness_hours = 168
 
+    # 補上這次沒跑的來源（BUG-10：meta.json 原本只列有跑的來源）
+    complete_sources: dict[str, Any] = {}
+    for name in ALL_SOURCES:
+        if name in sources_status:
+            complete_sources[name] = sources_status[name]
+        else:
+            complete_sources[name] = {
+                "status": "not_run",
+                "reason": "本次排程未包含此來源",
+            }
+    # 若有不在 ALL_SOURCES 裡的來源（例如未來新增），也要保留
+    for name, st in sources_status.items():
+        if name not in complete_sources:
+            complete_sources[name] = st
+
     cred = CredentialManager()
     meta = {
         "last_update_taipei": taipei_now_iso(),
         "snapshot_date": today,
         "previous_snapshot_date": last_snapshot,
         "data_freshness_hours": freshness_hours,
-        "sources": sources_status,
+        "sources": complete_sources,
         "credentials": cred.summary(),
         "us_markets_credentials": us_creds_status(cred),
         "notes": notes,
@@ -520,29 +540,51 @@ async def run_wantgoo_async(out_dir: Path) -> dict:
         status["reason"] = "wantgoo unavailable"
         return status
     try:
-        # 從 universe.json 抓前 5 檔（MVP，避免 Playwright 來源耗時過長）
+        # 瀏覽器類來源很慢（每頁 5-10 秒延遲），先抓少量示範股
         codes = _select_codes(out_dir, 5)
 
-        results = {"balance_sheet": [], "institutional": [], "main": []}
+        results: dict[str, list[dict[str, Any]]] = {
+            "balance_sheet": [], "institutional": [], "main": [],
+        }
         session = wantgoo_scraper.create_wantgoo_session()
         await session.start()
         try:
             for code in codes:
-                try:
-                    results["balance_sheet"].append({"code": code, "html": await wantgoo_scraper.fetch_balance_sheet(code, session=session)})
-                    results["institutional"].append({"code": code, "html": await wantgoo_scraper.fetch_institutional(code, session=session)})
-                    results["main"].append({"code": code, "html": await wantgoo_scraper.fetch_main_page(code, session=session)})
-                except Exception as e:
-                    results["balance_sheet"].append({"code": code, "error": str(e)})
+                for category, fetcher, parser in (
+                    ("balance_sheet", wantgoo_scraper.fetch_balance_sheet,
+                     wantgoo_scraper.parse_balance_sheet_html),
+                    ("institutional", wantgoo_scraper.fetch_institutional,
+                     wantgoo_scraper.parse_institutional_html),
+                    ("main", wantgoo_scraper.fetch_main_page,
+                     wantgoo_scraper.parse_main_page_html),
+                ):
+                    try:
+                        html = await fetcher(code, session=session)
+                        results[category].append(parser(html, code))
+                    except Exception as e:
+                        results[category].append({"code": code, "error": str(e)})
         finally:
             await session.close()
 
-        # 存 raw HTML 供 parser 之後 tune selector
         for category, items in results.items():
             wantgoo_scraper.save_latest(out_dir, category, items)
 
-        status["rows_count"] = sum(len(v) for v in results.values())
-        status["note"] = "Raw HTML stored; parsing needs selector tuning"
+        total = sum(len(v) for v in results.values())
+        errors = [
+            item for items in results.values() for item in items
+            if item.get("error")
+        ]
+        status["rows_count"] = total - len(errors)
+        status["errors"] = len(errors)
+        if errors and status["rows_count"] == 0:
+            status["status"] = "failed"
+            status["error"] = errors[0]["error"]
+        elif errors:
+            status["status"] = "partial"
+        status["note"] = (
+            f"玩股網：{total - len(errors)}/{total} 筆成功"
+            + (f"；{errors[0]['error']}" if errors else "")
+        )
         return status
     except Exception as e:
         import traceback as _tb
@@ -616,13 +658,21 @@ async def run_tdcc_opendata_async(repo: Path, out_dir: Path) -> dict:
                 r["pct_1000up_w2"] = trend.get("pct_1000up_w2")
                 r["pct_1000up_w3"] = trend.get("pct_1000up_w3")
         # 5. 存 data/latest/（含趨勢欄位）
-        tdcc_opendata.save_latest(out_dir, aggregated)
-        # 6. 存公開精簡歷史（讓 CI 也能累積多週趨勢）
+        #    只發布**示範清單內**的個股：全市場版本有 4,000+ 檔、1.4MB，
+        #    每天提交會讓公開倉庫快速膨脹（與 BUG-06 同一類問題）。
+        #    全市場版本改存到私有層 data/local/tdcc_chip_full.json。
         demo_codes = _select_codes(out_dir, 50)
+        code_set = set(demo_codes)
+        trimmed = [r for r in aggregated if r["code"] in code_set]
+        tdcc_opendata.save_latest(out_dir, trimmed)
+        full_path = repo / "data" / "local" / "tdcc_chip_full.json"
+        write_json(full_path, aggregated)
+        # 6. 存公開精簡歷史（讓 CI 也能累積多週趨勢）
         public_path = tdcc_opendata.save_public_history(aggregated, out_dir, demo_codes)
         status["public_history"] = bool(public_path)
         status["rows_count"] = len(rows)
         status["stocks_count"] = len(aggregated)
+        status["published_stocks"] = len(trimmed)
         status["trend_codes"] = len([r for r in aggregated if r.get("pct_1000up_w3") is not None])
         return status
     except Exception as e:

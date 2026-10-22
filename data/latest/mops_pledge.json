@@ -14,5 +14,149 @@
     "released_total": 0.0,
     "cumulative_max": 0.0,
     "no_data": true
+  },
+  {
+    "code": "2303",
+    "events": 3,
+    "pledged_total": 3200000.0,
+    "released_total": 2000000.0,
+    "cumulative_max": 2000000.0,
+    "no_data": false
+  },
+  {
+    "code": "3711",
+    "events": 2,
+    "pledged_total": 2765000.0,
+    "released_total": 0.0,
+    "cumulative_max": 2700000.0,
+    "no_data": false
+  },
+  {
+    "code": "5347",
+    "events": 0,
+    "pledged_total": 0.0,
+    "released_total": 0.0,
+    "cumulative_max": 0.0,
+    "no_data": true
+  },
+  {
+    "code": "2884",
+    "events": 0,
+    "pledged_total": 0.0,
+    "released_total": 0.0,
+    "cumulative_max": 0.0,
+    "no_data": true
+  },
+  {
+    "code": "2882",
+    "events": 1,
+    "pledged_total": 0.0,
+    "released_total": 2300000.0,
+    "cumulative_max": 2000000.0,
+    "no_data": false
+  },
+  {
+    "code": "2891",
+    "events": 5,
+    "pledged_total": 1000000.0,
+    "released_total": 29900000.0,
+    "cumulative_max": 29000000.0,
+    "no_data": false
+  },
+  {
+    "code": "2886",
+    "events": 0,
+    "pledged_total": 0.0,
+    "released_total": 0.0,
+    "cumulative_max": 0.0,
+    "no_data": true
+  },
+  {
+    "code": "3037",
+    "events": 0,
+    "pledged_total": 0.0,
+    "released_total": 0.0,
+    "cumulative_max": 0.0,
+    "no_data": true
+  },
+  {
+    "code": "8046",
+    "events": 0,
+    "pledged_total": 0.0,
+    "released_total": 0.0,
+    "cumulative_max": 0.0,
+    "no_data": true
+  },
+  {
+    "code": "3189",
+    "events": 0,
+    "pledged_total": 0.0,
+    "released_total": 0.0,
+    "cumulative_max": 0.0,
+    "no_data": true
+  },
+  {
+    "code": "4743",
+    "events": 0,
+    "pledged_total": 0.0,
+    "released_total": 0.0,
+    "cumulative_max": 0.0,
+    "no_data": true
+  },
+  {
+    "code": "4128",
+    "events": 0,
+    "pledged_total": 0.0,
+    "released_total": 0.0,
+    "cumulative_max": 0.0,
+    "no_data": true
+  },
+  {
+    "code": "4133",
+    "events": 0,
+    "pledged_total": 0.0,
+    "released_total": 0.0,
+    "cumulative_max": 0.0,
+    "no_data": true
+  },
+  {
+    "code": "6446",
+    "events": 8,
+    "pledged_total": 2019299.0,
+    "released_total": 22000.0,
+    "cumulative_max": 3279299.0,
+    "no_data": false
+  },
+  {
+    "code": "2603",
+    "events": 0,
+    "pledged_total": 0.0,
+    "released_total": 0.0,
+    "cumulative_max": 0.0,
+    "no_data": true
+  },
+  {
+    "code": "2609",
+    "events": 0,
+    "pledged_total": 0.0,
+    "released_total": 0.0,
+    "cumulative_max": 0.0,
+    "no_data": true
+  },
+  {
+    "code": "2615",
+    "events": 0,
+    "pledged_total": 0.0,
+    "released_total": 0.0,
+    "cumulative_max": 0.0,
+    "no_data": true
+  },
+  {
+    "code": "2618",
+    "events": 0,
+    "pledged_total": 0.0,
+    "released_total": 0.0,
+    "cumulative_max": 0.0,
+    "no_data": true
   }
 ]

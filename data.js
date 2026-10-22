@@ -356,19 +356,32 @@ function computeScores(universe) {
 
   // 3.5 模式判定
   //
-  // demo 模式：全場沒有任何因子具備完整真實輸入 → 目前的資料仍是示意值。
-  //            此時以全部因子計分（維持示範教學效果），但明確標記 mode='demo'。
-  // strict 模式：至少部分因子有真實輸入 → 嚴格模式，只用真實因子，
-  //            其餘因子權重重新分配，避免真假混用產生假 delta。
-  const anyRealFactor = factorValues.some(f => POSITIVE_FACTORS.some(fid => f.available[fid]));
-  const SCORING_MODE = anyRealFactor ? 'strict' : 'demo';
+  // 三種模式（依「有多少股票具備真實因子」決定）：
+  //   strict  — 每檔股票都至少有一個全真實輸入的因子 → 分數可互相比較
+  //   partial — 部分股票有、部分沒有 → 沒有真實因子的股票不參與排名
+  //   demo    — 全場都沒有任何因子具備完整真實輸入 → 以全部因子計分
+  //             （維持示範教學效果），但明確標記 mode='demo'
+  //
+  // 舊版只有 strict / demo 兩種，且 strict 的門檻是「至少一檔有」——
+  // 導致 43 檔裡只有 1 檔有真實資料時，整個版面仍宣稱「實戰模式」，
+  // 使用者會誤以為所有分數都是真的。
+  const realFactorCountPerStock = factorValues.map(
+    f => POSITIVE_FACTORS.filter(fid => f.available[fid]).length
+  );
+  const anyRealFactor = realFactorCountPerStock.some(c => c > 0);
+  const allRealFactor = realFactorCountPerStock.length > 0
+    && realFactorCountPerStock.every(c => c > 0);
+  const SCORING_MODE = allRealFactor ? 'strict' : (anyRealFactor ? 'partial' : 'demo');
+  // strict / partial 模式下，沒有任何真實因子的股票不該混在排名裡
+  const EXCLUDE_NO_DATA = SCORING_MODE !== 'demo';
 
-  // 4. 加權合成（strict 模式下不可用因子的權重按比例重新分配）
+  // 4. 加權合成（strict / partial 模式下不可用因子的權重按比例重新分配）
+  const noData = [];
   const out = factorValues.map(f => {
     let rawSum = 0;
     let usedWeight = 0;
     POSITIVE_FACTORS.forEach(fid => {
-      if (SCORING_MODE === 'strict' && !f.available[fid]) return;
+      if (SCORING_MODE !== 'demo' && !f.available[fid]) return;
       const z = safeNum(f[fid + '_raw_z'], 0);
       rawSum += z * Math.abs(FACTOR_WEIGHTS[fid] || 0);
       usedWeight += Math.abs(FACTOR_WEIGHTS[fid] || 0);
@@ -407,10 +420,12 @@ function computeScores(universe) {
       illustrative_factors: illustrativeFactors,
       f9_real: f.f9_available,
       total_factors: POSITIVE_FACTORS.length,
-      reliable: SCORING_MODE === 'strict' && realFactors.length > 0,
+      // 「這個分數可不可信」＝這檔股票有沒有真實因子（與全域模式無關）
+      reliable: realFactors.length > 0,
+      score_basis: realFactors.length > 0 ? 'real' : 'illustrative',
     };
 
-    return {
+    const row = {
       ...f.s,
       _filtered: false,
       _reasons: [],
@@ -430,9 +445,26 @@ function computeScores(universe) {
       usedWeight: usedWeight,
       data_quality: dataQuality,
     };
-  });
 
-  return { survivors: out, rejected: rejected, mode: SCORING_MODE };
+    // strict / partial 模式下，沒有任何真實因子的股票不參與排名
+    if (EXCLUDE_NO_DATA && realFactors.length === 0) {
+      noData.push({ ...row, tier: 'D', _no_data: true });
+      return null;
+    }
+    return row;
+  }).filter(Boolean);
+
+  return {
+    survivors: out,
+    rejected: rejected,
+    noData: noData,
+    mode: SCORING_MODE,
+    coverage: {
+      total: factorValues.length,
+      with_real_factors: factorValues.length - noData.length,
+      without_real_factors: noData.length,
+    },
+  };
 }
 
 // =============================================================
