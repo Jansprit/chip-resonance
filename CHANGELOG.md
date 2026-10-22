@@ -70,8 +70,28 @@ All notable changes to the 籌碼共振選股系統 (Chip-Resonance Selection Sy
 - 玩股網的個股 JSON API 目前對未登入訪客回 400（連站方自己的頁面請求也一樣）
 - MoneyDJ 週 K 線需要先 `python -m backend.scripts.auth_setup --site pyramid` 登入
 - FinMind 匿名存取已被站方封鎖，需 `FINMIND_TOKEN`
-- 因此 **F2 / F3 / F8 / F9 / F10 尚不能在 strict 模式計算**，
-  前端會顯示 demo 模式橫幅提醒
+- 因此 **F2 / F3 / F8 / F9 / F10 尚不能在 strict 模式全數計算**，
+  前端會顯示「◐ 部分真實」橫幅，並把沒有真實因子的個股排除於排名之外
+
+### 📊 實測結果
+
+public pipeline：TWSE 1088 檔、TPEx 892 檔、MOPS 20/20 檔（近 12 月質設異動 19 筆）、
+集保 4088 檔 → 合併層：43 檔全數有真實價格與真實集保分級、20 檔有真實董監資料
+
+### ✅ 最終驗證
+
+| 項目 | 結果 |
+|---|---|
+| 單元測試 | 11 個測試檔、83 項全部通過 |
+| `CI` workflow | 🟢 綠燈（45 秒）|
+| `Scrape & Update Public Data` workflow | 🟢 綠燈（16m38s，實際推上 `data/latest/meta.json`）|
+| `pages-build-deployment` | 🟢 綠燈 |
+| 線上網站實機驗證 | 43 檔 / 5 檔硬性過濾；banner 顯示 `TWSE ✓ 1088 · TPEx ✓ 892 · MOPS ✓ · 集保 ✓ 4088`、資料品質橫幅 `◐ 部分真實：1/38 檔有真實因子，其餘 37 檔未進入排名` |
+
+> 實機驗證過程中 CI 連續兩次失敗，都是 CI 自己抓出來的問題
+> （驗證了已移出版控的 `prices.json`、單元測試沒裝 `beautifulsoup4`、
+> 測試檔名寫死而漏掉 4 個新測試）—— 這正是 BUG-07「驗證從來沒擋下過東西」
+> 想解決的問題。
 
 ---
 
