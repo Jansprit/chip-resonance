@@ -37,7 +37,10 @@ jobs:
   scrape:
     name: Scrape public data sources
     runs-on: ubuntu-latest
-    timeout-minutes: 25
+    # MOPS 每檔需要 2 個請求（本月 + 3 個月前）、每次間隔 8 秒（風控節流），
+    # PIPELINE_LIMIT=20 時光 MOPS 就要 5~10 分鐘。加上 TWSE / TPEx / 集保，
+    # 25 分鐘在 runner 較慢時會不夠用，因此拉長到 40 分鐘。
+    timeout-minutes: 40
     steps:
       - name: Checkout repository
         uses: actions/checkout@v4

@@ -237,10 +237,23 @@ function renderFactorCards(targetSelector) {
   const target = document.querySelector(targetSelector);
   if (!target) return;
   const defs = window.FACTOR_DEFINITIONS;
+  const statusMap = window.FACTOR_STATUS || {};
 
   target.innerHTML = defs.map(f => {
     const isPenalty = f.direction === 'minus';
     const sign = isPenalty ? '−' : '+';
+    // 資料接通狀態徽章（誠實揭露：不是每個因子都跑在真實資料上）
+    const st = statusMap[f.code];
+    let statusBadge = '';
+    if (st) {
+      const color = st.level === 'ok' ? 'var(--green)'
+        : (st.level === 'partial' ? 'var(--orange)' : 'var(--yellow)');
+      const label = st.level === 'ok' ? '已接通'
+        : (st.level === 'partial' ? '部分接通' : '未接通');
+      statusBadge = `<span class="factor-meta-item"
+          title="${st.text}"><span style="color:${color};">●</span>
+          <strong>資料：</strong>${label}</span>`;
+    }
     return `
       <div class="factor-card ${isPenalty ? 'penalty' : ''}">
         <div class="factor-head">
@@ -256,6 +269,7 @@ function renderFactorCards(targetSelector) {
           <span class="factor-meta-item">📊 <strong>資料源：</strong>${f.dataSource}</span>
           <span class="factor-meta-item">⏱ <strong>頻率：</strong>${f.frequency}</span>
           <span class="factor-meta-item">${isPenalty ? '⚠️ <strong>方向：</strong>扣分' : '✨ <strong>方向：</strong>加分'}</span>
+          ${statusBadge}
         </div>
       </div>
     `;
@@ -757,15 +771,16 @@ function showMetaBanner() {
   const stale = freshnessH > 168;
   const sources = meta.sources || {};
   const srcStatus = (name) => {
-    const s = sources[name];
+    const s = sources && sources[name];
     if (!s) return '?';
     if (s.status === 'ok') return '✓';
-    if (s.status === 'skipped') return '⏭';
+    if (s.status === 'skipped' || s.status === 'not_run') return '⏭';
     if (s.status === 'failed' || s.status === 'disabled') return '✗';
     return '?';
   };
   const twseCount = (sources.twse && sources.twse.stocks_count) || 0;
   const tpexCount = (sources.tpex && sources.tpex.stocks_count) || 0;
+  const tdccCount = (sources.tdcc && sources.tdcc.stocks_count) || 0;
 
   // 資料品質（BUG-14 / BUG-15 修正）：誠實告知使用者這個分數有多可信
   const quality = dataQualitySummary(computeScores(window.STOCK_UNIVERSE || []));
@@ -791,8 +806,8 @@ function showMetaBanner() {
     <span style="font-size:11px; color:var(--gold);">
       TWSE ${srcStatus('twse')} ${twseCount} · TPEx ${srcStatus('tpex')} ${tpexCount}
       · FinMind ${srcStatus('finmind')} · MOPS ${srcStatus('mops')}
-      · TDCC ${srcStatus('tdcc_opendata')} · Pyramid ${srcStatus('pyramid')}
-      · Goodinfo ${srcStatus('goodinfo')}
+      · 集保 ${srcStatus('tdcc')} ${tdccCount} · 玩股網 ${srcStatus('wantgoo')}
+      · 金字塔 ${srcStatus('pyramid')} · Goodinfo ${srcStatus('goodinfo')}
     </span>
     <br>
     ${qualityLine}

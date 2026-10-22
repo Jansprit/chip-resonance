@@ -103,6 +103,26 @@ const FACTOR_DEFINITIONS = [
   }
 ];
 
+// 各因子的「資料接通狀態」（2026-10 實測結果，不是設計藍圖）
+//
+// level:
+//   ok       — 所有輸入欄位都已由真實來源供應
+//   partial  — 部分輸入已接通，缺的部分仍是示意值
+//   none     — 尚未接通，該因子目前一律是示意值
+//
+// 這張表的存在，是為了不讓「9 大因子」看起來像全部都已經在跑真實資料。
+const FACTOR_STATUS = {
+  F1:  { level: 'partial', text: '集保已接通；需累積 4 週歷史才有 w3' },
+  F2:  { level: 'none',    text: '尚未接通：需要價格歷史來源' },
+  F3:  { level: 'partial', text: 'MOPS 已接通；價格歷史待接' },
+  F4:  { level: 'none',    text: '尚未接通：需要 52 週高點基準' },
+  F5:  { level: 'none',    text: '尚未接通：需要 FinMind 股利資料' },
+  F6:  { level: 'none',    text: '尚未接通：需要集保股東人數資料' },
+  F8:  { level: 'partial', text: '集保已接通；價格歷史待接' },
+  F9:  { level: 'partial', text: '集保已接通；玩股網 API 目前封鎖' },
+  F10: { level: 'partial', text: '集保已接通；價格歷史待接' }
+};
+
 // 硬性過濾條件
 const HARD_FILTERS = [
   { id: 'volume', name: '日均成交量不足', desc: '20 日均量 < 500 張', check: s => s.avg_volume < 500 },
@@ -488,6 +508,7 @@ async function initializeData() {
 window.INDUSTRY_LIST = INDUSTRY_LIST;
 window.FACTOR_WEIGHTS = FACTOR_WEIGHTS;
 window.FACTOR_DEFINITIONS = FACTOR_DEFINITIONS;
+window.FACTOR_STATUS = FACTOR_STATUS;
 window.HARD_FILTERS = HARD_FILTERS;
 window.computeScores = computeScores;
 window.initializeData = initializeData;
