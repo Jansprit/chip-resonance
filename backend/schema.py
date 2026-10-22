@@ -264,13 +264,22 @@ if __name__ == "__main__":
     import sys
     from pathlib import Path as _Path
 
-    if len(sys.argv) < 2:
-        print("Usage: python -m backend.schema <file.json>")
+    # --optional：檔案不存在時跳過（而非失敗）。
+    # 有些資料檔是 pipeline 的中間產物，不會進版控（見 .gitignore），
+    # CI 在沒有跑 pipeline 的情況下不應該因為它們不存在而失敗。
+    args = [a for a in sys.argv[1:] if a != "--optional"]
+    optional = "--optional" in sys.argv[1:]
+
+    if len(args) < 1:
+        print("Usage: python -m backend.schema [--optional] <file.json>")
         sys.exit(2)
 
-    target = sys.argv[1]
+    target = args[0]
     path = _Path(target)
     if not path.exists():
+        if optional:
+            print(f"SKIP: {target} 不存在（選用檔案）")
+            sys.exit(0)
         print(f"FAIL: 檔案不存在：{target}")
         sys.exit(1)
 

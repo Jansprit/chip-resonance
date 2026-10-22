@@ -19,16 +19,18 @@ jobs:
         run: |
           echo "=== File structure check ==="
           missing=0
-          for f in LICENSE README.md \
+          for f in LICENSE README.md CHANGELOG.md \
                    index.html factors.html scoring.html backtest.html \
-                   app.js data.js styles.css .gitignore .nojekyll \
+                   app.js data.js styles.css .gitignore .nojekyll .dockerignore \
                    backend/scrapers/base.py backend/scrapers/twse.py \
                    backend/scrapers/tpex.py backend/scrapers/finmind.py \
                    backend/scrapers/mops.py backend/scrapers/tdcc.py \
+                   backend/scrapers/tdcc_opendata.py backend/scrapers/wantgoo.py \
                    backend/scrapers/pyramid.py backend/scrapers/goodinfo.py \
                    backend/scrapers/us_markets.py \
                    backend/pipeline.py backend/normalize.py backend/schema.py \
                    backend/requirements.txt backend/.env.example \
+                   backend/seed/demo_universe.json \
                    backend/tests/test_rate_limiter.py \
                    backend/scripts/run_local.py backend/scripts/build_universe.py \
                    backend/scripts/auth_setup.py backend/scripts/windows_task.ps1 \
@@ -48,14 +50,20 @@ jobs:
           fi
           echo "All required files present."
 
-      # 1b) Data JSON shape validation（如果有資料檔）
+      # 1b) Data JSON shape validation
+      #     會進版控的資料檔必須存在且通過驗證；
+      #     pipeline 的中間產物（prices.json 等）以 --optional 處理。
       - name: Validate data/latest/*.json
         if: hashFiles('data/latest/meta.json') != ''
         run: |
           python -m pip install --quiet pydantic
-          python -m backend.schema data/latest/prices.json
-          python -m backend.schema data/latest/market_index.json
+          python -m backend.schema data/latest/demo_subset.json
           python -m backend.schema data/latest/meta.json
+          python -m backend.schema data/latest/market_index.json
+          python -m backend.schema data/latest/tdcc_chip.json
+          python -m backend.schema --optional data/latest/tdcc_history_public.json
+          python -m backend.schema --optional data/latest/prices.json
+          python -m backend.schema --optional data/latest/tpex_prices.json
 
       # 2) HTML well-formedness 檢查 — 用 Python html.parser 確認 4 個 HTML 檔案至少語法正確
       - name: HTML well-formedness check
@@ -100,17 +108,16 @@ jobs:
             node --check "$f" && echo "  $f: syntax OK"
           done
 
-      # 3b) Python unit tests (rate limiter + normalize + integration + rotate + tdcc)
+      # 3b) Python unit tests — 跑 backend/tests/ 底下的**所有**測試檔。
+      #      用 glob 掃描而不是寫死檔名，避免新增測試時忘了加進 CI。
       - name: Backend unit tests
         run: |
           echo "=== Backend unit tests ==="
           pip install --quiet pydantic
-          python backend/tests/test_rate_limiter.py
-          python backend/tests/test_normalize.py
-          python backend/tests/test_integration.py
-          python backend/tests/test_rotate_snapshots.py
-          python backend/tests/test_tdcc_opendata.py
-          python backend/tests/test_risk_control.py
+          for t in backend/tests/test_*.py; do
+            echo "--- $t"
+            python "$t"
+          done
 
       # 4) 連結檢查 — 用 lychee 確認 README 與 docs 內部連結有效
       - name: Link check (markdown & HTML)
