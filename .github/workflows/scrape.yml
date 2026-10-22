@@ -1,7 +1,11 @@
 name: Scrape & Update Public Data
 
-# 公開資料子集 GitHub Actions 排程（TWSE + TPEx + FinMind + MOPS）
-# 不含 Playwright 類的來源（神秘金字塔 / Goodinfo / 集保），這些由本地 Docker / Windows Task 跑
+# 公開資料子集 GitHub Actions 排程
+# public 集合 = TWSE + TPEx + FinMind + MOPS + 集保開放平台
+#   → 全部是純 HTTP 的政府 / 官方開放 API，不需要瀏覽器、不需要登入。
+#   → 這是 CI 唯一該跑的集合（BUG-04：tdcc_opendata 原本從沒在 CI 執行過）。
+# private 集合 = Wantgoo / MoneyDJ / Goodinfo
+#   → 需要 Playwright 或登入 session，由本地 Docker / Windows Task 執行。
 
 on:
   schedule:
@@ -20,6 +24,7 @@ on:
           - tpex
           - finmind
           - mops
+          - tdcc
 
 permissions:
   contents: write
@@ -32,7 +37,7 @@ jobs:
   scrape:
     name: Scrape public data sources
     runs-on: ubuntu-latest
-    timeout-minutes: 20
+    timeout-minutes: 25
     steps:
       - name: Checkout repository
         uses: actions/checkout@v4
@@ -55,34 +60,69 @@ jobs:
         run: |
           python -m pip install --upgrade pip
           pip install -r backend/requirements.txt
-          sudo apt-get install -y nodejs || (which node || echo "Node not available, will fallback to demo_subset.json")
 
       - name: Run pipeline (public subset)
         env:
           RL_JITTER: '1.0'
+          PIPELINE_LIMIT: '20'
         run: |
           python -m backend.scripts.run_local --source ${{ github.event.inputs.source || 'public' }}
 
-      - name: Rebuild universe with real prices
+      - name: Merge real sources into demo_subset (provenance)
         run: |
           python backend/scripts/build_universe.py
 
+      # BUG-07：舊版 5 個驗證都帶 `|| true`，壞掉的資料永遠不會讓 workflow 失敗。
+      # 現在全部改成會擋下；`if: always()` 保留，讓 pipeline 失敗時也能驗證已產生的檔案。
       - name: Validate JSON shape
         if: always()
         run: |
-          python -m pip install --quiet pydantic
-          python -m backend.schema data/latest/prices.json || true
-          python -m backend.schema data/latest/tpex_prices.json || true
-          python -m backend.schema data/latest/market_index.json || true
-          python -m backend.schema data/latest/demo_subset.json || true
-          python -m backend.schema data/latest/universe.json || true
+          python -m backend.schema data/latest/prices.json
+          python -m backend.schema data/latest/tpex_prices.json
+          python -m backend.schema data/latest/market_index.json
+          python -m backend.schema data/latest/universe.json
+          python -m backend.schema data/latest/demo_subset.json
           python -m backend.schema data/latest/meta.json
+
+      # 只在對應來源的檔案存在時才驗證（單一來源排程時不會有全部檔案）
+      - name: Validate source outputs (if present)
+        if: always()
+        run: |
+          for f in tdcc_chip.json mops_director.json mops_pledge.json pyramid_price.json tdcc_history_public.json; do
+            if [ -f "data/latest/$f" ]; then
+              echo "--- $f"
+              python -m backend.schema "data/latest/$f"
+            fi
+          done
+
+      - name: Check provenance (real data actually reaches the scoring engine)
+        if: always()
+        run: |
+          python - <<'PY'
+          import json, sys
+          from pathlib import Path
+          p = Path("data/latest/demo_subset.json")
+          if not p.exists():
+              print("FAIL: demo_subset.json 不存在")
+              sys.exit(1)
+          rows = json.loads(p.read_text(encoding="utf-8"))
+          if not rows:
+              print("FAIL: demo_subset.json 是空的")
+              sys.exit(1)
+          prov = rows[0].get("_provenance", {})
+          real = [k for k, v in prov.items() if v == "real"]
+          print(f"第一檔的真實欄位：{sorted(real)}")
+          # 至少要有價格是真實的，否則合併層根本沒運作
+          if "price" not in real:
+              print("FAIL: demo_subset.json 的 price 不是 real，合併層可能沒跑")
+              sys.exit(1)
+          PY
 
       - name: Commit & push (only if changed)
         run: |
           git config user.name "github-actions[bot]"
           git config user.email "github-actions[bot]@users.noreply.github.com"
-          git add data/latest/ data/$(date -d "today" +%Y-%m-%d)/ 2>/dev/null || git add data/latest/
+          git add data/latest/ "data/$(date -d 'today' +%Y-%m-%d)/" 2>/dev/null || git add data/latest/
           if git diff --cached --quiet; then
             echo "No changes to commit."
           else
@@ -97,5 +137,6 @@ jobs:
           if [ -f data/latest/meta.json ]; then
             echo "- Last update (Taipei): $(jq -r '.last_update_taipei' data/latest/meta.json)" >> $GITHUB_STEP_SUMMARY
             echo "- Snapshot: $(jq -r '.snapshot_date' data/latest/meta.json)" >> $GITHUB_STEP_SUMMARY
-            echo "- Sources: $(jq -r '.sources | keys | join(\", \")' data/latest/meta.json)" >> $GITHUB_STEP_SUMMARY
+            echo "- Sources:" >> $GITHUB_STEP_SUMMARY
+            jq -r '.sources | to_entries[] | "  - \(.key): \(.value.status)"' data/latest/meta.json >> $GITHUB_STEP_SUMMARY
           fi

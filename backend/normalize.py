@@ -435,6 +435,150 @@ def from_finmind_month_revenue(rows: list[dict]) -> dict[str, dict]:
     return out
 
 
+# ============ 價格衍生因子（由 K 線計算）============
+
+def _weekly_close_series(bars: list[dict]) -> list[float]:
+    """把日線聚合成「每週最後一根」的收盤序列（供單週跌幅判斷用）。"""
+    from datetime import date as _date
+
+    buckets: dict[tuple[int, int], float] = {}
+    for b in bars:
+        raw = b.get("date")
+        close = b.get("close")
+        if not raw or close is None:
+            continue
+        try:
+            y, m, d = (int(x) for x in raw.split("-"))
+            iso = _date(y, m, d).isocalendar()
+        except (ValueError, TypeError):
+            continue
+        buckets[(iso[0], iso[1])] = float(close)
+    return list(buckets.values())
+
+
+def compute_price_derived(
+    bars: list[dict],
+    bar_days: int = 5,
+) -> dict[str, Any]:
+    """
+    由 K 線算出價格衍生因子。
+
+    bar_days：每根 bar 涵蓋幾天（週線 = 5，日線 = 1）
+
+    回傳：
+        {
+          "ret_60d": float | None,        # 近 60 日報酬率 %
+          "drawdown_120d": float | None,  # 自 120 日高點回撤 %
+          "is_60d_high": bool | None,     # 是否創 60 日新高
+          "crash_60d": bool | None,       # 近 60 日內是否出現單週跌幅 > 15%
+          "bars": int,
+          "last_date": str | None,
+        }
+
+    資料不足時對應欄位為 None —— 呼叫端必須據此把因子標記為
+    unavailable，而不是用 0 代入（0 會製造假訊號）。
+    """
+    result: dict[str, Any] = {
+        "ret_60d": None,
+        "drawdown_120d": None,
+        "is_60d_high": None,
+        "crash_60d": None,
+        "bars": 0,
+        "last_date": None,
+    }
+    if not bars:
+        return result
+
+    usable = [
+        b for b in bars
+        if b.get("close") not in (None, "") and b.get("date")
+    ]
+    usable.sort(key=lambda b: b["date"])
+    closes = [float(b["close"]) for b in usable]
+    if len(closes) < 2:
+        return result
+
+    result["bars"] = len(usable)
+    result["last_date"] = usable[-1]["date"]
+    current = closes[-1]
+
+    lookback_60 = max(2, round(60 / bar_days))
+    lookback_120 = max(2, round(120 / bar_days))
+
+    # 近 60 日報酬率
+    if len(closes) > lookback_60:
+        base = closes[-(lookback_60 + 1)]
+        if base:
+            result["ret_60d"] = round((current / base - 1) * 100, 2)
+
+    # 自 120 日高點回撤
+    if len(closes) >= lookback_120:
+        window = closes[-lookback_120:]
+        high = max(window)
+        if high:
+            result["drawdown_120d"] = round((current / high - 1) * 100, 2)
+
+    # 是否創 60 日新高
+    if len(closes) >= lookback_60:
+        result["is_60d_high"] = current >= max(closes[-lookback_60:])
+
+    # 近 60 日內是否出現單週跌幅 > 15%
+    if bar_days >= 5:
+        weekly = closes
+        weeks = lookback_60
+    else:
+        weekly = _weekly_close_series(usable)
+        weeks = max(2, round(60 / 7))
+    if len(weekly) >= 2:
+        tail = weekly[-(weeks + 1):]
+        crash = False
+        for prev, cur in zip(tail, tail[1:]):
+            if prev and (prev - cur) / prev > 0.15:
+                crash = True
+                break
+        result["crash_60d"] = crash
+
+    return result
+
+
+def compute_industry_medians(
+    stocks: list[dict],
+    min_peers: int = 2,
+) -> dict[str, float]:
+    """
+    依產業別計算「同產業 60 日報酬中位數」。
+
+    只用**真實**的 ret_60d 計算（示意值不得混進中位數）。
+    某產業的真實同業少於 min_peers 時，該產業不列入結果
+    （呼叫端據此把 industry_ret_60d_med 標為非 real）。
+    """
+    buckets: dict[str, list[float]] = {}
+    for s in stocks:
+        industry = s.get("industry")
+        if not industry:
+            continue
+        prov = s.get("_provenance") or {}
+        if prov.get("ret_60d") != "real":
+            continue
+        val = s.get("ret_60d")
+        if val is None:
+            continue
+        buckets.setdefault(str(industry), []).append(float(val))
+
+    out: dict[str, float] = {}
+    for industry, values in buckets.items():
+        if len(values) < min_peers:
+            continue
+        values.sort()
+        mid = len(values) // 2
+        median = (
+            values[mid] if len(values) % 2 == 1
+            else (values[mid - 1] + values[mid]) / 2
+        )
+        out[industry] = round(median, 2)
+    return out
+
+
 def merge_into(
     base_universe: list[dict],
     *chip_overlays: list[dict],

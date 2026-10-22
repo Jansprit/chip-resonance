@@ -290,6 +290,103 @@ def parse_holder_csv_to_pct_per_stock(
 
 # ============ 多週歷史支援（cache 在 data/local/tdcc_history/）============
 
+PUBLIC_HISTORY_FILENAME = "tdcc_history_public.json"
+PUBLIC_HISTORY_MAX_WEEKS = 8
+
+
+def save_public_history(
+    aggregated: list[dict[str, Any]],
+    out_dir: Path,
+    codes: list[str],
+) -> Path | None:
+    """
+    把示範清單內個股的大戶持股比例寫成**可公開**的精簡歷史。
+
+    為什麼需要這一份？
+    - 完整歷史在 data/local/tdcc_history/（受 .gitignore 保護），
+      CI 是臨時環境，累積不出多週資料 → pct_1000up_w1/w2/w3 永遠算不出來
+      → F1 / F9 / F10 永遠無法進入 strict 模式。
+    - 這裡只存示範清單（43 檔）的 {code: pct_1000up_now}，一週幾 KB，
+      屬於公開政府資料，可以安全進版控，讓 CI 也能累積出多週趨勢。
+
+    檔案格式：{ "YYYY-MM-DD": { "<code>": pct_1000up_now, ... }, ... }
+    """
+    if not aggregated or not codes:
+        return None
+    date = aggregated[0].get("date")
+    if not date:
+        return None
+
+    wanted = set(codes)
+    snapshot: dict[str, float] = {}
+    for row in aggregated:
+        code = row.get("code")
+        if code in wanted and row.get("pct_1000up_now") is not None:
+            snapshot[code] = row["pct_1000up_now"]
+    if not snapshot:
+        return None
+
+    path = out_dir / PUBLIC_HISTORY_FILENAME
+    history: dict[str, dict[str, float]] = {}
+    if path.exists():
+        try:
+            loaded = json.loads(path.read_text(encoding="utf-8"))
+            if isinstance(loaded, dict):
+                history = loaded
+        except (json.JSONDecodeError, OSError):
+            history = {}
+
+    history[date] = snapshot
+    # 只保留最近 N 週
+    if len(history) > PUBLIC_HISTORY_MAX_WEEKS:
+        keep = sorted(history.keys(), reverse=True)[:PUBLIC_HISTORY_MAX_WEEKS]
+        history = {k: history[k] for k in keep}
+
+    out_dir.mkdir(parents=True, exist_ok=True)
+    write_json(path, history)
+    return path
+
+
+def load_public_history(out_dir: Path) -> dict[str, list[dict[str, Any]]]:
+    """
+    讀取公開精簡歷史，轉成與 load_history() 相同的結構。
+
+    回傳：{ iso_date: [ { code, pct_1000up_now }, ... ] }
+    """
+    path = out_dir / PUBLIC_HISTORY_FILENAME
+    if not path.exists():
+        return {}
+    try:
+        raw = json.loads(path.read_text(encoding="utf-8"))
+    except (json.JSONDecodeError, OSError):
+        return {}
+    if not isinstance(raw, dict):
+        return {}
+
+    out: dict[str, list[dict[str, Any]]] = {}
+    for date, snapshot in raw.items():
+        if not isinstance(snapshot, dict):
+            continue
+        rows = [
+            {"code": code, "pct_1000up_now": value}
+            for code, value in snapshot.items()
+            if isinstance(value, (int, float))
+        ]
+        if rows:
+            out[date] = rows
+    return out
+
+
+def merge_history(
+    private: dict[str, list[dict[str, Any]]],
+    public: dict[str, list[dict[str, Any]]],
+) -> dict[str, list[dict[str, Any]]]:
+    """合併私有完整歷史與公開精簡歷史（同日期以私有為準）。"""
+    merged = dict(public)
+    merged.update(private)
+    return merged
+
+
 def save_history(
     parsed: list[dict[str, Any]],
     data_dir: Path,

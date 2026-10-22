@@ -1,17 +1,16 @@
 {
-  "last_update_taipei": "2026-10-22T20:26:54.208164+08:00",
+  "last_update_taipei": "2026-10-22T20:58:09.835317+08:00",
   "snapshot_date": "2026-10-22",
-  "previous_snapshot_date": "2026-09-22",
-  "data_freshness_hours": 720,
+  "previous_snapshot_date": "2026-10-22",
+  "data_freshness_hours": 0,
   "sources": {
-    "mops": {
+    "pyramid": {
       "status": "ok",
       "min_interval_sec": 8,
       "daily_quota": 100,
-      "rows_count": 2,
-      "stocks_count": 2,
-      "pledge_events": 0,
-      "note": "董監事持股餘額明細：2/2 檔成功（資料年月 11509）；近 12 月質設異動 0 筆"
+      "rows_count": 43,
+      "stocks_count": 43,
+      "note": "MoneyDJ 週 K 線：43/43 檔成功（1657 根週 bar）"
     }
   },
   "credentials": {

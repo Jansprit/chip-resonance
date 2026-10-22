@@ -110,14 +110,33 @@ def pipeline_limit(default: int = 5) -> int:
     return n
 
 
-def _select_codes(out_dir: Path, default: int) -> list[str]:
-    """從 universe.json 取出要抓的股票代號清單（受 PIPELINE_LIMIT 控管）。"""
-    limit = pipeline_limit(default)
+def _demo_codes() -> list[str]:
+    """示範清單（backend/seed/demo_universe.json）的股票代號。
+
+    這是 demo_subset.json 的母體；所有要合併進評分引擎的來源
+    都必須抓「同一批」代號，否則合併層對不上。
+    """
+    seed_path = Path(__file__).resolve().parents[0] / "seed" / "demo_universe.json"
     try:
-        universe = json.loads((out_dir / "latest" / "universe.json").read_text(encoding="utf-8"))
-        codes = [s["code"] for s in universe]
+        payload = json.loads(seed_path.read_text(encoding="utf-8"))
+        codes = [s["code"] for s in payload["stocks"] if s.get("code")]
+        if codes:
+            return codes
     except Exception:
-        codes = ["2330", "2454", "2317", "2884", "2882"]
+        pass
+    return ["2330", "2454", "2317", "2884", "2882"]
+
+
+def _select_codes(out_dir: Path, default: int) -> list[str]:
+    """從示範清單取出要抓的股票代號（受 PIPELINE_LIMIT 控管）。
+
+    修正（2026-10）：舊版讀 `out_dir / "latest" / "universe.json"`，
+    但 out_dir 本身就是 data/latest，實際路徑變成
+    `data/latest/latest/universe.json`（不存在）→ 每次都靜默掉進
+    fallback 的 5 檔硬編碼清單，等於所有來源都只抓那 5 檔。
+    """
+    limit = pipeline_limit(default)
+    codes = _demo_codes()
     if limit > 0:
         codes = codes[:limit]
     return codes
@@ -375,10 +394,24 @@ async def run_tdcc_async(out_dir: Path) -> dict:
 
 
 async def run_pyramid_async(out_dir: Path) -> dict:
-    """神秘金字塔 MoneyDJ — 抓 K 線歷史（30+ 年）+ 個股頁面。"""
+    """神秘金字塔 MoneyDJ — 抓週 K 線歷史（30+ 年）→ 價格衍生因子。
+
+    2026-10 修正：
+    - BCD 端點是公開下載型 API，**純 HTTP** 即可，不需要 Playwright
+      （省下每檔 1-2 秒的瀏覽器啟動成本）
+    - MoneyDJ 的 BCD 是「欄位-major」格式，舊的 parser 把它當成
+      逐行 CSV 解析，結果只會得到 values 陣列 → 已重寫
+    - 「持有人分級」HTML 解析器仍未實作（NotImplementedError），
+      這裡只抓有實用價值的 K 線，節省額度
+    """
     from backend.scrapers.pyramid import (
-        create_pyramid_session, fetch_stock_page, fetch_kline_bcd,
+        create_pyramid_client,
+        fetch_kline_bcd_http,
+        is_sso_page,
+        parse_kline_bcd_csv,
     )
+    from backend.normalize import compute_price_derived
+
     status = {
         "status": "ok",
         "min_interval_sec": 8, "daily_quota": 100, "rows_count": 0,
@@ -391,33 +424,56 @@ async def run_pyramid_async(out_dir: Path) -> dict:
         status["reason"] = "MoneyDJ pyramid unavailable"
         return status
     try:
-        session = create_pyramid_session()
-        await session.start()
+        codes = _select_codes(out_dir, 50)
+        results: list[dict[str, Any]] = []
+        client = create_pyramid_client()
+        sso_hits = 0
         try:
-            # 只抓 3 檔示範個股避免觸發風控
-            codes = _select_codes(out_dir, 3)
-
-            all_results = {"pages": [], "klines": {}}
             for code in codes:
                 try:
-                    page = await fetch_stock_page(code, session=session)
-                    all_results["pages"].append({"code": code, "html_len": len(page)})
+                    text = fetch_kline_bcd_http(code, client=client, bar="W", count=9999)
+                    if is_sso_page(text):
+                        # MoneyDJ 對 BCD 端點要求登入 session。
+                        # 這不是資料錯誤，必須明確標記出來，
+                        # 否則會靜默產生「0 根 bar」而看不出原因。
+                        sso_hits += 1
+                        results.append({
+                            "code": code,
+                            "error": "MoneyDJ 需要登入 session（請執行 "
+                                     "python -m backend.scripts.auth_setup --site pyramid）",
+                        })
+                        continue
+                    bars = parse_kline_bcd_csv(text)
+                    derived = compute_price_derived(bars, bar_days=5)
+                    row = {
+                        "code": code,
+                        "ret_60d": derived["ret_60d"],
+                        "drawdown_120d": derived["drawdown_120d"],
+                        "is_60d_high": derived["is_60d_high"],
+                        "crash_60d": derived["crash_60d"],
+                        "bars": derived["bars"],
+                        "last_date": derived["last_date"],
+                    }
+                    results.append(row)
                 except Exception as e:
-                    all_results["pages"].append({"code": code, "error": str(e)})
-                try:
-                    kline_csv = await fetch_kline_bcd(code, session=session)
-                    parsed = parse_kline_bcd_csv(kline_csv)
-                    all_results["klines"][code] = {"weeks": len(parsed), "first_date": parsed[0]["date"] if parsed else None, "last_date": parsed[-1]["date"] if parsed else None}
-                except Exception as e:
-                    all_results["klines"][code] = {"error": str(e)}
+                    results.append({"code": code, "error": str(e)})
         finally:
-            await session.close()
-        # 存到 out_dir
-        pyramid_save_latest(out_dir, all_results["pages"])
-        # 將 kline summary 另存
-        write_json(out_dir / "pyramid_kline_summary.json", all_results["klines"])
-        status["rows_count"] = len(all_results["pages"])
-        status["note"] = "K 線 30+ 年歷史 + 個股頁面 HTML 已存。Holder distribution 解析待 tune。"
+            client.session.close()
+
+        write_json(out_dir / "pyramid_price.json", results)
+        ok = [r for r in results if "error" not in r]
+        status["rows_count"] = len(ok)
+        status["stocks_count"] = len(codes)
+        status["sso_required"] = sso_hits
+        if sso_hits:
+            status["status"] = "skipped" if not ok else "partial"
+            status["reason"] = (
+                f"{sso_hits}/{len(codes)} 檔需要 MoneyDJ 登入 session"
+            )
+        status["note"] = (
+            f"MoneyDJ 週 K 線：{len(ok)}/{len(codes)} 檔成功"
+            f"（{ok[0]['bars'] if ok else 0} 根週 bar）"
+        )
         return status
     except Exception as e:
         import traceback as _tb
@@ -530,9 +586,7 @@ async def run_tdcc_opendata_async(repo: Path, out_dir: Path) -> dict:
         # 2. 依 code 彙總
         by_code = tdcc_opendata.parse_holder_csv_to_pct_per_stock(csv_text)
         aggregated = list(by_code.values())
-        # 3. 存 data/latest/
-        tdcc_opendata.save_latest(out_dir, aggregated)
-        # 4. 累積存 data/local/tdcc_history/<date>.json
+        # 3. 累積存 data/local/tdcc_history/<date>.json
         #    注意：傳 repo/"data"，save_history 內部會再接 "local/tdcc_history"，
         #    這樣才會落在 data/local/（受 .gitignore 保護的私有層），
         #    而非 repo 根目錄的 local/（BUG-06：曾被誤 commit 到公開倉庫）。
@@ -540,22 +594,36 @@ async def run_tdcc_opendata_async(repo: Path, out_dir: Path) -> dict:
         if aggregated:
             first_date = aggregated[0].get("date")
             tdcc_opendata.save_history(aggregated, data_root, iso_date=first_date)
-        # 5. 計算多週趨勢
-        history = tdcc_opendata.load_history(data_root, weeks=4)
+        # 4. 計算多週趨勢
+        #    **順序很重要**：趨勢必須在存檔之前算好。
+        #    舊版先 save_latest 再算 trend，導致 data/latest/tdcc_chip.json
+        #    永遠缺少 pct_1000up_w1/w2/w3/trend → F1/F9/F10 永遠無法 strict 計算。
+        #    歷史來源 = 私有完整歷史（本地）＋ 公開精簡歷史（CI 也能累積）
+        history = tdcc_opendata.merge_history(
+            tdcc_opendata.load_history(data_root, weeks=4),
+            tdcc_opendata.load_public_history(out_dir),
+        )
         if history:
             codes = [r["code"] for r in aggregated]
+            by_code_map = {r["code"]: r for r in aggregated}
             for code in codes:
                 trend = tdcc_opendata.compute_multi_week_trend(history, code)
-                # 將 trend 合併進 aggregated
-                for r in aggregated:
-                    if r["code"] == code:
-                        r["pct_1000up_trend"] = trend["pct_1000up_trend"]
-                        r["pct_1000up_w1"] = trend["pct_1000up_w1"]
-                        r["pct_1000up_w2"] = trend["pct_1000up_w2"]
-                        r["pct_1000up_w3"] = trend["pct_1000up_w3"]
-                        break
+                r = by_code_map.get(code)
+                if r is None:
+                    continue
+                r["pct_1000up_trend"] = trend.get("pct_1000up_trend")
+                r["pct_1000up_w1"] = trend.get("pct_1000up_w1")
+                r["pct_1000up_w2"] = trend.get("pct_1000up_w2")
+                r["pct_1000up_w3"] = trend.get("pct_1000up_w3")
+        # 5. 存 data/latest/（含趨勢欄位）
+        tdcc_opendata.save_latest(out_dir, aggregated)
+        # 6. 存公開精簡歷史（讓 CI 也能累積多週趨勢）
+        demo_codes = _select_codes(out_dir, 50)
+        public_path = tdcc_opendata.save_public_history(aggregated, out_dir, demo_codes)
+        status["public_history"] = bool(public_path)
         status["rows_count"] = len(rows)
         status["stocks_count"] = len(aggregated)
+        status["trend_codes"] = len([r for r in aggregated if r.get("pct_1000up_w3") is not None])
         return status
     except Exception as e:
         import traceback as _tb
@@ -578,6 +646,7 @@ async def _main_async(repo: Path | None, source: str, out_dir_name: str) -> int:
     sources_status: dict[str, Any] = {}
 
     # 同步源（先跑，避免 Playwright 來源失敗時已建立的資料被覆蓋）
+    # --- public 集合：全是政府 / 官方開放 API，純 HTTP，適合 CI 排程 ---
     if source in ("all", "public", "twse"):
         print("[1/8] TWSE OpenAPI ...")
         sources_status["twse"] = run_twse(out_dir)
@@ -598,19 +667,26 @@ async def _main_async(repo: Path | None, source: str, out_dir_name: str) -> int:
         sources_status["mops"] = await run_mops_async(out_dir)
         print(f"    {sources_status['mops']}")
 
-    if source in ("all", "public", "wantgoo"):
-        print("[5/8] Wantgoo (玩股網 — 融資券/當沖比/法人) ...")
-        sources_status["wantgoo"] = await run_wantgoo_async(out_dir)
-        print(f"    {sources_status['wantgoo']}")
-
-    # Playwright 源（async, 免登入但需 Playwright 過 Cloudflare）
-    if source in ("all", "private", "tdcc"):
+    # BUG-04：tdcc_opendata 原本只在 all/private 跑，
+    # CI 的 public 排程從來沒執行過 → 集保資料永遠是舊的。
+    # 集保開放平台是政府免費 API，純 HTTP，適合放進 CI。
+    if source in ("all", "public", "private", "tdcc"):
         print("[6/8] TDCC 政府資料開放平台 (CSV, 免登入免費) ...")
         sources_status["tdcc"] = await run_tdcc_opendata_async(repo, out_dir)
         print(f"    {sources_status['tdcc']}")
 
+    # --- private 集合：需要瀏覽器 / 登入 session / 較高負載，本地跑 ---
+    # Wantgoo：個股 JSON API 需要 Cloudflare 注入的 x-client-signature，
+    # 純 HTTP 一律 400 → 必須 Playwright 進頁面執行站方自己的 $.http。
+    if source in ("all", "private", "wantgoo"):
+        print("[5/8] Wantgoo (玩股網 — 融資券/法人/主力) ...")
+        sources_status["wantgoo"] = await run_wantgoo_async(out_dir)
+        print(f"    {sources_status['wantgoo']}")
+
+    # MoneyDJ：BCD 端點現在要求登入 session（2026-10 實測），
+    # 放 private 避免 CI 用 datacenter IP 大量打第三方站台。
     if source in ("all", "private", "pyramid"):
-        print("[7/8] Pyramid (神秘金字塔 — 免登入) ...")
+        print("[7/8] Pyramid (神秘金字塔 MoneyDJ 週 K 線) ...")
         sources_status["pyramid"] = await run_pyramid_async(out_dir)
         print(f"    {sources_status['pyramid']}")
 
@@ -624,8 +700,8 @@ async def _main_async(repo: Path | None, source: str, out_dir_name: str) -> int:
         out_dir,
         sources_status,
         notes=(
-            "Real TWSE + TPEx + FinMind + MOPS + (optionally) 集保/神秘金字塔/Goodinfo. "
-            "Browser-based sources require auth_setup.py first; otherwise gracefully skipped."
+            "public = TWSE + TPEx + FinMind + MOPS + 集保開放平台（純 HTTP，CI 排程）。"
+            "private = Wantgoo / MoneyDJ / Goodinfo（需瀏覽器或登入 session，本地跑）。"
         ),
     )
 

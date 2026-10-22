@@ -91,6 +91,59 @@ class MetaFile(BaseModel):
     notes: str = ""
 
 
+class TdccChipEntry(BaseModel):
+    """集保開放資料：持股分級（單一股票一列）。"""
+
+    date: str
+    code: str
+    pct_400up_now: Optional[float] = None
+    pct_600up_now: Optional[float] = None
+    pct_800up_now: Optional[float] = None
+    pct_1000up_now: Optional[float] = None
+    people_400up_now: Optional[int] = None
+    people_1000up_now: Optional[int] = None
+    # 多週趨勢（由 pipeline 計算後併入）
+    pct_1000up_w1: Optional[float] = None
+    pct_1000up_w2: Optional[float] = None
+    pct_1000up_w3: Optional[float] = None
+    pct_1000up_trend: Optional[str] = None
+
+
+class MopsDirectorEntry(BaseModel):
+    """公開資訊觀測站：董監事持股餘額明細彙總。"""
+
+    code: str
+    period: Optional[str] = None
+    rows: int = 0
+    holding_total: float = 0.0
+    pledged_total: float = 0.0
+    pledge_pct: Optional[float] = None
+    director_holding_change_3m: Optional[float] = None
+
+
+class MopsPledgeEntry(BaseModel):
+    """公開資訊觀測站：內部人設質解質異動彙總。"""
+
+    code: str
+    events: int = 0
+    pledged_total: float = 0.0
+    released_total: float = 0.0
+    cumulative_max: float = 0.0
+    no_data: bool = False
+
+
+class PyramidPriceEntry(BaseModel):
+    """MoneyDJ 週 K 線算出的價格衍生因子。"""
+
+    code: str
+    ret_60d: Optional[float] = None
+    drawdown_120d: Optional[float] = None
+    is_60d_high: Optional[bool] = None
+    crash_60d: Optional[bool] = None
+    bars: int = 0
+    last_date: Optional[str] = None
+
+
 # ============ JSON Schema (給前端 CI 使用) ============
 
 JSON_SCHEMA = {
@@ -209,39 +262,104 @@ JSON_SCHEMA = {
 if __name__ == "__main__":
     import json as _json
     import sys
+    from pathlib import Path as _Path
 
     if len(sys.argv) < 2:
         print("Usage: python -m backend.schema <file.json>")
-        sys.exit(1)
+        sys.exit(2)
 
     target = sys.argv[1]
-    with open(target, encoding="utf-8") as f:
+    path = _Path(target)
+    if not path.exists():
+        print(f"FAIL: 檔案不存在：{target}")
+        sys.exit(1)
+
+    with open(path, encoding="utf-8") as f:
         data = _json.load(f)
 
-    if isinstance(data, list) and data:
-        # Pick model based on first item keys
-        keys = set(data[0].keys())
-        # demo_subset: has 'industry' and 'avg_volume' AND 'pct_1000up_now'
-        if {"industry", "avg_volume", "pct_1000up_now"} & keys or (
-            "industry" in keys and "avg_volume" in keys
-        ):
-            DemoStockSubsetEntry.model_validate(data[0])
-            print(f"OK: demo_subset entry shape valid")
-        # prices.json: has 'volume_lots' AND 'turnover' AND 'transactions' (TWSE raw format)
-        elif {"volume_lots", "turnover", "transactions"} & keys:
-            StockPrice.model_validate(data[0])
-            print(f"OK: stock price entry shape valid")
-        # universe.json: has 'volume_lots' but NOT 'turnover'/'transactions'
-        elif "volume_lots" in keys:
-            print(f"OK: universe entry shape valid (subset of stock price)")
-        # market_index.json: has 'value' and 'change_pct'
-        elif {"value", "change_pct"} & keys:
-            MarketIndex.model_validate(data[0])
-            print(f"OK: market index entry shape valid")
-        else:
-            print(f"WARN: unknown list element keys: {list(data[0].keys())}")
-    elif isinstance(data, dict):
-        MetaFile.model_validate(data)
-        print(f"OK: meta shape valid")
-    else:
-        print(f"WARN: unexpected top-level type: {type(data)}")
+    # 依「檔名」決定模型，而不是猜欄位。
+    # 舊版靠第一筆的 key 猜，且多數分支只印 WARN 就 exit 0 ——
+    # 等於 schema 驗證從來沒有真的擋下過壞資料（BUG-07 的深層問題）。
+    name = path.name
+
+    def _validate_all(model, rows, label):
+        errors = []
+        for i, row in enumerate(rows):
+            try:
+                model.model_validate(row)
+            except Exception as e:  # pydantic ValidationError
+                errors.append(f"  [{i}] {e}")
+                if len(errors) >= 5:
+                    break
+        if errors:
+            print(f"FAIL: {label} 驗證失敗（至少 {len(errors)} 筆）：")
+            for e in errors:
+                print(e)
+            return 1
+        print(f"OK: {label}（{len(rows)} 筆全部通過）")
+        return 0
+
+    if name == "meta.json":
+        try:
+            MetaFile.model_validate(data)
+        except Exception as e:
+            print(f"FAIL: meta.json 驗證失敗：{e}")
+            sys.exit(1)
+        print("OK: meta shape valid")
+        sys.exit(0)
+
+    if name == "tdcc_history_public.json":
+        if not isinstance(data, dict):
+            print("FAIL: tdcc_history_public.json 應為 object")
+            sys.exit(1)
+        bad = [
+            k for k, v in data.items()
+            if not isinstance(v, dict)
+            or any(not isinstance(x, (int, float)) for x in v.values())
+        ]
+        if bad:
+            print(f"FAIL: tdcc_history_public.json 結構錯誤：{bad[:5]}")
+            sys.exit(1)
+        print(f"OK: tdcc_history_public.json（{len(data)} 週）")
+        sys.exit(0)
+
+    if not isinstance(data, list):
+        print(f"FAIL: {name} 最外層應為 array，實際是 {type(data).__name__}")
+        sys.exit(1)
+
+    if name == "demo_subset.json":
+        if not data:
+            print("FAIL: demo_subset.json 是空陣列")
+            sys.exit(1)
+        sys.exit(_validate_all(DemoStockSubsetEntry, data, name))
+
+    if name in ("prices.json", "tpex_prices.json", "universe.json"):
+        if not data:
+            print(f"FAIL: {name} 是空陣列")
+            sys.exit(1)
+        sys.exit(_validate_all(StockPrice, data, name))
+
+    if name == "market_index.json":
+        if not data:
+            print("FAIL: market_index.json 是空陣列")
+            sys.exit(1)
+        sys.exit(_validate_all(MarketIndex, data, name))
+
+    if name == "tdcc_chip.json":
+        if not data:
+            print("FAIL: tdcc_chip.json 是空陣列")
+            sys.exit(1)
+        sys.exit(_validate_all(TdccChipEntry, data, name))
+
+    if name == "mops_director.json":
+        sys.exit(_validate_all(MopsDirectorEntry, data, name))
+
+    if name == "mops_pledge.json":
+        sys.exit(_validate_all(MopsPledgeEntry, data, name))
+
+    if name == "pyramid_price.json":
+        sys.exit(_validate_all(PyramidPriceEntry, data, name))
+
+    print(f"FAIL: 未知檔案類型 {name}，無法驗證")
+    print("      請在 backend/schema.py 的 __main__ 補上對應的模型。")
+    sys.exit(1)

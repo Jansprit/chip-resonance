@@ -41,9 +41,11 @@ from .base import (
     SessionStore,
     SessionNotFound,
     SessionExpired,
+    HttpClient,
     RateLimiter,
     SourceHealth,
     RetryPolicy,
+    COMMON_BROWSER_UAS,
     write_json,
     read_json,
     taipei_today,
@@ -65,6 +67,96 @@ ENDPOINT_HOLDER_BCD = PYRAMID_BASE + "/Z/ZC/ZCW/CZCH1.djbcd?a={code}&b=W&c=9999"
 def is_available() -> bool:
     """神秘金字塔 免登入即可看。"""
     return True
+
+
+# MoneyDJ 現在對 BCD 端點會 302 → /sso/signin/<jwt>（要求登入 session）。
+# 2026-10 實測：無 session 時固定拿到「Sign in Page - SSO」，
+# 等 150 秒再試也一樣 → 這不是短暫限流，而是需要登入。
+SSO_MARKER = "Sign in Page"
+
+
+def is_sso_page(text: str) -> bool:
+    """判斷回應是不是 MoneyDJ 的 SSO 登入頁（而不是真正的 BCD 資料）。"""
+    if not text:
+        return True
+    head = text[:4000]
+    return SSO_MARKER in head or "/sso/signin" in head
+
+
+def has_session() -> bool:
+    """是否已有可用的 MoneyDJ 登入 session。"""
+    try:
+        return SessionStore().exists("pyramid")
+    except Exception:
+        return False
+
+
+def create_pyramid_client() -> HttpClient:
+    """建立受風控保護的 MoneyDJ HTTP 客戶端。
+
+    BCD 端點是公開的下載型 API，不需要瀏覽器，
+    用純 HTTP 抓可省下 Playwright 的啟動成本（每次約 1-2 秒/檔）。
+
+    若已有登入 session（.sessions/pyramid.json），會把 cookies 帶進來 ——
+    MoneyDJ 對 BCD 端點已改為要求登入。
+    """
+    rl = RateLimiter(min_interval=PYRAMID_MIN_INTERVAL_SEC, source_name="pyramid")
+    health = SourceHealth(source_name="pyramid", daily_quota=PYRAMID_DAILY_QUOTA)
+    client = HttpClient(
+        rate_limiter=rl,
+        health=health,
+        retry=RetryPolicy(),
+        user_agent=COMMON_BROWSER_UAS[0],
+        timeout=40,
+    )
+    client.session.headers.update({
+        "Referer": f"{PYRAMID_BASE}/",
+        "Accept": "text/plain,text/csv,*/*",
+    })
+    # 帶入登入 session 的 cookies（若有）
+    try:
+        store = SessionStore()
+        if store.exists("pyramid"):
+            state = store.load("pyramid")
+            for cookie in state.get("cookies", []):
+                client.session.cookies.set(
+                    cookie.get("name", ""),
+                    cookie.get("value", ""),
+                    domain=cookie.get("domain"),
+                    path=cookie.get("path", "/"),
+                )
+    except (SessionNotFound, SessionExpired, Exception):
+        pass
+    return client
+
+
+def fetch_kline_bcd_http(
+    stock_code: str,
+    client: Optional[HttpClient] = None,
+    bar: str = "W",
+    count: int = 9999,
+) -> str:
+    """
+    用純 HTTP 抓 MoneyDJ K 線 BCD（CSV 文字）。
+
+    URL: https://www.moneydj.com/Z/ZC/ZCW/CZKC1.djbcd?a=<code>&b=<W|D>&c=<count>
+    bar='W' 週線（30+ 年）、bar='D' 日線。
+    """
+    own_client = client is None
+    if own_client:
+        client = create_pyramid_client()
+    try:
+        url = ENDPOINT_KLINE_BCD.format(code=stock_code)
+        # bar / count 寫死在 template 外，直接組網址
+        url = url.replace("b=W", f"b={bar}").replace("c=9999", f"c={count}")
+        text = client.get_text(url)
+        debug_dir = Path(__file__).resolve().parents[1] / "data" / "local" / "raw" / "pyramid"
+        debug_dir.mkdir(parents=True, exist_ok=True)
+        (debug_dir / f"kline_{stock_code}_{bar}.csv").write_text(text, encoding="utf-8")
+        return text
+    finally:
+        if own_client:
+            client.session.close()
 
 
 def create_pyramid_session(cred: CredentialManager | None = None) -> BrowserSession:
@@ -153,30 +245,74 @@ async def fetch_kline_bcd(
 
 def parse_kline_bcd_csv(csv_text: str) -> list[dict[str, Any]]:
     """
-    解析 MoneyDJ K 線 BCD CSV → 結構化資料。
+    解析 MoneyDJ K 線 BCD → 結構化 K 線。
 
-    每行格式（from MoneyDJ BCD）：
-        1994/09/05, ...（數值）
+    **MoneyDJ 的 BCD 是「欄位-major」（column-major），不是每列一行的 CSV。**
+    實測結構（b=D, c=10, 2330）：
+
+        第 1 段：所有日期，逗號分隔
+                 2026/10/08,2026/10/12,...,2026/10/22
+        第 2 段：所有 bar 的開盤價   2550,2510,2500,...
+        第 3 段：所有 bar 的最高價   2575,2550,2510,...
+        第 4 段：所有 bar 的最低價   2550,2510,2490,...
+        第 5 段：所有 bar 的收盤價   2550,2540,2490,...
+        第 6 段：所有 bar 的成交量（張）23145,23556,40796,...
+
+    段落之間**沒有換行**，且相鄰欄位會用空白黏在一起
+    （例：'2026/10/22 2550' = 最後一個日期 + 它的開盤價）。
+
+    以 TWSE 官方 STOCK_DAY_ALL 交叉驗證（2026/10/21, 2330）：
+        開 2425 / 高 2435 / 低 2400 / 收 2420 / 量 27,095 張 → 完全吻合。
 
     回傳每筆：
-        { 'date': '1994-09-05', 'values': [float, ...] }
+        { 'date': '2026-10-12', 'open': 2510.0, 'high': 2550.0,
+          'low': 2510.0, 'close': 2540.0, 'volume': 23556.0 }
     """
+    tokens = [t for t in re.split(r"[,\s]+", csv_text.strip()) if t]
+    if not tokens:
+        return []
+
+    date_re = re.compile(r"^\d{4}/\d{2}/\d{2}$")
+    n = 0
+    while n < len(tokens) and date_re.match(tokens[n]):
+        n += 1
+    if n == 0:
+        return []
+
+    dates = [
+        f"{t[0:4]}-{t[5:7]}-{t[8:10]}" for t in tokens[:n]
+    ]
+    values = tokens[n:]
+    if len(values) < 5 * n:
+        # 資料不完整（可能是錯誤頁），不要猜
+        return []
+
+    def col(i: int) -> list[float]:
+        raw = values[i * n:(i + 1) * n]
+        out = []
+        for v in raw:
+            try:
+                out.append(float(v))
+            except ValueError:
+                out.append(0.0)
+        return out
+
+    opens = col(0)
+    highs = col(1)
+    lows = col(2)
+    closes = col(3)
+    volumes = col(4)
+
     rows = []
-    for line in csv_text.splitlines():
-        line = line.strip()
-        if not line:
-            continue
-        # 解析日期（格式 YYYY/MM/DD）
-        m = re.match(r"^(\d{4})/(\d{2})/(\d{2})", line)
-        if not m:
-            continue
-        try:
-            iso_date = f"{m.group(1)}-{m.group(2)}-{m.group(3)}"
-            values_part = line[len(m.group(0)):].strip()
-            values = [float(x) for x in values_part.split(",") if x.strip()]
-            rows.append({"date": iso_date, "values": values})
-        except (ValueError, IndexError):
-            continue
+    for i in range(n):
+        rows.append({
+            "date": dates[i],
+            "open": opens[i],
+            "high": highs[i],
+            "low": lows[i],
+            "close": closes[i],
+            "volume": volumes[i],
+        })
     return rows
 
 

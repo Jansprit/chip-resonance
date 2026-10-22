@@ -1,0 +1,389 @@
+[
+  {
+    "code": "2330",
+    "ret_60d": -1.65,
+    "drawdown_120d": -6.47,
+    "is_60d_high": false,
+    "crash_60d": false,
+    "bars": 1657,
+    "last_date": "2026-10-19"
+  },
+  {
+    "code": "2454",
+    "ret_60d": null,
+    "drawdown_120d": null,
+    "is_60d_high": null,
+    "crash_60d": null,
+    "bars": 0,
+    "last_date": null
+  },
+  {
+    "code": "2303",
+    "ret_60d": null,
+    "drawdown_120d": null,
+    "is_60d_high": null,
+    "crash_60d": null,
+    "bars": 0,
+    "last_date": null
+  },
+  {
+    "code": "3711",
+    "ret_60d": null,
+    "drawdown_120d": null,
+    "is_60d_high": null,
+    "crash_60d": null,
+    "bars": 0,
+    "last_date": null
+  },
+  {
+    "code": "5347",
+    "ret_60d": null,
+    "drawdown_120d": null,
+    "is_60d_high": null,
+    "crash_60d": null,
+    "bars": 0,
+    "last_date": null
+  },
+  {
+    "code": "2884",
+    "ret_60d": null,
+    "drawdown_120d": null,
+    "is_60d_high": null,
+    "crash_60d": null,
+    "bars": 0,
+    "last_date": null
+  },
+  {
+    "code": "2882",
+    "ret_60d": null,
+    "drawdown_120d": null,
+    "is_60d_high": null,
+    "crash_60d": null,
+    "bars": 0,
+    "last_date": null
+  },
+  {
+    "code": "2891",
+    "ret_60d": null,
+    "drawdown_120d": null,
+    "is_60d_high": null,
+    "crash_60d": null,
+    "bars": 0,
+    "last_date": null
+  },
+  {
+    "code": "2886",
+    "ret_60d": null,
+    "drawdown_120d": null,
+    "is_60d_high": null,
+    "crash_60d": null,
+    "bars": 0,
+    "last_date": null
+  },
+  {
+    "code": "3037",
+    "ret_60d": null,
+    "drawdown_120d": null,
+    "is_60d_high": null,
+    "crash_60d": null,
+    "bars": 0,
+    "last_date": null
+  },
+  {
+    "code": "8046",
+    "ret_60d": null,
+    "drawdown_120d": null,
+    "is_60d_high": null,
+    "crash_60d": null,
+    "bars": 0,
+    "last_date": null
+  },
+  {
+    "code": "3189",
+    "ret_60d": null,
+    "drawdown_120d": null,
+    "is_60d_high": null,
+    "crash_60d": null,
+    "bars": 0,
+    "last_date": null
+  },
+  {
+    "code": "4743",
+    "ret_60d": null,
+    "drawdown_120d": null,
+    "is_60d_high": null,
+    "crash_60d": null,
+    "bars": 0,
+    "last_date": null
+  },
+  {
+    "code": "4128",
+    "ret_60d": null,
+    "drawdown_120d": null,
+    "is_60d_high": null,
+    "crash_60d": null,
+    "bars": 0,
+    "last_date": null
+  },
+  {
+    "code": "4133",
+    "ret_60d": null,
+    "drawdown_120d": null,
+    "is_60d_high": null,
+    "crash_60d": null,
+    "bars": 0,
+    "last_date": null
+  },
+  {
+    "code": "6446",
+    "ret_60d": null,
+    "drawdown_120d": null,
+    "is_60d_high": null,
+    "crash_60d": null,
+    "bars": 0,
+    "last_date": null
+  },
+  {
+    "code": "2603",
+    "ret_60d": null,
+    "drawdown_120d": null,
+    "is_60d_high": null,
+    "crash_60d": null,
+    "bars": 0,
+    "last_date": null
+  },
+  {
+    "code": "2609",
+    "ret_60d": null,
+    "drawdown_120d": null,
+    "is_60d_high": null,
+    "crash_60d": null,
+    "bars": 0,
+    "last_date": null
+  },
+  {
+    "code": "2615",
+    "ret_60d": null,
+    "drawdown_120d": null,
+    "is_60d_high": null,
+    "crash_60d": null,
+    "bars": 0,
+    "last_date": null
+  },
+  {
+    "code": "2618",
+    "ret_60d": null,
+    "drawdown_120d": null,
+    "is_60d_high": null,
+    "crash_60d": null,
+    "bars": 0,
+    "last_date": null
+  },
+  {
+    "code": "2317",
+    "ret_60d": null,
+    "drawdown_120d": null,
+    "is_60d_high": null,
+    "crash_60d": null,
+    "bars": 0,
+    "last_date": null
+  },
+  {
+    "code": "2227",
+    "ret_60d": null,
+    "drawdown_120d": null,
+    "is_60d_high": null,
+    "crash_60d": null,
+    "bars": 0,
+    "last_date": null
+  },
+  {
+    "code": "1326",
+    "ret_60d": null,
+    "drawdown_120d": null,
+    "is_60d_high": null,
+    "crash_60d": null,
+    "bars": 0,
+    "last_date": null
+  },
+  {
+    "code": "1303",
+    "ret_60d": null,
+    "drawdown_120d": null,
+    "is_60d_high": null,
+    "crash_60d": null,
+    "bars": 0,
+    "last_date": null
+  },
+  {
+    "code": "1216",
+    "ret_60d": null,
+    "drawdown_120d": null,
+    "is_60d_high": null,
+    "crash_60d": null,
+    "bars": 0,
+    "last_date": null
+  },
+  {
+    "code": "2912",
+    "ret_60d": null,
+    "drawdown_120d": null,
+    "is_60d_high": null,
+    "crash_60d": null,
+    "bars": 0,
+    "last_date": null
+  },
+  {
+    "code": "1707",
+    "ret_60d": null,
+    "drawdown_120d": null,
+    "is_60d_high": null,
+    "crash_60d": null,
+    "bars": 0,
+    "last_date": null
+  },
+  {
+    "code": "2327",
+    "ret_60d": null,
+    "drawdown_120d": null,
+    "is_60d_high": null,
+    "crash_60d": null,
+    "bars": 0,
+    "last_date": null
+  },
+  {
+    "code": "2308",
+    "ret_60d": null,
+    "drawdown_120d": null,
+    "is_60d_high": null,
+    "crash_60d": null,
+    "bars": 0,
+    "last_date": null
+  },
+  {
+    "code": "2474",
+    "ret_60d": null,
+    "drawdown_120d": null,
+    "is_60d_high": null,
+    "crash_60d": null,
+    "bars": 0,
+    "last_date": null
+  },
+  {
+    "code": "3056",
+    "ret_60d": null,
+    "drawdown_120d": null,
+    "is_60d_high": null,
+    "crash_60d": null,
+    "bars": 0,
+    "last_date": null
+  },
+  {
+    "code": "5522",
+    "ret_60d": null,
+    "drawdown_120d": null,
+    "is_60d_high": null,
+    "crash_60d": null,
+    "bars": 0,
+    "last_date": null
+  },
+  {
+    "code": "6669",
+    "ret_60d": null,
+    "drawdown_120d": null,
+    "is_60d_high": null,
+    "crash_60d": null,
+    "bars": 0,
+    "last_date": null
+  },
+  {
+    "code": "5269",
+    "ret_60d": null,
+    "drawdown_120d": null,
+    "is_60d_high": null,
+    "crash_60d": null,
+    "bars": 0,
+    "last_date": null
+  },
+  {
+    "code": "2610",
+    "ret_60d": null,
+    "drawdown_120d": null,
+    "is_60d_high": null,
+    "crash_60d": null,
+    "bars": 0,
+    "last_date": null
+  },
+  {
+    "code": "2634",
+    "ret_60d": null,
+    "drawdown_120d": null,
+    "is_60d_high": null,
+    "crash_60d": null,
+    "bars": 0,
+    "last_date": null
+  },
+  {
+    "code": "3231",
+    "ret_60d": null,
+    "drawdown_120d": null,
+    "is_60d_high": null,
+    "crash_60d": null,
+    "bars": 0,
+    "last_date": null
+  },
+  {
+    "code": "2382",
+    "ret_60d": null,
+    "drawdown_120d": null,
+    "is_60d_high": null,
+    "crash_60d": null,
+    "bars": 0,
+    "last_date": null
+  },
+  {
+    "code": "2379",
+    "ret_60d": null,
+    "drawdown_120d": null,
+    "is_60d_high": null,
+    "crash_60d": null,
+    "bars": 0,
+    "last_date": null
+  },
+  {
+    "code": "3034",
+    "ret_60d": null,
+    "drawdown_120d": null,
+    "is_60d_high": null,
+    "crash_60d": null,
+    "bars": 0,
+    "last_date": null
+  },
+  {
+    "code": "2383",
+    "ret_60d": null,
+    "drawdown_120d": null,
+    "is_60d_high": null,
+    "crash_60d": null,
+    "bars": 0,
+    "last_date": null
+  },
+  {
+    "code": "2357",
+    "ret_60d": null,
+    "drawdown_120d": null,
+    "is_60d_high": null,
+    "crash_60d": null,
+    "bars": 0,
+    "last_date": null
+  },
+  {
+    "code": "6505",
+    "ret_60d": null,
+    "drawdown_120d": null,
+    "is_60d_high": null,
+    "crash_60d": null,
+    "bars": 0,
+    "last_date": null
+  }
+]
