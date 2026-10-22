@@ -1,24 +1,36 @@
 {
-  "last_update_taipei": "2026-10-22T23:40:22.540870+08:00",
-  "snapshot_date": "2026-10-22",
+  "last_update_taipei": "2026-10-23T00:00:15.572640+08:00",
+  "snapshot_date": "2026-10-23",
   "previous_snapshot_date": "2026-10-22",
-  "data_freshness_hours": 0,
+  "data_freshness_hours": 24,
   "sources": {
     "twse": {
-      "status": "not_run",
-      "reason": "本次排程未包含此來源"
+      "status": "ok",
+      "stocks_count": 1088,
+      "indices_count": 132,
+      "min_interval_sec": 3,
+      "daily_quota": 500
     },
     "tpex": {
-      "status": "not_run",
-      "reason": "本次排程未包含此來源"
+      "status": "ok",
+      "stocks_count": 892,
+      "min_interval_sec": 3,
+      "daily_quota": 500
     },
     "finmind": {
-      "status": "not_run",
-      "reason": "本次排程未包含此來源"
+      "status": "skipped",
+      "reason": "FINMIND_TOKEN not set",
+      "min_interval_sec": 5,
+      "daily_quota": 200
     },
     "mops": {
-      "status": "not_run",
-      "reason": "本次排程未包含此來源"
+      "status": "ok",
+      "min_interval_sec": 8,
+      "daily_quota": 100,
+      "rows_count": 20,
+      "stocks_count": 20,
+      "pledge_events": 19,
+      "note": "董監事持股餘額明細：20/20 檔成功（資料年月 11509）；近 12 月質設異動 19 筆"
     },
     "tdcc": {
       "status": "ok",
