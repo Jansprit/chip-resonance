@@ -264,7 +264,21 @@ class HttpClient:
         response = self._fetch_with_retry(url, **kwargs)
         return response.json()
 
-    def _fetch_with_retry(self, url: str, **kwargs) -> requests.Response:
+    def get_text(self, url: str, **kwargs) -> str:
+        """GET 並回傳文字（HTML / CSV）。失敗時拋例外。"""
+        response = self._fetch_with_retry(url, **kwargs)
+        return response.text
+
+    def post_text(self, url: str, data: dict | None = None, **kwargs) -> str:
+        """POST form-encoded 並回傳文字。
+
+        與 GET 共用同一套節流 / 配額 / 熔斷 / 重試邏輯，
+        因此 POST 型來源（如 MOPS 的 ajax_stapap1）同樣受風控保護。
+        """
+        response = self._fetch_with_retry(url, method="POST", data=data or {}, **kwargs)
+        return response.text
+
+    def _fetch_with_retry(self, url: str, method: str = "GET", **kwargs) -> requests.Response:
         last_error = None
 
         for attempt in range(1, self.retry.max_retries + 2):
@@ -276,7 +290,12 @@ class HttpClient:
 
             try:
                 self.rl.wait()
-                response = self.session.get(url, timeout=self.timeout, **kwargs)
+                if method.upper() == "POST":
+                    response = self.session.post(
+                        url, timeout=self.timeout, **kwargs
+                    )
+                else:
+                    response = self.session.get(url, timeout=self.timeout, **kwargs)
 
                 if response.status_code in (403, 429):
                     err = f"HTTP {response.status_code} (likely banned / rate-limited)"

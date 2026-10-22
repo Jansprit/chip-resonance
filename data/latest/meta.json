@@ -1,42 +1,17 @@
 {
-  "last_update_taipei": "2026-09-22T17:53:18.613287+08:00",
-  "snapshot_date": "2026-09-22",
+  "last_update_taipei": "2026-10-22T20:26:54.208164+08:00",
+  "snapshot_date": "2026-10-22",
   "previous_snapshot_date": "2026-09-22",
-  "data_freshness_hours": 0,
+  "data_freshness_hours": 720,
   "sources": {
-    "twse": {
-      "status": "ok",
-      "stocks_count": 1085,
-      "indices_count": 130,
-      "min_interval_sec": 3,
-      "daily_quota": 500
-    },
-    "tpex": {
-      "status": "ok",
-      "stocks_count": 892,
-      "min_interval_sec": 3,
-      "daily_quota": 500
-    },
-    "finmind": {
-      "status": "skipped",
-      "reason": "FINMIND_TOKEN not set",
-      "min_interval_sec": 5,
-      "daily_quota": 200
-    },
     "mops": {
-      "status": "skipped",
+      "status": "ok",
       "min_interval_sec": 8,
       "daily_quota": 100,
-      "rows_count": 0,
-      "reason": "MOPS endpoint migrated in 2024; pending new URL"
-    },
-    "wantgoo": {
-      "status": "failed",
-      "min_interval_sec": 8,
-      "daily_quota": 200,
-      "rows_count": 0,
-      "error": "No session for wantgoo; run auth_setup.py first",
-      "trace": "Traceback (most recent call last):\n  File \"E:\\MiniMax_Desktop\\Work01\\chip_resonance\\backend\\pipeline.py\", line 315, in run_wantgoo_async\n    await session.start()\n  File \"E:\\MiniMax_Desktop\\Work01\\chip_resonance\\backend\\scrapers\\base.py\", line 538, in start\n    self._storage_state = self.store.load(self.site)\n                          ~~~~~~~~~~~~~~~^^^^^^^^^^^\n  File \"E:\\MiniMax_Desktop\\Work01\\chip_resonance\\backend\\scrapers\\base.py\", line 421, in load\n    raise SessionNotFound(f\"No session for {site}; run auth_setup.py first\")\nbackend.scrapers.base.SessionNotFound: No session for wantgoo; run auth_setup.py first\n"
+      "rows_count": 2,
+      "stocks_count": 2,
+      "pledge_events": 0,
+      "note": "董監事持股餘額明細：2/2 檔成功（資料年月 11509）；近 12 月質設異動 0 筆"
     }
   },
   "credentials": {
@@ -47,8 +22,9 @@
     "fred": false,
     "sec_user_agent": false,
     "goodinfo_proxy": false,
-    "pyramid_credentials": false,
-    "goodinfo_credentials": false
+    "pyramid_session": false,
+    "goodinfo_session": false,
+    "tdcc_session": false
   },
   "us_markets_credentials": {
     "FINNHUB_API_KEY": false,

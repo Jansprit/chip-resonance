@@ -54,6 +54,9 @@ from backend.scrapers.finmind import (
 from backend.scrapers.mops import (
     is_available as mops_available,
 )
+from backend.scrapers.pyramid import (
+    is_available as pyramid_is_available,
+)
 from backend.scrapers import tdcc_opendata
 from backend.scrapers.tdcc import (
     create_tdcc_session, fetch_daily_range,
@@ -238,7 +241,13 @@ def run_finmind(out_dir: Path) -> dict:
 
 
 async def run_mops_async(out_dir: Path) -> dict:
-    """MOPS 公開資訊觀測站：抓董監事與質押資料（2026-09 啟用）。"""
+    """MOPS 公開資訊觀測站：抓董監事持股餘額明細（2026-10 修正 BUG-02）。
+
+    純 HTTP（requests + Referer）即可，不需要 cookie 也不需要 Playwright。
+    每檔股票需要 2 個請求：
+      1. 本月的董監事持股餘額明細（→ 目前持股、設質股數、設質比例）
+      2. 3 個月前的同一張表（→ 計算近 3 月持股變化率）
+    """
     from backend.scrapers import mops as mops_scraper
     status = {
         "status": "ok",
@@ -250,29 +259,74 @@ async def run_mops_async(out_dir: Path) -> dict:
         return status
     try:
         codes = _select_codes(out_dir, 5)
-        current_year = _taipei_now().year
-        director_results = []
-        pledge_results = []
-        session = mops_scraper.create_mops_session()
-        await session.start()
+
+        director_results: list[dict[str, Any]] = []
+        client = mops_scraper.create_mops_client()
         try:
             for code in codes:
                 try:
-                    h_dir = await mops_scraper.fetch_director_holding(code, current_year, session=session)
-                    director_results.append({"code": code, "year": current_year, "html": h_dir})
+                    # (1) 最新已公布月份（本月通常還沒公布，必須用 isnew=true）
+                    cur_html = mops_scraper.fetch_director_holding(
+                        code, 0, 0, client=client, is_new=True
+                    )
+                    cur = mops_scraper.parse_director_holding_html(cur_html, code)
+                    if cur.get("no_data") or not cur.get("period"):
+                        director_results.append({
+                            "code": code,
+                            "error": "MOPS 查無該公司的董監事持股資料",
+                            "period": cur.get("period", ""),
+                        })
+                        continue
+
+                    # (2) 往前推 3 個月 → 近 3 月持股變化率
+                    py, pm = mops_scraper.roc_period_to_ym(cur["period"])
+                    past_year, past_month = mops_scraper.shift_month(py, pm, -3)
+                    past = None
+                    try:
+                        past_html = mops_scraper.fetch_director_holding(
+                            code, past_year, past_month, client=client
+                        )
+                        past = mops_scraper.parse_director_holding_html(past_html, code)
+                    except Exception as pe:
+                        cur["past_error"] = str(pe)
+
+                    director_results.append(
+                        mops_scraper.combine_director_periods(cur, past)
+                    )
                 except Exception as e:
                     director_results.append({"code": code, "error": str(e)})
+
+            # 董監質設異動（近 12 個月）
+            pledge_results: list[dict[str, Any]] = []
+            today = _taipei_now()
+            for code in codes:
                 try:
-                    h_plg = await mops_scraper.fetch_pledge(code, session=session)
-                    pledge_results.append({"code": code, "html": h_plg})
+                    pl_html = mops_scraper.fetch_pledge(
+                        code, today.year, today.month, client=client
+                    )
+                    pledge_results.append(
+                        mops_scraper.parse_pledge_html(pl_html, code)
+                    )
                 except Exception as e:
                     pledge_results.append({"code": code, "error": str(e)})
         finally:
-            await session.close()
+            client.session.close()
+
         mops_scraper.save_latest(out_dir, "director", director_results)
         mops_scraper.save_latest(out_dir, "pledge", pledge_results)
-        status["rows_count"] = len(director_results) + len(pledge_results)
-        status["note"] = "Raw HTML stored; parsing needs selector tuning"
+
+        ok = [d for d in director_results if "error" not in d]
+        periods = sorted({d.get("period", "") for d in ok if d.get("period")})
+        status["rows_count"] = len(ok)
+        status["stocks_count"] = len(codes)
+        status["pledge_events"] = sum(
+            p.get("events", 0) for p in pledge_results if "error" not in p
+        )
+        status["note"] = (
+            f"董監事持股餘額明細：{len(ok)}/{len(codes)} 檔成功"
+            f"（資料年月 {', '.join(periods) or 'n/a'}）；"
+            f"近 12 月質設異動 {status['pledge_events']} 筆"
+        )
         return status
     except Exception as e:
         import traceback as _tb
@@ -329,8 +383,12 @@ async def run_pyramid_async(out_dir: Path) -> dict:
         "status": "ok",
         "min_interval_sec": 8, "daily_quota": 100, "rows_count": 0,
     }
-    if not mops_available():
+    # 注意：這裡要用「金字塔自己的」可用性檢查。
+    # 舊版誤用 mops_available()（複製貼上錯誤），MOPS 被停用時會連帶
+    # 讓 MoneyDJ 一起被跳過。
+    if not pyramid_is_available():
         status["status"] = "skipped"
+        status["reason"] = "MoneyDJ pyramid unavailable"
         return status
     try:
         session = create_pyramid_session()
