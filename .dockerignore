@@ -1,0 +1,55 @@
+# .dockerignore — 精簡 Docker build context
+# 對應 docs/2026-10-21-專案體檢報告.md BUG-09：
+# 沒有此檔時，.git 全歷史與大資料檔會被送進 build context，
+# 建置緩慢且私有資料會進到 image 內。
+
+# 版本控制
+.git
+.gitignore
+.github/
+
+# 本機私有資料（絕對不可進 image）
+backend/.sessions/
+backend/.env
+backend/.env.local
+.env
+.local/
+local/
+data/local/
+**/tdcc_history/
+**/.sessions/
+
+# Python
+__pycache__/
+*.py[cod]
+*.egg-info/
+.venv/
+venv/
+.pytest_cache/
+.mypy_cache/
+.ruff_cache/
+*.pyc
+
+# Node
+node_modules/
+package-lock.json
+package.json
+
+# 文件與開發工具
+docs/
+.vscode/
+.idea/
+*.log
+*.tmp
+*.bak
+.DS_Store
+Thumbs.db
+desktop.ini
+
+# 測試產物
+.pytest_cache/
+.coverage
+htmlcov/
+
+# 本機資料快照（image 內不需要，volume 會掛載）
+data/20*/

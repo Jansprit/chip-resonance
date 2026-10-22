@@ -15,6 +15,7 @@ from __future__ import annotations
 
 import asyncio
 import json
+import os
 import sys
 import traceback
 from datetime import datetime, timezone, timedelta
@@ -31,6 +32,7 @@ from backend.scrapers.base import (
     SourceBannedError,
     SourceDisabledError,
     SessionStore,
+    env_get,
     taipei_now_iso,
     taipei_today,
     write_json,
@@ -79,6 +81,43 @@ from backend.scrapers import wantgoo as wantgoo_scraper
 def _taipei_now() -> datetime:
     tz = timezone(timedelta(hours=8))
     return datetime.now(tz)
+
+
+def pipeline_limit(default: int = 5) -> int:
+    """
+    讀取 PIPELINE_LIMIT 設定，控制瀏覽器類來源要抓幾檔個股。
+
+    這是**風控機制**：瀏覽器類來源（神秘金字塔 / 集保 / 玩股網 / MOPS）
+    每檔都要發多次請求，檔數越多被封鎖的風險越高。
+    設為 0 表示不限制（不建議）。
+
+    讀取順序：程序環境變數 → backend/.env（與其他設定走同一條路徑，
+    避免 .env.example 寫的值被靜默忽略 — 見體檢報告 BUG-13）。
+    """
+    raw = (env_get("PIPELINE_LIMIT") or "").strip()
+    if not raw:
+        return default
+    try:
+        n = int(raw)
+    except ValueError:
+        print(f"[WARN] PIPELINE_LIMIT 不是整數：{raw!r}，使用預設 {default}")
+        return default
+    if n <= 0:
+        return 0  # 0 = 不限制
+    return n
+
+
+def _select_codes(out_dir: Path, default: int) -> list[str]:
+    """從 universe.json 取出要抓的股票代號清單（受 PIPELINE_LIMIT 控管）。"""
+    limit = pipeline_limit(default)
+    try:
+        universe = json.loads((out_dir / "latest" / "universe.json").read_text(encoding="utf-8"))
+        codes = [s["code"] for s in universe]
+    except Exception:
+        codes = ["2330", "2454", "2317", "2884", "2882"]
+    if limit > 0:
+        codes = codes[:limit]
+    return codes
 
 
 # ============ 來源狀態更新 ============
@@ -183,11 +222,7 @@ def run_finmind(out_dir: Path) -> dict:
         start = (today - timedelta(days=120)).strftime("%Y-%m-%d")
         end = today.strftime("%Y-%m-%d")
         # 簡化版：先抓大盤代號（取個股清單從 universe.json）
-        try:
-            universe = json.loads((out_dir / "universe.json").read_text(encoding="utf-8"))
-            stock_ids = [s["code"] for s in universe[:50]]  # MVP 只抓前 50 檔
-        except Exception:
-            stock_ids = ["2330", "2454", "2317", "2884", "2882", "2303", "2603", "2609", "2886", "2891"]
+        stock_ids = _select_codes(out_dir, 50)
         prices = fetch_stock_prices(stock_ids, start, end, client=client)
         finmind_save_latest(out_dir, "prices", prices, snapshot_date=taipei_today())
         status["rows_count"] = len(prices)
@@ -214,11 +249,7 @@ async def run_mops_async(out_dir: Path) -> dict:
         status["reason"] = "MOPS unavailable"
         return status
     try:
-        try:
-            universe = json.loads((out_dir / "latest" / "universe.json").read_text(encoding="utf-8"))
-            codes = [s["code"] for s in universe[:5]]
-        except Exception:
-            codes = ["2330", "2454", "2317", "2884", "2882"]
+        codes = _select_codes(out_dir, 5)
         current_year = _taipei_now().year
         director_results = []
         pledge_results = []
@@ -306,11 +337,7 @@ async def run_pyramid_async(out_dir: Path) -> dict:
         await session.start()
         try:
             # 只抓 3 檔示範個股避免觸發風控
-            try:
-                universe = json.loads((out_dir / "latest" / "universe.json").read_text(encoding="utf-8"))
-                codes = [s["code"] for s in universe[:3]]
-            except Exception:
-                codes = ["2330", "2454", "2454"]  # 示範用
+            codes = _select_codes(out_dir, 3)
 
             all_results = {"pages": [], "klines": {}}
             for code in codes:
@@ -345,11 +372,7 @@ async def run_pyramid_async(out_dir: Path) -> dict:
 async def run_goodinfo_async(out_dir: Path) -> dict:
     async def _fetch(out):
         session = create_goodinfo_session()
-        try:
-            universe = json.loads((out / "latest" / "universe.json").read_text(encoding="utf-8"))
-            codes = [s["code"] for s in universe[:5]]
-        except Exception:
-            codes = ["2330", "2454", "2317", "2884", "2882"]
+        codes = _select_codes(out, 5)
         results = []
         for code in codes:
             try:
@@ -384,11 +407,7 @@ async def run_wantgoo_async(out_dir: Path) -> dict:
         return status
     try:
         # 從 universe.json 抓前 5 檔（MVP，避免 Playwright 來源耗時過長）
-        try:
-            universe = json.loads((out_dir / "latest" / "universe.json").read_text(encoding="utf-8"))
-            codes = [s["code"] for s in universe[:5]]
-        except Exception:
-            codes = ["2330", "2454", "2317", "2884", "2882"]
+        codes = _select_codes(out_dir, 5)
 
         results = {"balance_sheet": [], "institutional": [], "main": []}
         session = wantgoo_scraper.create_wantgoo_session()
@@ -456,11 +475,15 @@ async def run_tdcc_opendata_async(repo: Path, out_dir: Path) -> dict:
         # 3. 存 data/latest/
         tdcc_opendata.save_latest(out_dir, aggregated)
         # 4. 累積存 data/local/tdcc_history/<date>.json
+        #    注意：傳 repo/"data"，save_history 內部會再接 "local/tdcc_history"，
+        #    這樣才會落在 data/local/（受 .gitignore 保護的私有層），
+        #    而非 repo 根目錄的 local/（BUG-06：曾被誤 commit 到公開倉庫）。
+        data_root = repo / "data"
         if aggregated:
             first_date = aggregated[0].get("date")
-            tdcc_opendata.save_history(aggregated, repo, iso_date=first_date)
+            tdcc_opendata.save_history(aggregated, data_root, iso_date=first_date)
         # 5. 計算多週趨勢
-        history = tdcc_opendata.load_history(repo, weeks=4)
+        history = tdcc_opendata.load_history(data_root, weeks=4)
         if history:
             codes = [r["code"] for r in aggregated]
             for code in codes:

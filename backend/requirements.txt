@@ -1,11 +1,22 @@
 # Backend dependencies for the chip-resonance scraper
 # Python 3.10+
+
+# --- 核心 ---
 requests>=2.31.0          # HTTP client
 pydantic>=2.5.0           # data validation
 jsonschema>=4.20.0        # JSON Schema validation for CI
 python-dateutil>=2.8.2    # date math
-tenacity>=8.2.3           # retry decorators (optional helper)
+tenacity>=8.2.3           # retry decorators
 
-# Dev / test
+# --- 瀏覽器自動化（神秘金字塔 / 集保 / 玩股網 / MOPS）---
+# 對應 docs/2026-10-21-專案體檢報告.md BUG-05：
+# 這三個套件在 base.py / auth_setup.py 直接 import，
+# 少了會讓所有 Playwright 來源在執行期拋 ModuleNotFoundError
+# （本機環境恰好預裝，掩蓋了缺陷；CI 的 scrape.yml 曾因此連續失敗）
+playwright>=1.40.0
+beautifulsoup4>=4.12.0     # HTML 解析
+lxml>=4.9.0                # BeautifulSoup 的解析後端
+
+# --- 開發 / 測試 ---
 pytest>=7.4.0
 pytest-asyncio>=0.23.0

@@ -60,7 +60,68 @@ DEFAULT_ENV_PATH = Path(__file__).resolve().parents[1] / ".env"
 # session storage 預設位置
 DEFAULT_SESSION_DIR = Path(__file__).resolve().parents[1] / ".sessions"
 
+# 可用環境變數覆寫 session 目錄（容器部署時把 .sessions 掛到別處）
+SESSION_DIR_ENV = "CHIP_RESONANCE_SESSION_DIR"
+
 TAIPEI_TZ = timezone(timedelta(hours=8))
+
+
+def resolve_session_dir() -> Path:
+    """回傳 session 儲存目錄（可被 CHIP_RESONANCE_SESSION_DIR 覆寫）。"""
+    return Path(os.environ.get(SESSION_DIR_ENV, DEFAULT_SESSION_DIR))
+
+
+# CredentialManager 實例快取（.env 只在啟動時讀一次即可）
+_CRED_CACHE: dict[str, Any] = {}
+
+
+def env_get(key: str, default: Optional[str] = None) -> Optional[str]:
+    """統一讀取設定：**程序環境變數優先，其次 backend/.env**。
+
+    BUG-13 根因修法：過去 RL_JITTER / PIPELINE_LIMIT 只讀 os.environ，
+    而 CredentialManager 讀 .env 檔案——兩條路各讀各的，造成 .env.example
+    裡寫的值被**靜默忽略**。這裡把兩者統一到同一條解析路徑。
+    """
+    cm = _CRED_CACHE.get("cm")
+    if cm is None:
+        cm = CredentialManager()
+        _CRED_CACHE["cm"] = cm
+    return cm.get(key, default)
+
+
+def reset_config_cache() -> None:
+    """清掉設定快取（測試用；正常流程中 .env 不會中途改變）。"""
+    _CRED_CACHE.clear()
+
+
+def session_is_expired(state: dict) -> bool:
+    """判斷一份 session state 是否已過期（無 expires_at 視為未過期）。"""
+    expires_at = state.get("_meta", {}).get("expires_at")
+    if not expires_at:
+        return False
+    try:
+        return datetime.now(TAIPEI_TZ) > datetime.fromisoformat(expires_at)
+    except ValueError:
+        return False
+
+
+def session_available(site: str) -> bool:
+    """該站點是否已有可用（存在、未過期、格式正確）的登入 session。
+
+    這是「能不能抓到需登入資料」的真實訊號，取代舊版
+    PYRAMID_USERNAME / GOODINFO_USERNAME 這類永遠不影響行為的死設定。
+    不會建立任何目錄，純讀取。
+    """
+    path = resolve_session_dir() / f"{site}.json"
+    if not path.exists():
+        return False
+    try:
+        state = json.loads(path.read_text(encoding="utf-8"))
+    except Exception:
+        return False
+    if not isinstance(state, dict):
+        return False
+    return not session_is_expired(state)
 
 
 # ============ 節流閥 ============
@@ -100,7 +161,8 @@ class RateLimiter:
                 if elapsed < self.min_interval:
                     sleep_for = self.min_interval - elapsed
                     # 加一點隨機抖動，避免週期性 fingerprint
-                    jitter = float(os.environ.get("RL_JITTER", "0.5"))
+                    # 讀取順序：程序環境變數 → backend/.env（CredentialManager 統一處理）
+                    jitter = float(env_get("RL_JITTER", "0.5"))
                     sleep_for += random.uniform(0, jitter)
                     time.sleep(sleep_for)
             self._last_call_ts = time.monotonic()
@@ -361,24 +423,22 @@ class CredentialManager:
     def goodinfo_proxy(self) -> Optional[str]:
         return self.get("GOODINFO_PROXY_URL")
 
-    @property
-    def pyramid_username(self) -> Optional[str]:
-        return self.get("PYRAMID_USERNAME")
-
-    @property
-    def pyramid_password(self) -> Optional[str]:
-        return self.get("PYRAMID_PASSWORD")
-
-    @property
-    def goodinfo_username(self) -> Optional[str]:
-        return self.get("GOODINFO_USERNAME")
-
-    @property
-    def goodinfo_password(self) -> Optional[str]:
-        return self.get("GOODINFO_PASSWORD")
+    # 注意：這裡**刻意沒有** PYRAMID_USERNAME / PYRAMID_PASSWORD /
+    # GOODINFO_USERNAME / GOODINFO_PASSWORD。
+    # 舊版 .env.example 宣稱可以用帳密登入，但專案從未實作自動登入：
+    # 真正可用的路徑是 `python -m backend.scripts.auth_setup --site <site>`
+    # 手動登入後把 cookies 存成 .sessions/<site>.json。
+    # 保留一個讀得到、卻永遠不影響行為的設定鍵，會讓 meta.json 產生
+    # 「已具備登入能力」的假象（見 docs/2026-10-21-專案體檢報告.md BUG-13）。
+    # 因此改成回報**真實**訊號：session 檔是否存在且未過期。
 
     def summary(self) -> dict[str, bool]:
-        """回傳各憑據是否存在的摘要（給 meta.json 與 debug 用）。"""
+        """回傳各憑據／session 是否可用（給 meta.json 與 debug 用）。
+
+        - 憑據類：環境變數是否有值
+        - session 類：.sessions/<site>.json 是否存在且未過期
+          （這才是「能不能抓到需登入的資料」的真實訊號）
+        """
         return {
             "finnhub": bool(self.finnhub_key),
             "finmind": bool(self.finmind_token),
@@ -387,8 +447,9 @@ class CredentialManager:
             "fred": bool(self.fred_key),
             "sec_user_agent": bool(self.sec_user_agent),
             "goodinfo_proxy": bool(self.goodinfo_proxy),
-            "pyramid_credentials": bool(self.pyramid_username and self.pyramid_password),
-            "goodinfo_credentials": bool(self.goodinfo_username and self.goodinfo_password),
+            "pyramid_session": session_available("pyramid"),
+            "goodinfo_session": session_available("goodinfo"),
+            "tdcc_session": session_available("tdcc"),
         }
 
 
@@ -405,7 +466,7 @@ class SessionStore:
     """
 
     def __init__(self, session_dir: Optional[Path] = None):
-        self.session_dir = session_dir or DEFAULT_SESSION_DIR
+        self.session_dir = session_dir or resolve_session_dir()
         self.session_dir.mkdir(parents=True, exist_ok=True)
 
     def _path(self, site: str) -> Path:
@@ -421,14 +482,9 @@ class SessionStore:
             raise SessionNotFound(f"No session for {site}; run auth_setup.py first")
         state = json.loads(path.read_text(encoding="utf-8"))
         # 過期檢查（若有 expires_at 欄位）
-        expires_at = state.get("_meta", {}).get("expires_at")
-        if expires_at:
-            try:
-                exp_dt = datetime.fromisoformat(expires_at)
-                if datetime.now(TAIPEI_TZ) > exp_dt:
-                    raise SessionExpired(f"Session for {site} expired at {expires_at}")
-            except ValueError:
-                pass
+        if session_is_expired(state):
+            expires_at = state.get("_meta", {}).get("expires_at")
+            raise SessionExpired(f"Session for {site} expired at {expires_at}")
         return state
 
     def save(self, site: str, storage_state: dict, expires_in_days: int = 30) -> None:

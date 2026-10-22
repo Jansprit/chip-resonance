@@ -97,9 +97,14 @@ notepad backend\.env
 |---|---|---|---|
 | `FINMIND_TOKEN` | [FinMind 官網](https://finmindtrade.com/) 申請 | 提升 rate limit（600/hr）| 否（沒 token 也能跑，但速率較低）|
 | `FINMIND_PAID` | FinMind 付費訂閱 | 解鎖 `TaiwanStockShareholding` 大戶持股分級 | 否（付費才有 F1/F4/F6 真實值）|
-| `PYRAMID_USERNAME/PASSWORD` | ~~神秘金字塔~~ | **2026-09 修正：不需登入**，基本資料免登入可看 | 否 |
-| `GOODINFO_USERNAME/PASSWORD` | Goodinfo 免費會員 | 登入後能看到董監加碼明細等進階資料 | 否（基本免登入）|
 | `GOODINFO_PROXY_URL` | 住宅代理 | 避免本機 IP 被擋 | 否（看您網路環境）|
+| `PIPELINE_LIMIT` | — | 限制每個來源要抓的股票檔數（`0` = 全部）| 否（各來源有預設）|
+
+> **2026-10 修正**：舊版這裡列有 `PYRAMID_USERNAME/PASSWORD` 與
+> `GOODINFO_USERNAME/PASSWORD`，但程式從未讀取它們——專案**不做帳密自動登入**。
+> 需登入的來源請走 `python -m backend.scripts.auth_setup --site <site>` 手动登入一次，
+> cookie 會存成 `backend/.sessions/<site>.json`。見
+> [體檢報告 BUG-13](docs/2026-10-21-專案體檢報告.md)。
 
 ### 哪些來源不必登入？
 

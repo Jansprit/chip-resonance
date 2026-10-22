@@ -98,11 +98,14 @@ exclude = ["backend/tests/*"]
 required_env = []
 optional_env = [
     "FINMIND_TOKEN",
-    "PYRAMID_USERNAME", "PYRAMID_PASSWORD",
-    "GOODINFO_USERNAME", "GOODINFO_PASSWORD",
     "GOODINFO_PROXY_URL",
     "FINNHUB_API_KEY", "ALPHA_VANTAGE_API_KEY", "TWELVE_DATA_API_KEY",
     "FRED_API_KEY", "SEC_USER_AGENT",
+    # 需登入的站點走 auth_setup.py 手動登入 + .sessions/<site>.json，
+    # 專案不實作帳密自動登入，故不再列 PYRAMID_*/GOODINFO_USERNAME/PASSWORD。
+    "CHIP_RESONANCE_SESSION_DIR",
+    # Pipeline 調校（backend/pipeline.py 實際讀取）
+    "PIPELINE_LIMIT", "RL_JITTER",
 ]
 
 # 節流預設（覆寫請在 .env 設 RL_JITTER）

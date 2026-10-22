@@ -36,10 +36,15 @@ backend/.env.local
 backend/.env.production
 backend/.sessions/
 backend/.sessions/**
-backend/data/local/      # 私有完整資料（僅本機）
+backend/data/local/
 backend/data/local/**
-data/local/             # 私有資料快照
+# 私有層：TDCC 歷史快取等（多層保險，避免任何路徑變更再次外洩）
+local/
+local/**
+data/local/
 data/local/**
+**/tdcc_history/
+**/.sessions/
 # Note: backend/.env.example is NOT ignored (it should be committed as template)
 
 # Build outputs (in case bundler is added later)

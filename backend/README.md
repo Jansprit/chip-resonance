@@ -105,9 +105,10 @@ vi backend/.env
 
 可選設定：
 - `FINMIND_TOKEN` — 啟用 FinMind 完整功能（月營收、財報、還原股價）
-- `PYRAMID_USERNAME` / `PYRAMID_PASSWORD` — 加速首次登入（仍需走 auth_setup）
-- `GOODINFO_USERNAME` / `GOODINFO_PASSWORD` — 同上
 - `GOODINFO_PROXY_URL` — 住宅代理（避免本機 IP 被擋）
+- `PIPELINE_LIMIT` — 每個來源要抓的股票檔數（`0` = 全部）
+
+> 專案**不做帳密自動登入**。需登入的來源請用下一節的 `auth_setup.py` 手动登入一次。
 
 ### 3. 登入需要 Playwright 的網站（一次性）
 
