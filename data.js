@@ -152,10 +152,14 @@ async function loadRealData() {
   const controller = new AbortController();
   const timeout = setTimeout(() => controller.abort(), 15000);
   try {
+    // cache-busting：GitHub Pages 對靜態檔設了 max-age，
+    // 就算 fetch 帶 cache:'no-store'，瀏覽器仍可能回傳記憶體快取，
+    // 導致 banner 顯示舊的來源狀態。加上時間戳確保每次都是最新。
+    const bust = `?t=${Date.now()}`;
     const [meta, demo, tdcc] = await Promise.all([
-      fetchJSON('data/latest/meta.json'),
-      fetchJSON('data/latest/demo_subset.json'),
-      fetchJSON('data/latest/tdcc_chip.json').catch(() => null),
+      fetchJSON(`data/latest/meta.json${bust}`),
+      fetchJSON(`data/latest/demo_subset.json${bust}`),
+      fetchJSON(`data/latest/tdcc_chip.json${bust}`).catch(() => null),
     ]);
     DATA_META = meta;
     DATA_LOADED = true;
