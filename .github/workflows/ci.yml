@@ -110,10 +110,13 @@ jobs:
 
       # 3b) Python unit tests — 跑 backend/tests/ 底下的**所有**測試檔。
       #      用 glob 掃描而不是寫死檔名，避免新增測試時忘了加進 CI。
+      #      依賴安裝完整的 requirements.txt（測試需要 beautifulsoup4/lxml），
+      #      不要只裝 pydantic —— 這正是 v0.3.0 第一次 CI 失敗的原因。
       - name: Backend unit tests
         run: |
           echo "=== Backend unit tests ==="
-          pip install --quiet pydantic
+          python -m pip install --quiet --upgrade pip
+          pip install --quiet -r backend/requirements.txt
           for t in backend/tests/test_*.py; do
             echo "--- $t"
             python "$t"

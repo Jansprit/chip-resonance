@@ -80,7 +80,6 @@ jobs:
           python -m backend.schema data/latest/prices.json
           python -m backend.schema data/latest/tpex_prices.json
           python -m backend.schema data/latest/market_index.json
-          python -m backend.schema data/latest/universe.json
           python -m backend.schema data/latest/demo_subset.json
           python -m backend.schema data/latest/meta.json
 

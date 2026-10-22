@@ -128,18 +128,33 @@ def _demo_codes() -> list[str]:
 
 
 def _select_codes(out_dir: Path, default: int) -> list[str]:
-    """從示範清單取出要抓的股票代號（受 PIPELINE_LIMIT 控管）。
+    """從示範清單取出「要抓」的股票代號（受 PIPELINE_LIMIT 控管）。
 
     修正（2026-10）：舊版讀 `out_dir / "latest" / "universe.json"`，
     但 out_dir 本身就是 data/latest，實際路徑變成
     `data/latest/latest/universe.json`（不存在）→ 每次都靜默掉進
     fallback 的 5 檔硬編碼清單，等於所有來源都只抓那 5 檔。
+
+    這是給「抓取成本高」的來源用的（MOPS / MoneyDJ / 玩股網）。
+    要「發布」的代號請用 _publish_codes()（不設上限）。
     """
     limit = pipeline_limit(default)
     codes = _demo_codes()
     if limit > 0:
         codes = codes[:limit]
     return codes
+
+
+def _publish_codes() -> list[str]:
+    """要發布到 data/latest/ 的完整示範清單（**不受 PIPELINE_LIMIT 限制**）。
+
+    為什麼要分開？
+    PIPELINE_LIMIT 的目的是省下「抓取成本」（每檔要發多���請求），
+    但「發布範圍」不該跟著縮 —— 否則只有前 N 檔有集保資料、
+    其餘沒有，合併後的 demo_subset 會變成資料覆蓋不均，
+    前端顯示的資料品質徽章也會不一致。
+    """
+    return _demo_codes()
 
 
 # ============ 來源狀態更新 ============
@@ -661,7 +676,7 @@ async def run_tdcc_opendata_async(repo: Path, out_dir: Path) -> dict:
         #    只發布**示範清單內**的個股：全市場版本有 4,000+ 檔、1.4MB，
         #    每天提交會讓公開倉庫快速膨脹（與 BUG-06 同一類問題）。
         #    全市場版本改存到私有層 data/local/tdcc_chip_full.json。
-        demo_codes = _select_codes(out_dir, 50)
+        demo_codes = _publish_codes()
         code_set = set(demo_codes)
         trimmed = [r for r in aggregated if r["code"] in code_set]
         tdcc_opendata.save_latest(out_dir, trimmed)
