@@ -161,7 +161,10 @@ def _publish_codes() -> list[str]:
 
 # 所有已知來源（meta.json 一定要全部列出，
 # 沒跑到的標成 not_run —— 前端 banner 才不會對 3/8 來源顯示「?」）
-ALL_SOURCES = ("twse", "tpex", "finmind", "mops", "tdcc", "wantgoo", "pyramid", "goodinfo")
+ALL_SOURCES = (
+    "twse", "tpex", "finmind", "mops", "tdcc",
+    "wantgoo_price", "wantgoo", "pyramid", "goodinfo",
+)
 
 
 def update_meta(out_dir: Path, sources_status: dict[str, Any], notes: str = "") -> None:

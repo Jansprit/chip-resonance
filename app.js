@@ -781,6 +781,7 @@ function showMetaBanner() {
   const twseCount = (sources.twse && sources.twse.stocks_count) || 0;
   const tpexCount = (sources.tpex && sources.tpex.stocks_count) || 0;
   const tdccCount = (sources.tdcc && sources.tdcc.stocks_count) || 0;
+  const wgCount = (sources.wantgoo_price && sources.wantgoo_price.rows_count) || 0;
 
   // 資料品質（BUG-14 / BUG-15 修正）：誠實告知使用者這個分數有多可信
   const quality = dataQualitySummary(computeScores(window.STOCK_UNIVERSE || []));
@@ -806,8 +807,10 @@ function showMetaBanner() {
     <span style="font-size:11px; color:var(--gold);">
       TWSE ${srcStatus('twse')} ${twseCount} · TPEx ${srcStatus('tpex')} ${tpexCount}
       · FinMind ${srcStatus('finmind')} · MOPS ${srcStatus('mops')}
-      · 集保 ${srcStatus('tdcc')} ${tdccCount} · 玩股網 ${srcStatus('wantgoo')}
-      · 金字塔 ${srcStatus('pyramid')} · Goodinfo ${srcStatus('goodinfo')}
+      · 集保 ${srcStatus('tdcc')} ${tdccCount}
+      · 玩股網K線 ${srcStatus('wantgoo_price')} ${wgCount}
+      · 籌碼 ${srcStatus('wantgoo')} · 金字塔 ${srcStatus('pyramid')}
+      · Goodinfo ${srcStatus('goodinfo')}
     </span>
     <br>
     ${qualityLine}
