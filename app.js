@@ -781,7 +781,11 @@ function showMetaBanner() {
   const twseCount = (sources.twse && sources.twse.stocks_count) || 0;
   const tpexCount = (sources.tpex && sources.tpex.stocks_count) || 0;
   const tdccCount = (sources.tdcc && sources.tdcc.stocks_count) || 0;
-  const wgCount = (sources.wantgoo_price && sources.wantgoo_price.rows_count) || 0;
+  // 價格衍生欄位（玩股網日 K 線）只由本機排程更新（datacenter IP 會被 403），
+  // 所以直接從已載入的資料算「有真實價格的檔數」，比來源狀態更貼近事實。
+  const priceRealCount = (window.STOCK_UNIVERSE || []).filter(
+    s => s && s._provenance && s._provenance.ret_60d === 'real'
+  ).length;
 
   // 資料品質（BUG-14 / BUG-15 修正）：誠實告知使用者這個分數有多可信
   const quality = dataQualitySummary(computeScores(window.STOCK_UNIVERSE || []));
@@ -808,7 +812,7 @@ function showMetaBanner() {
       TWSE ${srcStatus('twse')} ${twseCount} · TPEx ${srcStatus('tpex')} ${tpexCount}
       · FinMind ${srcStatus('finmind')} · MOPS ${srcStatus('mops')}
       · 集保 ${srcStatus('tdcc')} ${tdccCount}
-      · 玩股網K線 ${srcStatus('wantgoo_price')} ${wgCount}
+      · 玩股網K線 ${priceRealCount} 檔
       · 籌碼 ${srcStatus('wantgoo')} · 金字塔 ${srcStatus('pyramid')}
       · Goodinfo ${srcStatus('goodinfo')}
     </span>
