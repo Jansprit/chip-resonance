@@ -2,6 +2,70 @@
 
 All notable changes to the 籌碼共振選股系統 (Chip-Resonance Selection System).
 
+## [v0.3.1] — 2026-10-24 — 價格歷史接通（真實瀏覽器驗證後）
+
+v0.3.0 把三個來源判定為「不可用」：玩股網個股 API、MoneyDJ BCD、FinMind。
+本版用**真實瀏覽器（Playwright + 滑鼠互動 + 滾輪 + 點擊）**重新驗證，
+結論是**其中一個完全可用、另外兩個的診斷都错了**。
+
+### ✅ 玩股網價格歷史 — 完全可用（純 HTTP，免登入、免簽章）
+
+```
+GET https://www.wantgoo.com/investrue/{code}/historical-daily-candlesticks
+    ?before={今天 00:00 台北的毫秒時間戳}&top=490
+```
+
+- 每檔 **490 根日 K 線**（約兩年），欄位 `open/high/low/close/volume`
+- **不需要** Cloudflare 的 `x-client-signature`、不需要 Playwright、不需要登入
+- 參數契約（踩坑後釐清）：`top` **必須是 490**（其他值全 400）、
+  `before` **必須是今天 00:00 台北**（今天-1 天 / -30 天 / 0 / 現在全 400）
+- 實測 30 個代號全部 200
+- 交叉驗證：2330 於 2026-10-22 的收盤 2385 與 `/investrue/all-quote-info` 完全一致
+
+**效果**：F2 / F3 / F8 從「0 檔可算」變成 **F2 43 檔、F3 20 檔、F8 43 檔**，
+評分引擎從 `partial` 模式升為 **`strict` 模式**（38 檔入排名，每檔 3 個真實因子）。
+
+### 🔍 診斷修正：MoneyDJ 不是「要求登入」，是「免登入額度極小」
+
+先前結論「BCD 端點已改為要求 SSO 登入」是錯的。實測：
+
+| 方式 | 結果 |
+|---|---|
+| requests 連抓 6 檔（8 秒間隔） | 第 1 檔（2330）成功，其餘 5 檔全 302 → SSO |
+| Playwright 連抓 5 檔（含滑鼠互動） | 同樣只有第 1 檔成功 |
+| 同 session 換 `b=D` / `b=M` | 成功（CDN 快取命中） |
+
+也就是說**免登入額度大約只夠 1 檔**。要抓多檔仍需登入 session
+（`auth_setup --site pyramid`），但這不是「被封鎖」。
+程式碼已加 `sso_required` 明確標記，本模組降級為備援來源。
+
+### 🔍 診斷修正：FinMind 是「付費牆」不是「防爬」
+
+用完整瀏覽器指紋（真 Chromium TLS/HTTP2）+ 先訪官網取 cookie + 頁面內 fetch，
+仍回 `{"msg":"Your level is free. Please update your user level"}` 400。
+→ 瀏覽器模擬繞不過，必須有 `FINMIND_TOKEN`。
+（FinMind 已不再是價格歷史的必要來源 — 玩股網完全取代了它。）
+
+### 🔍 診斷修正：玩股網「籌碼資料」仍需登入
+
+法人/主力/融資券的個股 JSON API 需要 Cloudflare 注入的 `x-client-signature`，
+連站方自己的頁面請求都回 400 → 這部分維持「需登入 session」的結論。
+但站上還有兩個**免簽章**端點可用：`/investrue/all-alive`（1.27MB 標的清單）、
+`/investrue/all-quote-info`（1.73MB、6044 檔全市場即時 OHLCV）。
+
+### 🔧 其他
+
+- `wantgoo.py` 新增 `fetch_price_history()` / `parse_price_history()` /
+  `create_price_client()`（受風控保護：6 秒間隔、每日 200 次上限）
+- 新增 pipeline source `wantgoo_price`（納入 public 集合，CI 排程會跑）
+- `build_universe.py` 的價格衍生欄位優先來源改為玩股網（次選 MoneyDJ、最後 FinMind）
+- `schema.py` 新增 `WantgooPriceEntry` 模型
+- `_to_float()` 改為接受數字型輸入（JSON 回傳的是 float 不是字串）
+- `test_wantgoo.py` 13 → 19 項（新增端點契約、解析、before 計算的測試）
+- `test_merge_layer.py` 跟上 `build()` 簽章變更
+
+---
+
 ## [v0.3.0] — 2026-10-22 — 體檢報告修復 + 資料來源真正接通
 
 本版依 [docs/2026-10-21-專案體檢報告.md](docs/2026-10-21-專案體檢報告.md)

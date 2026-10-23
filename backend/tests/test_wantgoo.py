@@ -220,6 +220,71 @@ def test_to_float_handles_formatting():
     assert wantgoo._to_float(None) is None
 
 
+# ============ 價格歷史（純 HTTP，免登入）============
+
+# 真實回應格式（2026-10-24 實測，/investrue/2330/historical-daily-candlesticks）
+PRICE_HISTORY_RAW = [
+    {"time": 1792080000000, "tradeDate": 1792080000000,
+     "open": 2430.0, "high": 2445.0, "low": 2420.0, "close": 2420.0,
+     "volume": 33389, "millionAmount": 81100.73},
+    {"time": 1791993600000, "tradeDate": 1791993600000,
+     "open": 2420.0, "high": 2450.0, "low": 2420.0, "close": 2440.0,
+     "volume": 48032, "millionAmount": 90123.45},
+    {"time": 1791907200000, "tradeDate": 1791907200000,
+     "open": 2505.0, "high": 2535.0, "low": 2490.0, "close": 2490.0,
+     "volume": 23175, "millionAmount": 55555.55},
+]
+
+
+def test_price_history_contract_constants():
+    """端點參數契約（踩過坑，別亂改）。"""
+    assert wantgoo.PRICE_HISTORY_TOP == 490
+    assert wantgoo.PRICE_HISTORY_PATH == \
+        "/investrue/{code}/historical-daily-candlesticks"
+    # 必須走站點根目錄，不是 /stock 底下
+    assert wantgoo.WANTAOO_ORIGIN == "https://www.wantgoo.com"
+
+
+def test_parse_price_history_converts_and_sorts():
+    """原始資料是「最新在前」，要翻成日期升冪 + 欄位名稱統一。"""
+    bars = wantgoo.parse_price_history(PRICE_HISTORY_RAW)
+    assert len(bars) == 3
+    dates = [b["date"] for b in bars]
+    assert dates == sorted(dates), "必須依日期升冪"
+    assert bars[0]["date"] < bars[-1]["date"]
+    assert set(bars[0].keys()) == {"date", "open", "high", "low", "close", "volume"}
+    # 原始是「最新在前」，翻正後 bars[0] 應該是最舊那筆（close 2490）
+    assert bars[0]["close"] == 2490.0
+    assert bars[-1]["close"] == 2420.0
+    assert bars[-1]["volume"] == 33389.0
+
+
+def test_parse_price_history_skips_bad_rows():
+    """缺時間或缺收盤的資料列要略過，不可讓整批失敗。"""
+    raw = list(PRICE_HISTORY_RAW) + [
+        {"time": None, "tradeDate": None, "close": 100.0},
+        {"time": 1791907200000, "tradeDate": 1791907200000},
+        "not-a-dict",
+    ]
+    bars = wantgoo.parse_price_history(raw)
+    assert len(bars) == 3
+
+
+def test_parse_price_history_empty():
+    assert wantgoo.parse_price_history([]) == []
+    assert wantgoo.parse_price_history([{"x": 1}]) == []
+
+
+def test_taipei_midnight_ms_is_midnight():
+    """before 參數必須是「今天 00:00 台北」的毫秒時間戳。"""
+    import datetime as dt
+    ms = wantgoo._taipei_midnight_ms()
+    tpe = dt.timezone(dt.timedelta(hours=8))
+    moment = dt.datetime.fromtimestamp(ms / 1000, tpe)
+    assert (moment.hour, moment.minute, moment.second) == (0, 0, 0)
+    assert ms % 1000 == 0
+
+
 if __name__ == "__main__":
     test_page_urls_are_not_the_old_404_paths()
     print("PASS: test_page_urls_are_not_the_old_404_paths")
@@ -245,4 +310,14 @@ if __name__ == "__main__":
     print("PASS: test_parse_main_page_without_rows_returns_error")
     test_to_float_handles_formatting()
     print("PASS: test_to_float_handles_formatting")
-    print("\nAll 13 wantgoo tests passed.")
+    test_price_history_contract_constants()
+    print("PASS: test_price_history_contract_constants")
+    test_parse_price_history_converts_and_sorts()
+    print("PASS: test_parse_price_history_converts_and_sorts")
+    test_parse_price_history_skips_bad_rows()
+    print("PASS: test_parse_price_history_skips_bad_rows")
+    test_parse_price_history_empty()
+    print("PASS: test_parse_price_history_empty")
+    test_taipei_midnight_ms_is_midnight()
+    print("PASS: test_taipei_midnight_ms_is_midnight")
+    print("\nAll 19 wantgoo tests passed.")

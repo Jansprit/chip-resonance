@@ -31,15 +31,16 @@
 > 「真實的現在」混著「示意的歷史」會算出**看起來合理但完全錯誤的差值**
 > （例如 84.7% 真實 − 66.8% 示意 = 17.9%，會讓 F1 永遠滿分）。
 >
-> 因此評分分兩種模式：
+> 因此評分分三種模式：
 >
 > | 模式 | 觸發條件 | 行為 |
 > |---|---|---|
-> | **strict** | 至少有一個因子的輸入全部是真實資料 | 只用真實因子計分，其餘因子權重**按比例重新分配** |
-> | **demo** | 沒有任何因子有全真實輸入 | 全部因子照算，但每檔都標記 `mode='demo'`，前端會顯示紅色示範模式橫幅 |
+> | **strict** | 每檔股票都有至少一個全真實輸入的因子 | 只用真實因子計分，其餘因子權重**按比例重新分配** |
+> | **partial** | 只有部分股票有真實因子 | 有真實因子的照算；**完全沒有真實因子的股票不進入排名** |
+> | **demo** | 沒有任何因子有全真實輸入 | 全部因子照算，但每檔都標記 `mode='demo'`，前端會顯示示範模式橫幅 |
 >
 > 每檔股票在列表上都有一個資料品質徽章，顯示「哪幾個因子是真的」。
-> **看到 demo 橫幅就代表分數不能拿來當投資依據。**
+> **看到示範模式橫幅就代表分數不能拿來當投資依據。**
 >
 > 各因子的實際接通狀態見下方[「9 大因子」](#9-大因子)表格。
 
@@ -263,17 +264,17 @@ Step 6: 停損 -12% 或 ATR(14)*2.5（取較近者）
 
 | 代號 | 因子 | 方向 | 權重 | 所需輸入 | 資料來源 | 目前狀態 |
 |---|---|---|---|---|---|---|
-| F1 | 大股東連續加碼 | 加分 | 20% | `pct_1000up_now` `pct_1000up_w3` | 集保開放平台 | ✅ 已接通（需累積 4 週歷史才有 w3）|
-| F2 | 產業輪動 | 加分 | 10% | `industry_ret_60d_med` | 價格歷史 + 產業分類 | ⚠️ 價格歷史來源待接 |
-| F3 | 董監加碼價格落後 | 加分 | 15% | `director_holding_change_3m` `ret_60d` `industry_ret_60d_med` | MOPS + 價格歷史 | ⚠️ MOPS 已通，價格歷史待接 |
+| F1 | 大股東連續加碼 | 加分 | 20% | `pct_1000up_now` `pct_1000up_w3` | 集保開放平台 | ⚠️ 當週已通，需累積 4 週歷史才有 w3 |
+| F2 | 產業輪動 | 加分 | 10% | `industry_ret_60d_med` | 玩股網日 K 線 | ✅ **43/43 檔可算** |
+| F3 | 董監加碼價格落後 | 加分 | 15% | `director_holding_change_3m` `ret_60d` `industry_ret_60d_med` | MOPS + 玩股網 | ✅ **20/43 檔可算**（MOPS 抓到幾檔算幾檔）|
 | F4 | 集中度突破 | 加分 | 10% | `pct_400up_52w_high` | 需 52 週高點基準 | ❌ 尚未接通 |
 | F5 | 股利穩定 | 加分 | 10% | `div_years` `yield_now` `yield_5y_avg` | FinMind 股利 | ❌ 尚未接通 |
 | F6 | 散戶退場主力接手 | 加分 | 15% | `holder_cnt_change_8w` `avg_lot_change_8w` | 集保股東人數 | ❌ 尚未接通 |
-| F8 | 回調籌碼守穩 | 加分 | 10% | `drawdown_120d` `pct_1000up_now` | 價格歷史 + 集保 | ⚠️ 集保已通，價格歷史待接 |
-| F9 | 價籌背離懲罰 | **扣分** | -20% 封頂 | `is_60d_high` `pct_1000up_now/w1/w3` `margin_pct` `dt_ratio` | 價格 + 集保 + 玩股網 | ⚠️ 集保已通；玩股網 API 目前封鎖 |
-| F10 | 利空籌碼修復 | 加分 | 5% | `crash_60d` `pct_1000up_trend` | 價格歷史 + 集保 | ⚠️ 集保已通，價格歷史待接 |
+| F8 | 回調籌碼守穩 | 加分 | 10% | `drawdown_120d` `pct_1000up_now` | 玩股網日 K 線 + 集保 | ✅ **43/43 檔可算** |
+| F9 | 價籌背離懲罰 | **扣分** | -20% 封頂 | `is_60d_high` `pct_1000up_now/w1/w3` `margin_pct` `dt_ratio` | 玩股網 + 集保 | ⚠️ 價格已通；融資券/當沖需登入 |
+| F10 | 利空籌碼修復 | 加分 | 5% | `crash_60d` `pct_1000up_trend` | 玩股網日 K 線 + 集保 | ⚠️ 價格已通，需集保多週歷史 |
 
-### 各來源的實測狀態（2026-10）
+### 各來源的實測狀態（2026-10-24，含真實瀏覽器驗證）
 
 | 來源 | 狀態 | 說明 |
 |---|---|---|
@@ -281,14 +282,23 @@ Step 6: 停損 -12% 或 ATR(14)*2.5（取較近者）
 | TPEx 上櫃 | ✅ 可用 | `tpex.org.tw/openapi` 純 HTTP |
 | 集保開放平台 | ✅ 可用 | `opendata.tdcc.com.tw` 純 HTTP，CI 排程每天跑 |
 | MOPS 公開資訊觀測站 | ✅ 可用 | `mopsov.twse.com.tw/mops/web/ajax_stapap1`，純 HTTP、不需 cookie |
-| FinMind | ⚠️ 需 token | 匿名存取已被站方回 400（"Your level is free"）|
-| 玩股網 | ❌ API 封鎖 | 頁面 URL 已修正（原本全 404），但個股 JSON API 連站方自己的請求都回 400 |
-| 神秘金字塔 MoneyDJ | ⚠️ 需 session | BCD 端點已改為要求 SSO 登入，需先跑 `auth_setup --site pyramid` |
+| **玩股網（價格歷史）** | ✅ **可用** | `wantgoo.com/investrue/{code}/historical-daily-candlesticks?before={今天00:00}&top=490` → 每檔 490 根日 K 線，**純 HTTP、免登入、免 Playwright** |
+| **玩股網（籌碼資料）** | ⚠️ 需登入 | 法人/主力/融資券的個股 JSON API 需要 Cloudflare 注入的 `x-client-signature`，未登入一律 400 |
+| 神秘金字塔 MoneyDJ | ⚠️ 額度極小 | 免登入**只有第一個被請求的股票**能拿到 BCD，之後一律 302 → SSO。要抓多檔需 `auth_setup --site pyramid` |
+| FinMind | ⚠️ 付費牆 | 瀏覽器完整指紋 + cookie 後仍回 "Your level is free" → **是付費牆不是防爬**，需 `FINMIND_TOKEN` |
 | Goodinfo | ⚠️ 需 session | 需 `auth_setup --site goodinfo` |
 
-> 價格歷史（`ret_60d` / `drawdown_120d` / `is_60d_high` / `crash_60d`）
-> 目前可用的兩條路徑：MoneyDJ 週 K 線（需登入 session）或 FinMind 歷史價（需 token）。
-> 兩者都還沒接上 → **F2 / F3 / F8 / F9 / F10 尚不能在 strict 模式計算**。
+> **價格歷史已接通**：玩股網 `/investrue/{code}/historical-daily-candlesticks`
+> 每檔提供 490 根日 K 線（約兩年），足以計算 `ret_60d` / `drawdown_120d` /
+> `is_60d_high` / `crash_60d`。
+> 實測 43/43 檔成功 → **F2 / F3 / F8 已在 strict 模式計算**，
+> 評分引擎整體從 `partial` 模式升為 `strict` 模式。
+>
+> 剩下的缺口：
+> - **F1 / F10**：差集保的**多週歷史**（w1/w2/w3/trend）。
+>   公開精簡歷史檔會在 CI 每次排程累加，約 4 週後自動解鎖。
+> - **F9**：另需玩股網的融資券/當沖比（個股 API 需登入 session）。
+> - **F4 / F5 / F6**：尚無資料來源（52 週高點基準 / 股利 / 集保股東人數）。
 
 ### 評分公式
 

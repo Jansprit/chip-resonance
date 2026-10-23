@@ -8,7 +8,8 @@ scripts/build_universe.py — 合併各來源的真實資料到示範股票集�
     data/latest/tpex_prices.json      （TPEx 真實收盤）
     data/latest/tdcc_chip.json        （集保開放資料：大戶持股分級 + 多週趨勢）
     data/latest/mops_director.json    （公開資訊觀測站：董監持股 / 質押）
-    data/latest/pyramid_price.json    （MoneyDJ 週 K 線 → 價格衍生因子）
+    data/latest/wantgoo_price.json    （玩股網日 K 線 → 價格衍生因子，免登入）
+    data/latest/pyramid_price.json    （MoneyDJ 週 K 線 → 價格衍生因子，需登入）
     data/latest/finmind_prices.json   （FinMind 歷史價 → 價格衍生因子，可選）
         ↓
     data/latest/demo_subset.json      （含 _provenance 欄位來源標記）
@@ -190,6 +191,7 @@ def build(
     tpex: list[dict],
     tdcc: list[dict],
     mops: list[dict],
+    wantgoo_price: list[dict],
     pyramid_price: list[dict],
     finmind_prices: list[dict],
 ) -> tuple[list[dict], dict[str, int]]:
@@ -198,7 +200,9 @@ def build(
     price_map.update(index_by_code(tpex))
     tdcc_map = index_by_code(tdcc)
     mops_map = index_by_code(mops)
-    pyramid_map = index_by_code(pyramid_price)
+    # 價格衍生欄位有多個可能來源，優先順序：玩股網 > MoneyDJ > FinMind
+    # （玩股網免登入、每日 490 根日 K 線，最穩定）
+    pyramid_map = index_by_code(wantgoo_price) or index_by_code(pyramid_price)
 
     # FinMind 價格 → 價格衍生欄位（若無 token 會是空的，忽略）
     finmind_derived: dict[str, dict] = {}
@@ -221,7 +225,7 @@ def build(
     merged: list[dict] = []
     stats = {
         "price": 0, "tdcc": 0, "mops": 0,
-        "pyramid": 0, "finmind": 0,
+        "wantgoo_price": 0, "finmind": 0,
     }
 
     for base in seed:
@@ -244,7 +248,7 @@ def build(
 
         merge_price_derived(stock, pyramid_map.get(stock["code"]), real)
         if "ret_60d" in real:
-            stats["pyramid"] += 1
+            stats["wantgoo_price"] += 1
 
         if stock["code"] in finmind_derived:
             before = len(real)
@@ -280,17 +284,20 @@ def main() -> int:
     tpex = load_latest("tpex_prices.json")
     tdcc = load_latest("tdcc_chip.json")
     mops = load_latest("mops_director.json")
+    wantgoo_price = load_latest("wantgoo_price.json")
     pyramid_price = load_latest("pyramid_price.json")
     finmind_prices = load_latest("finmind_prices.json")
     print(f"  TWSE prices      : {len(prices)}")
     print(f"  TPEx prices      : {len(tpex)}")
     print(f"  TDCC chip        : {len(tdcc)}")
     print(f"  MOPS director    : {len(mops)}")
+    print(f"  Wantgoo price    : {len(wantgoo_price)}")
     print(f"  MoneyDJ price    : {len(pyramid_price)}")
     print(f"  FinMind prices   : {len(finmind_prices)}")
 
     merged, stats = build(
-        seed, prices, tpex, tdcc, mops, pyramid_price, finmind_prices
+        seed, prices, tpex, tdcc, mops,
+        wantgoo_price, pyramid_price, finmind_prices,
     )
     print(f"  merged with real : {stats}")
 

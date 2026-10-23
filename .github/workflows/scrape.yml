@@ -90,7 +90,8 @@ jobs:
       - name: Validate source outputs (if present)
         if: always()
         run: |
-          for f in tdcc_chip.json mops_director.json mops_pledge.json pyramid_price.json tdcc_history_public.json; do
+          for f in tdcc_chip.json mops_director.json mops_pledge.json \
+                   wantgoo_price.json pyramid_price.json tdcc_history_public.json; do
             if [ -f "data/latest/$f" ]; then
               echo "--- $f"
               python -m backend.schema "data/latest/$f"

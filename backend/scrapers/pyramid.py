@@ -21,6 +21,25 @@ scrapers/pyramid.py — 神秘金字塔（MoneyDJ）大戶持股分級抓取器
 - User-Agent 從 5 個常見瀏覽器 UA 隨機抽
 - 每次請求前先檢查 SourceHealth（quota / disabled / circuit breaker）
 - 抓取失敗時切換備援 URL（ZCX → ZCW BCD）並降速重試
+
+**2026-10 實測（重要修正）**
+先前判定「MoneyDJ 的 BCD 端點已改為要求 SSO 登入」，這個結論**是錯的**。
+用真實瀏覽器（Playwright + 滑鼠互動）與純 requests 反覆測試後，真相是：
+
+    同一個 IP 上，**第一個被請求的股票**可以免登入拿到完整 BCD，
+    後續的股票一律 302 → /sso/signin。
+    實測：requests 連抓 6 檔 → 第 1 檔（2330）成功、其餘 5 檔全失敗；
+          Playwright 連抓 5 檔 → 同樣只有第 1 檔成功。
+
+    所以這不是「免登入已全面封鎖」，而是**免登入的額度極小**。
+    要穩定抓多檔，需要登入 session（auth_setup --site pyramid）。
+
+另外 MoneyDJ 的 BCD 是「欄位-major」格式（見 parse_kline_bcd_csv），
+舊版把它當逐行 CSV 解析，只會得到 values 陣列。
+
+**替代方案**：價格歷史已改由玩股網提供
+（`/investrue/{code}/historical-daily-candlesticks`，純 HTTP、免登入、
+每檔 490 根日 K 線），本模組降級為備援來源。
 """
 
 from __future__ import annotations

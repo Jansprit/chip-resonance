@@ -112,15 +112,15 @@ const FACTOR_DEFINITIONS = [
 //
 // 這張表的存在，是為了不讓「9 大因子」看起來像全部都已經在跑真實資料。
 const FACTOR_STATUS = {
-  F1:  { level: 'partial', text: '集保已接通；需累積 4 週歷史才有 w3' },
-  F2:  { level: 'none',    text: '尚未接通：需要價格歷史來源' },
-  F3:  { level: 'partial', text: 'MOPS 已接通；價格歷史待接' },
+  F1:  { level: 'partial', text: '集保當週已通；需累積 4 週歷史才有 w3' },
+  F2:  { level: 'ok',       text: '已接通：玩股網日 K 線 → 產業 60 日報酬中位數' },
+  F3:  { level: 'ok',       text: '已接通：MOPS 董監持股 + 玩股網日 K 線' },
   F4:  { level: 'none',    text: '尚未接通：需要 52 週高點基準' },
   F5:  { level: 'none',    text: '尚未接通：需要 FinMind 股利資料' },
   F6:  { level: 'none',    text: '尚未接通：需要集保股東人數資料' },
-  F8:  { level: 'partial', text: '集保已接通；價格歷史待接' },
-  F9:  { level: 'partial', text: '集保已接通；玩股網 API 目前封鎖' },
-  F10: { level: 'partial', text: '集保已接通；價格歷史待接' }
+  F8:  { level: 'ok',       text: '已接通：玩股網日 K 線 + 集保分級' },
+  F9:  { level: 'partial', text: '價格與分級已通；融資券/當沖比需玩股網登入' },
+  F10: { level: 'partial', text: '價格已通；需集保多週歷史才有趨勢' }
 };
 
 // 硬性過濾條件

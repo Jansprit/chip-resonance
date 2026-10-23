@@ -143,7 +143,7 @@ def test_build_merges_prices_and_marks_real():
         {"code": "2330", "price": 1234.0, "volume_lots": 999, "date": "2026-10-22",
          "exchange": "TWSE", "change": 15.0},
     ]
-    merged, stats = build(SEED, prices, [], [], [], [], [])
+    merged, stats = build(SEED, prices, [], [], [], [], [], [])
     s = merged[0]
     assert s["price"] == 1234.0
     assert s["avg_volume"] == 999
@@ -162,7 +162,7 @@ def test_build_merges_tdcc_chip():
          "pct_400up_now": 70.2, "pct_1000up_w1": 83.0, "pct_1000up_w2": 82.0,
          "pct_1000up_w3": 81.0, "pct_1000up_trend": "+"},
     ]
-    merged, stats = build(SEED, [], [], tdcc, [], [], [])
+    merged, stats = build(SEED, [], [], tdcc, [], [], [], [])
     s = merged[0]
     assert s["pct_1000up_now"] == 84.7
     # TDCC 的 pct_400up_now 要映射到 seed 的 pct_400up
@@ -180,7 +180,7 @@ def test_build_tdcc_partial_multiweek_is_not_overwritten():
         {"code": "2330", "date": "2026-10-22", "pct_1000up_now": 84.7,
          "pct_1000up_w1": 83.0, "pct_1000up_w2": 82.0},
     ]
-    merged, _ = build(SEED, [], [], tdcc, [], [], [])
+    merged, _ = build(SEED, [], [], tdcc, [], [], [], [])
     s = merged[0]
     # now 是單週 → 可以覆寫
     assert s["pct_1000up_now"] == 84.7
@@ -199,7 +199,7 @@ def test_build_merges_mops():
          "holding_total": 1713829460.0, "pledged_total": 8128000.0,
          "pledge_pct": 0.4743, "director_holding_change_3m": -0.2781},
     ]
-    merged, stats = build(SEED, [], [], [], mops, [], [])
+    merged, stats = build(SEED, [], [], [], mops, [], [], [])
     s = merged[0]
     assert s["director_pledge"] == 0.4743
     assert s["director_holding_change_3m"] == -0.2781
@@ -216,7 +216,7 @@ def test_build_merges_price_derived_and_industry_median():
         {"code": "2454", "ret_60d": 30.0, "drawdown_120d": -2.0,
          "is_60d_high": True, "crash_60d": True},
     ]
-    merged, stats = build(SEED, [], [], [], [], pyramid, [])
+    merged, stats = build(SEED, [], [], [], [], pyramid, [], [])
     s = merged[0]
     assert s["ret_60d"] == 10.0
     assert s["drawdown_120d"] == -5.0
@@ -228,7 +228,7 @@ def test_build_merges_price_derived_and_industry_median():
     # 同產業中位數 = (10+30)/2 = 20
     assert s["industry_ret_60d_med"] == 20.0
     assert prov["industry_ret_60d_med"] == "real"
-    assert stats["pyramid"] == 2
+    assert stats["wantgoo_price"] == 2
 
 
 def test_factor_availability_follows_provenance():
@@ -236,12 +236,12 @@ def test_factor_availability_follows_provenance():
     tdcc = [{"code": "2330", "date": "2026-10-22", "pct_1000up_now": 84.7}]
     pyramid = [{"code": "2330", "ret_60d": 10.0, "drawdown_120d": -5.0,
                 "is_60d_high": False, "crash_60d": False}]
-    merged, _ = build(SEED, [], [], tdcc, [], pyramid, [])
+    merged, _ = build(SEED, [], [], tdcc, [], pyramid, [], [])
     s = merged[0]
     assert factor_is_available(s, "F8") is True
 
     # 缺 TDCC → F8 不可用（不能拿示意的 pct_1000up_now 混著真實的 drawdown）
-    merged2, _ = build(SEED, [], [], [], [], pyramid, [])
+    merged2, _ = build(SEED, [], [], [], [], pyramid, [], [])
     assert factor_is_available(merged2[0], "F8") is False
 
 
@@ -249,7 +249,7 @@ def test_build_does_not_mutate_seed():
     """合併層不得就地改動 seed（避免污染下一次的執行）。"""
     before = [dict(s) for s in SEED]
     build(SEED, [{"code": "2330", "price": 1.0, "volume_lots": 1, "date": "x",
-                   "exchange": "TWSE"}], [], [], [], [], [])
+                   "exchange": "TWSE"}], [], [], [], [], [], [])
     assert SEED == before
 
 

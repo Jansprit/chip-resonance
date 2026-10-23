@@ -536,6 +536,79 @@ async def run_goodinfo_async(out_dir: Path) -> dict:
     return await _run_playwright_source("goodinfo", _fetch, out_dir)
 
 
+async def run_wantgoo_price_async(out_dir: Path) -> dict:
+    """玩股網歷史 K 線（純 HTTP，免登入、免簽章）→ 價格衍生因子。
+
+    這是 F2 / F3 / F8 / F9 / F10 的價格輸入來源。
+    2026-10 實測：FinMind 已被付費牆擋、MoneyDJ 免登入只開放少數股票，
+    玩股網的 /investrue/{code}/historical-daily-candlesticks 反而完整可用
+    （每檔 490 根日 K 線，約兩年）。
+
+    端點契約見 backend/scrapers/wantgoo.py 的說明（top 必須 490、
+    before 必須是今天 00:00 台北的毫秒時間戳）。
+    """
+    from backend.scrapers import wantgoo as wantgoo_scraper
+    from backend.normalize import compute_price_derived
+
+    status = {
+        "status": "ok",
+        "min_interval_sec": 6, "daily_quota": 200, "rows_count": 0,
+    }
+    if not wantgoo_scraper.is_available():
+        status["status"] = "skipped"
+        status["reason"] = "wantgoo unavailable"
+        return status
+    try:
+        # 價格歷史是所有因子的共同輸入 → 抓完整示範清單，不受 PIPELINE_LIMIT 限制
+        codes = _publish_codes()
+        results: list[dict[str, Any]] = []
+        client = wantgoo_scraper.create_price_client()
+        try:
+            for code in codes:
+                try:
+                    bars = wantgoo_scraper.fetch_price_history(code, client=client)
+                    if not bars:
+                        results.append({"code": code, "error": "回傳空的 K 線資料"})
+                        continue
+                    derived = compute_price_derived(bars, bar_days=1)
+                    results.append({
+                        "code": code,
+                        "ret_60d": derived["ret_60d"],
+                        "drawdown_120d": derived["drawdown_120d"],
+                        "is_60d_high": derived["is_60d_high"],
+                        "crash_60d": derived["crash_60d"],
+                        "bars": derived["bars"],
+                        "last_date": derived["last_date"],
+                    })
+                except Exception as e:
+                    results.append({"code": code, "error": str(e)})
+        finally:
+            client.session.close()
+
+        write_json(out_dir / "wantgoo_price.json", results)
+        ok = [r for r in results if "error" not in r]
+        status["rows_count"] = len(ok)
+        status["stocks_count"] = len(codes)
+        if len(ok) == 0:
+            status["status"] = "failed"
+            status["error"] = next(
+                (r["error"] for r in results if "error" in r), "unknown"
+            )
+        elif len(ok) < len(codes):
+            status["status"] = "partial"
+        status["note"] = (
+            f"玩股網日 K 線：{len(ok)}/{len(codes)} 檔成功"
+            f"（{ok[0]['bars'] if ok else 0} 根日 bar）"
+        )
+        return status
+    except Exception as e:
+        import traceback as _tb
+        status["status"] = "failed"
+        status["error"] = str(e)
+        status["trace"] = _tb.format_exc()
+        return status
+
+
 async def run_wantgoo_async(out_dir: Path) -> dict:
     """玩股網 (wantgoo.com.tw) — 免登入但需 Playwright 過 Cloudflare。
 
@@ -741,10 +814,17 @@ async def _main_async(repo: Path | None, source: str, out_dir_name: str) -> int:
         print(f"    {sources_status['tdcc']}")
 
     # --- private 集合：需要瀏覽器 / 登入 session / 較高負載，本地跑 ---
-    # Wantgoo：個股 JSON API 需要 Cloudflare 注入的 x-client-signature，
-    # 純 HTTP 一律 400 → 必須 Playwright 進頁面執行站方自己的 $.http。
+    # 玩股網**價格歷史**是純 HTTP、免登入 → 放 public（CI 排程）
+    if source in ("all", "public", "private", "wantgoo_price"):
+        print("[5a/8] Wantgoo 歷史 K 線 (純 HTTP, 免登入) ...")
+        sources_status["wantgoo_price"] = await run_wantgoo_price_async(out_dir)
+        print(f"    {sources_status['wantgoo_price']}")
+
+    # Wantgoo 籌碼資料（法人 / 主力 / 融資券）：
+    # 站方的個股 JSON API 需要 Cloudflare 注入的 x-client-signature，
+    # 目前對未登入訪客回 400 → 這條路徑需要登入 session
     if source in ("all", "private", "wantgoo"):
-        print("[5/8] Wantgoo (玩股網 — 融資券/法人/主力) ...")
+        print("[5b/8] Wantgoo 籌碼 (法人/主力/融資券 — 目前需登入) ...")
         sources_status["wantgoo"] = await run_wantgoo_async(out_dir)
         print(f"    {sources_status['wantgoo']}")
 

@@ -144,6 +144,18 @@ class PyramidPriceEntry(BaseModel):
     last_date: Optional[str] = None
 
 
+class WantgooPriceEntry(BaseModel):
+    """玩股網日 K 線算出的價格衍生因子（目前的主要價格歷史來源）。"""
+
+    code: str
+    ret_60d: Optional[float] = None
+    drawdown_120d: Optional[float] = None
+    is_60d_high: Optional[bool] = None
+    crash_60d: Optional[bool] = None
+    bars: int = 0
+    last_date: Optional[str] = None
+
+
 # ============ JSON Schema (給前端 CI 使用) ============
 
 JSON_SCHEMA = {
@@ -368,6 +380,9 @@ if __name__ == "__main__":
 
     if name == "pyramid_price.json":
         sys.exit(_validate_all(PyramidPriceEntry, data, name))
+
+    if name == "wantgoo_price.json":
+        sys.exit(_validate_all(WantgooPriceEntry, data, name))
 
     print(f"FAIL: 未知檔案類型 {name}，無法驗證")
     print("      請在 backend/schema.py 的 __main__ 補上對應的模型。")

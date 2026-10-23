@@ -47,6 +47,10 @@ from .base import (
     SessionNotFound,
     SessionExpired,
     CredentialManager,
+    HttpClient,
+    RateLimiter,
+    SourceHealth,
+    RetryPolicy,
     write_json,
     taipei_today,
     random_delay,
@@ -55,6 +59,8 @@ from .base import (
 
 # 玩股網個股頁面
 WANTAOO_BASE = "https://www.wantgoo.com/stock"
+# 玩股網站點根目錄（/investrue/… 這類 API 不在 /stock 底下）
+WANTAOO_ORIGIN = "https://www.wantgoo.com"
 
 # 正確的頁面路徑（舊版這 4 個全 404）
 PAGE_MARGIN = "margin-trading/synopsis"            # 融資融券變化
@@ -84,6 +90,151 @@ def create_wantgoo_session(cred: CredentialManager | None = None) -> BrowserSess
 def is_available() -> bool:
     """玩股網資料全部免登入；只要有 Playwright + Chromium 就能跑。"""
     return True
+
+
+# ============ 價格歷史（純 HTTP，免登入、免簽章）============
+
+# 這是玩股網最有價值的端點（2026-10-24 實測）：
+#
+#   GET /investrue/{code}/historical-daily-candlesticks?before={ms}&top=490
+#
+# 回傳 490 筆**日** K 線（約兩年），欄位：
+#   {time, tradeDate, open, high, low, close, volume, millionAmount}
+#
+# 參數契約（踩過坑，別亂改）：
+#   - top **必須是 490**。30 / 60 / 120 / 240 / 300 / 400 / 491 / 500 / 1000
+#     全部回 400 BadRequest。
+#   - before **必須是「今天 00:00 台北」的毫秒時間戳**（頁面 JS 就是這樣算的：
+#     `dayjs().startOf("day").valueOf()`）。
+#     傳今天-1 天 / -30 天 / 0 / 現在，全部 400。
+#   - 代號本身沒有任何限制：實測 30 檔（2330/2454/2303/…/5871）全部 200。
+#
+# 好消息：這個端點**不需要** Cloudflare 的 x-client-signature，
+# 純 requests + Referer 就能拿到 → 不需要 Playwright、不需要登入。
+# 這是 FinMind（已付費牆）與 MoneyDJ（免登入只開放少數股票）的替代方案。
+PRICE_HISTORY_TOP = 490
+PRICE_HISTORY_PATH = "/investrue/{code}/historical-daily-candlesticks"
+
+WANTAOO_MIN_INTERVAL_SEC = 6.0
+WANTAOO_DAILY_QUOTA = 200
+
+
+def _taipei_midnight_ms() -> int:
+    """今天 00:00 台北的毫秒時間戳（before 參數必須是這個）。"""
+    from datetime import datetime, timedelta, timezone
+
+    tpe = timezone(timedelta(hours=8))
+    now = datetime.now(tpe)
+    midnight = now.replace(hour=0, minute=0, second=0, microsecond=0)
+    return int(midnight.timestamp() * 1000)
+
+
+def create_price_client() -> HttpClient:
+    """受風控保護的玩股網 HTTP 客戶端（純 requests，不需要瀏覽器）。"""
+    rl = RateLimiter(min_interval=WANTAOO_MIN_INTERVAL_SEC, source_name="wantgoo")
+    health = SourceHealth(source_name="wantgoo", daily_quota=WANTAOO_DAILY_QUOTA)
+    client = HttpClient(
+        rate_limiter=rl,
+        health=health,
+        retry=RetryPolicy(),
+        user_agent=(
+            "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 "
+            "(KHTML, like Gecko) Chrome/130.0.0.0 Safari/537.36"
+        ),
+        timeout=40,
+    )
+    client.session.headers.update({
+        "Referer": f"{WANTAOO_BASE}/2330/institutional-investors/trend",
+        "Accept": "application/json, text/plain, */*",
+        "Accept-Language": "zh-TW,zh;q=0.9",
+        "X-Requested-With": "XMLHttpRequest",
+    })
+    return client
+
+
+def fetch_price_history(
+    stock_code: str,
+    client: Optional[HttpClient] = None,
+) -> list[dict[str, Any]]:
+    """
+    抓單一股票的 490 筆日 K 線（純 HTTP）。
+
+    回傳 [{'date': '2026-10-15', 'open':…, 'high':…, 'low':…, 'close':…, 'volume':…}]
+    （已轉成日期字串，並依日期升冪排列）
+    """
+    import json as _json
+
+    own_client = client is None
+    if own_client:
+        client = create_price_client()
+    try:
+        url = (
+            f"{WANTAOO_ORIGIN}{PRICE_HISTORY_PATH.format(code=stock_code)}"
+            f"?before={_taipei_midnight_ms()}&top={PRICE_HISTORY_TOP}"
+        )
+        text = client.get_text(url)
+        try:
+            payload = _json.loads(text)
+        except ValueError:
+            return []
+        if not isinstance(payload, list):
+            return []
+        return parse_price_history(payload)
+    finally:
+        if own_client:
+            client.session.close()
+
+
+def parse_price_history(payload: list[dict[str, Any]]) -> list[dict[str, Any]]:
+    """玩股網 K 線 JSON → 統一格式（日期升冪）。
+
+    原始欄位：time / tradeDate（毫秒 epoch）、open / high / low / close / volume。
+    原始順序是**最新在前**，這裡翻正。
+    """
+    from datetime import datetime, timedelta, timezone
+
+    tpe = timezone(timedelta(hours=8))
+    out: list[dict[str, Any]] = []
+    for row in payload:
+        if not isinstance(row, dict):
+            continue
+        ts = row.get("tradeDate") or row.get("time")
+        close = row.get("close")
+        if ts is None or close is None:
+            continue
+        try:
+            day = datetime.fromtimestamp(float(ts) / 1000, tpe).strftime("%Y-%m-%d")
+        except (TypeError, ValueError, OSError):
+            continue
+        out.append({
+            "date": day,
+            "open": _to_float(row.get("open")) or 0.0,
+            "high": _to_float(row.get("high")) or 0.0,
+            "low": _to_float(row.get("low")) or 0.0,
+            "close": float(close),
+            "volume": _to_float(row.get("volume")) or 0.0,
+        })
+    out.sort(key=lambda b: b["date"])
+    return out
+
+
+def fetch_all_quote_info(client: Optional[HttpClient] = None) -> list[dict[str, Any]]:
+    """全市場即時行情（6044 檔，含 open/high/low/close/volume/previousClose）。"""
+    import json as _json
+
+    own_client = client is None
+    if own_client:
+        client = create_price_client()
+    try:
+        text = client.get_text(f"{WANTAOO_ORIGIN}/investrue/all-quote-info")
+        try:
+            payload = _json.loads(text)
+        except ValueError:
+            return []
+        return payload if isinstance(payload, list) else []
+    finally:
+        if own_client:
+            client.session.close()
 
 
 # ============ 抓取（渲染後的 HTML）============
@@ -243,10 +394,13 @@ def _tables(html: str) -> list[dict[str, Any]]:
     return out
 
 
-def _to_float(text: str) -> Optional[float]:
+def _to_float(text: Any) -> Optional[float]:
+    """把 '1,234.5' / '20.89%' / 1234.5 轉成 float；無法解析回 None。"""
     if text is None:
         return None
-    cleaned = text.replace(",", "").replace("%", "").strip()
+    if isinstance(text, (int, float)):
+        return float(text)
+    cleaned = str(text).replace(",", "").replace("%", "").strip()
     if not cleaned or cleaned in {"--", "-", "---", "N/A"}:
         return None
     m = re.search(r"-?\d+(?:\.\d+)?", cleaned)

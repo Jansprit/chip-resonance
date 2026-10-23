@@ -1,6 +1,6 @@
 [project]
 name = "chip-resonance-backend"
-version = "0.3.0"
+version = "0.3.1"
 description = "Multi-source Taiwan stock chip data pipeline (TWSE, TPEx, FinMind, MOPS, 集保, 神秘金字塔, Goodinfo)"
 requires-python = ">=3.10"
 authors = [
