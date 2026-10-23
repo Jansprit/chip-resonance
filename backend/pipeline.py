@@ -816,10 +816,12 @@ async def _main_async(repo: Path | None, source: str, out_dir_name: str) -> int:
         sources_status["tdcc"] = await run_tdcc_opendata_async(repo, out_dir)
         print(f"    {sources_status['tdcc']}")
 
-    # --- private 集合：需要瀏覽器 / 登入 session / 較高負載，本地跑 ---
-    # 玩股網**價格歷史**是純 HTTP、免登入 → 放 public（CI 排程）
-    if source in ("all", "public", "private", "wantgoo_price"):
-        print("[5a/8] Wantgoo 歷史 K 線 (純 HTTP, 免登入) ...")
+    # --- private 集合：需要瀏覽器 / 登入 session / 較高負載 / 被 datacenter IP 封鎖 ---
+    # 玩股網**歷史 K 線**是純 HTTP、免登入，但實測**對 datacenter IP 回 403**
+    # （GitHub Actions runner 連續失敗，本地 IP 連抓 43 檔全成功）
+    # → 只能在本機跑（Docker / Windows Task），CI 沿用上次提交的資料。
+    if source in ("all", "private", "wantgoo_price"):
+        print("[5a/8] Wantgoo 歷史 K 線 (純 HTTP, 免登入 — datacenter IP 會被 403) ...")
         sources_status["wantgoo_price"] = await run_wantgoo_price_async(out_dir)
         print(f"    {sources_status['wantgoo_price']}")
 

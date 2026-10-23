@@ -57,6 +57,22 @@ services:
               python3 -m backend.scripts.run_local --source all 2>&1 | tee /app/data/cron.log
             fi
           fi
+          # 玩股網的歷史 K 線對 datacenter IP 會回 403（CI 跑不動），
+          # 所以價格歷史只能靠本機排程更新。
+          # 跑完後可選地把新資料推回 GitHub，讓線上網站同步更新。
+          # 開關：環境變數 PUSH_TO_GITHUB=true（且容器內有 git 憑證）
+          if [ \"$${PUSH_TO_GITHUB:-false}\" = \"true\" ] && [ $$HOUR -eq 14 ] && [ $$MIN -eq 35 ]; then
+            echo '[cron] Refreshing demo_subset and pushing to GitHub'
+            python3 backend/scripts/build_universe.py 2>&1 | tee -a /app/data/cron.log
+            git add data/latest/ 2>/dev/null || true
+            if ! git diff --cached --quiet; then
+              git -c user.name='chip-resonance-bot' -c user.email='bot@example.com' \
+                commit -m 'data: refresh from local pipeline (price history)' && \
+              git push 2>&1 | tee -a /app/data/cron.log
+            else
+              echo '[cron] No data changes to push'
+            fi
+          fi
           sleep 60
         done
       "

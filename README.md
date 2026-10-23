@@ -282,11 +282,23 @@ Step 6: 停損 -12% 或 ATR(14)*2.5（取較近者）
 | TPEx 上櫃 | ✅ 可用 | `tpex.org.tw/openapi` 純 HTTP |
 | 集保開放平台 | ✅ 可用 | `opendata.tdcc.com.tw` 純 HTTP，CI 排程每天跑 |
 | MOPS 公開資訊觀測站 | ✅ 可用 | `mopsov.twse.com.tw/mops/web/ajax_stapap1`，純 HTTP、不需 cookie |
-| **玩股網（價格歷史）** | ✅ **可用** | `wantgoo.com/investrue/{code}/historical-daily-candlesticks?before={今天00:00}&top=490` → 每檔 490 根日 K 線，**純 HTTP、免登入、免 Playwright** |
+| **玩股網（價格歷史）** | ✅ **可用（但僅限本機）** | `wantgoo.com/investrue/{code}/historical-daily-candlesticks?before={今天00:00}&top=490` → 每檔 490 根日 K 線，**純 HTTP、免登入、免 Playwright**。⚠️ 對 **datacenter IP 回 403**（GitHub Actions runner 連續失敗、本機 IP 43/43 成功）→ 必須由本機排程更新 |
 | **玩股網（籌碼資料）** | ⚠️ 需登入 | 法人/主力/融資券的個股 JSON API 需要 Cloudflare 注入的 `x-client-signature`，未登入一律 400 |
 | 神秘金字塔 MoneyDJ | ⚠️ 額度極小 | 免登入**只有第一個被請求的股票**能拿到 BCD，之後一律 302 → SSO。要抓多檔需 `auth_setup --site pyramid` |
 | FinMind | ⚠️ 付費牆 | 瀏覽器完整指紋 + cookie 後仍回 "Your level is free" → **是付費牆不是防爬**，需 `FINMIND_TOKEN` |
 | Goodinfo | ⚠️ 需 session | 需 `auth_setup --site goodinfo` |
+
+> **CI 與本機的分工**
+>
+> | 來源 | CI（GitHub Actions） | 本機（Docker / Windows Task） |
+> |---|---|---|
+> | TWSE / TPEx / 集保 / MOPS | ✅ 每天跑 | ✅ 也會跑 |
+> | 玩股網歷史 K 線 | ❌ datacenter IP 被 403 | ✅ **必須靠這邊** |
+>
+> CI 的 `build_universe.py` 會沿用上次提交的 `data/latest/wantgoo_price.json`，
+> 所以網站上的 F2 / F3 / F8 不會消失，但**價格衍生欄位要靠本機排程刷新**。
+> 想讓線上網站同步更新，開啟 Docker 的 `PUSH_TO_GITHUB=true`
+> （容器已掛載 `.gitconfig` / `.ssh`），本機排程跑完會自動 commit + push。
 
 > **價格歷史已接通**：玩股網 `/investrue/{code}/historical-daily-candlesticks`
 > 每檔提供 490 根日 K 線（約兩年），足以計算 `ret_60d` / `drawdown_120d` /

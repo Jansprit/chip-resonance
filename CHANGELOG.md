@@ -57,12 +57,33 @@ GET https://www.wantgoo.com/investrue/{code}/historical-daily-candlesticks
 
 - `wantgoo.py` 新增 `fetch_price_history()` / `parse_price_history()` /
   `create_price_client()`（受風控保護：6 秒間隔、每日 200 次上限）
-- 新增 pipeline source `wantgoo_price`（納入 public 集合，CI 排程會跑）
+- 新增 pipeline source `wantgoo_price`（**限本機** — 見下方 datacenter IP 說明）
 - `build_universe.py` 的價格衍生欄位優先來源改為玩股網（次選 MoneyDJ、最後 FinMind）
 - `schema.py` 新增 `WantgooPriceEntry` 模型
 - `_to_float()` 改為接受數字型輸入（JSON 回傳的是 float 不是字串）
 - `test_wantgoo.py` 13 → 19 項（新增端點契約、解析、before 計算的測試）
 - `test_merge_layer.py` 跟上 `build()` 簽章變更
+
+### 🔍 診斷修正：玩股網價格歷史對 datacenter IP 回 403
+
+CI 首次跑 `wantgoo_price` 時 **0/43 檔成功（HTTP 403）**，
+但同一時間本機 IP 連抓 43 檔全成功 → 判定為 **IP 層級的封鎖**
+（GitHub Actions runner 是 datacenter IP）。
+
+因此把 `wantgoo_price` 移出 `public` 集合（CI 不再嘗試，避免整條排程失敗）。
+CI 的合併層會沿用上次提交的 `data/latest/wantgoo_price.json`，
+所以 F2 / F3 / F8 不會失效，只是**價格衍生欄位要靠本機排程刷新**。
+
+Docker 排程新增選用的自動推送（`PUSH_TO_GITHUB=true`）：
+本機跑完後自動 `build_universe.py` + commit + push，線上網站就會同步。
+
+### 📌 剩下的缺口
+
+- **F1 / F10**：差集保的**多週歷史**（w1/w2/w3/trend）。
+  公開精簡歷史檔會在 CI 每次排程累加，約 4 週後自動解鎖。
+- **F9**：另需玩股網的融資券/當沖比（個股 API 需登入 session）。
+- **F4 / F5 / F6**：尚無資料來源（52 週高點基準 / 股利 / 集保股東人數）。
+- **CI 抓不到玩股網**（datacenter IP 403）→ 價格歷史需本機排程更新。
 
 ---
 
