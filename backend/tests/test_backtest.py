@@ -1,4 +1,4 @@
-"""
+﻿"""
 test_backtest.py — 回測引擎的數學核心測試
 
 對應原始需求文件（tabbit_神秘金字塔網站_財富密碼揭密.md §六 驗證框架）：
@@ -39,6 +39,20 @@ def test_pearson_ic_returns_none_for_constant_input():
     assert engine.compute_ic([1.0, 1.0, 1.0], [1.0, 2.0, 3.0]) is None
 
 
+def test_pearson_ic_returns_none_for_constant_input_with_awkward_floats():
+    """
+    常數序列的「零變異」判定必須用浮點容差。
+
+    [0.05, 0.05, 0.05] 的累加誤差會讓 mean = 0.05000000000000001，
+    標準差算出來是 1.4e-18（不是 0），於是 `std == 0` 判斷失效，
+    IC 會變成一個天知道多大的亂數。
+    這不是理論問題：整份回測報告的 IC 都會被污染。
+    """
+    assert engine.compute_ic([0.05, 0.05, 0.05], [0.1, 0.2, 0.3]) is None
+    assert engine.compute_ic([0.1, 0.1, 0.1, 0.1], [0.1, 0.2, 0.3, 0.4]) is None
+    assert engine.compute_ic([0.1, 0.2, 0.3], [0.05, 0.05, 0.05]) is None
+
+
 def test_pearson_ic_returns_none_for_insufficient_data():
     assert engine.compute_ic([1.0], [2.0]) is None
     assert engine.compute_ic([], []) is None
@@ -75,6 +89,21 @@ def test_quantile_analysis_monotonic_when_signal_is_perfect():
 def test_quantile_analysis_handles_empty():
     assert engine.quantile_analysis([], []) == []
     assert engine.quantile_spread([]) == 0.0
+
+
+def test_is_monotonic_false_without_data():
+    """
+    沒有資料時不可宣稱「單調遞增」。
+
+    `all([])` 在 Python 回 True —— 那是布林運算的陷阱，不是分析結論。
+    報告若在 0 個樣本時顯示「單調遞增：是」，就是在講假話。
+    """
+    assert engine.is_monotonic([]) is False
+    assert engine.is_monotonic([{"quantile": 1, "count": 0, "mean_return": 0.0}]) is False
+    assert engine.is_monotonic([
+        {"quantile": 1, "count": 5, "mean_return": 0.01},
+        {"quantile": 2, "count": 0, "mean_return": 0.0},
+    ]) is False
 
 
 def test_quantile_analysis_skips_missing_pairs():
@@ -132,6 +161,12 @@ def test_annualize_sharpe_none_for_constant_returns():
     assert engine.annualize_sharpe([0.01] * 10) is None
 
 
+def test_annualize_sharpe_none_for_constant_returns_with_awkward_floats():
+    """零波動判定同樣要用浮點容差（[0.05]*10 的累加誤差足以讓 std ≠ 0）。"""
+    assert engine.annualize_sharpe([0.05] * 10) is None
+    assert engine.annualize_sharpe([0.3] * 7) is None
+
+
 def test_hit_rate():
     assert engine.hit_rate([0.1, -0.1, 0.2, -0.2]) == 0.5
     assert engine.hit_rate([]) == 0.0
@@ -162,6 +197,173 @@ def test_forward_return_two_weeks():
     assert abs(rets - 0.02) < 1e-9
     # 同一序列、weeks=3 → 對到 prices[3] = 121
     assert abs(engine.forward_return(prices, 0, weeks=3) - 0.21) < 1e-9
+
+
+# ============ 單一因子報告 ============
+
+def test_factor_report_ic_only_pairs_rows_with_both_factor_and_return():
+    """
+    IC 只能用「因子值與前瞻報酬同時存在」的列來配對。
+
+    舊版把「有因子值但沒報酬」的列也算進因子清單，卻從報酬清單裡剔除，
+    兩邊長度不一致後 `compute_ic` 只取前 N 筆 → 配對錯位，
+    算出來的 IC 完全不是同一組股票的相關性。
+    這會讓「沒有未來報酬」的樣本（正是最容易產生假訊號的地方）
+    汙染真實樣本的 IC。
+    """
+    rows = [
+        {"code": "A", "factors": {"F2": 100.0}, "available": {"F2": True}},
+        {"code": "B", "factors": {"F2": 1.0}, "available": {"F2": True}},
+        {"code": "C", "factors": {"F2": 2.0}, "available": {"F2": True}},
+        {"code": "D", "factors": {"F2": 3.0}, "available": {"F2": True}},
+    ]
+    rets = {"A": None, "B": 0.1, "C": 0.2, "D": 0.3}
+    rep = engine.factor_report(rows, rets, "F2")
+    assert rep["samples"] == 3
+    # 只用 B/C/D → 因子與報酬完全同向 → IC = 1.0
+    assert abs(rep["ic"] - 1.0) < 1e-9
+    assert abs(rep["rank_ic"] - 1.0) < 1e-9
+
+
+def test_factor_report_skips_unavailable_factor_even_with_return():
+    """available=False 的因子不可進入配對（不管有沒有報酬）。"""
+    rows = [
+        {"code": "A", "factors": {"F2": 1.0}, "available": {"F2": False}},
+        {"code": "B", "factors": {"F2": 2.0}, "available": {"F2": True}},
+        {"code": "C", "factors": {"F2": 3.0}, "available": {"F2": True}},
+        {"code": "D", "factors": {"F2": 4.0}, "available": {"F2": True}},
+    ]
+    rets = {"A": 0.9, "B": 0.2, "C": 0.3, "D": 0.4}
+    rep = engine.factor_report(rows, rets, "F2")
+    assert rep["samples"] == 3
+    assert abs(rep["ic"] - 1.0) < 1e-9
+
+
+def test_factor_report_verdict_matches_ic():
+    """verdict 必須與實際 IC 一致（不可用錯配的 IC 判斷去留）。"""
+    rows = [
+        {"code": "A", "factors": {"F2": 1000.0}, "available": {"F2": True}},
+    ] + [
+        {"code": f"B{i}", "factors": {"F2": float(i)}, "available": {"F2": True}}
+        for i in range(1, 12)
+    ]
+    rets = {"A": None}
+    rets.update({f"B{i}": i / 100.0 for i in range(1, 12)})
+    rep = engine.factor_report(rows, rets, "F2")
+    assert rep["samples"] == 11
+    assert rep["ic"] is not None
+    expected = "keep" if abs(rep["ic"]) >= 0.02 else "downweight_or_remove"
+    assert rep["verdict"] == expected
+
+
+# ============ ICIR / t 值 ============
+
+def test_compute_icir_of_constant_ic_is_none():
+    """IC 序列完全相同 → 標準差為 0 → ICIR 無法定義（回 None 不是 inf）。"""
+    assert engine.compute_icir([0.05, 0.05, 0.05]) is None
+
+
+def test_compute_icir_positive_and_negative():
+    """ICIR = IC 均值 / IC 標準差。"""
+    icir = engine.compute_icir([0.04, 0.06, 0.05])
+    assert icir is not None and icir > 0
+    icir_neg = engine.compute_icir([-0.04, -0.06, -0.05])
+    assert icir_neg is not None and icir_neg < 0
+
+
+def test_compute_icir_needs_at_least_three_points():
+    assert engine.compute_icir([0.05]) is None
+    assert engine.compute_icir([0.05, 0.06]) is None
+
+
+def test_compute_t_stat():
+    """t 值 = mean / (std / sqrt(n))。"""
+    xs = [0.04, 0.06, 0.05, 0.07]
+    t = engine.compute_t_stat(xs)
+    assert t is not None
+    mean = sum(xs) / len(xs)
+    var = sum((x - mean) ** 2 for x in xs) / len(xs)
+    expected = mean / ((var ** 0.5) / (len(xs) ** 0.5))
+    assert abs(t - expected) < 1e-9
+
+
+def test_compute_t_stat_needs_two_points():
+    assert engine.compute_t_stat([0.05]) is None
+
+
+# ============ 多空組合 ============
+
+def test_long_short_portfolio_uses_top_and_bottom_quantiles():
+    """多空組合：做多前 20%、做空後 20%，淨值等權。"""
+    rows = [
+        {"code": f"S{i}", "factors": {"F2": float(i)}, "available": {"F2": True}}
+        for i in range(10)
+    ]
+    rets = {f"S{i}": i / 100.0 for i in range(10)}
+    res = engine.long_short_portfolio(rows, rets, "F2", long_pct=0.2, short_pct=0.2)
+    # 前 20% = S9, S8；後 20% = S0, S1
+    assert res["long_codes"] == ["S9", "S8"]
+    assert res["short_codes"] == ["S0", "S1"]
+    gross = (0.09 + 0.08) / 2 - (0.0 + 0.01) / 2
+    assert abs(res["gross_return"] - gross) < 1e-9
+    assert res["cost"] > 0
+    assert abs(res["net_return"] - (gross - res["cost"])) < 1e-9
+
+
+def test_long_short_portfolio_handles_insufficient_rows():
+    """列數不足時無法做多空 → 回 None，不可假裝有績效。"""
+    rows = [{"code": "A", "factors": {"F2": 1.0}, "available": {"F2": True}}]
+    res = engine.long_short_portfolio(rows, {"A": 0.1}, "F2")
+    assert res is None
+
+
+def test_long_short_portfolio_skips_missing_returns():
+    """缺報酬的股票不可進入多空組合。"""
+    rows = [
+        {"code": f"S{i}", "factors": {"F2": float(i)}, "available": {"F2": True}}
+        for i in range(10)
+    ]
+    rets = {f"S{i}": (i / 100.0 if i >= 2 else None) for i in range(10)}
+    res = engine.long_short_portfolio(rows, rets, "F2", long_pct=0.2, short_pct=0.2)
+    assert res is not None
+    assert "S0" not in res["short_codes"]
+    assert "S1" not in res["short_codes"]
+
+
+def test_portfolio_metrics_from_returns():
+    """多空組合的績效指標。"""
+    rets = [0.02, -0.01, 0.03, 0.015, -0.005]
+    m = engine.portfolio_metrics(rets)
+    assert abs(m["hit_rate"] - 0.6) < 1e-9
+    assert m["sharpe"] is not None
+    assert m["max_drawdown"] <= 0
+    assert m["total_return"] is not None
+    assert m["periods"] == 5
+
+
+def test_portfolio_metrics_empty():
+    m = engine.portfolio_metrics([])
+    assert m["periods"] == 0
+    assert m["hit_rate"] == 0.0
+    assert m["sharpe"] is None
+
+
+# ============ Walk-Forward ============
+
+def test_walk_forward_split_produces_segments():
+    """每段用前 train_weeks 週訓練、後 test_weeks 週驗證（原始文件 §六.2）。"""
+    snaps = [{"as_of": f"2026-{1 + i // 4:02d}-0{1 + i % 4}"} for i in range(24)]
+    segments = engine.walk_forward_split(snaps, train_weeks=12, test_weeks=4)
+    assert len(segments) >= 1
+    seg = segments[0]
+    assert len(seg["train"]) == 12
+    assert len(seg["test"]) == 4
+    # 訓練集必須全部早於驗證集（不可偷看未來）
+    assert max(s["as_of"] for s in seg["train"]) < min(s["as_of"] for s in seg["test"])
+
+
+def test_walk_forward_split_empty():
+    assert engine.walk_forward_split([], train_weeks=12, test_weeks=4) == []
 
 
 # ============ point-in-time 紀律 ============
@@ -195,44 +397,15 @@ def test_select_point_in_time_keeps_missing_availability():
 
 
 if __name__ == "__main__":
-    test_pearson_ic_perfect_positive()
-    print("PASS: test_pearson_ic_perfect_positive")
-    test_pearson_ic_perfect_negative()
-    print("PASS: test_pearson_ic_perfect_negative")
-    test_pearson_ic_returns_none_for_constant_input()
-    print("PASS: test_pearson_ic_returns_none_for_constant_input")
-    test_pearson_ic_returns_none_for_insufficient_data()
-    print("PASS: test_pearson_ic_returns_none_for_insufficient_data")
-    test_rank_ic_is_scale_invariant()
-    print("PASS: test_rank_ic_is_scale_invariant")
-    test_quantile_analysis_monotonic_when_signal_is_perfect()
-    print("PASS: test_quantile_analysis_monotonic_when_signal_is_perfect")
-    test_quantile_analysis_handles_empty()
-    print("PASS: test_quantile_analysis_handles_empty")
-    test_quantile_analysis_skips_missing_pairs()
-    print("PASS: test_quantile_analysis_skips_missing_pairs")
-    test_apply_trading_costs()
-    print("PASS: test_apply_trading_costs")
-    test_apply_trading_costs_zero_turnover()
-    print("PASS: test_apply_trading_costs_zero_turnover")
-    test_max_drawdown()
-    print("PASS: test_max_drawdown")
-    test_max_drawdown_no_drawdown()
-    print("PASS: test_max_drawdown_no_drawdown")
-    test_annualize_sharpe()
-    print("PASS: test_annualize_sharpe")
-    test_annualize_sharpe_none_for_constant_returns()
-    print("PASS: test_annualize_sharpe_none_for_constant_returns")
-    test_hit_rate()
-    print("PASS: test_hit_rate")
-    test_forward_return_uses_future_weeks()
-    print("PASS: test_forward_return_uses_future_weeks")
-    test_forward_return_none_when_not_enough_history()
-    print("PASS: test_forward_return_none_when_not_enough_history")
-    test_forward_return_two_weeks()
-    print("PASS: test_forward_return_two_weeks")
-    test_select_point_in_time_rejects_future_publication()
-    print("PASS: test_select_point_in_time_rejects_future_publication")
-    test_select_point_in_time_keeps_missing_availability()
-    print("PASS: test_select_point_in_time_keeps_missing_availability")
-    print("\nAll 20 backtest tests passed.")
+    # 自動發現所有 test_ 開頭的函式 —— 避免「新增了測試卻忘了掛進執行流程」。
+    # 這正是 v0.3.0 體檢報告裡「文件說 A、程式做 B」那類問題的溫床。
+    import inspect
+
+    _fns = [
+        (name, fn) for name, fn in sorted(globals().items())
+        if name.startswith("test_") and callable(fn)
+    ]
+    for _name, _fn in _fns:
+        _fn()
+        print(f"PASS: {_name}")
+    print(f"\nAll {len(_fns)} backtest tests passed.")
