@@ -106,6 +106,19 @@ def load_latest(name: str) -> list[dict]:
     return data if isinstance(data, list) else []
 
 
+def load_latest_dict(name: str) -> dict:
+    """讀取「以 code 為 key 的物件」格式的資料檔。"""
+    p = LATEST / name
+    if not p.exists():
+        return {}
+    try:
+        data = json.loads(p.read_text(encoding="utf-8"))
+    except json.JSONDecodeError:
+        print(f"  WARN: {name} 不是合法 JSON，略過")
+        return {}
+    return data if isinstance(data, dict) else {}
+
+
 def index_by_code(rows: list[dict]) -> dict[str, dict]:
     return {r["code"]: r for r in rows if isinstance(r, dict) and r.get("code")}
 
@@ -174,9 +187,87 @@ def merge_mops(stock: dict, director: dict | None, real: set[str]) -> None:
 
 
 def merge_price_derived(stock: dict, derived: dict | None, real: set[str]) -> None:
-    """價格衍生欄位（ret_60d / drawdown_120d / is_60d_high / crash_60d）。"""
+    """價格衍生欄位（ret_60d / drawdown_120d / is_60d_high / crash_60d）。
+
+    支援兩種來源格式：
+    - 扁平：{code, ret_60d, drawdown_120d, ...}（玩股網 / MoneyDJ 已算好的）
+    - 原始 K 線：{code, bars: [...]}（Yahoo / TWSE 月線，由這裡現算）
+
+    ⚠️ **必須用型別判斷**，不可只看 `bars` 是否存在：
+    `compute_price_derived` 的輸出也帶 `bars`，但那是**筆數（int）**；
+    原始 K 線的 `bars` 是**陣列（list）**。
+    只判斷真偽會把 int 送進「重新計算」分支 → `TypeError: 'int' object is not iterable`。
+    """
     if not derived:
         return
+    bars = derived.get("bars")
+    if isinstance(bars, list) and bars:
+        merge_price_history(stock, derived, real)
+        return
+    for field in PRICE_DERIVED_FIELDS:
+        value = derived.get(field)
+        if value is None:
+            continue
+        stock[field] = value
+        real.add(field)
+
+
+def merge_margin_balance(
+    stock: dict,
+    margin: dict | None,
+    real: set[str],
+) -> None:
+    """融資融券餘額 → F9 的 margin_pct / short_ratio。"""
+    if not margin:
+        return
+    pct = margin.get("margin_pct")
+    if pct is not None:
+        stock["margin_pct"] = pct
+        real.add("margin_pct")
+    short_pct = margin.get("short_pct")
+    if short_pct is not None:
+        stock["short_ratio"] = short_pct
+        real.add("short_ratio")
+
+
+def merge_valuation(
+    stock: dict,
+    valuation: dict | None,
+    real: set[str],
+) -> None:
+    """個股基本資料 → F5 的 yield_now。"""
+    if not valuation:
+        return
+    yield_now = valuation.get("yield_now")
+    if yield_now is not None:
+        stock["yield_now"] = yield_now
+        real.add("yield_now")
+
+
+def merge_industry(
+    stock: dict,
+    industry: str | None,
+    real: set[str],
+) -> None:
+    """產業別 CID → F2 產業籌碼流量的分群依據。"""
+    if not industry:
+        return
+    stock["industry_cid"] = industry
+    real.add("industry_cid")
+
+
+def merge_price_history(
+    stock: dict,
+    entry: dict | None,
+    real: set[str],
+) -> None:
+    """價格歷史（日 K）→ 價格衍生因子 ret_60d / drawdown_120d / is_60d_high / crash_60d。"""
+    if not entry:
+        return
+    bars = entry.get("bars")
+    if not isinstance(bars, list) or not bars:
+        return
+    derived = compute_price_derived(bars, bar_days=1)
     for field in PRICE_DERIVED_FIELDS:
         value = derived.get(field)
         if value is None:
@@ -194,15 +285,22 @@ def build(
     wantgoo_price: list[dict],
     pyramid_price: list[dict],
     finmind_prices: list[dict],
+    *,
+    margin_balance: dict | None = None,
+    valuation: dict | None = None,
+    industry: dict | None = None,
+    price_history: list[dict] | None = None,
 ) -> tuple[list[dict], dict[str, int]]:
     """合併所有來源，回傳 (merged_stocks, stats)。"""
     price_map = index_by_code(prices)
     price_map.update(index_by_code(tpex))
     tdcc_map = index_by_code(tdcc)
     mops_map = index_by_code(mops)
-    # 價格衍生欄位有多個可能來源，優先順序：玩股網 > MoneyDJ > FinMind
-    # （玩股網免登入、每日 490 根日 K 線，最穩定）
-    pyramid_map = index_by_code(wantgoo_price) or index_by_code(pyramid_price)
+    # 價格衍生欄位有多個可能來源，優先順序：
+    #   Yahoo（price_history，免 key、CI 友善）> 玩股網（需本機）> MoneyDJ（需會員）
+    pyramid_map = (index_by_code(price_history or [])
+                   or index_by_code(wantgoo_price)
+                   or index_by_code(pyramid_price))
 
     # FinMind 價格 → 價格衍生欄位（若無 token 會是空的，忽略）
     finmind_derived: dict[str, dict] = {}
@@ -226,6 +324,7 @@ def build(
     stats = {
         "price": 0, "tdcc": 0, "mops": 0,
         "wantgoo_price": 0, "finmind": 0,
+        "margin": 0, "valuation": 0, "industry": 0, "price_history": 0,
     }
 
     for base in seed:
@@ -249,12 +348,27 @@ def build(
         merge_price_derived(stock, pyramid_map.get(stock["code"]), real)
         if "ret_60d" in real:
             stats["wantgoo_price"] += 1
+            if (price_history or []) and stock["code"] in index_by_code(price_history):
+                stats["price_history"] += 1
+
+        merge_margin_balance(stock, (margin_balance or {}).get(stock["code"]), real)
+        if "margin_pct" in real:
+            stats["margin"] += 1
+
+        merge_valuation(stock, (valuation or {}).get(stock["code"]), real)
+        if "yield_now" in real:
+            stats["valuation"] += 1
+
+        merge_industry(stock, (industry or {}).get(stock["code"]), real)
+        if "industry_cid" in real:
+            stats["industry"] += 1
 
         if stock["code"] in finmind_derived:
-            before = len(real)
+            # 統計「FinMind 有這檔的價格備援」，而不是「FinMind 新增了幾個欄位」——
+            # Yahoo 已經先填好同一批欄位時，後者永遠是 0，會讓人誤以為
+            # FinMind 沒有資料。
             merge_price_derived(stock, finmind_derived[stock["code"]], real)
-            if len(real) > before:
-                stats["finmind"] += 1
+            stats["finmind"] += 1
 
         attach_provenance(stock, real)
         merged.append(stock)
@@ -287,6 +401,10 @@ def main() -> int:
     wantgoo_price = load_latest("wantgoo_price.json")
     pyramid_price = load_latest("pyramid_price.json")
     finmind_prices = load_latest("finmind_prices.json")
+    price_history = load_latest("price_history.json")
+    margin_balance = load_latest_dict("margin_balance.json")
+    valuation = load_latest_dict("valuation.json")
+    industry = load_latest_dict("industry.json")
     print(f"  TWSE prices      : {len(prices)}")
     print(f"  TPEx prices      : {len(tpex)}")
     print(f"  TDCC chip        : {len(tdcc)}")
@@ -294,10 +412,18 @@ def main() -> int:
     print(f"  Wantgoo price    : {len(wantgoo_price)}")
     print(f"  MoneyDJ price    : {len(pyramid_price)}")
     print(f"  FinMind prices   : {len(finmind_prices)}")
+    print(f"  Yahoo price hist : {len(price_history)}")
+    print(f"  Margin balance   : {len(margin_balance)}")
+    print(f"  Valuation        : {len(valuation)}")
+    print(f"  Industry map     : {len(industry)}")
 
     merged, stats = build(
         seed, prices, tpex, tdcc, mops,
         wantgoo_price, pyramid_price, finmind_prices,
+        margin_balance=margin_balance,
+        valuation=valuation,
+        industry=industry,
+        price_history=price_history,
     )
     print(f"  merged with real : {stats}")
 

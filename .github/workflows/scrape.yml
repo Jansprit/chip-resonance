@@ -75,6 +75,27 @@ jobs:
         run: |
           python backend/scripts/build_universe.py
 
+      # 因子庫 + 回測報告（v0.4.0）
+      # 因子值必須從 data.js（唯一的因子實作）發佈，
+      # 不可用 Python 重寫一份 —— 兩份實作正是本專案最大的浪費來源。
+      - name: Emit point-in-time factor database
+        run: |
+          node backend/scripts/emit_factors.js
+
+      # 回測報告在樣本不足時會自己標示 sufficient_data=false，
+      # 不會輸出任何看起來像策略績效的數字。
+      - name: Generate backtest report (point-in-time)
+        run: |
+          python -m backend.scripts.run_backtest --weeks 4
+
+      # 資料來源健康度（CI 用 datacenter IP 實測，不是猜的）
+      - name: Check source health
+        if: always()
+        run: |
+          python -m backend.scripts.check_sources --public-only \
+            --output data/latest/source_health.json \
+            --matrix docs/source_matrix.generated.md
+
       # BUG-07：舊版 5 個驗證都帶 `|| true`，壞掉的資料永遠不會讓 workflow 失敗。
       # 現在全部改成會擋下；`if: always()` 保留，讓 pipeline 失敗時也能驗證已產生的檔案。
       - name: Validate JSON shape
@@ -91,12 +112,41 @@ jobs:
         if: always()
         run: |
           for f in tdcc_chip.json mops_director.json mops_pledge.json \
-                   wantgoo_price.json pyramid_price.json tdcc_history_public.json; do
+                   wantgoo_price.json pyramid_price.json tdcc_history_public.json \
+                   price_history.json margin_balance.json valuation.json \
+                   industry.json finmind_prices.json; do
             if [ -f "data/latest/$f" ]; then
               echo "--- $f"
               python -m backend.schema "data/latest/$f"
             fi
           done
+
+      # 因子庫與回測報告必須是合法 JSON（前端直接讀）
+      - name: Validate factor database & backtest report
+        if: always()
+        run: |
+          python - <<'PY'
+          import json
+          from pathlib import Path
+
+          latest = Path('data/latest')
+          for name in ('factors.json', 'backtest_report.json', 'source_health.json'):
+              p = latest / name
+              if p.exists():
+                  json.loads(p.read_text(encoding='utf-8'))
+                  print(f'  {name}: JSON OK')
+
+          hist = latest / 'factors_history.jsonl'
+          if hist.exists():
+              ok = 0
+              for line in hist.read_text(encoding='utf-8').splitlines():
+                  line = line.strip()
+                  if not line:
+                      continue
+                  json.loads(line)
+                  ok += 1
+              print(f'  factors_history.jsonl: {ok} snapshots OK')
+          PY
 
       - name: Check provenance (real data actually reaches the scoring engine)
         if: always()

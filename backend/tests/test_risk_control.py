@@ -179,28 +179,13 @@ def test_status_dict_for_meta_json():
     assert status["state"] == "closed"
     assert "disabled_until" in status
 
-
 if __name__ == "__main__":
-    test_can_request_initial_state()
-    print("PASS: test_can_request_initial_state")
-    test_record_success_increments_count()
-    print("PASS: test_record_success_increments_count")
-    test_quota_blocks_after_exceeded()
-    print("PASS: test_quota_blocks_after_exceeded")
-    test_403_disables_source()
-    print("PASS: test_403_disables_source")
-    test_429_disables_source()
-    print("PASS: test_429_disables_source")
-    test_circuit_breaker_opens_after_consecutive_errors()
-    print("PASS: test_circuit_breaker_opens_after_consecutive_errors")
-    test_half_open_recovers_on_success()
-    print("PASS: test_half_open_recovers_on_success")
-    test_daily_reset()
-    print("PASS: test_daily_reset")
-    test_risk_aware_rate_limiter_raises_when_blocked()
-    print("PASS: test_risk_aware_rate_limiter_raises_when_blocked")
-    test_cross_source_independence()
-    print("PASS: test_cross_source_independence")
-    test_status_dict_for_meta_json()
-    print("PASS: test_status_dict_for_meta_json")
-    print("\nAll 11 risk_control tests passed.")
+    # 自動發現所有 test_ 函式 —— 新增測試不可能再被靜默遺漏。
+    # 見 backend/tests/_runner.py 的說明。
+    import sys as _sys
+    from pathlib import Path as _Path
+
+    _sys.path.insert(0, str(_Path(__file__).resolve().parents[2]))
+    from backend.tests._runner import run_tests
+
+    run_tests(globals(), "risk_control")

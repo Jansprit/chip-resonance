@@ -112,10 +112,14 @@ const results = {};
   results.t3_f1_in_real = r.data_quality.real_factors.includes('F1');
 }
 
-/* ---- Test 4: 全部輸入皆真實 → F1 可用 ---- */
+/* ---- Test 4: 全部輸入皆真實 → F1 可用 ----
+   F1 的輸入集合 2026-10 起改為 4 個欄位（now/w1/w2/w3），
+   因為原始定義要求判斷「連續 3 週增加」。 */
 {
-  const s = mkStock({ code: 'REAL1', pct_1000up_now: 84.7, pct_1000up_w3: 66.8 });
+  const s = mkStock({ code: 'REAL1', pct_1000up_now: 84.7, pct_1000up_w1: 80, pct_1000up_w2: 74, pct_1000up_w3: 66.8 });
   s._provenance.pct_1000up_now = 'real';
+  s._provenance.pct_1000up_w1 = 'real';
+  s._provenance.pct_1000up_w2 = 'real';
   s._provenance.pct_1000up_w3 = 'real';
   const out = computeScores([s]);
   const r = out.survivors[0];
@@ -128,10 +132,10 @@ const results = {};
    2026-10 語意修正：舊版只要「有一檔」有真實因子就宣稱 strict，
    會讓 43 檔裡只有 1 檔有真實資料時整個版面仍顯示「實戰模式」。 */
 {
-  const a = mkStock({ code: 'A', pct_1000up_now: 90, pct_1000up_w3: 70 });
-  a._provenance.pct_1000up_now = 'real';
-  a._provenance.pct_1000up_w3 = 'real';
-  const b = mkStock({ code: 'B', pct_1000up_now: 20, pct_1000up_w3: 60 });
+  const a = mkStock({ code: 'A', pct_1000up_now: 90, pct_1000up_w1: 84, pct_1000up_w2: 78, pct_1000up_w3: 70 });
+  ['pct_1000up_now', 'pct_1000up_w1', 'pct_1000up_w2', 'pct_1000up_w3']
+    .forEach(k => { a._provenance[k] = 'real'; });
+  const b = mkStock({ code: 'B', pct_1000up_now: 20, pct_1000up_w1: 20, pct_1000up_w2: 20, pct_1000up_w3: 60 });
   b._provenance.pct_1000up_now = 'real';
   b._provenance.pct_1000up_w3 = 'illustrative';
   const out = computeScores([a, b]);
@@ -151,12 +155,12 @@ const results = {};
 
 /* ---- Test 5c: 每檔都有真實因子 → strict 模式 ---- */
 {
-  const a = mkStock({ code: 'SA', pct_1000up_now: 90, pct_1000up_w3: 70 });
-  a._provenance.pct_1000up_now = 'real';
-  a._provenance.pct_1000up_w3 = 'real';
-  const b = mkStock({ code: 'SB', pct_1000up_now: 20, pct_1000up_w3: 60 });
-  b._provenance.pct_1000up_now = 'real';
-  b._provenance.pct_1000up_w3 = 'real';
+  const a = mkStock({ code: 'SA', pct_1000up_now: 90, pct_1000up_w1: 84, pct_1000up_w2: 78, pct_1000up_w3: 70 });
+  ['pct_1000up_now', 'pct_1000up_w1', 'pct_1000up_w2', 'pct_1000up_w3']
+    .forEach(k => { a._provenance[k] = 'real'; });
+  const b = mkStock({ code: 'SB', pct_1000up_now: 20, pct_1000up_w1: 20, pct_1000up_w2: 20, pct_1000up_w3: 60 });
+  ['pct_1000up_now', 'pct_1000up_w1', 'pct_1000up_w2', 'pct_1000up_w3']
+    .forEach(k => { b._provenance[k] = 'real'; });
   const out = computeScores([a, b]);
   results.t5c_mode = out.mode;
   results.t5c_count = out.survivors.length;
@@ -173,6 +177,40 @@ const results = {};
   results.t5b_f1_in_real = r.data_quality.real_factors.includes('F1');
   results.t5b_reliable = r.data_quality.reliable;
   results.t5b_finite = Number.isFinite(r.score);
+}
+
+/* ---- Test 5d: F1 必須符合原始定義「連續 ≥3 週增加，且累計增幅 ≥1%」 ----
+   原始需求文件（tabbit_神秘金字塔網站_財富密碼揭密.md §四）：
+   「1000 張以上大戶持股比例連續 ≥3 週增加，且累計增幅 ≥1%」
+   舊版只算 now - w3 的淨差，完全沒有判斷「連續」——
+   那是不同的因子。 */
+{
+  function realF1(over) {
+    const s = mkStock(Object.assign({
+      code: 'F1X', pct_1000up_w3: 60, pct_1000up_w2: 61,
+      pct_1000up_w1: 62, pct_1000up_now: 63,
+    }, over));
+    ['pct_1000up_now', 'pct_1000up_w1', 'pct_1000up_w2', 'pct_1000up_w3']
+      .forEach(k => { s._provenance[k] = 'real'; });
+    return s;
+  }
+  // 連續 3 週增加、累計增幅 3% → 滿分
+  const up = computeScores([realF1({ code: 'F1UP' })]).survivors[0];
+  // 連續 3 週增加但累計增幅只有 0.3% → 不到滿分
+  const small = computeScores([realF1({
+    code: 'F1SM', pct_1000up_w3: 60, pct_1000up_w2: 60.1,
+    pct_1000up_w1: 60.2, pct_1000up_now: 60.3,
+  })]).survivors[0];
+  // 中間一週下降（非連續）→ 明顯較低
+  const broken = computeScores([realF1({
+    code: 'F1BR', pct_1000up_w3: 60, pct_1000up_w2: 61,
+    pct_1000up_w1: 59, pct_1000up_now: 63,
+  })]).survivors[0];
+  results.t5d_consecutive_full = up.F1;
+  results.t5d_small_gain = small.F1;
+  results.t5d_broken = broken.F1;
+  results.t5d_f1_inputs = FACTOR_INPUTS.F1.slice();
+  results.t5d_up_finite = Number.isFinite(up.F1);
 }
 
 /* ---- Test 6: 全部個股都無可用因子 → 分數為中性 50，不 NaN ---- */
@@ -206,111 +244,277 @@ console.log(JSON.stringify(results));
 """
 
 
-def main() -> int:
+# ==================================================================
+# 執行 Node 測試腳本一次，結果供所有測試函式使用
+# ==================================================================
+
+_RESULTS: dict = {}
+
+
+def _results() -> dict:
+    """以 Node 執行 data.js 的實際邏輯，回傳檢查結果。"""
+    if _RESULTS:
+        return _RESULTS
     with tempfile.TemporaryDirectory() as tmp:
         script = Path(tmp) / "test.js"
         script.write_text(TEST_JS, encoding="utf-8")
-
         result = subprocess.run(
             ["node", str(script), str(REPO)],
             capture_output=True,
             text=True,
+            encoding="utf-8",
+            errors="replace",
         )
-        if result.returncode != 0:
-            print("Node execution FAILED:")
-            print(result.stderr[:3000])
-            return 1
+    if result.returncode != 0:
+        raise AssertionError(
+            "Node 執行失敗：\n"
+            f"stdout: {result.stdout[:3000]}\n"
+            f"stderr: {result.stderr[:3000]}"
+        )
+    try:
+        _RESULTS.update(json.loads(result.stdout.strip().splitlines()[-1]))
+    except (ValueError, IndexError) as exc:
+        raise AssertionError(
+            f"無法解析 Node 輸出：{result.stdout[:3000]}"
+        ) from exc
+    return _RESULTS
 
-        try:
-            r = json.loads(result.stdout.strip().splitlines()[-1])
-        except (ValueError, IndexError):
-            print("Could not parse result:")
-            print(result.stdout[:3000])
-            print(result.stderr[:2000])
-            return 1
 
-    failures: list[str] = []
+# ==================================================================
+# T1 — NaN 防護
+# ==================================================================
 
-    def check(name: str, cond: bool, detail: str = "") -> None:
-        if cond:
-            print(f"PASS: {name}")
-        else:
-            print(f"FAIL: {name}  {detail}")
-            failures.append(name)
+def test_t1_no_nan():
+    r = _results()
+    assert r.get("t1_no_nan") is True, f"score={r.get('t1_score')}"
 
-    # T1
-    check("t1_no_nan", r.get("t1_no_nan") is True,
-          f"score={r.get('t1_score')}")
-    check("t1_f1_finite", isinstance(r.get("t1_f1"), (int, float))
-          and r["t1_f1"] == r["t1_f1"], f"F1={r.get('t1_f1')}")
 
-    # T2
-    check("t2_no_nan", r.get("t2_no_nan") is True,
-          f"score={r.get('t2_score')}")
+def test_t1_f1_finite():
+    r = _results()
+    val = r.get("t1_f1")
+    assert isinstance(val, (int, float)) and val == val, f"F1={val}"
 
-    # T3 — 混合來源 → F1 不可用
-    check("t3_f1_not_available", r.get("t3_f1_not_available") is True,
-          f"real={r.get('t3_f1_in_real')}")
-    check("t3_f1_not_in_real", r.get("t3_f1_in_real") is False)
 
-    # T4 — 全真實 → F1 可用
-    check("t4_f1_available", r.get("t4_f1_available") is True,
-          f"F1={r.get('t4_f1_value')}")
+# ==================================================================
+# T2 — 另一組資料的 NaN 防護
+# ==================================================================
 
-    # T5 — 部分真實 → partial 模式，沒有真實因子的股票被排除
-    check("t5_mode_partial", r.get("t5_mode") == "partial",
-          f"mode={r.get('t5_mode')}")
-    check("t5_a_f1_real", r.get("t5_a_f1_real") is True)
-    check("t5_b_f1_not_real", r.get("t5_b_f1_real") is False,
-          f"b_f1_real={r.get('t5_b_f1_real')}")
-    check("t5_b_excluded_from_ranking", r.get("t5_b_excluded") is True)
-    check("t5_all_finite", r.get("t5_all_finite") is True)
-    check("t5_scores_in_range",
-          0 <= (r.get("t5_a_score") or -1) <= 100 and 0 <= (r.get("t5_b_score") or -1) <= 100,
-          f"a={r.get('t5_a_score')} b={r.get('t5_b_score')}")
+def test_t2_no_nan():
+    r = _results()
+    assert r.get("t2_no_nan") is True, f"score={r.get('t2_score')}"
+
+
+# ==================================================================
+# T3 — 混合來源 → F1 不可用
+# ==================================================================
+
+def test_t3_f1_not_available():
+    r = _results()
+    assert r.get("t3_f1_not_available") is True, f"real={r.get('t3_f1_in_real')}"
+
+
+def test_t3_f1_not_in_real():
+    r = _results()
+    assert r.get("t3_f1_in_real") is False
+
+
+# ==================================================================
+# T4 — 全真實 → F1 可用
+# ==================================================================
+
+def test_t4_f1_available():
+    r = _results()
+    assert r.get("t4_f1_available") is True, f"F1={r.get('t4_f1_value')}"
+
+
+# ==================================================================
+# T5 — partial 模式
+# ==================================================================
+
+def test_t5_mode_partial():
+    r = _results()
+    assert r.get("t5_mode") == "partial", f"mode={r.get('t5_mode')}"
+
+
+def test_t5_a_f1_real():
+    r = _results()
+    assert r.get("t5_a_f1_real") is True
+
+
+def test_t5_b_f1_not_real():
+    r = _results()
+    assert r.get("t5_b_f1_real") is False, f"b_f1_real={r.get('t5_b_f1_real')}"
+
+
+def test_t5_b_excluded_from_ranking():
+    r = _results()
+    assert r.get("t5_b_excluded") is True
+
+
+def test_t5_all_finite():
+    r = _results()
+    assert r.get("t5_all_finite") is True
+
+
+def test_t5_scores_in_range():
+    r = _results()
+    a = r.get("t5_a_score")
+    b = r.get("t5_b_score")
+    assert 0 <= (a if a is not None else -1) <= 100, f"a={a}"
+    assert 0 <= (b if b is not None else -1) <= 100, f"b={b}"
+
+
+def test_t5_coverage_counted():
+    r = _results()
     cov = r.get("t5_coverage") or {}
-    check("t5_coverage_counted",
-          cov.get("without_real_factors") == 1 and cov.get("with_real_factors") == 1,
-          f"coverage={cov}")
+    assert cov.get("without_real_factors") == 1, f"coverage={cov}"
+    assert cov.get("with_real_factors") == 1, f"coverage={cov}"
 
-    # T5c — 每檔都有真實因子 → strict
-    check("t5c_mode_strict", r.get("t5c_mode") == "strict",
-          f"mode={r.get('t5c_mode')}")
-    check("t5c_count", r.get("t5c_count") == 2, f"count={r.get('t5c_count')}")
-    check("t5c_no_data_zero", r.get("t5c_no_data") == 0)
-    check("t5c_all_finite", r.get("t5c_all_finite") is True)
 
-    # T5b — demo 模式
-    check("t5b_mode_demo", r.get("t5b_mode") == "demo",
-          f"mode={r.get('t5b_mode')}")
-    check("t5b_f1_not_in_real", r.get("t5b_f1_in_real") is False)
-    check("t5b_not_reliable", r.get("t5b_reliable") is False)
-    check("t5b_finite", r.get("t5b_finite") is True)
+# ==================================================================
+# T5c — strict 模式
+# ==================================================================
 
-    # T6 — 全無可用因子
-    check("t6_all_finite", r.get("t6_all_finite") is True)
-    check("t6_all_50", r.get("t6_all_50") is True)
-    check("t6_none_reliable", r.get("t6_none_reliable") is True)
+def test_t5c_mode_strict():
+    r = _results()
+    assert r.get("t5c_mode") == "strict", f"mode={r.get('t5c_mode')}"
 
-    # T7 — 真實 demo_subset
-    if not r.get("t7_skipped"):
-        check("t7_has_provenance", r.get("t7_has_provenance") is True)
-        check("t7_all_finite", r.get("t7_all_finite") is True,
-              f"tier_a={r.get('t7_tier_a')} rejected={r.get('t7_rejected')}")
-        check("t7_mode_known", r.get("t7_mode") in ("demo", "strict", "partial"),
-              f"mode={r.get('t7_mode')}")
-        # 至少要能產生分層（demo 模式下應有 A 級示範股）
-        if r.get("t7_mode") == "demo":
-            check("t7_tier_a_positive", (r.get("t7_tier_a") or 0) > 0,
-                  f"tier_a={r.get('t7_tier_a')}")
 
-    print()
-    if failures:
-        print(f"{len(failures)} test(s) FAILED: {failures}")
-        return 1
-    print("All scoring provenance tests passed.")
-    return 0
+def test_t5c_count():
+    r = _results()
+    assert r.get("t5c_count") == 2, f"count={r.get('t5c_count')}"
+
+
+def test_t5c_no_data_zero():
+    r = _results()
+    assert r.get("t5c_no_data") == 0
+
+
+def test_t5c_all_finite():
+    r = _results()
+    assert r.get("t5c_all_finite") is True
+
+
+# ==================================================================
+# T5d — F1 對齊原始定義（連續 ≥3 週增加 + 累計增幅 ≥1%）
+# ==================================================================
+
+def test_t5d_finite():
+    r = _results()
+    assert r.get("t5d_up_finite") is True
+
+
+def test_t5d_requires_w1_w2():
+    r = _results()
+    assert r.get("t5d_f1_inputs") == [
+        "pct_1000up_now", "pct_1000up_w1", "pct_1000up_w2", "pct_1000up_w3",
+    ], f"inputs={r.get('t5d_f1_inputs')}"
+
+
+def test_t5d_consecutive_full_score():
+    r = _results()
+    assert (r.get("t5d_consecutive_full") or 0) >= 95, \
+        f"F1={r.get('t5d_consecutive_full')}"
+
+
+def test_t5d_broken_lower_than_consecutive():
+    r = _results()
+    broken = r.get("t5d_broken") or 0
+    full = r.get("t5d_consecutive_full") or 0
+    assert broken < full, f"broken={broken} full={full}"
+
+
+def test_t5d_small_gain_below_full():
+    r = _results()
+    small = r.get("t5d_small_gain") or 0
+    full = r.get("t5d_consecutive_full") or 0
+    assert small < full, f"small={small} full={full}"
+
+
+# ==================================================================
+# T5b — demo 模式
+# ==================================================================
+
+def test_t5b_mode_demo():
+    r = _results()
+    assert r.get("t5b_mode") == "demo", f"mode={r.get('t5b_mode')}"
+
+
+def test_t5b_f1_not_in_real():
+    r = _results()
+    assert r.get("t5b_f1_in_real") is False
+
+
+def test_t5b_not_reliable():
+    r = _results()
+    assert r.get("t5b_reliable") is False
+
+
+def test_t5b_finite():
+    r = _results()
+    assert r.get("t5b_finite") is True
+
+
+# ==================================================================
+# T6 — 全無可用因子
+# ==================================================================
+
+def test_t6_all_finite():
+    r = _results()
+    assert r.get("t6_all_finite") is True
+
+
+def test_t6_all_50():
+    r = _results()
+    assert r.get("t6_all_50") is True
+
+
+def test_t6_none_reliable():
+    r = _results()
+    assert r.get("t6_none_reliable") is True
+
+
+# ==================================================================
+# T7 — 真實 demo_subset
+# ==================================================================
+
+def test_t7_has_provenance():
+    r = _results()
+    if r.get("t7_skipped"):
+        return
+    assert r.get("t7_has_provenance") is True
+
+
+def test_t7_all_finite():
+    r = _results()
+    if r.get("t7_skipped"):
+        return
+    assert r.get("t7_all_finite") is True, \
+        f"tier_a={r.get('t7_tier_a')} rejected={r.get('t7_rejected')}"
+
+
+def test_t7_mode_known():
+    r = _results()
+    if r.get("t7_skipped"):
+        return
+    assert r.get("t7_mode") in ("demo", "strict", "partial"), \
+        f"mode={r.get('t7_mode')}"
+
+
+def test_t7_tier_a_positive_in_demo_mode():
+    r = _results()
+    if r.get("t7_skipped") or r.get("t7_mode") != "demo":
+        return
+    assert (r.get("t7_tier_a") or 0) > 0, f"tier_a={r.get('t7_tier_a')}"
 
 
 if __name__ == "__main__":
-    sys.exit(main())
+    # 自動發現所有 test_ 函式 —— 新增測試不可能再被靜默遺漏。
+    # 見 backend/tests/_runner.py 的說明。
+    import sys as _sys
+    from pathlib import Path as _Path
+
+    _sys.path.insert(0, str(_Path(__file__).resolve().parents[2]))
+    from backend.tests._runner import run_tests
+
+    run_tests(globals(), "scoring_provenance")

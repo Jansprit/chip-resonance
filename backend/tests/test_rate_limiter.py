@@ -83,12 +83,13 @@ def test_thread_safe_under_concurrent_calls():
         f"Concurrent RateLimiter had {len(violations)} interval violations"
     )
 
-
 if __name__ == "__main__":
-    test_no_call_below_min_interval()
-    print("PASS: test_no_call_below_min_interval")
-    test_constructor_rejects_too_low_interval()
-    print("PASS: test_constructor_rejects_too_low_interval")
-    test_thread_safe_under_concurrent_calls()
-    print("PASS: test_thread_safe_under_concurrent_calls")
-    print("\nAll 3 tests passed.")
+    # 自動發現所有 test_ 函式 —— 新增測試不可能再被靜默遺漏。
+    # 見 backend/tests/_runner.py 的說明。
+    import sys as _sys
+    from pathlib import Path as _Path
+
+    _sys.path.insert(0, str(_Path(__file__).resolve().parents[2]))
+    from backend.tests._runner import run_tests
+
+    run_tests(globals(), "rate_limiter")

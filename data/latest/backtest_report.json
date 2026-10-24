@@ -1,0 +1,314 @@
+{
+  "generated_at": "2026-10-25T03:23:30+08:00",
+  "mode": "single_snapshot",
+  "sufficient_data": false,
+  "sufficient_for_strategy": false,
+  "min_weeks_required": 8,
+  "min_weeks_for_strategy": 12,
+  "snapshot_count": 1,
+  "snapshot_dates": [
+    "2026-10-22"
+  ],
+  "rebalance_dates": [
+    "2026-10-27"
+  ],
+  "holding_weeks": 4,
+  "quantiles": 5,
+  "price_series_count": 43,
+  "forward_return_samples": 0,
+  "factor_row_coverage": {
+    "F1": 0,
+    "F2": 36,
+    "F3": 36,
+    "F4": 0,
+    "F5": 0,
+    "F6": 0,
+    "F8": 36,
+    "F10": 0
+  },
+  "walk_forward_segments": 0,
+  "walk_forward": [],
+  "factors": {
+    "F1": {
+      "factor": "F1",
+      "samples": 0,
+      "ic": null,
+      "rank_ic": null,
+      "quantiles": [],
+      "quantile_spread": 0.0,
+      "monotonic": false,
+      "ic_ir_threshold": 0.02,
+      "verdict": "insufficient_data",
+      "ic_series": [],
+      "ic_periods": 0,
+      "icir": null,
+      "ic_t_stat": null,
+      "long_short": {
+        "periods": 0,
+        "metrics": {
+          "periods": 0,
+          "total_return": null,
+          "annualized_return": null,
+          "sharpe": null,
+          "max_drawdown": 0.0,
+          "hit_rate": 0.0
+        },
+        "gross_metrics": {
+          "periods": 0,
+          "total_return": null,
+          "annualized_return": null,
+          "sharpe": null,
+          "max_drawdown": 0.0,
+          "hit_rate": 0.0
+        },
+        "last": null
+      }
+    },
+    "F2": {
+      "factor": "F2",
+      "samples": 0,
+      "ic": null,
+      "rank_ic": null,
+      "quantiles": [],
+      "quantile_spread": 0.0,
+      "monotonic": false,
+      "ic_ir_threshold": 0.02,
+      "verdict": "insufficient_data",
+      "ic_series": [],
+      "ic_periods": 0,
+      "icir": null,
+      "ic_t_stat": null,
+      "long_short": {
+        "periods": 0,
+        "metrics": {
+          "periods": 0,
+          "total_return": null,
+          "annualized_return": null,
+          "sharpe": null,
+          "max_drawdown": 0.0,
+          "hit_rate": 0.0
+        },
+        "gross_metrics": {
+          "periods": 0,
+          "total_return": null,
+          "annualized_return": null,
+          "sharpe": null,
+          "max_drawdown": 0.0,
+          "hit_rate": 0.0
+        },
+        "last": null
+      }
+    },
+    "F3": {
+      "factor": "F3",
+      "samples": 0,
+      "ic": null,
+      "rank_ic": null,
+      "quantiles": [],
+      "quantile_spread": 0.0,
+      "monotonic": false,
+      "ic_ir_threshold": 0.02,
+      "verdict": "insufficient_data",
+      "ic_series": [],
+      "ic_periods": 0,
+      "icir": null,
+      "ic_t_stat": null,
+      "long_short": {
+        "periods": 0,
+        "metrics": {
+          "periods": 0,
+          "total_return": null,
+          "annualized_return": null,
+          "sharpe": null,
+          "max_drawdown": 0.0,
+          "hit_rate": 0.0
+        },
+        "gross_metrics": {
+          "periods": 0,
+          "total_return": null,
+          "annualized_return": null,
+          "sharpe": null,
+          "max_drawdown": 0.0,
+          "hit_rate": 0.0
+        },
+        "last": null
+      }
+    },
+    "F4": {
+      "factor": "F4",
+      "samples": 0,
+      "ic": null,
+      "rank_ic": null,
+      "quantiles": [],
+      "quantile_spread": 0.0,
+      "monotonic": false,
+      "ic_ir_threshold": 0.02,
+      "verdict": "insufficient_data",
+      "ic_series": [],
+      "ic_periods": 0,
+      "icir": null,
+      "ic_t_stat": null,
+      "long_short": {
+        "periods": 0,
+        "metrics": {
+          "periods": 0,
+          "total_return": null,
+          "annualized_return": null,
+          "sharpe": null,
+          "max_drawdown": 0.0,
+          "hit_rate": 0.0
+        },
+        "gross_metrics": {
+          "periods": 0,
+          "total_return": null,
+          "annualized_return": null,
+          "sharpe": null,
+          "max_drawdown": 0.0,
+          "hit_rate": 0.0
+        },
+        "last": null
+      }
+    },
+    "F5": {
+      "factor": "F5",
+      "samples": 0,
+      "ic": null,
+      "rank_ic": null,
+      "quantiles": [],
+      "quantile_spread": 0.0,
+      "monotonic": false,
+      "ic_ir_threshold": 0.02,
+      "verdict": "insufficient_data",
+      "ic_series": [],
+      "ic_periods": 0,
+      "icir": null,
+      "ic_t_stat": null,
+      "long_short": {
+        "periods": 0,
+        "metrics": {
+          "periods": 0,
+          "total_return": null,
+          "annualized_return": null,
+          "sharpe": null,
+          "max_drawdown": 0.0,
+          "hit_rate": 0.0
+        },
+        "gross_metrics": {
+          "periods": 0,
+          "total_return": null,
+          "annualized_return": null,
+          "sharpe": null,
+          "max_drawdown": 0.0,
+          "hit_rate": 0.0
+        },
+        "last": null
+      }
+    },
+    "F6": {
+      "factor": "F6",
+      "samples": 0,
+      "ic": null,
+      "rank_ic": null,
+      "quantiles": [],
+      "quantile_spread": 0.0,
+      "monotonic": false,
+      "ic_ir_threshold": 0.02,
+      "verdict": "insufficient_data",
+      "ic_series": [],
+      "ic_periods": 0,
+      "icir": null,
+      "ic_t_stat": null,
+      "long_short": {
+        "periods": 0,
+        "metrics": {
+          "periods": 0,
+          "total_return": null,
+          "annualized_return": null,
+          "sharpe": null,
+          "max_drawdown": 0.0,
+          "hit_rate": 0.0
+        },
+        "gross_metrics": {
+          "periods": 0,
+          "total_return": null,
+          "annualized_return": null,
+          "sharpe": null,
+          "max_drawdown": 0.0,
+          "hit_rate": 0.0
+        },
+        "last": null
+      }
+    },
+    "F8": {
+      "factor": "F8",
+      "samples": 0,
+      "ic": null,
+      "rank_ic": null,
+      "quantiles": [],
+      "quantile_spread": 0.0,
+      "monotonic": false,
+      "ic_ir_threshold": 0.02,
+      "verdict": "insufficient_data",
+      "ic_series": [],
+      "ic_periods": 0,
+      "icir": null,
+      "ic_t_stat": null,
+      "long_short": {
+        "periods": 0,
+        "metrics": {
+          "periods": 0,
+          "total_return": null,
+          "annualized_return": null,
+          "sharpe": null,
+          "max_drawdown": 0.0,
+          "hit_rate": 0.0
+        },
+        "gross_metrics": {
+          "periods": 0,
+          "total_return": null,
+          "annualized_return": null,
+          "sharpe": null,
+          "max_drawdown": 0.0,
+          "hit_rate": 0.0
+        },
+        "last": null
+      }
+    },
+    "F10": {
+      "factor": "F10",
+      "samples": 0,
+      "ic": null,
+      "rank_ic": null,
+      "quantiles": [],
+      "quantile_spread": 0.0,
+      "monotonic": false,
+      "ic_ir_threshold": 0.02,
+      "verdict": "insufficient_data",
+      "ic_series": [],
+      "ic_periods": 0,
+      "icir": null,
+      "ic_t_stat": null,
+      "long_short": {
+        "periods": 0,
+        "metrics": {
+          "periods": 0,
+          "total_return": null,
+          "annualized_return": null,
+          "sharpe": null,
+          "max_drawdown": 0.0,
+          "hit_rate": 0.0
+        },
+        "gross_metrics": {
+          "periods": 0,
+          "total_return": null,
+          "annualized_return": null,
+          "sharpe": null,
+          "max_drawdown": 0.0,
+          "hit_rate": 0.0
+        },
+        "last": null
+      }
+    }
+  },
+  "note": "⚠️ 因子庫已累積 1 週，尚不足 8 週；**目前為流程驗證，不可解讀為策略績效**。"
+}
