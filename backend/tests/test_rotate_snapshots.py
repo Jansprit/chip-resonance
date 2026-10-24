@@ -117,16 +117,13 @@ def test_rotate_custom_retention():
         result_60 = rotate(data_dir, retention_days=60, dry_run=False)
         assert date_50 in result_60["kept"]
 
-
 if __name__ == "__main__":
-    test_find_snapshot_dirs_skips_special_dirs()
-    print("PASS: test_find_snapshot_dirs_skips_special_dirs")
-    test_rotate_dry_run_moves_old_snapshots()
-    print("PASS: test_rotate_dry_run_moves_old_snapshots")
-    test_rotate_actually_moves_old_snapshots()
-    print("PASS: test_rotate_actually_moves_old_snapshots")
-    test_rotate_keeps_recent_snapshots()
-    print("PASS: test_rotate_keeps_recent_snapshots")
-    test_rotate_custom_retention()
-    print("PASS: test_rotate_custom_retention")
-    print("\nAll 5 rotation tests passed.")
+    # 自動發現所有 test_ 函式 —— 新增測試不可能再被靜默遺漏。
+    # 見 backend/tests/_runner.py 的說明。
+    import sys as _sys
+    from pathlib import Path as _Path
+
+    _sys.path.insert(0, str(_Path(__file__).resolve().parents[2]))
+    from backend.tests._runner import run_tests
+
+    run_tests(globals(), "rotate_snapshots")

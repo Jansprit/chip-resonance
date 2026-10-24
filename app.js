@@ -852,10 +852,141 @@ function initFactorsPage() {
 }
 
 // =============================================================
+// 真實回測報告（data/latest/backtest_report.json）
+// =============================================================
+//
+// 這一段是 v0.4.0 新增的。之前本頁只有「示意性模擬」的 KPI 與曲線，
+// 對應原始需求 §六 的真實驗證框架則完全沒有畫面。
+//
+// 誠實原則：
+//   - 報告的 sufficient_data / sufficient_for_strategy 直接決定 banner 文案
+//   - 樣本不足時**不顯示任何績效數字**，只顯示「為什麼還不能顯示」
+//   - 載入失敗也要明說，不可用假數字補位
+
+function fmtPct(v, digits = 2) {
+  if (v === null || v === undefined || Number.isNaN(v)) return 'n/a';
+  return (v * 100).toFixed(digits) + '%';
+}
+
+function fmtNum(v, digits = 4) {
+  if (v === null || v === undefined || Number.isNaN(v)) return 'n/a';
+  return Number(v).toFixed(digits);
+}
+
+function renderBacktestReport(report) {
+  const target = document.getElementById('backtest-report');
+  if (!target) return;
+
+  const factors = report.factors || {};
+  const ids = Object.keys(factors);
+
+  const banner = report.sufficient_for_strategy
+    ? `<div class="alert-info" style="margin-bottom:16px;">
+         <strong>✅ 真實 point-in-time 回測：</strong>
+         已累積 ${report.snapshot_count} 週快照，統計結果可用於因子去留判斷。
+       </div>`
+    : (report.sufficient_data
+      ? `<div class="alert-warning" style="margin-bottom:16px;">
+           <strong>⚠️ 過渡期：</strong>
+           已累積 ${report.snapshot_count} 週快照（門檻 ${report.min_weeks_required} 週已達成，
+           但尚未達 ${report.min_weeks_for_strategy} 週）。
+           <strong>統計量可參考，績效數字仍不可解讀為策略績效。</strong>
+         </div>`
+      : `<div class="alert-warning" style="margin-bottom:16px;">
+           <strong>⚠️ 目前為流程驗證，不可解讀為策略績效：</strong>
+           point-in-time 因子庫只累積了 ${report.snapshot_count} 週，
+           尚未達 ${report.min_weeks_required} 週的統計門檻。
+           因子值必須「每一週當時可得」才能回測，用今天的資料回推過去是前視偏誤。
+         </div>`);
+
+  const metaRows = [
+    ['回測模式', report.mode || '-'],
+    ['快照週數', `${report.snapshot_count} 週`],
+    ['快照日期', (report.snapshot_dates || []).join('、') || '-'],
+    ['再平衡日', (report.rebalance_dates || []).join('、') || '-'],
+    ['持有期間', `${report.holding_weeks} 週`],
+    ['分層數', report.quantiles],
+    ['價格序列', `${report.price_series_count} 檔`],
+    ['前瞻報酬樣本', `${report.forward_return_samples} 筆`],
+    ['Walk-Forward 段數', `${report.walk_forward_segments || 0} 段`],
+  ];
+
+  const factorRows = ids.map((fid) => {
+    const r = factors[fid] || {};
+    const ls = (r.long_short || {}).metrics || {};
+    const total = ls.total_return;
+    return `
+      <tr>
+        <td><strong>${fid}</strong></td>
+        <td>${r.samples || 0}</td>
+        <td>${fmtNum(r.ic)}</td>
+        <td>${fmtNum(r.rank_ic)}</td>
+        <td>${fmtNum(r.icir, 3)}</td>
+        <td>${total === null || total === undefined ? 'n/a' : fmtPct(total)}</td>
+        <td>${r.monotonic ? '是' : '否'}</td>
+        <td><code>${r.verdict || '-'}</code></td>
+      </tr>`;
+  }).join('');
+
+  target.innerHTML = `
+    ${banner}
+    <div class="alert-info" style="margin-bottom:16px;">
+      <strong>📌 報告說明：</strong>${report.note || ''}
+    </div>
+    <h3 style="font-size:18px; margin:20px 0 10px;">回測設定</h3>
+    <div style="overflow-x:auto;">
+      <table class="stock-table">
+        <thead><tr><th>項目</th><th>值</th></tr></thead>
+        <tbody>
+          ${metaRows.map(([k, v]) => `<tr><td><strong>${k}</strong></td><td>${v}</td></tr>`).join('')}
+        </tbody>
+      </table>
+    </div>
+    <h3 style="font-size:18px; margin:24px 0 10px;">因子驗效（IC / 五分位分層 / 多空組合）</h3>
+    <div style="overflow-x:auto;">
+      <table class="stock-table">
+        <thead>
+          <tr>
+            <th>因子</th><th>樣本</th><th>IC</th><th>RankIC</th><th>ICIR</th>
+            <th>多空累計（扣成本）</th><th>分層單調</th><th>判定</th>
+          </tr>
+        </thead>
+        <tbody>${factorRows || '<tr><td colspan="8">尚無資料</td></tr>'}</tbody>
+      </table>
+    </div>
+    <p style="font-size:12px; color:var(--text-secondary); margin-top:12px;">
+      報告產生時間：${report.generated_at || '-'}　·
+      樣本不足時 IC / 多空組合欄位會顯示 n/a（而不是 0）——
+      「無法計算」與「算出來是 0」是兩件完全不同的事。
+    </p>
+  `;
+}
+
+async function loadBacktestReport() {
+  const target = document.getElementById('backtest-report');
+  if (!target) return;
+  try {
+    const resp = await fetch('/data/latest/backtest_report.json', { cache: 'no-store' });
+    if (!resp.ok) throw new Error(`HTTP ${resp.status}`);
+    const report = await resp.json();
+    renderBacktestReport(report);
+  } catch (err) {
+    target.innerHTML = `
+      <div class="alert-warning">
+        <strong>⚠️ 載入真實回測報告失敗：</strong>${err.message}。
+        <br>請先執行 <code>python -m backend.scripts.run_backtest</code> 產生
+        <code>data/latest/backtest_report.json</code>。
+      </div>`;
+  }
+}
+
+// =============================================================
 // 初始化：backtest.html
 // =============================================================
 function initBacktestPage() {
   if (!document.getElementById('qa-m1')) return;
+
+  loadBacktestReport();
 
   renderBacktestNavCurve('backtest-nav-curve');
   renderCapacityCurve('capacity-curve');

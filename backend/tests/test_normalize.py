@@ -158,30 +158,13 @@ def test_from_finmind_prices_computes_drawdown():
     # 最近 60 天新高（因為單調遞增）
     assert s["is_60d_high"] is True
 
-
 if __name__ == "__main__":
-    test_from_twse_fills_defaults()
-    print("PASS: test_from_twse_fills_defaults")
-    test_from_pyramid_computes_trend()
-    print("PASS: test_from_pyramid_computes_trend")
-    test_guess_industry_semiconductors()
-    print("PASS: test_guess_industry_semiconductors")
-    test_guess_industry_finance()
-    print("PASS: test_guess_industry_finance")
-    test_guess_industry_shipping()
-    print("PASS: test_guess_industry_shipping")
-    test_guess_industry_food()
-    print("PASS: test_guess_industry_food")
-    test_guess_industry_unknown()
-    print("PASS: test_guess_industry_unknown")
-    test_merge_into_priority()
-    print("PASS: test_merge_into_priority")
-    test_from_tpex_preserves_exchange()
-    print("PASS: test_from_tpex_preserves_exchange")
-    test_from_mops_director_sets_3m_change()
-    print("PASS: test_from_mops_director_sets_3m_change")
-    test_from_goodinfo_margin_short()
-    print("PASS: test_from_goodinfo_margin_short")
-    test_from_finmind_prices_computes_drawdown()
-    print("PASS: test_from_finmind_prices_computes_drawdown")
-    print("\nAll 12 normalize tests passed.")
+    # 自動發現所有 test_ 函式 —— 新增測試不可能再被靜默遺漏。
+    # 見 backend/tests/_runner.py 的說明。
+    import sys as _sys
+    from pathlib import Path as _Path
+
+    _sys.path.insert(0, str(_Path(__file__).resolve().parents[2]))
+    from backend.tests._runner import run_tests
+
+    run_tests(globals(), "normalize")

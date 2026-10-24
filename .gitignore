@@ -51,14 +51,21 @@ data/local/**
 # 歷史資料仍可從 git 對 data/latest/ 的每次提交還原。
 data/20*/
 data/20*/**
-# data/latest/ 裡只有網站真正會讀的三個檔需要進版控：
+# data/latest/ 裡只有網站真正會讀的檔案需要進版控：
 #   demo_subset.json（網站資料）、tdcc_chip.json（集保）、
-#   tdcc_history_public.json（CI 累積多週趨勢用）、meta.json（banner）
+#   tdcc_history_public.json（CI 累積多週趨勢用）、meta.json（banner）、
+#   factors.json / factors_history.jsonl（point-in-time 因子庫）、
+#   backtest_report.json（回測報告）、source_health.json（來源健康度）
 # 其餘是 pipeline 的中間產物（全市場行情檔），每天提交會讓
-# 公開倉庫以每日約 1 MB 的速度膨脹，故不進版控。
+# 公開倉庫以每日數 MB 的速度膨脹，故不進版控。
 data/latest/prices.json
 data/latest/tpex_prices.json
 data/latest/universe.json
+# 價格歷史：43 檔 × 487 根日 K 線 ≈ 4 MB，每天提交會讓倉庫一年膨脹 1.4 GB。
+# 它是 pipeline 的中間產物，每次抓取都會重新產生；
+# 網站端不需要它（前端只讀 demo_subset.json）。
+data/latest/price_history.json
+data/latest/finmind_prices.json
 # Note: backend/.env.example is NOT ignored (it should be committed as template)
 
 # Build outputs (in case bundler is added later)

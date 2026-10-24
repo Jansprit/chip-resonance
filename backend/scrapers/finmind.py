@@ -37,12 +37,38 @@ DATASETS = {
     "TaiwanStockShareholding": "台股持股分級（需付費）",
 }
 
+# 免費層（無 token）可用的 dataset —— 2026-10-25 實測：
+#   TaiwanStockPrice        → 200，資料回溯到 2016-01-04
+#   TaiwanStockDayTrading   → 200，資料回溯到 2016-01-04
+#   TaiwanStockShareholding → 400 "Your level is free"（**這個才需要付費**）
+#
+# 過去的結論「FinMind 是付費牆」其實只對持股分級成立；
+# 價格與當沖資料集免 token 就能拿，這直接影響 pipeline 該不該跑 FinMind。
+FREE_DATASETS = ("TaiwanStockPrice", "TaiwanStockDayTrading", "TaiwanStockInfo")
+
 
 def create_finmind_client(cred: Optional[CredentialManager] = None) -> HttpClient:
+    """
+    FinMind 客戶端（**快速失敗**，不要用全域的 60/300/900 秒退避）。
+
+    2026-10-25 實測：FinMind 免費層會**間歇性**回
+    `400 {"msg": "Your level is free"}` —— 同一個 URL 在 30 秒內
+    可以「成功 → 失敗 → 又成功」。
+
+    用全域退避（60 s → 300 s → 900 s）會讓 pipeline 整整卡掉 15 分鐘，
+    而且最後還是失敗（那是配額／路由層的問題，不是暫時性的網路抖動）。
+    這裡改成：最多重試 2 次、間隔 3 / 8 秒，然後就放棄這一個來源，
+    讓合併層退回 Yahoo 的價格資料。
+    """
     rl = RateLimiter(min_interval=5.0, source_name="finmind")
     health = SourceHealth(source_name="finmind", daily_quota=200)
-    client = HttpClient(rate_limiter=rl, health=health, retry=RetryPolicy())
-    # 把 token 帶到 header
+    client = HttpClient(
+        rate_limiter=rl,
+        health=health,
+        retry=RetryPolicy(max_retries=2, schedule=(3, 8)),
+        timeout=30,
+    )
+    # 把 token 帶到 header（有的話）。沒有 token 也能用免費資料集。
     if cred is None:
         cred = CredentialManager()
     token = cred.finmind_token
@@ -52,10 +78,16 @@ def create_finmind_client(cred: Optional[CredentialManager] = None) -> HttpClien
 
 
 def is_available(cred: Optional[CredentialManager] = None) -> bool:
-    """是否可以使用 FinMind（有無 token）。"""
-    if cred is None:
-        cred = CredentialManager()
-    return bool(cred.finmind_token)
+    """
+    FinMind 免費層可用（2026-10-25 實測：無 token 也能取 TaiwanStockPrice）。
+
+    舊版回傳 `bool(finmind_token)`，導致 pipeline 在沒有 token 時
+    **整個跳過** FinMind —— 等於白白放棄一個免費、CI 可用的價格來源。
+    需要 token 的只有付費資料集（如 TaiwanStockShareholding），
+    那部分由呼叫端另外判斷。
+    """
+    return True
+
 
 
 def fetch_dataset(
@@ -73,17 +105,46 @@ def fetch_dataset(
         stock_id: 股票代號，例如 "2330"（留空 = 全市場）
         start_date: YYYY-MM-DD
         end_date: YYYY-MM-DD
+
+    ⚠️ **參數名稱的坑（2026-10-25 抓到的根因）**：
+    FinMind v4 的股票代號參數是 **`data_id`**，不是 `stock_id`。
+    傳 `stock_id=2330` 會回：
+
+        400 {"msg": "Your level is free. Please update your user level."}
+
+    這個錯誤訊息**完全誤導** —— 它看起來像「免費層沒有這個資料集」，
+    於是本專案好一段時間都認為 FinMind 是付費牆、把它整個放棄。
+    實際上只是參數名稱寫錯；改成 `data_id` 立刻 200，
+    而且免 token 就能拿到 2016-01-04 起的歷史資料。
+
+    這是「見樹不見林」的典型：錯誤訊息指向「付費牆」，
+    真因卻只是一個參數名。
     """
     if client is None:
         client = create_finmind_client()
     params = {"dataset": dataset}
     if stock_id:
-        params["stock_id"] = stock_id
+        params["data_id"] = stock_id          # ← 必須是 data_id，不是 stock_id
     if start_date:
         params["start_date"] = start_date
     if end_date:
         params["end_date"] = end_date
-    return client.get_json(FINMIND_BASE, params=params)
+    payload = client.get_json(FINMIND_BASE, params=params)
+
+    # FinMind 的回應是一層 envelope：{"msg":"success","status":200,"data":[...]}
+    # 舊版直接把整個 envelope 當成資料回傳，於是呼叫端拿到的是
+    # ["msg", "status", "data"] 這三個 key 的字串陣列 —— 資料完全沒進來。
+    # 這個 bug 之所以能藏這麼久，正是因為 FinMind 從來沒被成功執行過
+    # （沒 token → 整個來源被 skip）。
+    if isinstance(payload, dict):
+        status = payload.get("status")
+        if status != 200:
+            raise RuntimeError(
+                f"FinMind {dataset} 回 {status}：{payload.get('msg')!r}"
+            )
+        rows = payload.get("data")
+        return rows if isinstance(rows, list) else []
+    return payload if isinstance(payload, list) else []
 
 
 def fetch_stock_prices(
