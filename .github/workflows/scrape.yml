@@ -125,26 +125,28 @@ jobs:
       - name: Validate factor database & backtest report
         if: always()
         run: |
-          for f in factors.json backtest_report.json source_health.json; do
-            if [ -f "data/latest/$f" ]; then
-              echo "--- $f"
-              python -c "import json,sys; json.load(open('data/latest/$f', encoding='utf-8')); print('  JSON OK')"
-            fi
-          done
-          # factors_history.jsonl：每行都必須是合法 JSON
-          if [ -f "data/latest/factors_history.jsonl" ]; then
-            python -c "
-import json
-ok = 0
-for i, line in enumerate(open('data/latest/factors_history.jsonl', encoding='utf-8')):
-    line = line.strip()
-    if not line:
-        continue
-    json.loads(line)
-    ok += 1
-print(f'  factors_history.jsonl OK: {ok} snapshots')
-"
-          fi
+          python - <<'PY'
+          import json
+          from pathlib import Path
+
+          latest = Path('data/latest')
+          for name in ('factors.json', 'backtest_report.json', 'source_health.json'):
+              p = latest / name
+              if p.exists():
+                  json.loads(p.read_text(encoding='utf-8'))
+                  print(f'  {name}: JSON OK')
+
+          hist = latest / 'factors_history.jsonl'
+          if hist.exists():
+              ok = 0
+              for line in hist.read_text(encoding='utf-8').splitlines():
+                  line = line.strip()
+                  if not line:
+                      continue
+                  json.loads(line)
+                  ok += 1
+              print(f'  factors_history.jsonl: {ok} snapshots OK')
+          PY
 
       - name: Check provenance (real data actually reaches the scoring engine)
         if: always()

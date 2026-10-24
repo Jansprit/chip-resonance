@@ -112,6 +112,32 @@ jobs:
             node --check "$f" && echo "  $f: syntax OK"
           done
 
+      # 3a) GitHub Actions workflow YAML 檢查
+      #      2026-10-25 實測：scrape.yml 裡巢狀的 `python -c "..."` 多行字串
+      #      因為未縮排而截斷了 YAML block → workflow 直接失效，
+      #      而且症狀是「workflow file issue」，很難一眼看出是哪一行。
+      #      這裡在 CI 先擋下，不要等到部署時才發現。
+      - name: Workflow YAML validation
+        run: |
+          echo "=== Workflow YAML validation ==="
+          python - <<'PY'
+          import sys
+          import yaml
+          from pathlib import Path
+
+          ok = True
+          for p in sorted(Path('.github/workflows').glob('*.yml')):
+              try:
+                  data = yaml.safe_load(p.read_text(encoding='utf-8'))
+                  triggers = list((data.get(True) or data.get('on') or {}).keys())
+                  print(f"  {p}: OK  triggers={triggers}")
+              except Exception as exc:
+                  ok = False
+                  print(f"  ::error::{p}: YAML 解析失敗：{exc}")
+          if not ok:
+              sys.exit(1)
+          PY
+
       # 3b) Python unit tests — 跑 backend/tests/ 底下的**所有**測試檔。
       #      用 glob 掃描而不是寫死檔名，避免新增測試時忘了加進 CI。
       #      依賴安裝完整的 requirements.txt（測試需要 beautifulsoup4/lxml），
