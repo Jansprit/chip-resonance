@@ -41,7 +41,7 @@ from __future__ import annotations
 import argparse
 import json
 import sys
-from datetime import date, datetime, timedelta
+from datetime import date, datetime, timedelta, timezone
 from pathlib import Path
 from typing import Any, Optional
 
@@ -51,6 +51,10 @@ if str(REPO_ROOT) not in sys.path:
 
 from backend.backtest import engine  # noqa: E402
 from backend.console import configure_console  # noqa: E402
+
+# 台北時區：回測報告的時間戳必須是台股市場的時間，
+# 不是執行環境的本地時間（CI 是 UTC）。
+TAIPEI_TZ = timezone(timedelta(hours=8))
 
 LATEST = REPO_ROOT / "data" / "latest"
 FACTORS_HISTORY = LATEST / "factors_history.jsonl"
@@ -380,7 +384,7 @@ def run_backtest(
         )
 
     return {
-        "generated_at": datetime.now().isoformat(timespec="seconds"),
+        "generated_at": datetime.now(TAIPEI_TZ).isoformat(timespec="seconds"),
         "mode": "point_in_time" if len(covered) > 1 else "single_snapshot",
         "sufficient_data": sufficient,
         "sufficient_for_strategy": strategy_ready,

@@ -204,7 +204,10 @@ class SourceHealth:
     last_error: Optional[str] = None
 
     def reset_if_new_day(self) -> None:
-        today = date.today().isoformat()
+        # ⚠️ 用**台北**日期，不是執行環境的本地日期。
+        # CI 是 UTC → `date.today()` 會是 UTC 的日期，
+        # 配額重置時機因此比台股市場的日界早了 8 小時。
+        today = taipei_today()
         if not hasattr(self, "_last_date"):
             self._last_date = today
             return

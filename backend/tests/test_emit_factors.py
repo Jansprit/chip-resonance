@@ -18,6 +18,7 @@ test_emit_factors.py — 因子庫發佈腳本（emit_factors.js）的行為測�
 from __future__ import annotations
 
 import json
+import os
 import shutil
 import subprocess
 import sys
@@ -142,6 +143,80 @@ def test_emit_published_at_is_three_business_days():
             out = tmp / f"f_{as_of}.json"
             hist = tmp / f"h_{as_of}.jsonl"
             proc = _run_emit(src, out, hist)
+            assert proc.returncode == 0, proc.stderr
+            payload = json.loads(out.read_text(encoding="utf-8"))
+            assert payload["as_of"] == as_of
+            assert payload["published_at"] == expected, (
+                f"{as_of} 的 published_at 應為 {expected}，實際 {payload['published_at']}"
+            )
+
+
+def test_emit_published_at_is_timezone_independent():
+    """
+    published_at 不可受執行環境時區影響。
+
+    實測（2026-10-25 CI）：`addBusinessDays` 用的是 `Date.getDay()` /
+    `setDate()` —— 那是**本地時區**的方法。本機是 UTC+8 所以算對，
+    但 CI 是 UTC → `new Date('2026-10-23T00:00:00+08:00')` 在 UTC 下
+    是週四，週末判斷整個錯位 → published_at 差一天。
+
+    這是典型的「我這台機器上沒事」型 bug：只有 CI 才會抓到。
+    """
+    outs = []
+    for tz in ("UTC", "Asia/Taipei", "America/New_York"):
+        with tempfile.TemporaryDirectory() as tmp:
+            tmp = Path(tmp)
+            src = _write_universe(tmp, [_stock("2330", date="2026-10-23")])
+            out = tmp / "factors.json"
+            hist = tmp / "factors_history.jsonl"
+            env = dict(os.environ)
+            env["TZ"] = tz
+            proc = subprocess.run(
+                [NODE, str(EMIT), str(src), str(out), str(hist)],
+                cwd=str(REPO),
+                capture_output=True,
+                text=True,
+                encoding="utf-8",
+                errors="replace",
+                env=env,
+                timeout=120,
+            )
+            assert proc.returncode == 0, f"TZ={tz} 失敗：{proc.stderr}"
+            payload = json.loads(out.read_text(encoding="utf-8"))
+            outs.append((tz, payload["as_of"], payload["published_at"]))
+    assert len({(a, p) for _, a, p in outs}) == 1, \
+        f"published_at 受時區影響：{outs}"
+    # 2026-10-23 是星期五 → +3 個營業日 = 2026-10-28（星期三）
+    assert outs[0][2] == "2026-10-28", f"published_at 計算錯誤：{outs}"
+
+
+def test_emit_published_at_crosses_weekend_correctly():
+    """週五出發的快照，published_at 必須跳過週末。"""
+    cases = [
+        ("2026-10-22", "2026-10-27"),   # 四 → 二
+        ("2026-10-23", "2026-10-28"),   # 五 → 三（跨週末）
+        ("2026-10-26", "2026-10-29"),   # 一 → 四
+        ("2026-10-30", "2026-11-04"),   # 五 → 四（跨週末）
+    ]
+    with tempfile.TemporaryDirectory() as tmp:
+        tmp = Path(tmp)
+        for as_of, expected in cases:
+            src = _write_universe(tmp, [_stock("2330", date=as_of)],
+                                  name=f"u_{as_of}.json")
+            out = tmp / f"f_{as_of}.json"
+            hist = tmp / f"h_{as_of}.jsonl"
+            env = dict(os.environ)
+            env["TZ"] = "UTC"          # 用 CI 的時區驗證
+            proc = subprocess.run(
+                [NODE, str(EMIT), str(src), str(out), str(hist)],
+                cwd=str(REPO),
+                capture_output=True,
+                text=True,
+                encoding="utf-8",
+                errors="replace",
+                env=env,
+                timeout=120,
+            )
             assert proc.returncode == 0, proc.stderr
             payload = json.loads(out.read_text(encoding="utf-8"))
             assert payload["as_of"] == as_of

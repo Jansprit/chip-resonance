@@ -42,18 +42,30 @@ const DEFAULT_INPUT = path.join(REPO, 'data', 'latest', 'demo_subset.json');
 const DEFAULT_OUTPUT = path.join(REPO, 'data', 'latest', 'factors.json');
 const DEFAULT_HISTORY = path.join(REPO, 'data', 'latest', 'factors_history.jsonl');
 
-/** T+3 交易日：as_of 往後加 3 個工作天（跳過週六日）。 */
+/**
+ * T+3 交易日：as_of 往後加 3 個工作天（跳過週六日）。
+ *
+ * ⚠️ **必須用 UTC 方法計算**（2026-10-25 CI 抓到的 bug）：
+ * 舊版用 `getDay()` / `setDate()` —— 那是**本地時區**的方法。
+ * 本機是 UTC+8 所以算對，但 CI 是 UTC：
+ *   new Date('2026-10-23T00:00:00+08:00') 在 UTC 下是「週四」，
+ *   週末判斷整個錯位 → published_at 差一天。
+ *
+ * 這是典型的「我這台機器上沒事」型 bug，只會在 CI 才被抓到。
+ * 修正方式：把 YYYY-MM-DD 當成「純曆日」用 UTC 方法處理，
+ * 這樣不管執行環境在哪個時區，結果都一樣。
+ */
 function addBusinessDays(isoDate, days) {
-  const d = new Date(isoDate + 'T00:00:00+08:00');
+  const d = new Date(isoDate + 'T00:00:00Z');
   let added = 0;
   while (added < days) {
-    d.setDate(d.getDate() + 1);
-    const wd = d.getDay();
+    d.setUTCDate(d.getUTCDate() + 1);
+    const wd = d.getUTCDay();
     if (wd !== 0 && wd !== 6) added += 1;
   }
-  const y = d.getFullYear();
-  const m = String(d.getMonth() + 1).padStart(2, '0');
-  const day = String(d.getDate()).padStart(2, '0');
+  const y = d.getUTCFullYear();
+  const m = String(d.getUTCMonth() + 1).padStart(2, '0');
+  const day = String(d.getUTCDate()).padStart(2, '0');
   return `${y}-${m}-${day}`;
 }
 
