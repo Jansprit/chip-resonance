@@ -81,6 +81,26 @@ def test_data_paths_have_cache_busting():
     )
 
 
+def test_script_tags_are_versioned():
+    """
+    app.js / data.js 的 script 標籤必須帶版本參數。
+
+    靜態站部署新版本後，瀏覽器與 CDN 都會快取舊的 JS ——
+    症狀是「改了程式但網站沒變」，而且本機開發完全看不出來。
+    2026-10-25 實測：修正相對路徑後重新部署，線上仍是舊的 app.js。
+    """
+    offenders = []
+    for name in ("index.html", "factors.html", "backtest.html", "scoring.html"):
+        html = (REPO / name).read_text(encoding="utf-8")
+        for m in re.finditer(r'<script src="(app|data)\.js([^"]*)"></script>', html):
+            if "?v=" not in m.group(2):
+                offenders.append(f"{name}: {m.group(0)}")
+    assert not offenders, (
+        "以下 script 標籤沒有版本參數，部署後使用者會拿到舊的 JS：\n"
+        + "\n".join(offenders)
+    )
+
+
 def test_backtest_page_has_report_container():
     """backtest.html 必須有真實報告的掛載點與說明。"""
     html = (REPO / "backtest.html").read_text(encoding="utf-8")
