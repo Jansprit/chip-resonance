@@ -265,21 +265,13 @@ def test_emit_includes_all_positive_factors():
         row = payload["rows"][0]
         assert set(row["factors"]) == {"F1", "F2", "F3", "F4", "F5", "F6", "F8", "F10"}
 
-
 if __name__ == "__main__":
-    fns = [
-        test_emit_writes_factors_json,
-        test_emit_published_at_is_three_business_days,
-        test_emit_marks_unavailable_factors_as_null,
-        test_emit_appends_to_history,
-        test_emit_history_dedupes_same_as_of,
-        test_emit_history_accumulates_across_weeks,
-        test_emit_history_updates_same_as_of_with_newer_data,
-        test_emit_missing_input_is_skipped_gracefully,
-        test_emit_output_matches_history_entry,
-        test_emit_includes_all_positive_factors,
-    ]
-    for fn in fns:
-        fn()
-        print(f"PASS: {fn.__name__}")
-    print(f"\nAll {len(fns)} emit_factors tests passed.")
+    # 自動發現所有 test_ 函式 —— 新增測試不可能再被靜默遺漏。
+    # 見 backend/tests/_runner.py 的說明。
+    import sys as _sys
+    from pathlib import Path as _Path
+
+    _sys.path.insert(0, str(_Path(__file__).resolve().parents[2]))
+    from backend.tests._runner import run_tests
+
+    run_tests(globals(), "emit_factors")

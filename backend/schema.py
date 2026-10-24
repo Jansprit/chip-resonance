@@ -372,6 +372,38 @@ if __name__ == "__main__":
         print(f"OK: tdcc_history_public.json（{len(data)} 週）")
         sys.exit(0)
 
+    # --- 以 code 為 key 的物件型檔案 ---
+    # ⚠️ 這幾個分支**必須**放在下面「最外層應為 array」的檢查之前，
+    # 否則它們變成永遠走不到的死碼（2026-10-25 實際踩到：
+    # CI 驗證 margin_balance.json 直接失敗，因為先被 array 檢查擋掉）。
+    if name == "margin_balance.json":
+        for code, entry in data.items():
+            try:
+                MarginBalanceEntry.model_validate(entry)
+            except Exception as e:
+                print(f"FAIL: margin_balance.json[{code}] 驗證失敗：{e}")
+                sys.exit(1)
+        print(f"OK: margin_balance.json（{len(data)} 檔全部通過）")
+        sys.exit(0)
+
+    if name == "valuation.json":
+        for code, entry in data.items():
+            try:
+                ValuationEntry.model_validate(entry)
+            except Exception as e:
+                print(f"FAIL: valuation.json[{code}] 驗證失敗：{e}")
+                sys.exit(1)
+        print(f"OK: valuation.json（{len(data)} 檔全部通過）")
+        sys.exit(0)
+
+    if name == "industry.json":
+        bad = [k for k, v in data.items() if not isinstance(v, str) or not v.strip()]
+        if bad:
+            print(f"FAIL: industry.json 結構錯誤：{bad[:5]}")
+            sys.exit(1)
+        print(f"OK: industry.json（{len(data)} 檔全部通過）")
+        sys.exit(0)
+
     if not isinstance(data, list):
         print(f"FAIL: {name} 最外層應為 array，實際是 {type(data).__name__}")
         sys.exit(1)
@@ -415,33 +447,19 @@ if __name__ == "__main__":
     if name == "price_history.json":
         sys.exit(_validate_all(PriceHistoryEntry, data, name))
 
-    if name == "margin_balance.json":
-        # 以 code 為 key 的物件
-        for code, entry in data.items():
-            try:
-                MarginBalanceEntry.model_validate(entry)
-            except Exception as e:
-                print(f"FAIL: margin_balance.json[{code}] 驗證失敗：{e}")
-                sys.exit(1)
-        print(f"OK: margin_balance.json（{len(data)} 檔全部通過）")
-        sys.exit(0)
-
-    if name == "valuation.json":
-        for code, entry in data.items():
-            try:
-                ValuationEntry.model_validate(entry)
-            except Exception as e:
-                print(f"FAIL: valuation.json[{code}] 驗證失敗：{e}")
-                sys.exit(1)
-        print(f"OK: valuation.json（{len(data)} 檔全部通過）")
-        sys.exit(0)
-
-    if name == "industry.json":
-        bad = [k for k, v in data.items() if not isinstance(v, str) or not v.strip()]
+    if name == "finmind_prices.json":
+        # FinMind 原始列：{date, stock_id, Trading_Volume, ...}
+        bad = []
+        for i, row in enumerate(data):
+            if not isinstance(row, dict):
+                bad.append(f"[{i}] 不是物件")
+                continue
+            if not row.get("stock_id") or not row.get("date"):
+                bad.append(f"[{i}] 缺 stock_id/date：{str(row)[:80]}")
         if bad:
-            print(f"FAIL: industry.json 結構錯誤：{bad[:5]}")
+            print(f"FAIL: finmind_prices.json 結構錯誤：{bad[:5]}")
             sys.exit(1)
-        print(f"OK: industry.json（{len(data)} 檔全部通過）")
+        print(f"OK: finmind_prices.json（{len(data)} 列全部通過）")
         sys.exit(0)
 
     print(f"FAIL: 未知檔案類型 {name}，無法驗證")

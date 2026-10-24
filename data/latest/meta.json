@@ -1,36 +1,58 @@
 {
-  "last_update_taipei": "2026-10-24T23:38:11.211053+08:00",
-  "snapshot_date": "2026-10-24",
-  "previous_snapshot_date": "2026-10-24",
+  "last_update_taipei": "2026-10-25T03:00:40.191187+08:00",
+  "snapshot_date": "2026-10-25",
+  "previous_snapshot_date": "2026-10-25",
   "data_freshness_hours": 0,
   "sources": {
     "twse": {
-      "status": "not_run",
-      "reason": "本次排程未包含此來源"
-    },
-    "tpex": {
-      "status": "not_run",
-      "reason": "本次排程未包含此來源"
-    },
-    "finmind": {
-      "status": "not_run",
-      "reason": "本次排程未包含此來源"
-    },
-    "mops": {
-      "status": "not_run",
-      "reason": "本次排程未包含此來源"
-    },
-    "tdcc": {
-      "status": "not_run",
-      "reason": "本次排程未包含此來源"
-    },
-    "yahoo_price": {
-      "status": "partial",
+      "status": "ok",
+      "stocks_count": 1088,
+      "indices_count": 132,
       "min_interval_sec": 3,
       "daily_quota": 500,
-      "rows_count": 40,
+      "margin_count": 1235,
+      "valuation_count": 1080,
+      "industry_count": 1097
+    },
+    "tpex": {
+      "status": "ok",
+      "stocks_count": 892,
+      "min_interval_sec": 3,
+      "daily_quota": 500
+    },
+    "finmind": {
+      "status": "ok",
+      "reason": null,
+      "min_interval_sec": 5,
+      "daily_quota": 200,
+      "rows_count": 3440
+    },
+    "mops": {
+      "status": "ok",
+      "min_interval_sec": 8,
+      "daily_quota": 100,
+      "rows_count": 43,
       "stocks_count": 43,
-      "note": "Yahoo 日 K 線：40/43 檔成功"
+      "pledge_events": 11,
+      "note": "董監事持股餘額明細：43/43 檔成功（資料年月 11509）；近 12 月質設異動 11 筆"
+    },
+    "tdcc": {
+      "status": "ok",
+      "min_interval_sec": 1,
+      "daily_quota": 100,
+      "rows_count": 61500,
+      "stocks_count": 4100,
+      "public_history": true,
+      "published_stocks": 43,
+      "trend_codes": 0
+    },
+    "yahoo_price": {
+      "status": "ok",
+      "min_interval_sec": 3,
+      "daily_quota": 500,
+      "rows_count": 43,
+      "stocks_count": 43,
+      "note": "Yahoo 日 K 線：43/43 檔成功"
     },
     "wantgoo_price": {
       "status": "not_run",

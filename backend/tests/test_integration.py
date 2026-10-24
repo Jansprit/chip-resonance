@@ -23,6 +23,7 @@ sys.path.insert(0, str(Path(__file__).resolve().parents[2]))
 # 確保 import pipeline 時不會執行 main()
 import backend.pipeline as pipeline
 from backend.scrapers.base import SourceHealth, RateLimiter, HttpClient
+from backend.scrapers import finmind
 
 
 def test_run_twse_writes_correctly():
@@ -59,19 +60,41 @@ def test_run_twse_writes_correctly():
         assert data[0]["price"] == 2460
 
 
-def test_run_finmind_skips_without_token():
-    """沒有 FINMIND_TOKEN 時，run_finmind 應該回傳 skipped 狀態。"""
-    with tempfile.TemporaryDirectory() as tmp:
-        out_dir = Path(tmp) / "latest"
-        out_dir.mkdir(parents=True, exist_ok=True)
-        with patch.dict("os.environ", {}, clear=False):
-            import os
-            os.environ.pop("FINMIND_TOKEN", None)
-            from backend.scrapers.base import CredentialManager
-            with patch.object(CredentialManager, "finmind_token", new_callable=lambda: None):
-                status = pipeline.run_finmind(out_dir)
-        assert status["status"] == "skipped"
-        assert "FINMIND_TOKEN" in status["reason"]
+def test_run_finmind_does_not_require_token():
+    """
+    沒有 FINMIND_TOKEN 時，FinMind **仍然可用**（免費層）。
+
+    2026-10-25 實測：`dataset=TaiwanStockPrice&data_id=2330` 免 token 就回 200，
+    而且資料回溯到 2016-01-04。
+    舊版因為 `is_available()` 要求 token，整個來源被 skip，
+    等於白白放棄一個免費、CI 可用的價格來源。
+
+    ⚠️ 真正的坑是參數名稱：FinMind v4 要的是 `data_id`，
+    傳 `stock_id` 會回 400「Your level is free」——
+    那個誤導性的錯誤訊息正是「FinMind 是付費牆」這個錯誤結論的來源。
+    """
+    from backend.scrapers.base import CredentialManager
+    with patch.object(CredentialManager, "finmind_token", new_callable=lambda: None):
+        assert finmind.is_available() is True
+
+
+def test_pipeline_exit_code_treats_partial_as_success():
+    """
+    「partial」（部分檔案失敗）不該讓整條 pipeline 失敗。
+
+    以前 Yahoo 只要有 1 檔失敗就回 partial → pipeline exit 1
+    → CI 的 scrape 步驟必定失敗 → 每次都在同一個地方壞掉。
+
+    語意應該是：
+      ok / skipped / partial → 0（有可用資料就算成功）
+      有任何 failed          → 1（來源真的壞了，要讓 CI 紅燈）
+      全部失敗               → 2
+    """
+    assert pipeline.pipeline_exit_code(["ok", "partial", "ok"]) == 0
+    assert pipeline.pipeline_exit_code(["ok", "skipped"]) == 0
+    assert pipeline.pipeline_exit_code([]) == 0
+    assert pipeline.pipeline_exit_code(["ok", "failed"]) == 1
+    assert pipeline.pipeline_exit_code(["failed", "failed"]) == 2
 
 
 def test_run_mops_now_uses_playwright():
@@ -155,22 +178,13 @@ def test_demo_subset_preserves_chip_fields():
     assert merged[0]["price"] == 2460  # demo 保留
     assert merged[0]["industry"] == "SEMI"
 
-
 if __name__ == "__main__":
-    test_run_twse_writes_correctly()
-    print("PASS: test_run_twse_writes_correctly")
-    test_run_finmind_skips_without_token()
-    print("PASS: test_run_finmind_skips_without_token")
-    test_run_mops_now_uses_playwright()
-    print("PASS: test_run_mops_now_uses_playwright")
-    test_source_health_disables_on_403()
-    print("PASS: test_source_health_disables_on_403")
-    test_rate_limiter_rejects_low_interval()
-    print("PASS: test_rate_limiter_rejects_low_interval")
-    test_taipei_today_format()
-    print("PASS: test_taipei_today_format")
-    test_meta_written_after_run()
-    print("PASS: test_meta_written_after_run")
-    test_demo_subset_preserves_chip_fields()
-    print("PASS: test_demo_subset_preserves_chip_fields")
-    print("\nAll 8 integration tests passed.")
+    # 自動發現所有 test_ 函式 —— 新增測試不可能再被靜默遺漏。
+    # 見 backend/tests/_runner.py 的說明。
+    import sys as _sys
+    from pathlib import Path as _Path
+
+    _sys.path.insert(0, str(_Path(__file__).resolve().parents[2]))
+    from backend.tests._runner import run_tests
+
+    run_tests(globals(), "integration")

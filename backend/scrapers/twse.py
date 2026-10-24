@@ -41,7 +41,18 @@ ENDPOINT_VALUATION = f"{TWSE_BASE}/exchangeReport/BWIBBU_d"
 ENDPOINT_COMPANY_BASIC = f"{TWSE_BASE}/opendata/t187ap03_L"
 
 # Yahoo Finance v8（免 key；2026-10-24 實測本機與 CI 皆可）
-ENDPOINT_YAHOO_CHART = "https://query1.finance.yahoo.com/v8/finance/chart/{code}.TW"
+ENDPOINT_YAHOO_CHART = "https://query1.finance.yahoo.com/v8/finance/chart/{code}.{suffix}"
+
+# Yahoo 的台股代號後綴：
+#   .TW  → 上市（TWSE）
+#   .TWO → 上櫃（TPEx）
+#
+# ⚠️ 2026-10-25 實測：只試 .TW 會讓上櫃股（5347 / 4743 / 4128 等）
+#    全部拿到 404 "symbol may be delisted"，
+#    看起來像「股票下市了」，實際上只是後綴不對。
+#    修好之後 43/43 檔都能取到歷史 K 線（原本 40/43）。
+YAHOO_SUFFIXES = ("TW", "TWO")
+
 
 
 def create_twse_client() -> HttpClient:
@@ -424,19 +435,28 @@ def fetch_price_history(
     range_: str = "2y",
     interval: str = "1d",
 ) -> list[dict[str, Any]]:
-    """抓單一股票的日 K 線（Yahoo v8，免 key）。
+    """
+    抓單一股票的日 K 線（Yahoo v8，免 key）。
 
     風控：走 yahoo 專用的節流閥（2.5 秒/次、每日 500 次、快速失敗），
     43 檔約需 2 分鐘。
+
+    **上市 / 上櫃兩種後綴都會試**（.TW → .TWO）：
+    只試 .TW 會讓上櫃股整批 404，看起來像「股票下市」，
+    實際上只是後綴不對（2026-10-25 實測：修好後 40/43 → 43/43）。
     """
     client = client or create_yahoo_client()
-    url = (f"{ENDPOINT_YAHOO_CHART.format(code=code)}"
-           f"?range={range_}&interval={interval}")
-    try:
-        payload = client.get_json(url)
-    except Exception:
-        return []
-    return parse_yahoo_chart(payload, code)
+    for suffix in YAHOO_SUFFIXES:
+        url = (f"{ENDPOINT_YAHOO_CHART.format(code=code, suffix=suffix)}"
+               f"?range={range_}&interval={interval}")
+        try:
+            payload = client.get_json(url)
+        except Exception:
+            continue
+        bars = parse_yahoo_chart(payload, code)
+        if bars:
+            return bars
+    return []
 
 
 if __name__ == "__main__":

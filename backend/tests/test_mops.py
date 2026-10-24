@@ -191,32 +191,13 @@ def test_to_float_handles_formatting():
     assert mops._to_float("") is None
     assert mops._to_float(None) is None
 
-
 if __name__ == "__main__":
-    test_endpoint_host_is_mopsov()
-    print("PASS: test_endpoint_host_is_mopsov")
-    test_legacy_404_page_not_used()
-    print("PASS: test_legacy_404_page_not_used")
-    test_is_available_true()
-    print("PASS: test_is_available_true")
-    test_to_roc()
-    print("PASS: test_to_roc")
-    test_roc_period_to_ym()
-    print("PASS: test_roc_period_to_ym")
-    test_shift_month_crosses_year()
-    print("PASS: test_shift_month_crosses_year")
-    test_parse_director_holding()
-    print("PASS: test_parse_director_holding")
-    test_parse_director_detects_no_data()
-    print("PASS: test_parse_director_detects_no_data")
-    test_combine_director_periods()
-    print("PASS: test_combine_director_periods")
-    test_combine_director_periods_without_past()
-    print("PASS: test_combine_director_periods_without_past")
-    test_parse_pledge_html()
-    print("PASS: test_parse_pledge_html")
-    test_parse_pledge_detects_no_data()
-    print("PASS: test_parse_pledge_detects_no_data")
-    test_to_float_handles_formatting()
-    print("PASS: test_to_float_handles_formatting")
-    print("\nAll 14 mops tests passed.")
+    # 自動發現所有 test_ 函式 —— 新增測試不可能再被靜默遺漏。
+    # 見 backend/tests/_runner.py 的說明。
+    import sys as _sys
+    from pathlib import Path as _Path
+
+    _sys.path.insert(0, str(_Path(__file__).resolve().parents[2]))
+    from backend.tests._runner import run_tests
+
+    run_tests(globals(), "mops")

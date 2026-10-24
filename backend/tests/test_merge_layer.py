@@ -252,32 +252,13 @@ def test_build_does_not_mutate_seed():
                    "exchange": "TWSE"}], [], [], [], [], [], [])
     assert SEED == before
 
-
 if __name__ == "__main__":
-    test_compute_price_derived_basic()
-    print("PASS: test_compute_price_derived_basic")
-    test_compute_price_derived_detects_crash()
-    print("PASS: test_compute_price_derived_detects_crash")
-    test_compute_price_derived_insufficient_data()
-    print("PASS: test_compute_price_derived_insufficient_data")
-    test_compute_price_derived_drawdown()
-    print("PASS: test_compute_price_derived_drawdown")
-    test_compute_industry_medians_only_uses_real()
-    print("PASS: test_compute_industry_medians_only_uses_real")
-    test_compute_industry_medians_min_peers()
-    print("PASS: test_compute_industry_medians_min_peers")
-    test_build_merges_prices_and_marks_real()
-    print("PASS: test_build_merges_prices_and_marks_real")
-    test_build_merges_tdcc_chip()
-    print("PASS: test_build_merges_tdcc_chip")
-    test_build_tdcc_partial_multiweek_is_not_overwritten()
-    print("PASS: test_build_tdcc_partial_multiweek_is_not_overwritten")
-    test_build_merges_mops()
-    print("PASS: test_build_merges_mops")
-    test_build_merges_price_derived_and_industry_median()
-    print("PASS: test_build_merges_price_derived_and_industry_median")
-    test_factor_availability_follows_provenance()
-    print("PASS: test_factor_availability_follows_provenance")
-    test_build_does_not_mutate_seed()
-    print("PASS: test_build_does_not_mutate_seed")
-    print("\nAll 13 merge_layer tests passed.")
+    # 自動發現所有 test_ 函式 —— 新增測試不可能再被靜默遺漏。
+    # 見 backend/tests/_runner.py 的說明。
+    import sys as _sys
+    from pathlib import Path as _Path
+
+    _sys.path.insert(0, str(_Path(__file__).resolve().parents[2]))
+    from backend.tests._runner import run_tests
+
+    run_tests(globals(), "merge_layer")

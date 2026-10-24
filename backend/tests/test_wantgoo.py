@@ -28,6 +28,81 @@ sys.path.insert(0, str(Path(__file__).resolve().parents[2]))
 from backend.scrapers import wantgoo
 
 
+# ===== before 參數契約（2026-10-25 實測）=====
+
+def test_price_history_before_candidates_are_ordered_newest_first():
+    """
+    `before` 候選值必須由新到舊排列。
+
+    實測（2026-10-25 01:30 TPE）：`before = 今天 00:00 台北` 會回 HTTP 400，
+    但往前 1 天（昨天）就正常。伺服器的接受規則不透明，
+    所以不能只押一個值，必須準備一串候選依序試。
+    """
+    cands = wantgoo.price_history_before_candidates()
+    assert len(cands) >= 2, "至少要有今天與昨天兩個候選"
+    assert cands == sorted(cands, reverse=True), "候選必須由新到舊"
+    assert len(set(cands)) == len(cands), "候選不可重複"
+
+
+def test_price_history_before_candidates_cover_multiple_days():
+    """候選必須涵蓋多天（週末 / 連假都可能讓今天不成立）。"""
+    cands = wantgoo.price_history_before_candidates()
+    assert len(cands) >= 8, f"只準備了 {len(cands)} 個候選，不足以涵蓋連假"
+
+
+def test_price_history_before_candidates_are_midnight_taipei():
+    """每個候選都必須是「某一天 00:00 台北」的毫秒時間戳。"""
+    from datetime import datetime, timedelta, timezone
+
+    tpe = timezone(timedelta(hours=8))
+    for ms in wantgoo.price_history_before_candidates():
+        d = datetime.fromtimestamp(ms / 1000, tpe)
+        assert (d.hour, d.minute, d.second, d.microsecond) == (0, 0, 0, 0), \
+            f"{d.isoformat()} 不是 00:00"
+
+
+def test_fetch_price_history_falls_back_when_first_candidate_is_rejected():
+    """
+    第一個候選被伺服器拒絕（400）時，必須自動往下一個候選試。
+
+    這是實際發生過的故障：v0.3.1 固定用「今天 00:00」，
+    在 2026-10-25 凌晨執行時整個玩股網價格來源直接失效。
+    """
+    attempted: list[str] = []
+
+    class _FakeResponse:
+        status_code = 200
+        text = '[{"time": 1792598400000, "close": 2385.0}]'
+
+    class _FakeClient:
+        def get_text(self, url):
+            attempted.append(url)
+            if len(attempted) == 1:
+                class _Bad:
+                    status_code = 400
+                    text = "400 - BadRequest"
+                return _Bad().text
+            return _FakeResponse.text
+
+    result = wantgoo.fetch_price_history("2330", client=_FakeClient())
+    assert len(attempted) >= 2, "第一個候選被拒後必須再試第二個"
+    assert attempted[0] != attempted[1]
+    assert result, "fallback 之後應該有拿到資料"
+
+
+def test_fetch_price_history_raises_when_all_candidates_rejected():
+    """所有候選都被拒時必須明確報錯（不可回空資料冒充成功）。"""
+    class _FakeClient:
+        def get_text(self, url):
+            raise RuntimeError("400 - BadRequest")
+
+    try:
+        wantgoo.fetch_price_history("2330", client=_FakeClient())
+    except Exception:
+        return
+    raise AssertionError("所有候選都失敗時必須拋例外")
+
+
 # ===== 真實結構的 fixture（兩層表頭 + rowspan）=====
 
 MARGIN_HTML = """
@@ -284,40 +359,13 @@ def test_taipei_midnight_ms_is_midnight():
     assert (moment.hour, moment.minute, moment.second) == (0, 0, 0)
     assert ms % 1000 == 0
 
-
 if __name__ == "__main__":
-    test_page_urls_are_not_the_old_404_paths()
-    print("PASS: test_page_urls_are_not_the_old_404_paths")
-    test_api_paths_match_site_bundle()
-    print("PASS: test_api_paths_match_site_bundle")
-    test_is_available_true()
-    print("PASS: test_is_available_true")
-    test_flatten_two_level_headers()
-    print("PASS: test_flatten_two_level_headers")
-    test_rows_are_not_header_rows()
-    print("PASS: test_rows_are_not_header_rows")
-    test_parse_balance_sheet()
-    print("PASS: test_parse_balance_sheet")
-    test_parse_balance_sheet_without_rows_returns_error()
-    print("PASS: test_parse_balance_sheet_without_rows_returns_error")
-    test_parse_institutional()
-    print("PASS: test_parse_institutional")
-    test_parse_institutional_without_rows_returns_error()
-    print("PASS: test_parse_institutional_without_rows_returns_error")
-    test_parse_main_page()
-    print("PASS: test_parse_main_page")
-    test_parse_main_page_without_rows_returns_error()
-    print("PASS: test_parse_main_page_without_rows_returns_error")
-    test_to_float_handles_formatting()
-    print("PASS: test_to_float_handles_formatting")
-    test_price_history_contract_constants()
-    print("PASS: test_price_history_contract_constants")
-    test_parse_price_history_converts_and_sorts()
-    print("PASS: test_parse_price_history_converts_and_sorts")
-    test_parse_price_history_skips_bad_rows()
-    print("PASS: test_parse_price_history_skips_bad_rows")
-    test_parse_price_history_empty()
-    print("PASS: test_parse_price_history_empty")
-    test_taipei_midnight_ms_is_midnight()
-    print("PASS: test_taipei_midnight_ms_is_midnight")
-    print("\nAll 19 wantgoo tests passed.")
+    # 自動發現所有 test_ 函式 —— 新增測試不可能再被靜默遺漏。
+    # 見 backend/tests/_runner.py 的說明。
+    import sys as _sys
+    from pathlib import Path as _Path
+
+    _sys.path.insert(0, str(_Path(__file__).resolve().parents[2]))
+    from backend.tests._runner import run_tests
+
+    run_tests(globals(), "wantgoo")
