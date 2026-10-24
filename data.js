@@ -241,7 +241,7 @@ async function loadRealData() {
 // 5. 每檔股票輸出 data_quality，供 UI 誠實呈現「這個分數有多可信」。
 
 const FACTOR_INPUTS = {
-  F1:  ['pct_1000up_now', 'pct_1000up_w3'],
+  F1:  ['pct_1000up_now', 'pct_1000up_w1', 'pct_1000up_w2', 'pct_1000up_w3'],
   F2:  ['industry_ret_60d_med'],
   F3:  ['director_holding_change_3m', 'ret_60d', 'industry_ret_60d_med'],
   F4:  ['pct_400up_52w_high'],
@@ -304,6 +304,7 @@ function computeScores(universe) {
   const factorValues = survivors.map(s => {
     const pct_1000up_now = safeNum(s.pct_1000up_now, 50);
     const pct_1000up_w1 = safeNum(s.pct_1000up_w1, pct_1000up_now);
+    const pct_1000up_w2 = safeNum(s.pct_1000up_w2, pct_1000up_w1);
     const pct_1000up_w3 = safeNum(s.pct_1000up_w3, pct_1000up_now);
     const pct_1000up_delta_3w = pct_1000up_now - pct_1000up_w3;
     const pct_1000up_delta_2w = pct_1000up_w1 - pct_1000up_w3;
@@ -312,7 +313,22 @@ function computeScores(universe) {
     const ret_underperform = ret_60d < industry_ret_60d_med;
     const dir_change_3m_ok = safeNum(s.director_holding_change_3m, 0) > 0.5;
 
-    const F1_raw = pct_1000up_delta_3w >= 1.0 ? 100 : pct_1000up_delta_3w * 50 + 50;
+    const F1_raw = (() => {
+      // 原始需求文件 §四：「1000 張以上大戶持股比例**連續 ≥3 週增加**，
+      // 且**累計增幅 ≥1%**」。
+      // 舊版只算 now - w3 的淨差，完全沒有判斷「連續」——那是另一個因子。
+      const consecutiveUp3w =
+        pct_1000up_w3 < pct_1000up_w2 &&
+        pct_1000up_w2 < pct_1000up_w1 &&
+        pct_1000up_w1 < pct_1000up_now;
+      const cumGain3w = pct_1000up_delta_3w;
+      if (consecutiveUp3w) {
+        return cumGain3w >= 1.0 ? 100 : 60 + cumGain3w * 20;
+      }
+      // 不是連續增加：即使淨值為正也只給低分（避免把「一週大漲一週回吐」
+      // 誤判成「大戶連續加碼」）
+      return cumGain3w > 0 ? 45 : 20;
+    })();
     const F2_raw = Math.max(0, Math.min(100, industry_ret_60d_med * 50 + 50));
     const F3_raw = (dir_change_3m_ok && ret_underperform) ? 100 :
                    (dir_change_3m_ok ? 70 : (ret_underperform ? 50 : 30));
@@ -512,6 +528,7 @@ async function initializeData() {
 window.INDUSTRY_LIST = INDUSTRY_LIST;
 window.FACTOR_WEIGHTS = FACTOR_WEIGHTS;
 window.FACTOR_DEFINITIONS = FACTOR_DEFINITIONS;
+window.FACTOR_INPUTS = FACTOR_INPUTS;
 window.FACTOR_STATUS = FACTOR_STATUS;
 window.HARD_FILTERS = HARD_FILTERS;
 window.computeScores = computeScores;

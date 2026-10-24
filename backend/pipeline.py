@@ -40,6 +40,11 @@ from backend.scrapers.base import (
 from backend.scrapers.twse import (
     create_twse_client, fetch_prices, fetch_market_index,
     save_latest as twse_save_latest,
+    fetch_margin_balance as twse_fetch_margin_balance,
+    fetch_valuation as twse_fetch_valuation,
+    fetch_industry_map as twse_fetch_industry_map,
+    fetch_price_history as twse_fetch_price_history,
+    create_yahoo_client,
 )
 from backend.scrapers.tpex import (
     create_tpex_client, fetch_daily_quotes,
@@ -163,7 +168,7 @@ def _publish_codes() -> list[str]:
 # 沒跑到的標成 not_run —— 前端 banner 才不會對 3/8 來源顯示「?」）
 ALL_SOURCES = (
     "twse", "tpex", "finmind", "mops", "tdcc",
-    "wantgoo_price", "wantgoo", "pyramid", "goodinfo",
+    "yahoo_price", "wantgoo_price", "wantgoo", "pyramid", "goodinfo",
 )
 
 
@@ -228,6 +233,22 @@ def run_twse(out_dir: Path) -> dict:
         twse_save_latest(out_dir.parent, prices, idx)
         status["stocks_count"] = len(prices)
         status["indices_count"] = len(idx)
+        # 官方開放 API 補充端點（2026-10-24 新增）：
+        #   MI_MARGN   → F9 的 margin_pct / short_ratio
+        #   BWIBBU_d   → F5 的 yield_now
+        #   t187ap03_L → 產業別 CID（F2 的分群依據）
+        # 三者皆為單一請求涵蓋全市場，官方開放 API，不擋 datacenter IP。
+        for key, fn, fname in (
+            ("margin", twse_fetch_margin_balance, "margin_balance.json"),
+            ("valuation", twse_fetch_valuation, "valuation.json"),
+            ("industry", twse_fetch_industry_map, "industry.json"),
+        ):
+            try:
+                data = fn(client)
+                write_json(out_dir / fname, data)
+                status[f"{key}_count"] = len(data)
+            except Exception as e:
+                status[f"{key}_error"] = str(e)
         return status
     except (SourceBannedError, SourceDisabledError) as e:
         status["status"] = "disabled"
@@ -539,6 +560,49 @@ async def run_goodinfo_async(out_dir: Path) -> dict:
     return await _run_playwright_source("goodinfo", _fetch, out_dir)
 
 
+async def run_yahoo_price_async(out_dir: Path) -> dict:
+    """Yahoo Finance 歷史 K 線（免 key、CI 友善）→ 價格衍生因子。
+
+    為什麼不是玩股網？
+    2026-10-24 實測：玩股網 /investrue/.../historical-daily-candlesticks
+    本機 43/43 檔全成功，但 **GitHub Actions 的 datacenter IP 一律 403**。
+    Yahoo v8 在本機與 CI 皆可，且免 key → 這是能放進 public 集合的價格來源。
+
+    輸出 data/latest/price_history.json：
+    [{code, bars: [{date, open, high, low, close, volume}, ...]}, ...]
+    """
+    status = {
+        "status": "ok",
+        "min_interval_sec": 3, "daily_quota": 500, "rows_count": 0,
+    }
+    try:
+        codes = _publish_codes()
+        client = create_yahoo_client()
+        results: list[dict[str, Any]] = []
+        try:
+            for code in codes:
+                bars = twse_fetch_price_history(code, client=client)
+                results.append({"code": code, "bars": bars})
+        finally:
+            client.session.close()
+        write_json(out_dir / "price_history.json", results)
+        ok = [r for r in results if r["bars"]]
+        status["rows_count"] = len(ok)
+        status["stocks_count"] = len(codes)
+        if not ok:
+            status["status"] = "failed"
+            status["error"] = "Yahoo Finance 未回傳任何 K 線資料"
+        elif len(ok) < len(codes):
+            status["status"] = "partial"
+        status["note"] = f"Yahoo 日 K 線：{len(ok)}/{len(codes)} 檔成功"
+        return status
+    except Exception as e:
+        status["status"] = "failed"
+        status["error"] = str(e)
+        status["trace"] = traceback.format_exc()
+        return status
+
+
 async def run_wantgoo_price_async(out_dir: Path) -> dict:
     """玩股網歷史 K 線（純 HTTP，免登入、免簽章）→ 價格衍生因子。
 
@@ -792,6 +856,12 @@ async def _main_async(repo: Path | None, source: str, out_dir_name: str) -> int:
         print("[1/8] TWSE OpenAPI ...")
         sources_status["twse"] = run_twse(out_dir)
         print(f"    {sources_status['twse']}")
+
+    # Yahoo 價格歷史（免 key；FinMind 付費牆 / MoneyDJ 需會員的替代方案）
+    if source in ("all", "public", "private", "yahoo_price"):
+        print("[1b/8] Yahoo Finance 歷史 K 線 (免 key) ...")
+        sources_status["yahoo_price"] = await run_yahoo_price_async(out_dir)
+        print(f"    {sources_status['yahoo_price']}")
 
     if source in ("all", "public", "tpex"):
         print("[2/8] TPEx OpenAPI ...")
