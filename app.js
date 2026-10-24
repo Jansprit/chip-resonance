@@ -966,7 +966,13 @@ async function loadBacktestReport() {
   const target = document.getElementById('backtest-report');
   if (!target) return;
   try {
-    const resp = await fetch('/data/latest/backtest_report.json', { cache: 'no-store' });
+    // ⚠️ 必須用**相對**路徑 + cache-busting：
+    //   - 絕對路徑 `/data/latest/...` 在專案型 GitHub Pages 會跑到網域根目錄 → 404
+    //     （網站實際在 https://<user>.github.io/<repo>/）
+    //   - GitHub Pages 對靜態檔設了 max-age，沒有 bust 參數會拿到舊的報告
+    //     （與 data.js 的 loadRealData 同一個理由）
+    const bust = `?t=${Date.now()}`;
+    const resp = await fetch(`data/latest/backtest_report.json${bust}`, { cache: 'no-store' });
     if (!resp.ok) throw new Error(`HTTP ${resp.status}`);
     const report = await resp.json();
     renderBacktestReport(report);
