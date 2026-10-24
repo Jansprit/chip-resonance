@@ -104,9 +104,13 @@ def is_available() -> bool:
 # 參數契約（踩過坑，別亂改）：
 #   - top **必須是 490**。30 / 60 / 120 / 240 / 300 / 400 / 491 / 500 / 1000
 #     全部回 400 BadRequest。
-#   - before **必須是「今天 00:00 台北」的毫秒時間戳**（頁面 JS 就是這樣算的：
+#   - before 應該是「某一天 00:00 台北」的毫秒時間戳（頁面 JS 就是這樣算的：
 #     `dayjs().startOf("day").valueOf()`）。
-#     傳今天-1 天 / -30 天 / 0 / 現在，全部 400。
+#     ⚠️ **但「今天 00:00」並非永遠成立**（2026-10-25 01:30 TPE 實測）：
+#     伺服器對 before 的接受規則不透明，同一個「今天 00:00」在 10-24 可以、
+#     在 10-25 卻回 400；往前 1~5 天又可以。
+#     因此改成**候選清單**：依序試「今天、昨天、前天…」，取第一個不是 400 的。
+#     這不是繞過限制，而是因為伺服器的規則會變，固定押一個值必然會壞。
 #   - 代號本身沒有任何限制：實測 30 檔（2330/2454/2303/…/5871）全部 200。
 #
 # 好消息：這個端點**不需要** Cloudflare 的 x-client-signature，
@@ -115,18 +119,42 @@ def is_available() -> bool:
 PRICE_HISTORY_TOP = 490
 PRICE_HISTORY_PATH = "/investrue/{code}/historical-daily-candlesticks"
 
+# before 候選天數：今天起往回推 10 天（涵蓋週末與國慶連假）
+PRICE_HISTORY_BEFORE_CANDIDATES = 10
+
 WANTAOO_MIN_INTERVAL_SEC = 6.0
 WANTAOO_DAILY_QUOTA = 200
 
 
 def _taipei_midnight_ms() -> int:
-    """今天 00:00 台北的毫秒時間戳（before 參數必須是這個）。"""
+    """今天 00:00 台北的毫秒時間戳。"""
     from datetime import datetime, timedelta, timezone
 
     tpe = timezone(timedelta(hours=8))
     now = datetime.now(tpe)
     midnight = now.replace(hour=0, minute=0, second=0, microsecond=0)
     return int(midnight.timestamp() * 1000)
+
+
+def price_history_before_candidates(
+    days: int = PRICE_HISTORY_BEFORE_CANDIDATES,
+) -> list[int]:
+    """
+    `before` 參數的候選清單（由新到舊）：今天、昨天、前天…
+
+    伺服器對 `before` 的接受規則不透明（見上方註解），
+    因此不能只押一個值 —— 固定押「今天 00:00」在 2026-10-25 就整個失效。
+    """
+    from datetime import datetime, timedelta, timezone
+
+    tpe = timezone(timedelta(hours=8))
+    now = datetime.now(tpe)
+    midnight = now.replace(hour=0, minute=0, second=0, microsecond=0)
+    out: list[int] = []
+    for k in range(max(1, days)):
+        d = midnight - timedelta(days=k)
+        out.append(int(d.timestamp() * 1000))
+    return out
 
 
 def create_price_client() -> HttpClient:
@@ -168,18 +196,31 @@ def fetch_price_history(
     if own_client:
         client = create_price_client()
     try:
-        url = (
-            f"{WANTAOO_ORIGIN}{PRICE_HISTORY_PATH.format(code=stock_code)}"
-            f"?before={_taipei_midnight_ms()}&top={PRICE_HISTORY_TOP}"
+        last_error: Optional[str] = None
+        for before in price_history_before_candidates():
+            url = (
+                f"{WANTAOO_ORIGIN}{PRICE_HISTORY_PATH.format(code=stock_code)}"
+                f"?before={before}&top={PRICE_HISTORY_TOP}"
+            )
+            try:
+                text = client.get_text(url)
+            except Exception as exc:            # noqa: BLE001 — 換下一個候選
+                last_error = f"{type(exc).__name__}: {exc}"
+                continue
+            try:
+                payload = _json.loads(text)
+            except ValueError:
+                last_error = "回應不是合法 JSON"
+                continue
+            if not isinstance(payload, list) or not payload:
+                last_error = "回應不是資料陣列"
+                continue
+            return parse_price_history(payload)
+        # 所有候選都失敗 → 明確報錯（不可回空資料冒充成功）
+        raise RuntimeError(
+            f"玩股網價格歷史全部 {len(price_history_before_candidates())} 個 "
+            f"before 候選都失敗：{last_error}"
         )
-        text = client.get_text(url)
-        try:
-            payload = _json.loads(text)
-        except ValueError:
-            return []
-        if not isinstance(payload, list):
-            return []
-        return parse_price_history(payload)
     finally:
         if own_client:
             client.session.close()

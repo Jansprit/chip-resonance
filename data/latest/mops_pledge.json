@@ -113,50 +113,118 @@
   },
   {
     "code": "4133",
-    "events": 0,
-    "pledged_total": 0.0,
-    "released_total": 0.0,
-    "cumulative_max": 0.0,
-    "no_data": true
+    "error": "Source mops disabled: hit daily quota (100)"
   },
   {
     "code": "6446",
-    "events": 8,
-    "pledged_total": 2019299.0,
-    "released_total": 22000.0,
-    "cumulative_max": 3279299.0,
-    "no_data": false
+    "error": "Source mops disabled: hit daily quota (100)"
   },
   {
     "code": "2603",
-    "events": 0,
-    "pledged_total": 0.0,
-    "released_total": 0.0,
-    "cumulative_max": 0.0,
-    "no_data": true
+    "error": "Source mops disabled: hit daily quota (100)"
   },
   {
     "code": "2609",
-    "events": 0,
-    "pledged_total": 0.0,
-    "released_total": 0.0,
-    "cumulative_max": 0.0,
-    "no_data": true
+    "error": "Source mops disabled: hit daily quota (100)"
   },
   {
     "code": "2615",
-    "events": 0,
-    "pledged_total": 0.0,
-    "released_total": 0.0,
-    "cumulative_max": 0.0,
-    "no_data": true
+    "error": "Source mops disabled: hit daily quota (100)"
   },
   {
     "code": "2618",
-    "events": 0,
-    "pledged_total": 0.0,
-    "released_total": 0.0,
-    "cumulative_max": 0.0,
-    "no_data": true
+    "error": "Source mops disabled: hit daily quota (100)"
+  },
+  {
+    "code": "2317",
+    "error": "Source mops disabled: hit daily quota (100)"
+  },
+  {
+    "code": "2227",
+    "error": "Source mops disabled: hit daily quota (100)"
+  },
+  {
+    "code": "1326",
+    "error": "Source mops disabled: hit daily quota (100)"
+  },
+  {
+    "code": "1303",
+    "error": "Source mops disabled: hit daily quota (100)"
+  },
+  {
+    "code": "1216",
+    "error": "Source mops disabled: hit daily quota (100)"
+  },
+  {
+    "code": "2912",
+    "error": "Source mops disabled: hit daily quota (100)"
+  },
+  {
+    "code": "1707",
+    "error": "Source mops disabled: hit daily quota (100)"
+  },
+  {
+    "code": "2327",
+    "error": "Source mops disabled: hit daily quota (100)"
+  },
+  {
+    "code": "2308",
+    "error": "Source mops disabled: hit daily quota (100)"
+  },
+  {
+    "code": "2474",
+    "error": "Source mops disabled: hit daily quota (100)"
+  },
+  {
+    "code": "3056",
+    "error": "Source mops disabled: hit daily quota (100)"
+  },
+  {
+    "code": "5522",
+    "error": "Source mops disabled: hit daily quota (100)"
+  },
+  {
+    "code": "6669",
+    "error": "Source mops disabled: hit daily quota (100)"
+  },
+  {
+    "code": "5269",
+    "error": "Source mops disabled: hit daily quota (100)"
+  },
+  {
+    "code": "2610",
+    "error": "Source mops disabled: hit daily quota (100)"
+  },
+  {
+    "code": "2634",
+    "error": "Source mops disabled: hit daily quota (100)"
+  },
+  {
+    "code": "3231",
+    "error": "Source mops disabled: hit daily quota (100)"
+  },
+  {
+    "code": "2382",
+    "error": "Source mops disabled: hit daily quota (100)"
+  },
+  {
+    "code": "2379",
+    "error": "Source mops disabled: hit daily quota (100)"
+  },
+  {
+    "code": "3034",
+    "error": "Source mops disabled: hit daily quota (100)"
+  },
+  {
+    "code": "2383",
+    "error": "Source mops disabled: hit daily quota (100)"
+  },
+  {
+    "code": "2357",
+    "error": "Source mops disabled: hit daily quota (100)"
+  },
+  {
+    "code": "6505",
+    "error": "Source mops disabled: hit daily quota (100)"
   }
 ]

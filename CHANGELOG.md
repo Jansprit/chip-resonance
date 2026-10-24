@@ -2,6 +2,115 @@
 
 All notable changes to the 籌碼共振選股系統 (Chip-Resonance Selection System).
 
+## [v0.4.0] — 2026-10-25 — 真實資料來源 + point-in-time 回測框架
+
+v0.3.x 的核心問題不是「功能不夠」，而是**對資料來源的判斷有誤**，
+以及**沒有任何能證明回測結論的機制**。本版兩者都補上。
+
+### 🔍 診斷修正：FinMind 不是付費牆，是參數名稱寫錯
+
+先前（v0.3.x）把 FinMind 判定為「付費牆」，pipeline 因此**整個跳過**它。
+真因是：FinMind v4 的股票代號參數要 `data_id`，傳 `stock_id` 會回
+
+```
+400 {"msg": "Your level is free. Please update your user level."}
+```
+
+這個錯誤訊息**完全誤導** —— 看起來像「免費層沒有這個資料集」。
+改成 `data_id` 之後，免 token 就取 `TaiwanStockPrice` / `TaiwanStockDayTrading`，
+而且資料回溯到 **2016-01-04**（正好對應原始需求 §六 的樣本切割起點）。
+
+順帶修掉第二個 bug：`fetch_dataset` 直接回傳 FinMind 的 envelope
+（`{"msg","status","data"}`），呼叫端拿到的是三個 key 的字串陣列 ——
+資料完全沒進來。這個 bug 之所以能藏這麼久，正是因為 FinMind 從來沒被成功執行過。
+
+### ✨ 新增：point-in-time 因子庫 + 回測引擎
+
+對應原始需求 §六（驗證框架）與 §七（`log_to_backtest_db`）：
+
+- `backend/scripts/emit_factors.js` — 直接載入 `data.js`（**唯一的因子實作**）
+  發佈 `data/latest/factors.json`，並逐週累積 `factors_history.jsonl`。
+  刻意不用 Python 重寫一份因子計算：那是本專案最大的浪費來源。
+- `backend/backtest/engine.py` — IC / RankIC / ICIR / t 值 / 五分位分層 /
+  多空組合（扣 0.1425% 手續費 + 0.3% 交易稅 + 0.1% 滑價）/ Walk-Forward 切分。
+- `backend/scripts/run_backtest.py` — 回測 CLI，輸出 `data/latest/backtest_report.json`。
+- `backtest.html` — 改為顯示**真實**報告；樣本不足時強制標示
+  「不可解讀為策略績效」，且 IC / 多空組合欄位顯示 `n/a` 而不是 `0`。
+
+### 🐛 修正：T+3 進場紀律（回測引擎完全沒有樣本）
+
+舊邏輯是 `if published_at > as_of: skip`。
+但 `published_at` 永遠 = `as_of + 3 個營業天` → **每一份快照都被丟掉**，
+前瞻報酬永遠是空的 —— 回測看起來在跑，實際上一個樣本都沒產出來。
+
+症狀是「條件寫得好像在執行偏誤控制」，實際上把整條迴路掐死。
+現在改成：**進場日 = published_at**，進場價取資料可得日之後的收盤價。
+
+### 🐛 修正：IC 配對錯位
+
+`factor_report` 把「有因子值但沒前瞻報酬」的列也算進因子清單，
+卻從報酬清單剔除 → 兩邊長度不一致 → `compute_ic` 取前 N 筆 →
+因子與報酬**配對到不同股票**。算出來的 IC 根本不是同一組股票的相關性。
+
+### 🐛 修正：上櫃股的 Yahoo 代號後綴
+
+Yahoo 的台股代號：上市 `.TW`、上櫃 `.TWO`。
+只試 `.TW` 會讓上櫃股（5347 / 4743 / 4128）整批 404
+「symbol may be delisted」—— 看起來像股票下市，實際只是後綴不對。
+修好後 40/43 → **43/43**。
+
+### 🐛 修正：玩股網 `before` 參數的接受規則
+
+2026-10-25 實測：`before=今天 00:00 台北` 會回 **HTTP 400**，
+往前 1~5 天才會成功。伺服器的接受規則不透明，固定押一個值必然會壞。
+改成候選清單（今天、昨天、前天…）逐日往回試。
+
+### 🐛 修正：schema 驗證器的死碼
+
+`margin_balance.json` / `valuation.json` / `industry.json`
+的驗證分支被寫在「最外層應為 array」的檢查**之後** → 永遠走不到。
+症狀是 CI 的資料驗證步驟直接失敗，而這三個檔案從來沒被驗證過。
+
+### 🐛 修正：pipeline 的結束碼
+
+只要有**一個**來源回 `partial` 就 exit 1 → CI 的 scrape 步驟必定失敗。
+「少幾檔」不等於「整條流程壞掉」；真正該讓 CI 紅燈的是 `failed`。
+
+### 🐛 修正：測試清單手寫導致測試被靜默遺漏
+
+18 個測試檔的 `__main__` 都手寫一份「要跑哪些測試」清單。
+新增測試卻忘了加進清單時，那個測試**永遠不會執行**，而且沒有任何錯誤。
+改用共用 runner（自動發現 `test_` 函式），
+並新增 `test_suite_integrity.py` 守住這條規則（含「測試檔不得有 0 個測試」）。
+
+轉換過程中還抓到 `test_scoring_provenance.py` 原本是 `main()` + 內嵌 `check()`
+的舊結構，轉換後**整個檔案的 33 項檢查一個都沒跑**卻顯示 PASS。
+
+### ✅ 新增：資料來源可達性矩陣 + 健康度檢查
+
+- `backend/scripts/check_sources.py` — 逐個探測 17 個來源，
+  輸出 `data/latest/source_health.json` 與 `docs/source_matrix.generated.md`。
+  狀態誠實分類：`ok` / `empty` / `blocked` / `error`（403 與登入頁都不算 ok）。
+- `docs/資料來源可達性矩陣.md` — 端點契約、踩過的坑、因子 × 來源對照表。
+
+### 📊 因子可算性（實測 43 檔）
+
+| 因子 | v0.3.1 | v0.4.0 |
+|---|---|---|
+| F2 產業輪動 | 43/43 | 43/43 |
+| F3 董監背離 | 20/43 | **43/43** |
+| F5 股利穩定 | 未接通 | **43/43**（TWSE `BWIBBU_d`）|
+| F8 回調守穩 | 43/43 | 43/43 |
+| F10 籌碼修復 | 部分 | 43/43 |
+| F1 大戶連續加碼 | 未接通 | ⏳ 需累積 4 週集保歷史 |
+| F6 散戶退場 | 未接通 | ❌ 無免費來源 |
+| F9 價籌背離 | 未接通 | ⚠️ 融資使用率已通，**個股當沖比仍無來源** |
+
+### 🔒 風控
+
+不變：本專案**不做**代理輪替、不做任何規避封鎖的手段。
+所有來源的結論都以真實 HTTP / 真實瀏覽器實測為依據。
+
 ## [v0.3.1] — 2026-10-24 — 價格歷史接通（真實瀏覽器驗證後）
 
 v0.3.0 把三個來源判定為「不可用」：玩股網個股 API、MoneyDJ BCD、FinMind。

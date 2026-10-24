@@ -42,6 +42,18 @@
       </p>
     </header>
 
+    <!-- 真實回測報告（data/latest/backtest_report.json）-->
+    <section class="section">
+      <h2 class="section-title"><span class="section-title-emoji">📊</span> 真實回測報告</h2>
+      <p class="section-subtitle">
+        由 <code>python -m backend.scripts.run_backtest</code> 產生的 point-in-time 報告
+        （嚴守 T+3 資料可得性，每週一重新平衡，持有 4~12 週）
+      </p>
+      <div id="backtest-report">
+        <div class="alert-info">載入中…</div>
+      </div>
+    </section>
+
     <!-- 核心方法論 -->
     <section class="section">
       <h2 class="section-title"><span class="section-title-emoji">🎓</span> 核心方法論</h2>
@@ -80,15 +92,18 @@
 
     <!-- KPI 卡片 -->
     <section class="section">
-      <h2 class="section-title"><span class="section-title-emoji">🏆</span> 樣本外驗證 KPI（模擬）</h2>
-      <p class="section-subtitle">2022~2025 樣本外期間，籌碼共振策略 vs 0050 基準</p>
+      <h2 class="section-title"><span class="section-title-emoji">🏆</span> 樣本外驗證 KPI（示意）</h2>
+      <p class="section-subtitle">
+        ⚠️ 以下數字是<strong>示範用的示意值</strong>，用來說明驗證框架的 KPI 定義，
+        <strong>不是本專案的回測結果</strong>。真實結果請看上方「真實回測報告」。
+      </p>
       <div class="stat-grid" id="kpi-cards"></div>
     </section>
 
     <!-- 淨值曲線 -->
     <section class="section">
-      <h2 class="section-title"><span class="section-title-emoji">📈</span> 60 週淨值曲線（模擬）</h2>
-      <p class="section-subtitle">對比籌碼共振策略與 0050 基準指數</p>
+      <h2 class="section-title"><span class="section-title-emoji">📈</span> 60 週淨值曲線（示意）</h2>
+      <p class="section-subtitle">對比籌碼共振策略與 0050 基準指數（示意資料，非真實回測）</p>
       <div class="chart-container" style="height: 400px;">
         <canvas id="backtest-nav-curve"></canvas>
       </div>

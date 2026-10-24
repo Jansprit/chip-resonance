@@ -18,7 +18,46 @@ from pathlib import Path
 
 sys.path.insert(0, str(Path(__file__).resolve().parents[2]))
 
-from backend.scripts.build_universe import build
+from backend.scripts.build_universe import build, merge_price_derived
+
+
+def test_merge_price_derived_accepts_already_derived_dict():
+    """
+    「已經算好的衍生欄位」不可被誤判成「原始 K 線」。
+
+    `compute_price_derived` 回傳的 dict 裡，`bars` 是**筆數（int）**；
+    而 Yahoo / TWSE 的 price_history 格式裡，`bars` 是**K 線陣列（list）**。
+    舊版只判斷 `if derived.get("bars")` → 兩者都會走「重新計算」分支，
+    把 int 當成陣列 → `TypeError: 'int' object is not iterable`。
+
+    這個 bug 之所以能藏這麼久，正是因為 FinMind 從來沒被成功執行過
+    （沒有 token → 整個來源被 skip）。
+    """
+    stock = {"code": "2330"}
+    real: set[str] = set()
+    derived = {
+        "ret_60d": 12.5, "drawdown_120d": -8.0, "is_60d_high": False,
+        "crash_60d": False, "bars": 80, "last_date": "2026-10-22",
+    }
+    merge_price_derived(stock, derived, real)
+    assert stock["ret_60d"] == 12.5
+    assert stock["drawdown_120d"] == -8.0
+    assert "ret_60d" in real
+    assert "drawdown_120d" in real
+
+
+def test_merge_price_derived_still_handles_raw_bars():
+    """原始 K 線（bars 是 list）仍然要走「現場計算」分支。"""
+    stock = {"code": "2330"}
+    real: set[str] = set()
+    # 需要 > 60 根才會算得出 60 日報酬（compute_price_derived 的 lookback）
+    bars = [
+        {"date": f"2026-{1 + i // 28:02d}-{1 + i % 28:02d}", "close": 100.0 + i}
+        for i in range(130)
+    ]
+    merge_price_derived(stock, {"bars": bars}, real)
+    assert "ret_60d" in real
+    assert stock["ret_60d"] is not None
 
 
 SEED = [
@@ -175,22 +214,13 @@ def test_merge_without_new_sources_keeps_illustrative():
     assert s["_provenance"]["yield_now"] == "illustrative"
     assert s["_provenance"]["industry_cid"] == "illustrative"
 
-
 if __name__ == "__main__":
-    test_merge_margin_balance_marks_real()
-    print("PASS: test_merge_margin_balance_marks_real")
-    test_merge_margin_balance_none_value_stays_illustrative()
-    print("PASS: test_merge_margin_balance_none_value_stays_illustrative")
-    test_merge_valuation_marks_real()
-    print("PASS: test_merge_valuation_marks_real")
-    test_merge_valuation_missing_yield_not_real()
-    print("PASS: test_merge_valuation_missing_yield_not_real")
-    test_merge_industry_cid()
-    print("PASS: test_merge_industry_cid")
-    test_merge_price_history_produces_derived_factors()
-    print("PASS: test_merge_price_history_produces_derived_factors")
-    test_price_history_takes_priority_over_wantgoo()
-    print("PASS: test_price_history_takes_priority_over_wantgoo")
-    test_merge_without_new_sources_keeps_illustrative()
-    print("PASS: test_merge_without_new_sources_keeps_illustrative")
-    print("\nAll 8 merge_official tests passed.")
+    # 自動發現所有 test_ 函式 —— 新增測試不可能再被靜默遺漏。
+    # 見 backend/tests/_runner.py 的說明。
+    import sys as _sys
+    from pathlib import Path as _Path
+
+    _sys.path.insert(0, str(_Path(__file__).resolve().parents[2]))
+    from backend.tests._runner import run_tests
+
+    run_tests(globals(), "merge_official")

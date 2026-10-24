@@ -104,16 +104,13 @@ def test_run_backtest_cli_writes_report_without_console_error():
         assert "factors" in payload
         assert "note" in payload
 
-
 if __name__ == "__main__":
-    fns = [
-        test_configure_console_does_not_raise,
-        test_configure_console_survives_non_reconfigurable_streams,
-        test_configure_console_sets_replace_errors,
-        test_printing_warning_symbol_does_not_crash_after_configure,
-        test_run_backtest_cli_writes_report_without_console_error,
-    ]
-    for fn in fns:
-        fn()
-        print(f"PASS: {fn.__name__}")
-    print(f"\nAll {len(fns)} console tests passed.")
+    # 自動發現所有 test_ 函式 —— 新增測試不可能再被靜默遺漏。
+    # 見 backend/tests/_runner.py 的說明。
+    import sys as _sys
+    from pathlib import Path as _Path
+
+    _sys.path.insert(0, str(_Path(__file__).resolve().parents[2]))
+    from backend.tests._runner import run_tests
+
+    run_tests(globals(), "console")

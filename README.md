@@ -115,8 +115,8 @@ notepad backend\.env
 
 | 變數 | 來源 | 影響 | 是否必填 |
 |---|---|---|---|
-| `FINMIND_TOKEN` | [FinMind 官網](https://finmindtrade.com/) 申請 | 提升 rate limit（600/hr）| 否（沒 token 也能跑，但速率較低）|
-| `FINMIND_PAID` | FinMind 付費訂閱 | 解鎖 `TaiwanStockShareholding` 大戶持股分級 | 否（付費才有 F1/F4/F6 真實值）|
+| `FINMIND_TOKEN` | [FinMind 官網](https://finmindtrade.com/) 申請 | 提升 rate limit（600/hr）| 否（**免 token 也能取價格與當沖資料集**，2026-10-25 實測）|
+| `FINMIND_PAID` | FinMind 付費訂閱 | 解鎖 `TaiwanStockShareholding` 大戶持股分級 | 否（**只有持股分級**要付費）|
 | `GOODINFO_PROXY_URL` | 住宅代理 | 避免本機 IP 被擋 | 否（看您網路環境）|
 | `PIPELINE_LIMIT` | — | 限制每個來源要抓的股票檔數（`0` = 全部）| 否（各來源有預設）|
 
@@ -135,7 +135,8 @@ notepad backend\.env
 | **TWSE OpenAPI** | ❌ | 全部公開 |
 | **TPEx OpenAPI** | ❌ | 全部公開 |
 | **集保中心 (TDCC)** | ❌ | 週資料公開可下載 |
-| **FinMind 免費層** | ❌ | 價格、月營收、財報、股利、三大法人 |
+| **Yahoo Finance** | ❌ | 價格歷史（CI 首選），上市 `.TW` / 上櫃 `.TWO` |
+| **FinMind 免費層** | ❌ | 價格、月營收、財報、股利、三大法人、**個股當沖**（2026-10-25 實測免 token 可用；⚠️ 股票代號參數要用 `data_id`）|
 | **神秘金字塔 (Pyramid)** | ⚠️ **修正：免登入** | 400/600/800/1000 張大戶分級、董監持股都可免登入瀏覽器查看；只是有 Cloudflare 防護需用 Playwright |
 | **玩股網 (Wantgoo)** | ❌ | 融資券、當沖比、法人買賣超都免登入；同樣需 Playwright 過 Cloudflare |
 | **Goodinfo** | ❌（基本免登入）| 基本個股資料免登入；登入後能看到董監加碼、融資券、當沖比明細 |
@@ -264,53 +265,63 @@ Step 6: 停損 -12% 或 ATR(14)*2.5（取較近者）
 
 | 代號 | 因子 | 方向 | 權重 | 所需輸入 | 資料來源 | 目前狀態 |
 |---|---|---|---|---|---|---|
-| F1 | 大股東連續加碼 | 加分 | 20% | `pct_1000up_now` `pct_1000up_w3` | 集保開放平台 | ⚠️ 當週已通，需累積 4 週歷史才有 w3 |
-| F2 | 產業輪動 | 加分 | 10% | `industry_ret_60d_med` | 玩股網日 K 線 | ✅ **43/43 檔可算** |
-| F3 | 董監加碼價格落後 | 加分 | 15% | `director_holding_change_3m` `ret_60d` `industry_ret_60d_med` | MOPS + 玩股網 | ✅ **20/43 檔可算**（MOPS 抓到幾檔算幾檔）|
+| F1 | 大股東連續加碼 | 加分 | 20% | `pct_1000up_now` `pct_1000up_w1` `pct_1000up_w2` `pct_1000up_w3` | 集保開放平台 | ⏳ 當週已通，需累積 4 週歷史（原始定義要求「連續 ≥3 週增加」+ 累計增幅 ≥1%）|
+| F2 | 產業輪動 | 加分 | 10% | `industry_ret_60d_med` | Yahoo / TWSE 價格歷史 | ✅ **43/43 檔可算**（⚠️ 目前用產業中位數代理；原始定義「產業成分股大戶淨增持家數」待第二期）|
+| F3 | 董監加碼價格落後 | 加分 | 15% | `director_holding_change_3m` `ret_60d` `industry_ret_60d_med` | MOPS + 價格歷史 | ✅ **43/43 檔可算** |
 | F4 | 集中度突破 | 加分 | 10% | `pct_400up_52w_high` | 需 52 週高點基準 | ❌ 尚未接通 |
-| F5 | 股利穩定 | 加分 | 10% | `div_years` `yield_now` `yield_5y_avg` | FinMind 股利 | ❌ 尚未接通 |
-| F6 | 散戶退場主力接手 | 加分 | 15% | `holder_cnt_change_8w` `avg_lot_change_8w` | 集保股東人數 | ❌ 尚未接通 |
-| F8 | 回調籌碼守穩 | 加分 | 10% | `drawdown_120d` `pct_1000up_now` | 玩股網日 K 線 + 集保 | ✅ **43/43 檔可算** |
-| F9 | 價籌背離懲罰 | **扣分** | -20% 封頂 | `is_60d_high` `pct_1000up_now/w1/w3` `margin_pct` `dt_ratio` | 玩股網 + 集保 | ⚠️ 價格已通；融資券/當沖需登入 |
-| F10 | 利空籌碼修復 | 加分 | 5% | `crash_60d` `pct_1000up_trend` | 玩股網日 K 線 + 集保 | ⚠️ 價格已通，需集保多週歷史 |
+| F5 | 股利穩定 | 加分 | 10% | `div_years` `yield_now` `yield_5y_avg` | TWSE `BWIBBU_d` | ⚠️ **殖利率輸入已接通**（40 檔），但仍缺 `div_years` / `yield_5y_avg` → 尚不可算 |
+| F6 | 散戶退場主力接手 | 加分 | 15% | `holder_cnt_change_8w` `avg_lot_change_8w` | 集保股東人數 | ❌ **無免費來源**，維持不可用 |
+| F8 | 回調籌碼守穩 | 加分 | 10% | `drawdown_120d` `pct_1000up_now` | 價格歷史 + 集保 | ✅ **43/43 檔可算** |
+| F9 | 價籌背離懲罰 | **扣分** | -20% 封頂 | `is_60d_high` `pct_1000up_now/w1/w3` `margin_pct` `dt_ratio` | TWSE 融資券 + 集保 | ⚠️ 融資使用率 ✅、**個股當沖比 ❌** → 整個 F9 仍不可用 |
+| F10 | 利空籌碼修復 | 加分 | 5% | `crash_60d` `pct_1000up_trend` | 價格歷史 + 集保 | ⚠️ 價格輸入已通，但缺 `pct_1000up_trend`（需集保多週歷史）→ 尚不可算 |
 
-### 各來源的實測狀態（2026-10-24，含真實瀏覽器驗證）
+### 各來源的實測狀態（2026-10-25，含真實瀏覽器與真實 HTTP 驗證）
+
+> 完整矩陣（含端點、參數、筆數、datacenter IP 行為）見
+> [docs/資料來源可達性矩陣.md](docs/資料來源可達性矩陣.md)；
+> 機器可讀版本由 `python -m backend.scripts.check_sources` 產生。
 
 | 來源 | 狀態 | 說明 |
 |---|---|---|
-| TWSE 上市 | ✅ 可用 | `openapi.twse.com.tw` 純 HTTP |
+| TWSE 上市 | ✅ 可用 | `openapi.twse.com.tw` 純 HTTP，另含融資券（MI_MARGN）/ 殖利率（BWIBBU_d）/ 產業別（t187ap03_L）|
+| TWSE RWD（月線 / 三大法人）| ✅ 可用 | `twse.com.tw/rwd/zh/...` 純 HTTP；非交易日需往回試其他日期 |
 | TPEx 上櫃 | ✅ 可用 | `tpex.org.tw/openapi` 純 HTTP |
 | 集保開放平台 | ✅ 可用 | `opendata.tdcc.com.tw` 純 HTTP，CI 排程每天跑 |
-| MOPS 公開資訊觀測站 | ✅ 可用 | `mopsov.twse.com.tw/mops/web/ajax_stapap1`，純 HTTP、不需 cookie |
-| **玩股網（價格歷史）** | ✅ **可用（但僅限本機）** | `wantgoo.com/investrue/{code}/historical-daily-candlesticks?before={今天00:00}&top=490` → 每檔 490 根日 K 線，**純 HTTP、免登入、免 Playwright**。⚠️ 對 **datacenter IP 回 403**（GitHub Actions runner 連續失敗、本機 IP 43/43 成功）→ 必須由本機排程更新 |
+| MOPS 公開資訊觀測站 | ✅ 可用 | `mopsov.twse.com.tw/mops/web/ajax_stapap1`，純 HTTP、不需 cookie；參數用**民國**年月 |
+| **Yahoo Finance（價格歷史）** | ✅ **可用（CI 首選）** | `query1.finance.yahoo.com/v8/finance/chart/{code}.TW` / `.TWO` → 免 key、CI 可用。⚠️ 上櫃股要用 `.TWO` 後綴（只試 `.TW` 會整批 404）|
+| **玩股網（價格歷史）** | ✅ 可用（但**僅限本機**）| `wantgoo.com/investrue/{code}/historical-daily-candlesticks?before={ms}&top=490` → 每檔 490 根日 K 線。⚠️ 對 **datacenter IP 回 403**；⚠️ `before` 的接受規則不透明（「今天 00:00」會 400），已改為候選清單逐日往回試 |
 | **玩股網（籌碼資料）** | ⚠️ 需登入 | 法人/主力/融資券的個股 JSON API 需要 Cloudflare 注入的 `x-client-signature`，未登入一律 400 |
-| 神秘金字塔 MoneyDJ | ⚠️ 額度極小 | 免登入**只有第一個被請求的股票**能拿到 BCD，之後一律 302 → SSO。要抓多檔需 `auth_setup --site pyramid` |
-| FinMind | ⚠️ 付費牆 | 瀏覽器完整指紋 + cookie 後仍回 "Your level is free" → **是付費牆不是防爬**，需 `FINMIND_TOKEN` |
-| Goodinfo | ⚠️ 需 session | 需 `auth_setup --site goodinfo` |
+| 神秘金字塔 MoneyDJ | ⚠️ 需會員 | 籌碼頁 `/z/zc/{zcj|zck|zcn|zcw}/{code}.djhtm` 會 302 到 SSO 登入頁；免登入 BCD 約 1 檔/日 |
+| FinMind | ✅ **免費層可用** | ⚠️ **2026-10-25 重大修正**：先前「FinMind 是付費牆」的結論是**錯的** —— 真因是參數名稱要 `data_id`（傳 `stock_id` 會回誤導性的 400「Your level is free」）。改對後免 token 就能取 `TaiwanStockPrice` / `TaiwanStockDayTrading`，且回溯 2016-01-04。只有 `TaiwanStockShareholding`（持股分級）才是付費牆 |
+| Goodinfo | ⚠️ 需 session | 需 `auth_setup --site goodinfo`；未登入回 403 |
+| TDCC 分散表（股東人數）| ❌ 無免費 API | portal 頁面由 JS 動態渲染，找不到後端端點 → F6 維持不可用 |
 
 > **CI 與本機的分工**
 >
 > | 來源 | CI（GitHub Actions） | 本機（Docker / Windows Task） |
 > |---|---|---|
-> | TWSE / TPEx / 集保 / MOPS | ✅ 每天跑 | ✅ 也會跑 |
+> | TWSE / TPEx / 集保 / MOPS / Yahoo / FinMind | ✅ 每天跑 | ✅ 也會跑 |
 > | 玩股網歷史 K 線 | ❌ datacenter IP 被 403 | ✅ **必須靠這邊** |
 >
 > CI 的 `build_universe.py` 會沿用上次提交的 `data/latest/wantgoo_price.json`，
-> 所以網站上的 F2 / F3 / F8 不會消失，但**價格衍生欄位要靠本機排程刷新**。
+> 所以網站上的價格衍生欄位不會消失，但**價格要靠本機排程刷新**。
 > 想讓線上網站同步更新，開啟 Docker 的 `PUSH_TO_GITHUB=true`
 > （容器已掛載 `.gitconfig` / `.ssh`），本機排程跑完會自動 commit + push。
 
-> **價格歷史已接通**：玩股網 `/investrue/{code}/historical-daily-candlesticks`
-> 每檔提供 490 根日 K 線（約兩年），足以計算 `ret_60d` / `drawdown_120d` /
-> `is_60d_high` / `crash_60d`。
-> 實測 43/43 檔成功 → **F2 / F3 / F8 已在 strict 模式計算**，
-> 評分引擎整體從 `partial` 模式升為 `strict` 模式。
+> **v0.4.0 的三個改變**：
+> 1. **價格歷史改由 Yahoo 供給**（CI 可用），玩股網退為本機備援。
+>    實測 **43/43** 檔成功 → 目前可算的因子為 **F2 / F3 / F8 各 43 檔**。
+> 2. **FinMind 免費層接回**（參數名稱修正後），提供 2016 年起的價格歷史，
+>    為原始需求 §六 的樣本切割（2016~2021 / 2022~2025 / 2026 紙上）預留空間。
+> 3. **point-in-time 因子庫 + 回測報告**開始逐週累積，
+>    `backtest.html` 會顯示真實報告並在樣本不足時強制標示
+>    「不可解讀為策略績效」。
 >
 > 剩下的缺口：
-> - **F1 / F10**：差集保的**多週歷史**（w1/w2/w3/trend）。
->   公開精簡歷史檔會在 CI 每次排程累加，約 4 週後自動解鎖。
-> - **F9**：另需玩股網的融資券/當沖比（個股 API 需登入 session）。
-> - **F4 / F5 / F6**：尚無資料來源（52 週高點基準 / 股利 / 集保股東人數）。
+> - **F1 / F10**：需要集保的**多週歷史**（w1/w2/w3/trend）—— 2026-10 起每週累積，約 4 週後解鎖。
+> - **F9**：需要個股當沖比（`dt_ratio`）—— FinMind 免費層的 `BuyAfterSale` 不含數值，仍無來源。
+> - **F4 / F6**：尚無資料來源（52 週高點基準 / 集保股東人數）。
+> - **F2**：原始定義「產業成分股大戶淨增持家數」需每週保存全市場截面，第二期實作。
 
 ### 評分公式
 

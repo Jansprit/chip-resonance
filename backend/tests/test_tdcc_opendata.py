@@ -166,18 +166,13 @@ def test_history_w0_minus_w3_trend_up():
         assert trend["pct_1000up_w0"] == 86.0
         assert trend["pct_1000up_trend"] == "+"
 
-
 if __name__ == "__main__":
-    test_roc_date_to_iso()
-    print("PASS: test_roc_date_to_iso")
-    test_aggregate_skips_tier_16_and_17()
-    print("PASS: test_aggregate_skips_tier_16_and_17")
-    test_parse_csv_handles_bom_and_header()
-    print("PASS: test_parse_csv_handles_bom_and_header")
-    test_parse_to_pct_per_stock()
-    print("PASS: test_parse_to_pct_per_stock")
-    test_history_save_load_and_trend()
-    print("PASS: test_history_save_load_and_trend")
-    test_history_w0_minus_w3_trend_up()
-    print("PASS: test_history_w0_minus_w3_trend_up")
-    print("\nAll 6 tdcc_opendata tests passed.")
+    # 自動發現所有 test_ 函式 —— 新增測試不可能再被靜默遺漏。
+    # 見 backend/tests/_runner.py 的說明。
+    import sys as _sys
+    from pathlib import Path as _Path
+
+    _sys.path.insert(0, str(_Path(__file__).resolve().parents[2]))
+    from backend.tests._runner import run_tests
+
+    run_tests(globals(), "tdcc_opendata")

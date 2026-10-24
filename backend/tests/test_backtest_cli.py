@@ -254,27 +254,13 @@ def test_load_price_series_handles_bars_shape():
             bt.PRICE_HISTORY = original
     assert series["2330"] == [("2026-01-02", 100.0), ("2026-01-05", 105.0)]
 
-
 if __name__ == "__main__":
-    fns = [
-        test_forward_return_enters_at_published_at_not_as_of,
-        test_forward_return_never_uses_price_before_publication,
-        test_forward_return_same_day_publication_enters_same_day,
-        test_forward_return_skips_when_no_price_after_publication,
-        test_forward_return_skips_when_exit_price_missing,
-        test_forward_return_skips_unknown_code,
-        test_forward_return_holding_period_is_configurable,
-        test_rebalance_date_is_published_at,
-        test_rebalance_schedule_dedupes_same_rebalance_date,
-        test_run_backtest_report_has_required_keys,
-        test_run_backtest_marks_insufficient_data_for_single_snapshot,
-        test_run_backtest_marks_insufficient_data_below_min_weeks,
-        test_run_backtest_reports_sufficient_data_with_enough_snapshots,
-        test_run_backtest_counts_forward_return_samples,
-        test_run_backtest_handles_empty_inputs,
-        test_load_price_series_handles_bars_shape,
-    ]
-    for fn in fns:
-        fn()
-        print(f"PASS: {fn.__name__}")
-    print(f"\nAll {len(fns)} backtest CLI tests passed.")
+    # 自動發現所有 test_ 函式 —— 新增測試不可能再被靜默遺漏。
+    # 見 backend/tests/_runner.py 的說明。
+    import sys as _sys
+    from pathlib import Path as _Path
+
+    _sys.path.insert(0, str(_Path(__file__).resolve().parents[2]))
+    from backend.tests._runner import run_tests
+
+    run_tests(globals(), "backcli")

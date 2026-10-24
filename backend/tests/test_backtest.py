@@ -1,4 +1,4 @@
-﻿"""
+"""
 test_backtest.py — 回測引擎的數學核心測試
 
 對應原始需求文件（tabbit_神秘金字塔網站_財富密碼揭密.md §六 驗證框架）：
@@ -395,17 +395,13 @@ def test_select_point_in_time_keeps_missing_availability():
     assert "A" in codes
     assert "C" not in codes
 
-
 if __name__ == "__main__":
-    # 自動發現所有 test_ 開頭的函式 —— 避免「新增了測試卻忘了掛進執行流程」。
-    # 這正是 v0.3.0 體檢報告裡「文件說 A、程式做 B」那類問題的溫床。
-    import inspect
+    # 自動發現所有 test_ 函式 —— 新增測試不可能再被靜默遺漏。
+    # 見 backend/tests/_runner.py 的說明。
+    import sys as _sys
+    from pathlib import Path as _Path
 
-    _fns = [
-        (name, fn) for name, fn in sorted(globals().items())
-        if name.startswith("test_") and callable(fn)
-    ]
-    for _name, _fn in _fns:
-        _fn()
-        print(f"PASS: {_name}")
-    print(f"\nAll {len(_fns)} backtest tests passed.")
+    _sys.path.insert(0, str(_Path(__file__).resolve().parents[2]))
+    from backend.tests._runner import run_tests
+
+    run_tests(globals(), "backtest")

@@ -223,34 +223,71 @@ def test_parse_yahoo_chart_empty():
     assert twse.parse_yahoo_chart({}, "2330") == []
     assert twse.parse_yahoo_chart({"chart": {"result": []}}, "2330") == []
 
+def test_fetch_price_history_tries_both_twse_and_tpex_suffixes():
+    """
+    上櫃股在 Yahoo 用 .TWO，上市用 .TW。
+
+    只試 .TW 會讓上櫃股整批 404（2026-10-25 實測 5347 / 4743 / 4128），
+    看起來像「股票下市了」，實際上只是後綴不對。
+    """
+    attempted = []
+
+    class _FakeClient:
+        def get_json(self, url):
+            attempted.append(url)
+            if ".TWO" in url:
+                return {"chart": {"result": [{
+                    "timestamp": [1792080000],
+                    "indicators": {"quote": [{"close": [2385.0]}]},
+                }], "error": None}}
+            raise RuntimeError("404 Not Found")
+
+    bars = twse.fetch_price_history("5347", client=_FakeClient())
+    assert len(attempted) == 2, f"應該先試 .TW 再試 .TWO，實際：{attempted}"
+    assert ".TW?" in attempted[0]
+    assert ".TWO?" in attempted[1]
+    assert bars, "上櫃股應該能取到 K 線"
+
+
+def test_fetch_price_history_returns_empty_when_all_suffixes_fail():
+    attempted = []
+
+    class _FakeClient:
+        def get_json(self, url):
+            attempted.append(url)
+            raise RuntimeError("404 Not Found")
+
+    assert twse.fetch_price_history("9999", client=_FakeClient()) == []
+    assert len(attempted) == 2
+
+
+def test_fetch_price_history_stops_at_first_success():
+    attempted = []
+
+    class _FakeClient:
+        def get_json(self, url):
+            attempted.append(url)
+            return {"chart": {"result": [{
+                "timestamp": [1792080000],
+                "indicators": {"quote": [{"close": [2385.0]}]},
+            }], "error": None}}
+
+    twse.fetch_price_history("2330", client=_FakeClient())
+    assert len(attempted) == 1, "第一個後綴成功就不該再試"
+
+
+def test_yahoo_suffixes_include_twse_and_tpex():
+    assert "TW" in twse.YAHOO_SUFFIXES
+    assert "TWO" in twse.YAHOO_SUFFIXES
+
 
 if __name__ == "__main__":
-    test_parse_margin_balance_computes_pct()
-    print("PASS: test_parse_margin_balance_computes_pct")
-    test_parse_margin_balance_zero_limit_is_none_not_zero()
-    print("PASS: test_parse_margin_balance_zero_limit_is_none_not_zero")
-    test_parse_margin_balance_skips_missing_fields()
-    print("PASS: test_parse_margin_balance_skips_missing_fields")
-    test_parse_margin_balance_empty()
-    print("PASS: test_parse_margin_balance_empty")
-    test_parse_valuation_extracts_dividend_yield()
-    print("PASS: test_parse_valuation_extracts_dividend_yield")
-    test_parse_valuation_missing_yield_is_none()
-    print("PASS: test_parse_valuation_missing_yield_is_none")
-    test_parse_valuation_empty()
-    print("PASS: test_parse_valuation_empty")
-    test_parse_industry_map()
-    print("PASS: test_parse_industry_map")
-    test_parse_industry_skips_blank()
-    print("PASS: test_parse_industry_skips_blank")
-    test_parse_industry_empty()
-    print("PASS: test_parse_industry_empty")
-    test_parse_yahoo_chart_to_bars()
-    print("PASS: test_parse_yahoo_chart_to_bars")
-    test_parse_yahoo_chart_handles_error()
-    print("PASS: test_parse_yahoo_chart_handles_error")
-    test_parse_yahoo_chart_handles_null_values()
-    print("PASS: test_parse_yahoo_chart_handles_null_values")
-    test_parse_yahoo_chart_empty()
-    print("PASS: test_parse_yahoo_chart_empty")
-    print("\nAll 15 official_sources tests passed.")
+    # 自動發現所有 test_ 函式 —— 新增測試不可能再被靜默遺漏。
+    # 見 backend/tests/_runner.py 的說明。
+    import sys as _sys
+    from pathlib import Path as _Path
+
+    _sys.path.insert(0, str(_Path(__file__).resolve().parents[2]))
+    from backend.tests._runner import run_tests
+
+    run_tests(globals(), "official_sources")

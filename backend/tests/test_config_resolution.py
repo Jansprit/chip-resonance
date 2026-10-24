@@ -302,40 +302,13 @@ def test_pyproject_has_no_dead_optional_env():
     assert "PIPELINE_LIMIT" in listed
     assert "RL_JITTER" in listed
 
-
 if __name__ == "__main__":
-    test_env_get_prefers_process_environment_over_env_file()
-    print("PASS: test_env_get_prefers_process_environment_over_env_file")
-    test_env_get_falls_back_to_env_file()
-    print("PASS: test_env_get_falls_back_to_env_file")
-    test_env_get_returns_default_when_absent()
-    print("PASS: test_env_get_returns_default_when_absent")
-    test_pipeline_limit_reads_env_file()
-    print("PASS: test_pipeline_limit_reads_env_file")
-    test_pipeline_limit_process_env_overrides_env_file()
-    print("PASS: test_pipeline_limit_process_env_overrides_env_file")
-    test_pipeline_limit_falls_back_to_default()
-    print("PASS: test_pipeline_limit_falls_back_to_default")
-    test_pipeline_limit_zero_means_unlimited()
-    print("PASS: test_pipeline_limit_zero_means_unlimited")
-    test_pipeline_limit_invalid_value_uses_default()
-    print("PASS: test_pipeline_limit_invalid_value_uses_default")
-    test_session_available_false_when_missing()
-    print("PASS: test_session_available_false_when_missing")
-    test_session_available_true_for_valid_session()
-    print("PASS: test_session_available_true_for_valid_session")
-    test_session_available_false_for_expired_session()
-    print("PASS: test_session_available_false_for_expired_session")
-    test_session_available_false_for_corrupt_file()
-    print("PASS: test_session_available_false_for_corrupt_file")
-    test_session_is_expired_without_meta()
-    print("PASS: test_session_is_expired_without_meta")
-    test_summary_has_no_dead_credential_keys()
-    print("PASS: test_summary_has_no_dead_credential_keys")
-    test_summary_session_flags_are_bool()
-    print("PASS: test_summary_session_flags_are_bool")
-    test_env_example_has_no_dead_keys()
-    print("PASS: test_env_example_has_no_dead_keys")
-    test_pyproject_has_no_dead_optional_env()
-    print("PASS: test_pyproject_has_no_dead_optional_env")
-    print("\nAll 18 config_resolution tests passed.")
+    # 自動發現所有 test_ 函式 —— 新增測試不可能再被靜默遺漏。
+    # 見 backend/tests/_runner.py 的說明。
+    import sys as _sys
+    from pathlib import Path as _Path
+
+    _sys.path.insert(0, str(_Path(__file__).resolve().parents[2]))
+    from backend.tests._runner import run_tests
+
+    run_tests(globals(), "config_resolution")

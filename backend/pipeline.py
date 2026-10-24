@@ -928,11 +928,30 @@ async def _main_async(repo: Path | None, source: str, out_dir_name: str) -> int:
     print(f"\n=== done ({taipei_now_iso()}) ===")
 
     statuses = [v.get("status") for v in sources_status.values()]
-    if not statuses:
+    return pipeline_exit_code(statuses)
+
+
+def pipeline_exit_code(statuses: list[Optional[str]]) -> int:
+    """
+    依各來源的狀態決定 pipeline 的結束碼。
+
+    語意：
+      0 → ok / skipped / partial（有可用資料就算成功）
+      1 → 有任何來源 failed（來源真的壞了，CI 應該紅燈）
+      2 → 全部失敗
+
+    ⚠️ 為什麼 partial 不算失敗？
+    舊版只要有**一個**來源回 partial 就 exit 1。
+    而 Yahoo 只要有 1 檔股票查不到（例如上櫃股用錯後綴）就會回 partial
+    → CI 的 scrape 步驟必定失敗 → 每次都在同一個地方壞掉。
+    「少幾檔」不等於「整條流程壞掉」；真正該讓 CI 紅燈的是 `failed`。
+    """
+    clean = [s for s in statuses if s]
+    if not clean:
         return 0
-    if all(s in ("ok", "skipped") for s in statuses):
+    if all(s in ("ok", "skipped", "partial") for s in clean):
         return 0
-    if any(s == "ok" for s in statuses):
+    if any(s == "ok" or s == "partial" for s in clean):
         return 1
     return 2
 

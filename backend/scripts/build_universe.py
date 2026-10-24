@@ -192,10 +192,16 @@ def merge_price_derived(stock: dict, derived: dict | None, real: set[str]) -> No
     支援兩種來源格式：
     - 扁平：{code, ret_60d, drawdown_120d, ...}（玩股網 / MoneyDJ 已算好的）
     - 原始 K 線：{code, bars: [...]}（Yahoo / TWSE 月線，由這裡現算）
+
+    ⚠️ **必須用型別判斷**，不可只看 `bars` 是否存在：
+    `compute_price_derived` 的輸出也帶 `bars`，但那是**筆數（int）**；
+    原始 K 線的 `bars` 是**陣列（list）**。
+    只判斷真偽會把 int 送進「重新計算」分支 → `TypeError: 'int' object is not iterable`。
     """
     if not derived:
         return
-    if derived.get("bars"):
+    bars = derived.get("bars")
+    if isinstance(bars, list) and bars:
         merge_price_history(stock, derived, real)
         return
     for field in PRICE_DERIVED_FIELDS:
@@ -258,8 +264,8 @@ def merge_price_history(
     """價格歷史（日 K）→ 價格衍生因子 ret_60d / drawdown_120d / is_60d_high / crash_60d。"""
     if not entry:
         return
-    bars = entry.get("bars") or []
-    if not bars:
+    bars = entry.get("bars")
+    if not isinstance(bars, list) or not bars:
         return
     derived = compute_price_derived(bars, bar_days=1)
     for field in PRICE_DERIVED_FIELDS:
@@ -358,10 +364,11 @@ def build(
             stats["industry"] += 1
 
         if stock["code"] in finmind_derived:
-            before = len(real)
+            # 統計「FinMind 有這檔的價格備援」，而不是「FinMind 新增了幾個欄位」——
+            # Yahoo 已經先填好同一批欄位時，後者永遠是 0，會讓人誤以為
+            # FinMind 沒有資料。
             merge_price_derived(stock, finmind_derived[stock["code"]], real)
-            if len(real) > before:
-                stats["finmind"] += 1
+            stats["finmind"] += 1
 
         attach_provenance(stock, real)
         merged.append(stock)
