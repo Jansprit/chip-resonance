@@ -186,6 +186,98 @@ def merge_mops(stock: dict, director: dict | None, real: set[str]) -> None:
         real.add(dst)
 
 
+# =============================================================
+# 欄位供應狀態（factor status 的單一真相來源）
+# =============================================================
+#
+# 「這個因子到底能不能用真實資料算」是使用者最需要知道的資訊，
+# 而它不該靠一份手寫的說明表 —— 那種表一定會和程式漂移。
+#
+# 這裡把每個欄位的供應狀態分成四級，factor 的等級由它推導：
+#
+#   always      — 已接通，每次 pipeline 都會填上真實值
+#   conditional — 有來源，但需要時間累積（集保多週歷史）
+#   pending     — 有來源但尚未接上（可預見會補上）
+#   never       — 目前找不到任何可用來源（FinMind 免費層不給當沖量、
+#                 集保分散表沒有免費 API）
+#
+# 推導規則：
+#   ok      → 所有輸入都是 always
+#   partial → 沒有 never，但有 pending / conditional
+#   none    → 有輸入是 never（該因子在可預見的未來都算不了）
+#
+# data.js 的 FACTOR_STATUS 必須與這裡一致；
+# backend/tests/test_factor_status.py 會實際驗證兩者一致。
+FIELD_SUPPLY: dict[str, str] = {
+    # ---- 已接通 ----
+    "price": "always",
+    "avg_volume": "always",
+    "date": "always",
+    "exchange": "always",
+    "date_chip": "always",
+    # 集保當週分級
+    "pct_1000up_now": "always",
+    "pct_400up_now": "always",
+    "pct_600up_now": "always",
+    "pct_800up_now": "always",
+    "people_1000up_now": "always",
+    "people_400up_now": "always",
+    # TWSE 融資券
+    "margin_pct": "always",
+    "short_ratio": "always",
+    # 價格衍生
+    "ret_60d": "always",
+    "drawdown_120d": "always",
+    "is_60d_high": "always",
+    "crash_60d": "always",
+    "industry_ret_60d_med": "always",
+    # MOPS 董監
+    "director_holding_change_3m": "always",
+    "director_pledge": "always",
+    # TWSE 基本資料
+    "yield_now": "always",
+    "industry_cid": "always",
+    # ---- 需時間累積 ----
+    "pct_1000up_w1": "conditional",
+    "pct_1000up_w2": "conditional",
+    "pct_1000up_w3": "conditional",
+    "pct_1000up_trend": "conditional",
+    # ---- 有來源但尚未接上 ----
+    "div_years": "pending",
+    "yield_5y_avg": "pending",
+    "pct_400up_52w_high": "pending",
+    "eps_q4": "pending",
+    # ---- 完全沒有可用來源 ----
+    "dt_ratio": "never",
+    "holder_cnt_change_8w": "never",
+    "avg_lot_change_8w": "never",
+}
+
+
+def factor_supply_level(factor_inputs: dict[str, list[str]]) -> str:
+    """
+    由欄位供應狀態推導因子等級（ok / partial / none）。
+
+    factor_inputs: {因子代號: [輸入欄位, ...]}
+    """
+    levels = []
+    for fields in factor_inputs.values():
+        supplies = [FIELD_SUPPLY.get(f, "pending") for f in fields]
+        if "never" in supplies:
+            levels.append("none")
+        elif all(s == "always" for s in supplies):
+            levels.append("ok")
+        else:
+            levels.append("partial")
+    if not levels:
+        return "none"
+    if "none" in levels:
+        return "none"
+    if all(l == "ok" for l in levels):
+        return "ok"
+    return "partial"
+
+
 def merge_price_derived(stock: dict, derived: dict | None, real: set[str]) -> None:
     """價格衍生欄位（ret_60d / drawdown_120d / is_60d_high / crash_60d）。
 

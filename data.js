@@ -42,21 +42,21 @@ const FACTOR_DEFINITIONS = [
     code: 'F1', name: '大股東連續加碼', weight: 20, direction: 'plus',
     desc: '1000 張以上大戶持股比例連續 ≥3 週增加，且累計增幅 ≥1%。',
     formula: 'consecutive_increase(pct_1000up, weeks=3) ≥ 1.0',
-    dataSource: '神秘金字塔 + 集保中心',
+    dataSource: '集保開放平台（1-5 持股分級）',
     frequency: '週'
   },
   {
     code: 'F2', name: '產業輪動', weight: 10, direction: 'plus',
     desc: '個股所屬 CID 的全體成分股「大戶淨增持家數 − 淨減持家數」之 4 週均值，取全市場前 30% 的產業。',
     formula: 'industry_flow_rank(holders, by="CID", window=4) in top 30%',
-    dataSource: '金字塔 CID 參數 + 集保',
+    dataSource: 'TWSE 產業別 CID + 集保',
     frequency: '週'
   },
   {
     code: 'F3', name: '董監加碼價格落後', weight: 15, direction: 'plus',
     desc: '董監持股近 3 個月增加 >0.5%，且個股 60 日報酬率落後同產業中位數。',
     formula: 'director_change_3m > 0.5% AND ret_60d < industry_median',
-    dataSource: 'Goodinfo / 公開資訊觀測站',
+    dataSource: 'MOPS 公開資訊觀測站',
     frequency: '月'
   },
   {
@@ -70,14 +70,14 @@ const FACTOR_DEFINITIONS = [
     code: 'F5', name: '股利穩定', weight: 10, direction: 'plus',
     desc: '連續配息 ≥5 年，目前殖利率高於自身 5 年均值。',
     formula: 'div_years >= 5 AND yield_now > yield_5y_avg',
-    dataSource: '神秘金字塔股利模組 + Goodinfo',
+    dataSource: 'TWSE BWIBBU_d（殖利率）+ 配息歷史（待補）',
     frequency: '季/年'
   },
   {
     code: 'F6', name: '散戶退場主力接手', weight: 15, direction: 'plus',
     desc: '股東總人數 8 週變化率 <-5%，且平均持有張數 8 週變化率 >+5%，兩者同向才給分。',
     formula: 'holder_cnt_8w < -5% AND avg_lot_8w > +5%',
-    dataSource: '集保分散表',
+    dataSource: '集保分散表（暫無免費 API）',
     frequency: '週'
   },
   {
@@ -98,28 +98,33 @@ const FACTOR_DEFINITIONS = [
     code: 'F9', name: '價籌背離懲罰', weight: -20, direction: 'minus',
     desc: '股價創 60 日新高但大戶比例連 2 週下降，或當沖比 >40%、融資使用率 >70%（觸發任一即扣分，多重觸發累計封頂 -20）。',
     formula: '(is_60d_high AND Δpct_1000up_2w < 0) OR dt_ratio > 40% OR margin_pct > 70%',
-    dataSource: '證交所 + Goodinfo + 集保',
+    dataSource: 'TWSE 融資券 + 集保 + 當沖比（待補）',
     frequency: '日'
   }
 ];
 
-// 各因子的「資料接通狀態」（2026-10 實測結果，不是設計藍圖）
+// 各因子的「資料接通狀態」
+//
+// ⚠️ 這張表是**實測結果**，不是設計藍圖，而且必須與程式實作一致 ——
+//    每次因子可用性改變都要同步更新（backend/tests/test_factor_status.py 會驗證）。
 //
 // level:
-//   ok       — 所有輸入欄位都已由真實來源供應
+//   ok       — 所有輸入欄位都已由真實來源供應（所有股票都可算）
 //   partial  — 部分輸入已接通，缺的部分仍是示意值
 //   none     — 尚未接通，該因子目前一律是示意值
 //
 // 這張表的存在，是為了不讓「9 大因子」看起來像全部都已經在跑真實資料。
+// 2026-10-25 更新：接上 Yahoo/TWSE 價格歷史、TWSE 融資券與殖利率、
+// FinMind 免費層之後重新量測的結果。
 const FACTOR_STATUS = {
-  F1:  { level: 'partial', text: '集保當週已通；需累積 4 週歷史才有 w3' },
-  F2:  { level: 'ok',       text: '已接通：玩股網日 K 線 → 產業 60 日報酬中位數' },
-  F3:  { level: 'ok',       text: '已接通：MOPS 董監持股 + 玩股網日 K 線' },
-  F4:  { level: 'none',    text: '尚未接通：需要 52 週高點基準' },
-  F5:  { level: 'none',    text: '尚未接通：需要 FinMind 股利資料' },
-  F6:  { level: 'none',    text: '尚未接通：需要集保股東人數資料' },
-  F8:  { level: 'ok',       text: '已接通：玩股網日 K 線 + 集保分級' },
-  F9:  { level: 'partial', text: '價格與分級已通；融資券/當沖比需玩股網登入' },
+  F1:  { level: 'partial', text: '集保當週已通；需累積 4 週歷史才有 w1/w2/w3' },
+  F2:  { level: 'ok',       text: '⚠️ 目前用的是「產業 60 日報酬中位數」代理值；原始定義「產業成分股大戶淨增持家數 − 淨減持家數」待第二期' },
+  F3:  { level: 'ok',       text: '已接通：MOPS 董監持股 + 價格歷史（Yahoo / TWSE）' },
+  F4:  { level: 'partial', text: '尚未接通：需要 52 週高點基準與「首次突破」判定（價格歷史已足夠，待實作）' },
+  F5:  { level: 'partial', text: '殖利率已接通（TWSE BWIBBU_d）；仍缺配息年數與 5 年均殖利率' },
+  F6:  { level: 'none',    text: '尚未接通：找不到免費的個股股東人數來源' },
+  F8:  { level: 'ok',       text: '已接通：價格歷史（Yahoo / TWSE）+ 集保分級' },
+  F9:  { level: 'none',    text: '融資使用率已通（TWSE MI_MARGN）；仍缺個股當沖比 → 整個 F9 尚不可用' },
   F10: { level: 'partial', text: '價格已通；需集保多週歷史才有趨勢' }
 };
 
