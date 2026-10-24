@@ -6,7 +6,7 @@ schema.py — pydantic models + JSON Schema
 
 from __future__ import annotations
 
-from typing import Optional
+from typing import Any, Dict, List, Optional
 from pydantic import BaseModel, Field, field_validator
 
 
@@ -154,6 +154,34 @@ class WantgooPriceEntry(BaseModel):
     crash_60d: Optional[bool] = None
     bars: int = 0
     last_date: Optional[str] = None
+
+
+class PriceHistoryEntry(BaseModel):
+    """Yahoo Finance 歷史 K 線（原始 bars，交由合併層現算衍生因子）。"""
+
+    code: str
+    bars: List[Dict[str, Any]] = Field(default_factory=list)
+
+
+class MarginBalanceEntry(BaseModel):
+    """TWSE MI_MARGN 融資融券餘額（F9 的 margin_pct / short_ratio）。"""
+
+    margin_balance: Optional[float] = None
+    margin_limit: Optional[float] = None
+    margin_pct: Optional[float] = None
+    short_balance: Optional[float] = None
+    short_limit: Optional[float] = None
+    short_pct: Optional[float] = None
+
+
+class ValuationEntry(BaseModel):
+    """TWSE BWIBBU_d 個股基本資料（F5 的 yield_now）。"""
+
+    close_price: Optional[float] = None
+    yield_now: Optional[float] = None
+    dividend_year: Optional[int] = None
+    pe_ratio: Optional[float] = None
+    pb_ratio: Optional[float] = None
 
 
 # ============ JSON Schema (給前端 CI 使用) ============
@@ -383,6 +411,38 @@ if __name__ == "__main__":
 
     if name == "wantgoo_price.json":
         sys.exit(_validate_all(WantgooPriceEntry, data, name))
+
+    if name == "price_history.json":
+        sys.exit(_validate_all(PriceHistoryEntry, data, name))
+
+    if name == "margin_balance.json":
+        # 以 code 為 key 的物件
+        for code, entry in data.items():
+            try:
+                MarginBalanceEntry.model_validate(entry)
+            except Exception as e:
+                print(f"FAIL: margin_balance.json[{code}] 驗證失敗：{e}")
+                sys.exit(1)
+        print(f"OK: margin_balance.json（{len(data)} 檔全部通過）")
+        sys.exit(0)
+
+    if name == "valuation.json":
+        for code, entry in data.items():
+            try:
+                ValuationEntry.model_validate(entry)
+            except Exception as e:
+                print(f"FAIL: valuation.json[{code}] 驗證失敗：{e}")
+                sys.exit(1)
+        print(f"OK: valuation.json（{len(data)} 檔全部通過）")
+        sys.exit(0)
+
+    if name == "industry.json":
+        bad = [k for k, v in data.items() if not isinstance(v, str) or not v.strip()]
+        if bad:
+            print(f"FAIL: industry.json 結構錯誤：{bad[:5]}")
+            sys.exit(1)
+        print(f"OK: industry.json（{len(data)} 檔全部通過）")
+        sys.exit(0)
 
     print(f"FAIL: 未知檔案類型 {name}，無法驗證")
     print("      請在 backend/schema.py 的 __main__ 補上對應的模型。")

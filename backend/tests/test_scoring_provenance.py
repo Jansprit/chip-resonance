@@ -112,10 +112,14 @@ const results = {};
   results.t3_f1_in_real = r.data_quality.real_factors.includes('F1');
 }
 
-/* ---- Test 4: 全部輸入皆真實 → F1 可用 ---- */
+/* ---- Test 4: 全部輸入皆真實 → F1 可用 ----
+   F1 的輸入集合 2026-10 起改為 4 個欄位（now/w1/w2/w3），
+   因為原始定義要求判斷「連續 3 週增加」。 */
 {
-  const s = mkStock({ code: 'REAL1', pct_1000up_now: 84.7, pct_1000up_w3: 66.8 });
+  const s = mkStock({ code: 'REAL1', pct_1000up_now: 84.7, pct_1000up_w1: 80, pct_1000up_w2: 74, pct_1000up_w3: 66.8 });
   s._provenance.pct_1000up_now = 'real';
+  s._provenance.pct_1000up_w1 = 'real';
+  s._provenance.pct_1000up_w2 = 'real';
   s._provenance.pct_1000up_w3 = 'real';
   const out = computeScores([s]);
   const r = out.survivors[0];
@@ -128,10 +132,10 @@ const results = {};
    2026-10 語意修正：舊版只要「有一檔」有真實因子就宣稱 strict，
    會讓 43 檔裡只有 1 檔有真實資料時整個版面仍顯示「實戰模式」。 */
 {
-  const a = mkStock({ code: 'A', pct_1000up_now: 90, pct_1000up_w3: 70 });
-  a._provenance.pct_1000up_now = 'real';
-  a._provenance.pct_1000up_w3 = 'real';
-  const b = mkStock({ code: 'B', pct_1000up_now: 20, pct_1000up_w3: 60 });
+  const a = mkStock({ code: 'A', pct_1000up_now: 90, pct_1000up_w1: 84, pct_1000up_w2: 78, pct_1000up_w3: 70 });
+  ['pct_1000up_now', 'pct_1000up_w1', 'pct_1000up_w2', 'pct_1000up_w3']
+    .forEach(k => { a._provenance[k] = 'real'; });
+  const b = mkStock({ code: 'B', pct_1000up_now: 20, pct_1000up_w1: 20, pct_1000up_w2: 20, pct_1000up_w3: 60 });
   b._provenance.pct_1000up_now = 'real';
   b._provenance.pct_1000up_w3 = 'illustrative';
   const out = computeScores([a, b]);
@@ -151,12 +155,12 @@ const results = {};
 
 /* ---- Test 5c: 每檔都有真實因子 → strict 模式 ---- */
 {
-  const a = mkStock({ code: 'SA', pct_1000up_now: 90, pct_1000up_w3: 70 });
-  a._provenance.pct_1000up_now = 'real';
-  a._provenance.pct_1000up_w3 = 'real';
-  const b = mkStock({ code: 'SB', pct_1000up_now: 20, pct_1000up_w3: 60 });
-  b._provenance.pct_1000up_now = 'real';
-  b._provenance.pct_1000up_w3 = 'real';
+  const a = mkStock({ code: 'SA', pct_1000up_now: 90, pct_1000up_w1: 84, pct_1000up_w2: 78, pct_1000up_w3: 70 });
+  ['pct_1000up_now', 'pct_1000up_w1', 'pct_1000up_w2', 'pct_1000up_w3']
+    .forEach(k => { a._provenance[k] = 'real'; });
+  const b = mkStock({ code: 'SB', pct_1000up_now: 20, pct_1000up_w1: 20, pct_1000up_w2: 20, pct_1000up_w3: 60 });
+  ['pct_1000up_now', 'pct_1000up_w1', 'pct_1000up_w2', 'pct_1000up_w3']
+    .forEach(k => { b._provenance[k] = 'real'; });
   const out = computeScores([a, b]);
   results.t5c_mode = out.mode;
   results.t5c_count = out.survivors.length;
@@ -173,6 +177,40 @@ const results = {};
   results.t5b_f1_in_real = r.data_quality.real_factors.includes('F1');
   results.t5b_reliable = r.data_quality.reliable;
   results.t5b_finite = Number.isFinite(r.score);
+}
+
+/* ---- Test 5d: F1 必須符合原始定義「連續 ≥3 週增加，且累計增幅 ≥1%」 ----
+   原始需求文件（tabbit_神秘金字塔網站_財富密碼揭密.md §四）：
+   「1000 張以上大戶持股比例連續 ≥3 週增加，且累計增幅 ≥1%」
+   舊版只算 now - w3 的淨差，完全沒有判斷「連續」——
+   那是不同的因子。 */
+{
+  function realF1(over) {
+    const s = mkStock(Object.assign({
+      code: 'F1X', pct_1000up_w3: 60, pct_1000up_w2: 61,
+      pct_1000up_w1: 62, pct_1000up_now: 63,
+    }, over));
+    ['pct_1000up_now', 'pct_1000up_w1', 'pct_1000up_w2', 'pct_1000up_w3']
+      .forEach(k => { s._provenance[k] = 'real'; });
+    return s;
+  }
+  // 連續 3 週增加、累計增幅 3% → 滿分
+  const up = computeScores([realF1({ code: 'F1UP' })]).survivors[0];
+  // 連續 3 週增加但累計增幅只有 0.3% → 不到滿分
+  const small = computeScores([realF1({
+    code: 'F1SM', pct_1000up_w3: 60, pct_1000up_w2: 60.1,
+    pct_1000up_w1: 60.2, pct_1000up_now: 60.3,
+  })]).survivors[0];
+  // 中間一週下降（非連續）→ 明顯較低
+  const broken = computeScores([realF1({
+    code: 'F1BR', pct_1000up_w3: 60, pct_1000up_w2: 61,
+    pct_1000up_w1: 59, pct_1000up_now: 63,
+  })]).survivors[0];
+  results.t5d_consecutive_full = up.F1;
+  results.t5d_small_gain = small.F1;
+  results.t5d_broken = broken.F1;
+  results.t5d_f1_inputs = FACTOR_INPUTS.F1.slice();
+  results.t5d_up_finite = Number.isFinite(up.F1);
 }
 
 /* ---- Test 6: 全部個股都無可用因子 → 分數為中性 50，不 NaN ---- */
@@ -279,6 +317,22 @@ def main() -> int:
     check("t5c_count", r.get("t5c_count") == 2, f"count={r.get('t5c_count')}")
     check("t5c_no_data_zero", r.get("t5c_no_data") == 0)
     check("t5c_all_finite", r.get("t5c_all_finite") is True)
+
+    # T5d — F1 對齊原始定義（連續 ≥3 週增加 + 累計增幅 ≥1%）
+    check("t5d_finite", r.get("t5d_up_finite") is True)
+    check("t5d_requires_w1_w2",
+          r.get("t5d_f1_inputs") == ["pct_1000up_now", "pct_1000up_w1",
+                                     "pct_1000up_w2", "pct_1000up_w3"],
+          f"inputs={r.get('t5d_f1_inputs')}")
+    check("t5d_consecutive_full_score",
+          (r.get("t5d_consecutive_full") or 0) >= 95,
+          f"F1={r.get('t5d_consecutive_full')}")
+    check("t5d_broken_lower_than_consecutive",
+          (r.get("t5d_broken") or 0) < (r.get("t5d_consecutive_full") or 0),
+          f"broken={r.get('t5d_broken')} full={r.get('t5d_consecutive_full')}")
+    check("t5d_small_gain_below_full",
+          (r.get("t5d_small_gain") or 0) < (r.get("t5d_consecutive_full") or 0),
+          f"small={r.get('t5d_small_gain')} full={r.get('t5d_consecutive_full')}")
 
     # T5b — demo 模式
     check("t5b_mode_demo", r.get("t5b_mode") == "demo",
