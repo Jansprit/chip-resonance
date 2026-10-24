@@ -268,14 +268,19 @@ Step 6: 停損 -12% 或 ATR(14)*2.5（取較近者）
 | F1 | 大股東連續加碼 | 加分 | 20% | `pct_1000up_now` `pct_1000up_w1` `pct_1000up_w2` `pct_1000up_w3` | 集保開放平台 | ⏳ 當週已通，需累積 4 週歷史（原始定義要求「連續 ≥3 週增加」+ 累計增幅 ≥1%）|
 | F2 | 產業輪動 | 加分 | 10% | `industry_ret_60d_med` | Yahoo / TWSE 價格歷史 | ✅ **43/43 檔可算**（⚠️ 目前用產業中位數代理；原始定義「產業成分股大戶淨增持家數」待第二期）|
 | F3 | 董監加碼價格落後 | 加分 | 15% | `director_holding_change_3m` `ret_60d` `industry_ret_60d_med` | MOPS + 價格歷史 | ✅ **43/43 檔可算** |
-| F4 | 集中度突破 | 加分 | 10% | `pct_400up_52w_high` | 需 52 週高點基準 | ❌ 尚未接通 |
+| F4 | 集中度突破 | 加分 | 10% | `pct_400up_52w_high` | 需 52 週高點基準 | ⚠️ 尚未接通：價格歷史已足夠，待實作「首次突破」判定 |
 | F5 | 股利穩定 | 加分 | 10% | `div_years` `yield_now` `yield_5y_avg` | TWSE `BWIBBU_d` | ⚠️ **殖利率輸入已接通**（40 檔），但仍缺 `div_years` / `yield_5y_avg` → 尚不可算 |
 | F6 | 散戶退場主力接手 | 加分 | 15% | `holder_cnt_change_8w` `avg_lot_change_8w` | 集保股東人數 | ❌ **無免費來源**，維持不可用 |
 | F8 | 回調籌碼守穩 | 加分 | 10% | `drawdown_120d` `pct_1000up_now` | 價格歷史 + 集保 | ✅ **43/43 檔可算** |
-| F9 | 價籌背離懲罰 | **扣分** | -20% 封頂 | `is_60d_high` `pct_1000up_now/w1/w3` `margin_pct` `dt_ratio` | TWSE 融資券 + 集保 | ⚠️ 融資使用率 ✅、**個股當沖比 ❌** → 整個 F9 仍不可用 |
+| F9 | 價籌背離懲罰 | **扣分** | -20% 封頂 | `is_60d_high` `pct_1000up_now/w1/w3` `margin_pct` `dt_ratio` | TWSE 融資券 + 集保 | ❌ 融資使用率已通（TWSE MI_MARGN），但**個股當沖比無來源** → 整個 F9 不可用 |
 | F10 | 利空籌碼修復 | 加分 | 5% | `crash_60d` `pct_1000up_trend` | 價格歷史 + 集保 | ⚠️ 價格輸入已通，但缺 `pct_1000up_trend`（需集保多週歷史）→ 尚不可算 |
 
 ### 各來源的實測狀態（2026-10-25，含真實瀏覽器與真實 HTTP 驗證）
+
+> 因子的「接通狀態」由 `backend/scripts/build_universe.py` 的 `FIELD_SUPPLY`
+> 推導（欄位 → always / conditional / pending / never），
+> `data.js` 的 `FACTOR_STATUS` 必須與之一致 ——
+> `backend/tests/test_factor_status.py` 會實際驗證，文件不會與程式漂移。
 
 > 完整矩陣（含端點、參數、筆數、datacenter IP 行為）見
 > [docs/資料來源可達性矩陣.md](docs/資料來源可達性矩陣.md)；

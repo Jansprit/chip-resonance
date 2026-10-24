@@ -86,6 +86,25 @@ Yahoo 的台股代號：上市 `.TW`、上櫃 `.TWO`。
 轉換過程中還抓到 `test_scoring_provenance.py` 原本是 `main()` + 內嵌 `check()`
 的舊結構，轉換後**整個檔案的 33 項檢查一個都沒跑**卻顯示 PASS。
 
+### 📋 修正：因子「接通狀態」與程式漂移
+
+`data.js` 的 `FACTOR_STATUS`（factors.html 直接顯示給使用者）
+停留在 2026-10 的假設：接上 Yahoo/TWSE 價格、FinMind 免費層、
+TWSE 融資券與殖利率之後，它完全沒更新 → **文件說 A、程式做 B**。
+
+而且「這一版快照有幾檔算得出來」不能拿來當等級依據 ——
+CI 每次抓的檔數不同，等級會跟著跳動。
+
+改成：
+
+- `backend/scripts/build_universe.py` 新增 `FIELD_SUPPLY`：
+  每個欄位標成 `always` / `conditional` / `pending` / `never`，
+  因子等級由它推導（`ok` / `partial` / `none`）。
+- `data.js` 的 `FACTOR_STATUS` 必須與之一致，
+  由 `backend/tests/test_factor_status.py` 實際驗證。
+- F2 的狀態說明必須揭露「目前是產業 60 日報酬中位數的**代理值**，
+  原始定義（產業成分股大戶淨增持家數）待第二期」。
+
 ### ✅ 新增：資料來源可達性矩陣 + 健康度檢查
 
 - `backend/scripts/check_sources.py` — 逐個探測 17 個來源，

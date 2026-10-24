@@ -1,5 +1,5 @@
 {
-  "generated_at": "2026-10-25T04:46:10+08:00",
+  "generated_at": "2026-10-25T05:33:46+08:00",
   "mode": "single_snapshot",
   "sufficient_data": false,
   "sufficient_for_strategy": false,
@@ -14,7 +14,7 @@
   ],
   "holding_weeks": 4,
   "quantiles": 5,
-  "price_series_count": 43,
+  "price_series_count": 0,
   "forward_return_samples": 0,
   "factor_row_coverage": {
     "F1": 0,
