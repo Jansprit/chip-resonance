@@ -1,5 +1,5 @@
 {
-  "generated_at": "2026-10-25T04:46:37+08:00",
+  "generated_at": "2026-10-26T19:42:52+08:00",
   "total": 12,
   "ok": 12,
   "blocked": 0,
@@ -21,10 +21,10 @@
       "status": "ok",
       "http_status": 200,
       "records": 1383,
-      "latency_ms": 2316,
+      "latency_ms": 1407,
       "error": null,
       "blocked_reason": "",
-      "checked_at": "2026-10-25T04:46:12+08:00"
+      "checked_at": "2026-10-26T19:42:31+08:00"
     },
     {
       "name": "twse_mi_index",
@@ -35,10 +35,10 @@
       "status": "ok",
       "http_status": 200,
       "records": 267,
-      "latency_ms": 788,
+      "latency_ms": 426,
       "error": null,
       "blocked_reason": "",
-      "checked_at": "2026-10-25T04:46:13+08:00"
+      "checked_at": "2026-10-26T19:42:31+08:00"
     },
     {
       "name": "twse_margin",
@@ -49,10 +49,10 @@
       "status": "ok",
       "http_status": 200,
       "records": 1302,
-      "latency_ms": 1528,
+      "latency_ms": 791,
       "error": null,
       "blocked_reason": "",
-      "checked_at": "2026-10-25T04:46:15+08:00"
+      "checked_at": "2026-10-26T19:42:32+08:00"
     },
     {
       "name": "twse_valuation",
@@ -63,10 +63,10 @@
       "status": "ok",
       "http_status": 200,
       "records": 1084,
-      "latency_ms": 968,
+      "latency_ms": 863,
       "error": null,
       "blocked_reason": "",
-      "checked_at": "2026-10-25T04:46:16+08:00"
+      "checked_at": "2026-10-26T19:42:33+08:00"
     },
     {
       "name": "twse_company_basic",
@@ -77,10 +77,10 @@
       "status": "ok",
       "http_status": 200,
       "records": 1097,
-      "latency_ms": 1547,
+      "latency_ms": 971,
       "error": null,
       "blocked_reason": "",
-      "checked_at": "2026-10-25T04:46:17+08:00"
+      "checked_at": "2026-10-26T19:42:34+08:00"
     },
     {
       "name": "twse_stock_day",
@@ -91,10 +91,10 @@
       "status": "ok",
       "http_status": 200,
       "records": 15,
-      "latency_ms": 1794,
+      "latency_ms": 1016,
       "error": null,
       "blocked_reason": "",
-      "checked_at": "2026-10-25T04:46:19+08:00"
+      "checked_at": "2026-10-26T19:42:35+08:00"
     },
     {
       "name": "twse_fund_t86",
@@ -105,10 +105,10 @@
       "status": "ok",
       "http_status": 200,
       "records": 7,
-      "latency_ms": 2516,
+      "latency_ms": 2399,
       "error": null,
       "blocked_reason": "",
-      "checked_at": "2026-10-25T04:46:21+08:00"
+      "checked_at": "2026-10-26T19:42:37+08:00"
     },
     {
       "name": "tpex_daily_close",
@@ -119,10 +119,10 @@
       "status": "ok",
       "http_status": 200,
       "records": 13032,
-      "latency_ms": 8841,
+      "latency_ms": 9549,
       "error": null,
       "blocked_reason": "",
-      "checked_at": "2026-10-25T04:46:30+08:00"
+      "checked_at": "2026-10-26T19:42:47+08:00"
     },
     {
       "name": "tdcc_chip_grades",
@@ -133,10 +133,10 @@
       "status": "ok",
       "http_status": 200,
       "records": 69700,
-      "latency_ms": 2855,
+      "latency_ms": 2333,
       "error": null,
       "blocked_reason": "",
-      "checked_at": "2026-10-25T04:46:33+08:00"
+      "checked_at": "2026-10-26T19:42:49+08:00"
     },
     {
       "name": "tdcc_holder_index",
@@ -147,10 +147,10 @@
       "status": "ok",
       "http_status": 200,
       "records": 19998,
-      "latency_ms": 2341,
+      "latency_ms": 1762,
       "error": null,
       "blocked_reason": "",
-      "checked_at": "2026-10-25T04:46:36+08:00"
+      "checked_at": "2026-10-26T19:42:51+08:00"
     },
     {
       "name": "yahoo_chart",
@@ -161,10 +161,10 @@
       "status": "ok",
       "http_status": 200,
       "records": 487,
-      "latency_ms": 98,
+      "latency_ms": 99,
       "error": null,
       "blocked_reason": "",
-      "checked_at": "2026-10-25T04:46:36+08:00"
+      "checked_at": "2026-10-26T19:42:51+08:00"
     },
     {
       "name": "mops_director",
@@ -175,10 +175,10 @@
       "status": "ok",
       "http_status": 200,
       "records": 63,
-      "latency_ms": 1640,
+      "latency_ms": 900,
       "error": null,
       "blocked_reason": "",
-      "checked_at": "2026-10-25T04:46:37+08:00"
+      "checked_at": "2026-10-26T19:42:52+08:00"
     }
   ]
 }

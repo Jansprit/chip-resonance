@@ -1,8 +1,8 @@
 {
-  "last_update_taipei": "2026-10-25T04:46:09.661254+08:00",
-  "snapshot_date": "2026-10-25",
+  "last_update_taipei": "2026-10-26T19:42:29.233130+08:00",
+  "snapshot_date": "2026-10-26",
   "previous_snapshot_date": "2026-10-25",
-  "data_freshness_hours": 0,
+  "data_freshness_hours": 24,
   "sources": {
     "twse": {
       "status": "ok",
