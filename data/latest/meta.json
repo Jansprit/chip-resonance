@@ -1,7 +1,7 @@
 {
-  "last_update_taipei": "2026-10-26T19:42:29.233130+08:00",
-  "snapshot_date": "2026-10-26",
-  "previous_snapshot_date": "2026-10-25",
+  "last_update_taipei": "2026-10-27T19:01:43.455223+08:00",
+  "snapshot_date": "2026-10-27",
+  "previous_snapshot_date": "2026-10-26",
   "data_freshness_hours": 24,
   "sources": {
     "twse": {
@@ -16,7 +16,7 @@
     },
     "tpex": {
       "status": "ok",
-      "stocks_count": 892,
+      "stocks_count": 895,
       "min_interval_sec": 3,
       "daily_quota": 500
     },
@@ -25,7 +25,7 @@
       "reason": null,
       "min_interval_sec": 5,
       "daily_quota": 200,
-      "rows_count": 1600
+      "rows_count": 1620
     },
     "mops": {
       "status": "ok",

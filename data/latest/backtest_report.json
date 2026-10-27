@@ -1,16 +1,18 @@
 {
-  "generated_at": "2026-10-26T19:42:29+08:00",
-  "mode": "single_snapshot",
+  "generated_at": "2026-10-27T19:01:43+08:00",
+  "mode": "point_in_time",
   "sufficient_data": false,
   "sufficient_for_strategy": false,
   "min_weeks_required": 8,
   "min_weeks_for_strategy": 12,
-  "snapshot_count": 1,
+  "snapshot_count": 2,
   "snapshot_dates": [
-    "2026-10-22"
+    "2026-10-22",
+    "2026-10-27"
   ],
   "rebalance_dates": [
-    "2026-10-27"
+    "2026-10-27",
+    "2026-10-30"
   ],
   "holding_weeks": 4,
   "quantiles": 5,
@@ -18,12 +20,12 @@
   "forward_return_samples": 0,
   "factor_row_coverage": {
     "F1": 0,
-    "F2": 38,
-    "F3": 17,
+    "F2": 76,
+    "F3": 34,
     "F4": 0,
     "F5": 0,
     "F6": 0,
-    "F8": 38,
+    "F8": 76,
     "F10": 0
   },
   "walk_forward_segments": 0,
@@ -310,5 +312,5 @@
       }
     }
   },
-  "note": "⚠️ 因子庫已累積 1 週，尚不足 8 週；**目前為流程驗證，不可解讀為策略績效**。"
+  "note": "⚠️ 因子庫已累積 2 週，尚不足 8 週；**目前為流程驗證，不可解讀為策略績效**。"
 }
