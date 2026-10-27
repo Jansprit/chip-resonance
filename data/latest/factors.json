@@ -1,6 +1,6 @@
 {
-  "as_of": "2026-10-22",
-  "published_at": "2026-10-27",
+  "as_of": "2026-10-27",
+  "published_at": "2026-10-30",
   "mode": "point_in_time",
   "scoring_mode": "strict",
   "coverage": {
@@ -14,7 +14,7 @@
       "code": "2330",
       "name": "台積電",
       "price": 2385,
-      "score": 51.8,
+      "score": 50.9,
       "tier": "C",
       "factors": {
         "F1": null,
@@ -76,8 +76,8 @@
       "code": "2454",
       "name": "聯發科",
       "price": 4010,
-      "score": 67.8,
-      "tier": "B",
+      "score": 59.4,
+      "tier": "C",
       "factors": {
         "F1": null,
         "F2": 100,
@@ -85,7 +85,7 @@
         "F4": null,
         "F5": null,
         "F6": null,
-        "F8": 60,
+        "F8": 30,
         "F10": null
       },
       "available": {
@@ -138,7 +138,7 @@
       "code": "3711",
       "name": "日月光投控",
       "price": 654,
-      "score": 51.2,
+      "score": 49.8,
       "tier": "C",
       "factors": {
         "F1": null,
@@ -199,8 +199,8 @@
     {
       "code": "5347",
       "name": "世界先進",
-      "price": 161,
-      "score": 51.8,
+      "price": 161.5,
+      "score": 50.9,
       "tier": "C",
       "factors": {
         "F1": null,
@@ -260,7 +260,7 @@
       "code": "2884",
       "name": "玉山金",
       "price": 49.75,
-      "score": 65.2,
+      "score": 64.4,
       "tier": "B",
       "factors": {
         "F1": null,
@@ -322,7 +322,7 @@
       "code": "2882",
       "name": "國泰金",
       "price": 113.5,
-      "score": 51.8,
+      "score": 50.9,
       "tier": "C",
       "factors": {
         "F1": null,
@@ -384,7 +384,7 @@
       "code": "2891",
       "name": "中信金",
       "price": 74.9,
-      "score": 65.2,
+      "score": 64.4,
       "tier": "B",
       "factors": {
         "F1": null,
@@ -446,7 +446,7 @@
       "code": "2886",
       "name": "兆豐金",
       "price": 55.2,
-      "score": 51.8,
+      "score": 50.9,
       "tier": "C",
       "factors": {
         "F1": null,
@@ -508,7 +508,7 @@
       "code": "3037",
       "name": "欣興",
       "price": 1085,
-      "score": 51.2,
+      "score": 49.8,
       "tier": "C",
       "factors": {
         "F1": null,
@@ -570,7 +570,7 @@
       "code": "8046",
       "name": "南電",
       "price": 1265,
-      "score": 64.6,
+      "score": 63.2,
       "tier": "B",
       "factors": {
         "F1": null,
@@ -632,7 +632,7 @@
       "code": "3189",
       "name": "景碩",
       "price": 986,
-      "score": 51.2,
+      "score": 49.8,
       "tier": "C",
       "factors": {
         "F1": null,
@@ -694,11 +694,11 @@
       "code": "4133",
       "name": "亞諾法",
       "price": 20.6,
-      "score": 31.3,
-      "tier": "D",
+      "score": 46,
+      "tier": "C",
       "factors": {
         "F1": null,
-        "F2": 0,
+        "F2": 100,
         "F3": 50,
         "F4": null,
         "F5": null,
@@ -755,16 +755,16 @@
       "code": "6446",
       "name": "藥華藥",
       "price": 1160,
-      "score": 44.7,
-      "tier": "D",
+      "score": 66.8,
+      "tier": "B",
       "factors": {
         "F1": null,
-        "F2": 0,
+        "F2": 100,
         "F3": 70,
         "F4": null,
         "F5": null,
         "F6": null,
-        "F8": 30,
+        "F8": 60,
         "F10": null
       },
       "available": {
@@ -817,7 +817,7 @@
       "code": "2603",
       "name": "長榮",
       "price": 260,
-      "score": 38.4,
+      "score": 37.5,
       "tier": "D",
       "factors": {
         "F1": null,
@@ -879,7 +879,7 @@
       "code": "2609",
       "name": "陽明",
       "price": 61.9,
-      "score": 38.4,
+      "score": 37.5,
       "tier": "D",
       "factors": {
         "F1": null,
@@ -941,7 +941,7 @@
       "code": "2615",
       "name": "萬海",
       "price": 119.5,
-      "score": 38.4,
+      "score": 37.5,
       "tier": "D",
       "factors": {
         "F1": null,
@@ -1003,7 +1003,7 @@
       "code": "2618",
       "name": "長榮航",
       "price": 42.2,
-      "score": 51.8,
+      "score": 50.9,
       "tier": "C",
       "factors": {
         "F1": null,
@@ -1065,8 +1065,8 @@
       "code": "2317",
       "name": "鴻海",
       "price": 245,
-      "score": 45.8,
-      "tier": "C",
+      "score": 35.2,
+      "tier": "D",
       "factors": {
         "F1": null,
         "F2": 0,
@@ -1127,8 +1127,8 @@
       "code": "2227",
       "name": "裕隆",
       "price": 42.4,
-      "score": 45.8,
-      "tier": "C",
+      "score": 35.2,
+      "tier": "D",
       "factors": {
         "F1": null,
         "F2": 0,
@@ -1188,7 +1188,7 @@
       "code": "1326",
       "name": "台化",
       "price": 73,
-      "score": 72.8,
+      "score": 70.3,
       "tier": "B",
       "factors": {
         "F1": null,
@@ -1250,7 +1250,7 @@
       "code": "1303",
       "name": "南亞",
       "price": 301,
-      "score": 72.8,
+      "score": 70.3,
       "tier": "B",
       "factors": {
         "F1": null,
@@ -1312,7 +1312,7 @@
       "code": "1216",
       "name": "統一",
       "price": 79.6,
-      "score": 23.4,
+      "score": 13.7,
       "tier": "D",
       "factors": {
         "F1": null,
@@ -1374,7 +1374,7 @@
       "code": "2912",
       "name": "統一超",
       "price": 226,
-      "score": 23.4,
+      "score": 13.7,
       "tier": "D",
       "factors": {
         "F1": null,
@@ -1435,7 +1435,7 @@
       "code": "1707",
       "name": "葡萄王",
       "price": 85.2,
-      "score": 27.9,
+      "score": 5.1,
       "tier": "D",
       "factors": {
         "F1": null,
@@ -1444,7 +1444,7 @@
         "F4": null,
         "F5": null,
         "F6": null,
-        "F8": 60,
+        "F8": 30,
         "F10": null
       },
       "available": {
@@ -1496,11 +1496,11 @@
       "code": "2327",
       "name": "國巨",
       "price": 507,
-      "score": 14.5,
+      "score": 40.3,
       "tier": "D",
       "factors": {
         "F1": null,
-        "F2": 0,
+        "F2": 100,
         "F3": null,
         "F4": null,
         "F5": null,
@@ -1558,11 +1558,11 @@
       "code": "2308",
       "name": "台達電",
       "price": 1560,
-      "score": 23.4,
-      "tier": "D",
+      "score": 48.9,
+      "tier": "C",
       "factors": {
         "F1": null,
-        "F2": 0,
+        "F2": 100,
         "F3": null,
         "F4": null,
         "F5": null,
@@ -1620,11 +1620,11 @@
       "code": "2474",
       "name": "可成",
       "price": 196.5,
-      "score": 45.8,
-      "tier": "C",
+      "score": 70.3,
+      "tier": "B",
       "factors": {
         "F1": null,
-        "F2": 0,
+        "F2": 100,
         "F3": null,
         "F4": null,
         "F5": null,
@@ -1682,7 +1682,7 @@
       "code": "6669",
       "name": "緯穎",
       "price": 1840,
-      "score": 41.4,
+      "score": 40.3,
       "tier": "D",
       "factors": {
         "F1": null,
@@ -1744,7 +1744,7 @@
       "code": "5269",
       "name": "祥碩",
       "price": 1465,
-      "score": 41.4,
+      "score": 40.3,
       "tier": "D",
       "factors": {
         "F1": null,
@@ -1806,7 +1806,7 @@
       "code": "2610",
       "name": "華航",
       "price": 20.5,
-      "score": 72.8,
+      "score": 70.3,
       "tier": "B",
       "factors": {
         "F1": null,
@@ -1868,7 +1868,7 @@
       "code": "2634",
       "name": "漢翔",
       "price": 60.5,
-      "score": 72.8,
+      "score": 70.3,
       "tier": "B",
       "factors": {
         "F1": null,
@@ -1930,7 +1930,7 @@
       "code": "3231",
       "name": "緯創",
       "price": 190,
-      "score": 50.4,
+      "score": 48.9,
       "tier": "C",
       "factors": {
         "F1": null,
@@ -1992,7 +1992,7 @@
       "code": "2382",
       "name": "廣達",
       "price": 322,
-      "score": 72.8,
+      "score": 70.3,
       "tier": "B",
       "factors": {
         "F1": null,
@@ -2054,7 +2054,7 @@
       "code": "2379",
       "name": "瑞昱",
       "price": 772,
-      "score": 54.9,
+      "score": 53.2,
       "tier": "C",
       "factors": {
         "F1": null,
@@ -2116,7 +2116,7 @@
       "code": "3034",
       "name": "聯詠",
       "price": 583,
-      "score": 41.4,
+      "score": 40.3,
       "tier": "D",
       "factors": {
         "F1": null,
@@ -2178,8 +2178,8 @@
       "code": "2383",
       "name": "台光電",
       "price": 5070,
-      "score": 54.9,
-      "tier": "C",
+      "score": 40.3,
+      "tier": "D",
       "factors": {
         "F1": null,
         "F2": 100,
@@ -2187,7 +2187,7 @@
         "F4": null,
         "F5": null,
         "F6": null,
-        "F8": 60,
+        "F8": 30,
         "F10": null
       },
       "available": {
@@ -2240,7 +2240,7 @@
       "code": "2357",
       "name": "華碩",
       "price": 946,
-      "score": 50.4,
+      "score": 48.9,
       "tier": "C",
       "factors": {
         "F1": null,
@@ -2302,7 +2302,7 @@
       "code": "6505",
       "name": "台塑化",
       "price": 106.5,
-      "score": 72.8,
+      "score": 70.3,
       "tier": "B",
       "factors": {
         "F1": null,
