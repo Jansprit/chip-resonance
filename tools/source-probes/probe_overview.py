@@ -7,7 +7,10 @@ Stage A — 純 HTTP 快速驗證（不用瀏覽器）
 """
 import json
 import time
+import os
 import requests
+
+FINMIND_TOKEN = os.environ.get("FINMIND_TOKEN", "")
 
 UA = ("Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 "
       "(KHTML, like Gecko) Chrome/130.0.0.0 Safari/537.36")
@@ -96,9 +99,9 @@ print("\n" + "=" * 78)
 print("4. FinMind TaiwanStockShareholding（使用者 9/23 提過的免費管道）")
 print("=" * 78)
 for label, qs in [
-    ("shareholding+token", "dataset=TaiwanStockShareholding&stock_id=2330&start_date=2026-01-01&end_date=2026-10-24&token=***REMOVED***"),
+    ("shareholding+token", f"dataset=TaiwanStockShareholding&stock_id=2330&start_date=2026-01-01&end_date=2026-10-24&token={FINMIND_TOKEN}"),
     ("shareholding no-token", "dataset=TaiwanStockShareholding&stock_id=2330&start_date=2026-01-01&end_date=2026-10-24"),
-    ("price+token", "dataset=TaiwanStockPrice&stock_id=2330&start_date=2026-01-01&end_date=2026-10-24&token=***REMOVED***"),
+    ("price+token", f"dataset=TaiwanStockPrice&stock_id=2330&start_date=2026-01-01&end_date=2026-10-24&token={FINMIND_TOKEN}"),
 ]:
     try:
         r = requests.get(f"https://api.finmindtrade.com/api/v4/data?{qs}",
