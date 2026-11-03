@@ -25,9 +25,9 @@
   },
   {
     "code": "3711",
-    "events": 2,
+    "events": 3,
     "pledged_total": 2765000.0,
-    "released_total": 0.0,
+    "released_total": 65000.0,
     "cumulative_max": 2700000.0,
     "no_data": false
   },
@@ -121,8 +121,8 @@
   },
   {
     "code": "6446",
-    "events": 8,
-    "pledged_total": 2019299.0,
+    "events": 7,
+    "pledged_total": 1986380.0,
     "released_total": 22000.0,
     "cumulative_max": 3279299.0,
     "no_data": false

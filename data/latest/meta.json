@@ -1,22 +1,22 @@
 {
-  "last_update_taipei": "2026-10-29T20:03:06.917146+08:00",
-  "snapshot_date": "2026-10-29",
-  "previous_snapshot_date": "2026-10-27",
-  "data_freshness_hours": 48,
+  "last_update_taipei": "2026-11-03T21:16:02.252432+08:00",
+  "snapshot_date": "2026-11-03",
+  "previous_snapshot_date": "2026-10-29",
+  "data_freshness_hours": 120,
   "sources": {
     "twse": {
       "status": "ok",
-      "stocks_count": 1091,
-      "indices_count": 132,
+      "stocks_count": 1092,
+      "indices_count": 131,
       "min_interval_sec": 3,
       "daily_quota": 500,
-      "margin_count": 1237,
-      "valuation_count": 1085,
-      "industry_count": 1098
+      "margin_count": 1239,
+      "valuation_count": 1087,
+      "industry_count": 1099
     },
     "tpex": {
       "status": "ok",
-      "stocks_count": 892,
+      "stocks_count": 893,
       "min_interval_sec": 3,
       "daily_quota": 500
     },
@@ -40,8 +40,8 @@
       "status": "ok",
       "min_interval_sec": 1,
       "daily_quota": 100,
-      "rows_count": 61500,
-      "stocks_count": 4100,
+      "rows_count": 61665,
+      "stocks_count": 4111,
       "public_history": true,
       "published_stocks": 43,
       "trend_codes": 0

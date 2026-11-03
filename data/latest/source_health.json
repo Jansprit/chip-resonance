@@ -1,12 +1,12 @@
 {
-  "generated_at": "2026-10-29T20:04:04+08:00",
+  "generated_at": "2026-11-03T21:17:06+08:00",
   "total": 12,
-  "ok": 11,
+  "ok": 10,
   "blocked": 0,
-  "empty": 0,
+  "empty": 1,
   "error": 1,
   "public_total": 12,
-  "public_ok": 11,
+  "public_ok": 10,
   "degraded": true,
   "categories": [
     "public"
@@ -20,11 +20,11 @@
       "description": "TWSE 每日收盤行情（全市場）",
       "status": "ok",
       "http_status": 200,
-      "records": 1386,
-      "latency_ms": 1734,
+      "records": 1389,
+      "latency_ms": 1355,
       "error": null,
       "blocked_reason": "",
-      "checked_at": "2026-10-29T20:03:10+08:00"
+      "checked_at": "2026-11-03T21:16:04+08:00"
     },
     {
       "name": "twse_mi_index",
@@ -35,10 +35,10 @@
       "status": "ok",
       "http_status": 200,
       "records": 267,
-      "latency_ms": 1252,
+      "latency_ms": 1079,
       "error": null,
       "blocked_reason": "",
-      "checked_at": "2026-10-29T20:03:12+08:00"
+      "checked_at": "2026-11-03T21:16:05+08:00"
     },
     {
       "name": "twse_margin",
@@ -48,11 +48,11 @@
       "description": "TWSE 融資融券餘額 → F9 融資使用率 / 融券比率",
       "status": "ok",
       "http_status": 200,
-      "records": 1304,
-      "latency_ms": 1092,
+      "records": 1305,
+      "latency_ms": 1385,
       "error": null,
       "blocked_reason": "",
-      "checked_at": "2026-10-29T20:03:13+08:00"
+      "checked_at": "2026-11-03T21:16:06+08:00"
     },
     {
       "name": "twse_valuation",
@@ -62,11 +62,11 @@
       "description": "TWSE 基本資料（殖利率）→ F5 現金殖利率",
       "status": "ok",
       "http_status": 200,
-      "records": 1087,
-      "latency_ms": 1400,
+      "records": 1088,
+      "latency_ms": 836,
       "error": null,
       "blocked_reason": "",
-      "checked_at": "2026-10-29T20:03:14+08:00"
+      "checked_at": "2026-11-03T21:16:07+08:00"
     },
     {
       "name": "twse_company_basic",
@@ -76,39 +76,39 @@
       "description": "TWSE 公司基本資料（產業別 CID）→ F2 產業分類",
       "status": "ok",
       "http_status": 200,
-      "records": 1098,
-      "latency_ms": 1289,
+      "records": 1099,
+      "latency_ms": 1455,
       "error": null,
       "blocked_reason": "",
-      "checked_at": "2026-10-29T20:03:15+08:00"
+      "checked_at": "2026-11-03T21:16:08+08:00"
     },
     {
       "name": "twse_stock_day",
       "category": "public",
       "method": "GET",
-      "url": "https://www.twse.com.tw/rwd/zh/afterTrading/STOCK_DAY?date=2026093001&stockNo=2330&response=json",
+      "url": "https://www.twse.com.tw/rwd/zh/afterTrading/STOCK_DAY?date=2026103101&stockNo=2330&response=json",
       "description": "TWSE 月線 OHLCV（官方，價格歷史交叉校驗用）",
       "status": "ok",
       "http_status": 200,
-      "records": 18,
-      "latency_ms": 1141,
+      "records": 2,
+      "latency_ms": 1508,
       "error": null,
       "blocked_reason": "",
-      "checked_at": "2026-10-29T20:03:17+08:00"
+      "checked_at": "2026-11-03T21:16:10+08:00"
     },
     {
       "name": "twse_fund_t86",
       "category": "public",
       "method": "GET",
-      "url": "https://www.twse.com.tw/rwd/zh/fund/T86?date=20261028&response=json",
+      "url": "https://www.twse.com.tw/rwd/zh/fund/T86?date=20261102&response=json",
       "description": "TWSE 三大法人買賣超",
       "status": "ok",
       "http_status": 200,
       "records": 7,
-      "latency_ms": 1387,
+      "latency_ms": 1393,
       "error": null,
       "blocked_reason": "",
-      "checked_at": "2026-10-29T20:03:18+08:00"
+      "checked_at": "2026-11-03T21:16:11+08:00"
     },
     {
       "name": "tpex_daily_close",
@@ -119,10 +119,10 @@
       "status": "error",
       "http_status": null,
       "records": 0,
-      "latency_ms": 29941,
+      "latency_ms": 49162,
       "error": "ChunkedEncodingError: Response ended prematurely",
       "blocked_reason": "",
-      "checked_at": "2026-10-29T20:03:48+08:00"
+      "checked_at": "2026-11-03T21:17:00+08:00"
     },
     {
       "name": "tdcc_chip_grades",
@@ -132,11 +132,11 @@
       "description": "集保持股分級（1-5）→ F1 大戶持股比例 / F8",
       "status": "ok",
       "http_status": 200,
-      "records": 69700,
-      "latency_ms": 3265,
+      "records": 69887,
+      "latency_ms": 2893,
       "error": null,
       "blocked_reason": "",
-      "checked_at": "2026-10-29T20:03:51+08:00"
+      "checked_at": "2026-11-03T21:17:03+08:00"
     },
     {
       "name": "tdcc_holder_index",
@@ -147,10 +147,10 @@
       "status": "ok",
       "http_status": 200,
       "records": 19998,
-      "latency_ms": 11167,
+      "latency_ms": 1897,
       "error": null,
       "blocked_reason": "",
-      "checked_at": "2026-10-29T20:04:02+08:00"
+      "checked_at": "2026-11-03T21:17:05+08:00"
     },
     {
       "name": "yahoo_chart",
@@ -161,10 +161,10 @@
       "status": "ok",
       "http_status": 200,
       "records": 486,
-      "latency_ms": 86,
+      "latency_ms": 161,
       "error": null,
       "blocked_reason": "",
-      "checked_at": "2026-10-29T20:04:02+08:00"
+      "checked_at": "2026-11-03T21:17:05+08:00"
     },
     {
       "name": "mops_director",
@@ -172,13 +172,13 @@
       "method": "POST",
       "url": "https://mopsov.twse.com.tw/mops/web/ajax_stapap1",
       "description": "MOPS 董監持股 → F3 董監籌碼背離",
-      "status": "ok",
+      "status": "empty",
       "http_status": 200,
-      "records": 63,
-      "latency_ms": 1582,
+      "records": 0,
+      "latency_ms": 1074,
       "error": null,
       "blocked_reason": "",
-      "checked_at": "2026-10-29T20:04:04+08:00"
+      "checked_at": "2026-11-03T21:17:06+08:00"
     }
   ]
 }
