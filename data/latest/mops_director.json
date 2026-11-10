@@ -1,21 +1,21 @@
 [
   {
     "code": "2330",
-    "period": "11509",
+    "period": "11510",
     "rows": 49,
-    "holding_total": 1713829460.0,
+    "holding_total": 1713864085.0,
     "pledged_total": 8128000.0,
-    "pledge_pct": 0.4743,
-    "director_holding_change_3m": -0.2781
+    "pledge_pct": 0.4742,
+    "director_holding_change_3m": -0.2664
   },
   {
     "code": "2454",
-    "period": "11509",
+    "period": "11510",
     "rows": 41,
-    "holding_total": 93411817.0,
+    "holding_total": 93409817.0,
     "pledged_total": 0.0,
     "pledge_pct": 0.0,
-    "director_holding_change_3m": 0.8335
+    "director_holding_change_3m": 0.8313
   },
   {
     "code": "2303",
@@ -28,12 +28,12 @@
   },
   {
     "code": "3711",
-    "period": "11509",
+    "period": "11510",
     "rows": 36,
-    "holding_total": 3480082453.0,
-    "pledged_total": 6665000.0,
-    "pledge_pct": 0.1915,
-    "director_holding_change_3m": 0.3372
+    "holding_total": 3461412512.0,
+    "pledged_total": 6600000.0,
+    "pledge_pct": 0.1907,
+    "director_holding_change_3m": -0.4628
   },
   {
     "code": "5347",
@@ -46,12 +46,12 @@
   },
   {
     "code": "2884",
-    "period": "11509",
-    "rows": 783,
-    "holding_total": 226200321244.0,
+    "period": "11510",
+    "rows": 782,
+    "holding_total": 226198619401.0,
     "pledged_total": 498000.0,
     "pledge_pct": 0.0002,
-    "director_holding_change_3m": 26.0691
+    "director_holding_change_3m": 26.0693
   },
   {
     "code": "2882",
@@ -65,11 +65,11 @@
   {
     "code": "2891",
     "period": "11510",
-    "rows": 1351,
-    "holding_total": 117951013194.0,
+    "rows": 1533,
+    "holding_total": 155314684239.0,
     "pledged_total": 265881484.0,
-    "pledge_pct": 0.2254,
-    "director_holding_change_3m": -18.3946
+    "pledge_pct": 0.1712,
+    "director_holding_change_3m": 7.4557
   },
   {
     "code": "2886",
@@ -82,12 +82,12 @@
   },
   {
     "code": "3037",
-    "period": "11509",
-    "rows": 56,
-    "holding_total": 641107007.0,
+    "period": "11510",
+    "rows": 55,
+    "holding_total": 641101007.0,
     "pledged_total": 0.0,
     "pledge_pct": 0.0,
-    "director_holding_change_3m": -0.0267
+    "director_holding_change_3m": -0.0277
   },
   {
     "code": "8046",
@@ -109,12 +109,12 @@
   },
   {
     "code": "4743",
-    "period": "11509",
+    "period": "11510",
     "rows": 21,
     "holding_total": 102004737.0,
     "pledged_total": 0.0,
     "pledge_pct": 0.0,
-    "director_holding_change_3m": 0.2413
+    "director_holding_change_3m": 0.0
   },
   {
     "code": "4128",
@@ -145,8 +145,8 @@
   },
   {
     "code": "2603",
-    "period": "11509",
-    "rows": 79,
+    "period": "11510",
+    "rows": 80,
     "holding_total": 102977281.0,
     "pledged_total": 0.0,
     "pledge_pct": 0.0,

@@ -1,8 +1,8 @@
 {
-  "last_update_taipei": "2026-11-09T22:33:45.051471+08:00",
-  "snapshot_date": "2026-11-09",
-  "previous_snapshot_date": "2026-11-03",
-  "data_freshness_hours": 144,
+  "last_update_taipei": "2026-11-10T21:56:31.618265+08:00",
+  "snapshot_date": "2026-11-10",
+  "previous_snapshot_date": "2026-11-09",
+  "data_freshness_hours": 24,
   "sources": {
     "twse": {
       "status": "ok",
@@ -10,8 +10,8 @@
       "indices_count": 132,
       "min_interval_sec": 3,
       "daily_quota": 500,
-      "margin_count": 1240,
-      "valuation_count": 1086,
+      "margin_count": 1239,
+      "valuation_count": 1087,
       "industry_count": 1099
     },
     "tpex": {
@@ -25,7 +25,7 @@
       "reason": null,
       "min_interval_sec": 5,
       "daily_quota": 200,
-      "rows_count": 1620
+      "rows_count": 1640
     },
     "mops": {
       "status": "ok",
@@ -34,7 +34,7 @@
       "rows_count": 20,
       "stocks_count": 20,
       "pledge_events": 19,
-      "note": "董監事持股餘額明細：20/20 檔成功（資料年月 11509, 11510）；近 12 月質設異動 19 筆"
+      "note": "董監事持股餘額明細：20/20 檔成功（資料年月 11510）；近 12 月質設異動 19 筆"
     },
     "tdcc": {
       "status": "ok",
