@@ -1,6 +1,6 @@
 {
-  "as_of": "2026-11-10",
-  "published_at": "2026-11-13",
+  "as_of": "2026-11-11",
+  "published_at": "2026-11-16",
   "mode": "point_in_time",
   "scoring_mode": "strict",
   "coverage": {
@@ -13,75 +13,13 @@
     {
       "code": "2330",
       "name": "台積電",
-      "price": 2235,
-      "score": 34.9,
+      "price": 2285,
+      "score": 30.1,
       "tier": "D",
       "factors": {
         "F1": 20,
         "F2": 0,
         "F3": 30,
-        "F4": null,
-        "F5": null,
-        "F6": null,
-        "F8": 60,
-        "F10": 0
-      },
-      "available": {
-        "F1": true,
-        "F2": true,
-        "F3": true,
-        "F4": false,
-        "F5": false,
-        "F6": false,
-        "F8": true,
-        "F10": true
-      },
-      "provenance": {
-        "code": "illustrative",
-        "name": "illustrative",
-        "industry": "illustrative",
-        "price": "real",
-        "avg_volume": "real",
-        "director_pledge": "real",
-        "eps_q4": "illustrative",
-        "list_year": "illustrative",
-        "warning": "illustrative",
-        "margin_pct": "real",
-        "dt_ratio": "illustrative",
-        "pct_1000up_now": "real",
-        "pct_1000up_w1": "real",
-        "pct_1000up_w2": "real",
-        "pct_1000up_w3": "real",
-        "pct_400up": "real",
-        "pct_400up_52w_high": "illustrative",
-        "holder_cnt_change_8w": "illustrative",
-        "avg_lot_change_8w": "illustrative",
-        "drawdown_120d": "real",
-        "ret_60d": "real",
-        "industry_ret_60d_med": "real",
-        "director_holding_change_3m": "real",
-        "div_years": "illustrative",
-        "yield_now": "real",
-        "yield_5y_avg": "illustrative",
-        "crash_60d": "real",
-        "pct_1000up_trend": "real",
-        "is_60d_high": "real",
-        "date": "real",
-        "exchange": "real",
-        "short_ratio": "real",
-        "industry_cid": "real"
-      }
-    },
-    {
-      "code": "2454",
-      "name": "聯發科",
-      "price": 3725,
-      "score": 42.2,
-      "tier": "D",
-      "factors": {
-        "F1": 20,
-        "F2": 0,
-        "F3": 70,
         "F4": null,
         "F5": null,
         "F6": null,
@@ -135,9 +73,71 @@
       }
     },
     {
+      "code": "2454",
+      "name": "聯發科",
+      "price": 3830,
+      "score": 47,
+      "tier": "C",
+      "factors": {
+        "F1": 20,
+        "F2": 0,
+        "F3": 70,
+        "F4": null,
+        "F5": null,
+        "F6": null,
+        "F8": 60,
+        "F10": 0
+      },
+      "available": {
+        "F1": true,
+        "F2": true,
+        "F3": true,
+        "F4": false,
+        "F5": false,
+        "F6": false,
+        "F8": true,
+        "F10": true
+      },
+      "provenance": {
+        "code": "illustrative",
+        "name": "illustrative",
+        "industry": "illustrative",
+        "price": "real",
+        "avg_volume": "real",
+        "director_pledge": "real",
+        "eps_q4": "illustrative",
+        "list_year": "illustrative",
+        "warning": "illustrative",
+        "margin_pct": "real",
+        "dt_ratio": "illustrative",
+        "pct_1000up_now": "real",
+        "pct_1000up_w1": "real",
+        "pct_1000up_w2": "real",
+        "pct_1000up_w3": "real",
+        "pct_400up": "real",
+        "pct_400up_52w_high": "illustrative",
+        "holder_cnt_change_8w": "illustrative",
+        "avg_lot_change_8w": "illustrative",
+        "drawdown_120d": "real",
+        "ret_60d": "real",
+        "industry_ret_60d_med": "real",
+        "director_holding_change_3m": "real",
+        "div_years": "illustrative",
+        "yield_now": "real",
+        "yield_5y_avg": "illustrative",
+        "crash_60d": "real",
+        "pct_1000up_trend": "real",
+        "is_60d_high": "real",
+        "date": "real",
+        "exchange": "real",
+        "short_ratio": "real",
+        "industry_cid": "real"
+      }
+    },
+    {
       "code": "3711",
       "name": "日月光投控",
-      "price": 561,
+      "price": 605,
       "score": 38.3,
       "tier": "D",
       "factors": {
@@ -199,7 +199,7 @@
     {
       "code": "5347",
       "name": "世界先進",
-      "price": 132.5,
+      "price": 138.5,
       "score": 39.5,
       "tier": "D",
       "factors": {
@@ -259,7 +259,7 @@
     {
       "code": "2884",
       "name": "玉山金",
-      "price": 47.3,
+      "price": 46.95,
       "score": 67.8,
       "tier": "B",
       "factors": {
@@ -321,7 +321,7 @@
     {
       "code": "2882",
       "name": "國泰金",
-      "price": 111,
+      "price": 110,
       "score": 53.6,
       "tier": "C",
       "factors": {
@@ -383,7 +383,7 @@
     {
       "code": "2891",
       "name": "中信金",
-      "price": 75.9,
+      "price": 73.7,
       "score": 76.9,
       "tier": "A",
       "factors": {
@@ -445,7 +445,7 @@
     {
       "code": "2886",
       "name": "兆豐金",
-      "price": 52.8,
+      "price": 53,
       "score": 61.6,
       "tier": "B",
       "factors": {
@@ -507,69 +507,7 @@
     {
       "code": "3037",
       "name": "欣興",
-      "price": 757,
-      "score": 39.5,
-      "tier": "D",
-      "factors": {
-        "F1": 20,
-        "F2": 0,
-        "F3": 50,
-        "F4": null,
-        "F5": null,
-        "F6": null,
-        "F8": 30,
-        "F10": 50
-      },
-      "available": {
-        "F1": true,
-        "F2": true,
-        "F3": true,
-        "F4": false,
-        "F5": false,
-        "F6": false,
-        "F8": true,
-        "F10": true
-      },
-      "provenance": {
-        "code": "illustrative",
-        "name": "illustrative",
-        "industry": "illustrative",
-        "price": "real",
-        "avg_volume": "real",
-        "director_pledge": "real",
-        "eps_q4": "illustrative",
-        "list_year": "illustrative",
-        "warning": "illustrative",
-        "margin_pct": "real",
-        "dt_ratio": "illustrative",
-        "pct_1000up_now": "real",
-        "pct_1000up_w1": "real",
-        "pct_1000up_w2": "real",
-        "pct_1000up_w3": "real",
-        "pct_400up": "real",
-        "pct_400up_52w_high": "illustrative",
-        "holder_cnt_change_8w": "illustrative",
-        "avg_lot_change_8w": "illustrative",
-        "drawdown_120d": "real",
-        "ret_60d": "real",
-        "industry_ret_60d_med": "real",
-        "director_holding_change_3m": "real",
-        "div_years": "illustrative",
-        "yield_now": "real",
-        "yield_5y_avg": "illustrative",
-        "crash_60d": "real",
-        "pct_1000up_trend": "real",
-        "is_60d_high": "real",
-        "date": "real",
-        "exchange": "real",
-        "short_ratio": "real",
-        "industry_cid": "real"
-      }
-    },
-    {
-      "code": "8046",
-      "name": "南電",
-      "price": 933,
+      "price": 828,
       "score": 33.5,
       "tier": "D",
       "factors": {
@@ -629,9 +567,71 @@
       }
     },
     {
+      "code": "8046",
+      "name": "南電",
+      "price": 1005,
+      "score": 39.5,
+      "tier": "D",
+      "factors": {
+        "F1": 20,
+        "F2": 0,
+        "F3": 50,
+        "F4": null,
+        "F5": null,
+        "F6": null,
+        "F8": 30,
+        "F10": 50
+      },
+      "available": {
+        "F1": true,
+        "F2": true,
+        "F3": true,
+        "F4": false,
+        "F5": false,
+        "F6": false,
+        "F8": true,
+        "F10": true
+      },
+      "provenance": {
+        "code": "illustrative",
+        "name": "illustrative",
+        "industry": "illustrative",
+        "price": "real",
+        "avg_volume": "real",
+        "director_pledge": "real",
+        "eps_q4": "illustrative",
+        "list_year": "illustrative",
+        "warning": "illustrative",
+        "margin_pct": "real",
+        "dt_ratio": "illustrative",
+        "pct_1000up_now": "real",
+        "pct_1000up_w1": "real",
+        "pct_1000up_w2": "real",
+        "pct_1000up_w3": "real",
+        "pct_400up": "real",
+        "pct_400up_52w_high": "illustrative",
+        "holder_cnt_change_8w": "illustrative",
+        "avg_lot_change_8w": "illustrative",
+        "drawdown_120d": "real",
+        "ret_60d": "real",
+        "industry_ret_60d_med": "real",
+        "director_holding_change_3m": "real",
+        "div_years": "illustrative",
+        "yield_now": "real",
+        "yield_5y_avg": "illustrative",
+        "crash_60d": "real",
+        "pct_1000up_trend": "real",
+        "is_60d_high": "real",
+        "date": "real",
+        "exchange": "real",
+        "short_ratio": "real",
+        "industry_cid": "real"
+      }
+    },
+    {
       "code": "3189",
       "name": "景碩",
-      "price": 690,
+      "price": 745,
       "score": 33.5,
       "tier": "D",
       "factors": {
@@ -693,7 +693,7 @@
     {
       "code": "4133",
       "name": "亞諾法",
-      "price": 20.1,
+      "price": 19.85,
       "score": 41.3,
       "tier": "D",
       "factors": {
@@ -754,7 +754,7 @@
     {
       "code": "2603",
       "name": "長榮",
-      "price": 245.5,
+      "price": 255.5,
       "score": 63.9,
       "tier": "B",
       "factors": {
@@ -816,9 +816,9 @@
     {
       "code": "2609",
       "name": "陽明",
-      "price": 57.5,
-      "score": 77.9,
-      "tier": "A",
+      "price": 58.2,
+      "score": 69.9,
+      "tier": "B",
       "factors": {
         "F1": 100,
         "F2": 100,
@@ -826,7 +826,7 @@
         "F4": null,
         "F5": null,
         "F6": null,
-        "F8": 100,
+        "F8": 50,
         "F10": 0
       },
       "available": {
@@ -878,7 +878,7 @@
     {
       "code": "2615",
       "name": "萬海",
-      "price": 107,
+      "price": 111.5,
       "score": 56.5,
       "tier": "C",
       "factors": {
@@ -940,7 +940,7 @@
     {
       "code": "2618",
       "name": "長榮航",
-      "price": 43.9,
+      "price": 46.15,
       "score": 69.9,
       "tier": "B",
       "factors": {
@@ -1002,7 +1002,7 @@
     {
       "code": "2317",
       "name": "鴻海",
-      "price": 239,
+      "price": 241.5,
       "score": 53.9,
       "tier": "C",
       "factors": {
@@ -1064,7 +1064,7 @@
     {
       "code": "2227",
       "name": "裕隆",
-      "price": 40,
+      "price": 39.85,
       "score": 36.1,
       "tier": "D",
       "factors": {
@@ -1125,7 +1125,7 @@
     {
       "code": "1326",
       "name": "台化",
-      "price": 68.9,
+      "price": 71.5,
       "score": 47.2,
       "tier": "C",
       "factors": {
@@ -1187,7 +1187,7 @@
     {
       "code": "1303",
       "name": "南亞",
-      "price": 263,
+      "price": 289,
       "score": 51.7,
       "tier": "C",
       "factors": {
@@ -1249,7 +1249,7 @@
     {
       "code": "1216",
       "name": "統一",
-      "price": 76.7,
+      "price": 75.5,
       "score": 63.8,
       "tier": "B",
       "factors": {
@@ -1304,14 +1304,13 @@
         "is_60d_high": "real",
         "date": "real",
         "exchange": "real",
-        "short_ratio": "real",
         "industry_cid": "real"
       }
     },
     {
       "code": "2912",
       "name": "統一超",
-      "price": 211.5,
+      "price": 210.5,
       "score": 53.9,
       "tier": "C",
       "factors": {
@@ -1366,14 +1365,13 @@
         "is_60d_high": "real",
         "date": "real",
         "exchange": "real",
-        "short_ratio": "real",
         "industry_cid": "real"
       }
     },
     {
       "code": "1707",
       "name": "葡萄王",
-      "price": 80.5,
+      "price": 79.3,
       "score": 36.1,
       "tier": "D",
       "factors": {
@@ -1435,7 +1433,7 @@
     {
       "code": "2327",
       "name": "國巨",
-      "price": 411,
+      "price": 416.5,
       "score": 34.3,
       "tier": "D",
       "factors": {
@@ -1497,7 +1495,7 @@
     {
       "code": "2308",
       "name": "台達電",
-      "price": 1160,
+      "price": 1275,
       "score": 34.3,
       "tier": "D",
       "factors": {
@@ -1559,7 +1557,7 @@
     {
       "code": "2474",
       "name": "可成",
-      "price": 185,
+      "price": 187.5,
       "score": 43.3,
       "tier": "D",
       "factors": {
@@ -1621,7 +1619,7 @@
     {
       "code": "6669",
       "name": "緯穎",
-      "price": 1645,
+      "price": 1680,
       "score": 52.4,
       "tier": "C",
       "factors": {
@@ -1683,9 +1681,9 @@
     {
       "code": "5269",
       "name": "祥碩",
-      "price": 1250,
-      "score": 72.9,
-      "tier": "B",
+      "price": 1125,
+      "score": 83.5,
+      "tier": "A",
       "factors": {
         "F1": 100,
         "F2": 0,
@@ -1693,7 +1691,7 @@
         "F4": null,
         "F5": null,
         "F6": null,
-        "F8": 50,
+        "F8": 100,
         "F10": 100
       },
       "available": {
@@ -1745,7 +1743,7 @@
     {
       "code": "2610",
       "name": "華航",
-      "price": 21.75,
+      "price": 22.8,
       "score": 54.4,
       "tier": "C",
       "factors": {
@@ -1807,7 +1805,7 @@
     {
       "code": "2634",
       "name": "漢翔",
-      "price": 54,
+      "price": 54.6,
       "score": 40.8,
       "tier": "D",
       "factors": {
@@ -1869,7 +1867,7 @@
     {
       "code": "3231",
       "name": "緯創",
-      "price": 168.5,
+      "price": 171,
       "score": 53.9,
       "tier": "C",
       "factors": {
@@ -1931,7 +1929,7 @@
     {
       "code": "2382",
       "name": "廣達",
-      "price": 296.5,
+      "price": 298.5,
       "score": 50,
       "tier": "C",
       "factors": {
@@ -1993,7 +1991,7 @@
     {
       "code": "2379",
       "name": "瑞昱",
-      "price": 743,
+      "price": 745,
       "score": 64.6,
       "tier": "B",
       "factors": {
@@ -2055,7 +2053,7 @@
     {
       "code": "3034",
       "name": "聯詠",
-      "price": 486.5,
+      "price": 477.5,
       "score": 53.9,
       "tier": "C",
       "factors": {
@@ -2117,7 +2115,7 @@
     {
       "code": "2383",
       "name": "台光電",
-      "price": 4070,
+      "price": 4365,
       "score": 34.3,
       "tier": "D",
       "factors": {
@@ -2179,7 +2177,7 @@
     {
       "code": "2357",
       "name": "華碩",
-      "price": 860,
+      "price": 884,
       "score": 36.1,
       "tier": "D",
       "factors": {
@@ -2241,7 +2239,7 @@
     {
       "code": "6505",
       "name": "台塑化",
-      "price": 88.4,
+      "price": 89.6,
       "score": 40.8,
       "tier": "D",
       "factors": {

@@ -1,7 +1,7 @@
 {
-  "last_update_taipei": "2026-11-10T21:56:31.618265+08:00",
-  "snapshot_date": "2026-11-10",
-  "previous_snapshot_date": "2026-11-09",
+  "last_update_taipei": "2026-11-11T21:11:48.183077+08:00",
+  "snapshot_date": "2026-11-11",
+  "previous_snapshot_date": "2026-11-10",
   "data_freshness_hours": 24,
   "sources": {
     "twse": {
@@ -11,7 +11,7 @@
       "min_interval_sec": 3,
       "daily_quota": 500,
       "margin_count": 1239,
-      "valuation_count": 1087,
+      "valuation_count": 1085,
       "industry_count": 1099
     },
     "tpex": {
