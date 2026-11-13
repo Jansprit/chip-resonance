@@ -1,5 +1,5 @@
 {
-  "generated_at": "2026-11-12T22:15:32+08:00",
+  "generated_at": "2026-11-13T21:32:44+08:00",
   "total": 12,
   "ok": 12,
   "blocked": 0,
@@ -20,11 +20,11 @@
       "description": "TWSE 每日收盤行情（全市場）",
       "status": "ok",
       "http_status": 200,
-      "records": 1390,
-      "latency_ms": 1457,
+      "records": 1389,
+      "latency_ms": 2237,
       "error": null,
       "blocked_reason": "",
-      "checked_at": "2026-11-12T22:14:46+08:00"
+      "checked_at": "2026-11-13T21:32:17+08:00"
     },
     {
       "name": "twse_mi_index",
@@ -35,10 +35,10 @@
       "status": "ok",
       "http_status": 200,
       "records": 267,
-      "latency_ms": 479,
+      "latency_ms": 573,
       "error": null,
       "blocked_reason": "",
-      "checked_at": "2026-11-12T22:14:47+08:00"
+      "checked_at": "2026-11-13T21:32:18+08:00"
     },
     {
       "name": "twse_margin",
@@ -49,10 +49,10 @@
       "status": "ok",
       "http_status": 200,
       "records": 1309,
-      "latency_ms": 881,
+      "latency_ms": 885,
       "error": null,
       "blocked_reason": "",
-      "checked_at": "2026-11-12T22:14:48+08:00"
+      "checked_at": "2026-11-13T21:32:19+08:00"
     },
     {
       "name": "twse_valuation",
@@ -62,11 +62,11 @@
       "description": "TWSE 基本資料（殖利率）→ F5 現金殖利率",
       "status": "ok",
       "http_status": 200,
-      "records": 1087,
-      "latency_ms": 779,
+      "records": 1086,
+      "latency_ms": 750,
       "error": null,
       "blocked_reason": "",
-      "checked_at": "2026-11-12T22:14:48+08:00"
+      "checked_at": "2026-11-13T21:32:20+08:00"
     },
     {
       "name": "twse_company_basic",
@@ -77,10 +77,10 @@
       "status": "ok",
       "http_status": 200,
       "records": 1099,
-      "latency_ms": 1029,
+      "latency_ms": 1238,
       "error": null,
       "blocked_reason": "",
-      "checked_at": "2026-11-12T22:14:50+08:00"
+      "checked_at": "2026-11-13T21:32:21+08:00"
     },
     {
       "name": "twse_stock_day",
@@ -90,25 +90,25 @@
       "description": "TWSE 月線 OHLCV（官方，價格歷史交叉校驗用）",
       "status": "ok",
       "http_status": 200,
-      "records": 9,
-      "latency_ms": 1318,
+      "records": 10,
+      "latency_ms": 1322,
       "error": null,
       "blocked_reason": "",
-      "checked_at": "2026-11-12T22:14:51+08:00"
+      "checked_at": "2026-11-13T21:32:22+08:00"
     },
     {
       "name": "twse_fund_t86",
       "category": "public",
       "method": "GET",
-      "url": "https://www.twse.com.tw/rwd/zh/fund/T86?date=20261111&response=json",
+      "url": "https://www.twse.com.tw/rwd/zh/fund/T86?date=20261112&response=json",
       "description": "TWSE 三大法人買賣超",
       "status": "ok",
       "http_status": 200,
       "records": 7,
-      "latency_ms": 1055,
+      "latency_ms": 2335,
       "error": null,
       "blocked_reason": "",
-      "checked_at": "2026-11-12T22:14:52+08:00"
+      "checked_at": "2026-11-13T21:32:24+08:00"
     },
     {
       "name": "tpex_daily_close",
@@ -118,11 +118,11 @@
       "description": "TPEx 上櫃每日收盤行情",
       "status": "ok",
       "http_status": 200,
-      "records": 13789,
-      "latency_ms": 11659,
+      "records": 13807,
+      "latency_ms": 9919,
       "error": null,
       "blocked_reason": "",
-      "checked_at": "2026-11-12T22:15:04+08:00"
+      "checked_at": "2026-11-13T21:32:34+08:00"
     },
     {
       "name": "tdcc_chip_grades",
@@ -133,10 +133,10 @@
       "status": "ok",
       "http_status": 200,
       "records": 69955,
-      "latency_ms": 2409,
+      "latency_ms": 4897,
       "error": null,
       "blocked_reason": "",
-      "checked_at": "2026-11-12T22:15:06+08:00"
+      "checked_at": "2026-11-13T21:32:39+08:00"
     },
     {
       "name": "tdcc_holder_index",
@@ -147,10 +147,10 @@
       "status": "ok",
       "http_status": 200,
       "records": 19998,
-      "latency_ms": 2148,
+      "latency_ms": 2385,
       "error": null,
       "blocked_reason": "",
-      "checked_at": "2026-11-12T22:15:08+08:00"
+      "checked_at": "2026-11-13T21:32:42+08:00"
     },
     {
       "name": "yahoo_chart",
@@ -161,10 +161,10 @@
       "status": "ok",
       "http_status": 200,
       "records": 487,
-      "latency_ms": 203,
+      "latency_ms": 187,
       "error": null,
       "blocked_reason": "",
-      "checked_at": "2026-11-12T22:15:08+08:00"
+      "checked_at": "2026-11-13T21:32:42+08:00"
     },
     {
       "name": "mops_director",
@@ -175,10 +175,10 @@
       "status": "ok",
       "http_status": 200,
       "records": 63,
-      "latency_ms": 23302,
+      "latency_ms": 2342,
       "error": null,
       "blocked_reason": "",
-      "checked_at": "2026-11-12T22:15:32+08:00"
+      "checked_at": "2026-11-13T21:32:44+08:00"
     }
   ]
 }

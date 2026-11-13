@@ -41,11 +41,11 @@
   },
   {
     "code": "2884",
-    "events": 0,
-    "pledged_total": 0.0,
+    "events": 1,
+    "pledged_total": 772667.0,
     "released_total": 0.0,
-    "cumulative_max": 0.0,
-    "no_data": true
+    "cumulative_max": 772667.0,
+    "no_data": false
   },
   {
     "code": "2882",

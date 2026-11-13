@@ -1,11 +1,11 @@
 {
-  "generated_at": "2026-11-12T22:14:45+08:00",
+  "generated_at": "2026-11-13T21:32:15+08:00",
   "mode": "point_in_time",
   "sufficient_data": false,
   "sufficient_for_strategy": false,
   "min_weeks_required": 8,
   "min_weeks_for_strategy": 12,
-  "snapshot_count": 8,
+  "snapshot_count": 9,
   "snapshot_dates": [
     "2026-10-22",
     "2026-10-27",
@@ -14,7 +14,8 @@
     "2026-11-09",
     "2026-11-10",
     "2026-11-11",
-    "2026-11-12"
+    "2026-11-12",
+    "2026-11-13"
   ],
   "rebalance_dates": [
     "2026-10-27",
@@ -24,21 +25,22 @@
     "2026-11-12",
     "2026-11-13",
     "2026-11-16",
-    "2026-11-17"
+    "2026-11-17",
+    "2026-11-18"
   ],
   "holding_weeks": 4,
   "quantiles": 5,
   "price_series_count": 43,
   "forward_return_samples": 0,
   "factor_row_coverage": {
-    "F1": 148,
-    "F2": 300,
-    "F3": 132,
+    "F1": 185,
+    "F2": 337,
+    "F3": 148,
     "F4": 0,
     "F5": 0,
     "F6": 0,
-    "F8": 300,
-    "F10": 148
+    "F8": 337,
+    "F10": 185
   },
   "walk_forward_segments": 0,
   "walk_forward": [],
@@ -324,5 +326,5 @@
       }
     }
   },
-  "note": "⚠️ 因子庫已累積 8 週，尚不足 8 週；**目前為流程驗證，不可解讀為策略績效**。"
+  "note": "⚠️ 因子庫已累積 9 週，尚不足 8 週；**目前為流程驗證，不可解讀為策略績效**。"
 }
