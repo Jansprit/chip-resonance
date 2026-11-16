@@ -1,5 +1,5 @@
 {
-  "generated_at": "2026-11-13T21:32:44+08:00",
+  "generated_at": "2026-11-16T22:10:02+08:00",
   "total": 12,
   "ok": 12,
   "blocked": 0,
@@ -21,10 +21,10 @@
       "status": "ok",
       "http_status": 200,
       "records": 1389,
-      "latency_ms": 2237,
+      "latency_ms": 619,
       "error": null,
       "blocked_reason": "",
-      "checked_at": "2026-11-13T21:32:17+08:00"
+      "checked_at": "2026-11-16T22:08:50+08:00"
     },
     {
       "name": "twse_mi_index",
@@ -35,10 +35,10 @@
       "status": "ok",
       "http_status": 200,
       "records": 267,
-      "latency_ms": 573,
+      "latency_ms": 97,
       "error": null,
       "blocked_reason": "",
-      "checked_at": "2026-11-13T21:32:18+08:00"
+      "checked_at": "2026-11-16T22:08:50+08:00"
     },
     {
       "name": "twse_margin",
@@ -49,10 +49,10 @@
       "status": "ok",
       "http_status": 200,
       "records": 1309,
-      "latency_ms": 885,
+      "latency_ms": 108,
       "error": null,
       "blocked_reason": "",
-      "checked_at": "2026-11-13T21:32:19+08:00"
+      "checked_at": "2026-11-16T22:08:50+08:00"
     },
     {
       "name": "twse_valuation",
@@ -63,10 +63,10 @@
       "status": "ok",
       "http_status": 200,
       "records": 1086,
-      "latency_ms": 750,
+      "latency_ms": 89,
       "error": null,
       "blocked_reason": "",
-      "checked_at": "2026-11-13T21:32:20+08:00"
+      "checked_at": "2026-11-16T22:08:50+08:00"
     },
     {
       "name": "twse_company_basic",
@@ -77,10 +77,10 @@
       "status": "ok",
       "http_status": 200,
       "records": 1099,
-      "latency_ms": 1238,
+      "latency_ms": 165,
       "error": null,
       "blocked_reason": "",
-      "checked_at": "2026-11-13T21:32:21+08:00"
+      "checked_at": "2026-11-16T22:08:50+08:00"
     },
     {
       "name": "twse_stock_day",
@@ -90,25 +90,25 @@
       "description": "TWSE 月線 OHLCV（官方，價格歷史交叉校驗用）",
       "status": "ok",
       "http_status": 200,
-      "records": 10,
-      "latency_ms": 1322,
+      "records": 11,
+      "latency_ms": 1236,
       "error": null,
       "blocked_reason": "",
-      "checked_at": "2026-11-13T21:32:22+08:00"
+      "checked_at": "2026-11-16T22:08:52+08:00"
     },
     {
       "name": "twse_fund_t86",
       "category": "public",
       "method": "GET",
-      "url": "https://www.twse.com.tw/rwd/zh/fund/T86?date=20261112&response=json",
+      "url": "https://www.twse.com.tw/rwd/zh/fund/T86?date=20261113&response=json",
       "description": "TWSE 三大法人買賣超",
       "status": "ok",
       "http_status": 200,
       "records": 7,
-      "latency_ms": 2335,
+      "latency_ms": 383,
       "error": null,
       "blocked_reason": "",
-      "checked_at": "2026-11-13T21:32:24+08:00"
+      "checked_at": "2026-11-16T22:08:52+08:00"
     },
     {
       "name": "tpex_daily_close",
@@ -118,11 +118,11 @@
       "description": "TPEx 上櫃每日收盤行情",
       "status": "ok",
       "http_status": 200,
-      "records": 13807,
-      "latency_ms": 9919,
+      "records": 13843,
+      "latency_ms": 62493,
       "error": null,
       "blocked_reason": "",
-      "checked_at": "2026-11-13T21:32:34+08:00"
+      "checked_at": "2026-11-16T22:09:54+08:00"
     },
     {
       "name": "tdcc_chip_grades",
@@ -132,11 +132,11 @@
       "description": "集保持股分級（1-5）→ F1 大戶持股比例 / F8",
       "status": "ok",
       "http_status": 200,
-      "records": 69955,
-      "latency_ms": 4897,
+      "records": 70125,
+      "latency_ms": 3352,
       "error": null,
       "blocked_reason": "",
-      "checked_at": "2026-11-13T21:32:39+08:00"
+      "checked_at": "2026-11-16T22:09:58+08:00"
     },
     {
       "name": "tdcc_holder_index",
@@ -147,10 +147,10 @@
       "status": "ok",
       "http_status": 200,
       "records": 19998,
-      "latency_ms": 2385,
+      "latency_ms": 2695,
       "error": null,
       "blocked_reason": "",
-      "checked_at": "2026-11-13T21:32:42+08:00"
+      "checked_at": "2026-11-16T22:10:00+08:00"
     },
     {
       "name": "yahoo_chart",
@@ -160,11 +160,11 @@
       "description": "Yahoo Finance 價格歷史（CI 可用的價格來源）",
       "status": "ok",
       "http_status": 200,
-      "records": 487,
-      "latency_ms": 187,
+      "records": 485,
+      "latency_ms": 87,
       "error": null,
       "blocked_reason": "",
-      "checked_at": "2026-11-13T21:32:42+08:00"
+      "checked_at": "2026-11-16T22:10:01+08:00"
     },
     {
       "name": "mops_director",
@@ -175,10 +175,10 @@
       "status": "ok",
       "http_status": 200,
       "records": 63,
-      "latency_ms": 2342,
+      "latency_ms": 1673,
       "error": null,
       "blocked_reason": "",
-      "checked_at": "2026-11-13T21:32:44+08:00"
+      "checked_at": "2026-11-16T22:10:02+08:00"
     }
   ]
 }
