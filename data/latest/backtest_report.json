@@ -1,11 +1,11 @@
 {
-  "generated_at": "2026-11-25T00:19:46+08:00",
+  "generated_at": "2026-11-26T00:10:34+08:00",
   "mode": "point_in_time",
-  "sufficient_data": false,
-  "sufficient_for_strategy": false,
+  "sufficient_data": true,
+  "sufficient_for_strategy": true,
   "min_weeks_required": 8,
   "min_weeks_for_strategy": 12,
-  "snapshot_count": 16,
+  "snapshot_count": 17,
   "snapshot_dates": [
     "2026-10-22",
     "2026-10-27",
@@ -22,7 +22,8 @@
     "2026-11-19",
     "2026-11-20",
     "2026-11-23",
-    "2026-11-24"
+    "2026-11-24",
+    "2026-11-25"
   ],
   "rebalance_dates": [
     "2026-10-27",
@@ -40,21 +41,22 @@
     "2026-11-24",
     "2026-11-25",
     "2026-11-26",
-    "2026-11-27"
+    "2026-11-27",
+    "2026-11-30"
   ],
   "holding_weeks": 4,
   "quantiles": 5,
   "price_series_count": 43,
-  "forward_return_samples": 0,
+  "forward_return_samples": 38,
   "factor_row_coverage": {
-    "F1": 444,
-    "F2": 596,
-    "F3": 260,
+    "F1": 481,
+    "F2": 633,
+    "F3": 276,
     "F4": 0,
     "F5": 0,
     "F6": 0,
-    "F8": 596,
-    "F10": 444
+    "F8": 633,
+    "F10": 481
   },
   "walk_forward_segments": 0,
   "walk_forward": [],
@@ -96,72 +98,178 @@
     },
     "F2": {
       "factor": "F2",
-      "samples": 0,
-      "ic": null,
-      "rank_ic": null,
-      "quantiles": [],
-      "quantile_spread": 0.0,
+      "samples": 38,
+      "ic": -0.1342549872784457,
+      "rank_ic": -0.16894297423014826,
+      "quantiles": [
+        {
+          "quantile": 1,
+          "count": 7,
+          "mean_return": -0.08673300213134637
+        },
+        {
+          "quantile": 2,
+          "count": 8,
+          "mean_return": -0.15476568638243807
+        },
+        {
+          "quantile": 3,
+          "count": 7,
+          "mean_return": -0.2081087750772852
+        },
+        {
+          "quantile": 4,
+          "count": 8,
+          "mean_return": -0.10078771235032753
+        },
+        {
+          "quantile": 5,
+          "count": 8,
+          "mean_return": -0.19531319672092065
+        }
+      ],
+      "quantile_spread": -0.10858019458957428,
       "monotonic": false,
       "ic_ir_threshold": 0.02,
-      "verdict": "insufficient_data",
-      "ic_series": [],
-      "ic_periods": 0,
+      "verdict": "keep",
+      "ic_series": [
+        -0.1342549872784457
+      ],
+      "ic_periods": 1,
       "icir": null,
       "ic_t_stat": null,
       "long_short": {
-        "periods": 0,
+        "periods": 1,
         "metrics": {
-          "periods": 0,
-          "total_return": null,
-          "annualized_return": null,
+          "periods": 1,
+          "total_return": -0.09193563943372773,
+          "annualized_return": -99.33615787214636,
           "sharpe": null,
           "max_drawdown": 0.0,
           "hit_rate": 0.0
         },
         "gross_metrics": {
-          "periods": 0,
-          "total_return": null,
-          "annualized_return": null,
+          "periods": 1,
+          "total_return": -0.07623563943372769,
+          "annualized_return": -98.38123968378764,
           "sharpe": null,
           "max_drawdown": 0.0,
           "hit_rate": 0.0
         },
-        "last": null
+        "last": {
+          "factor": "F2",
+          "n_pairs": 38,
+          "long_codes": [
+            "6505",
+            "2357",
+            "2383",
+            "3034",
+            "2379",
+            "2382",
+            "3231",
+            "2634"
+          ],
+          "short_codes": [
+            "4133",
+            "6446",
+            "2317",
+            "2227",
+            "1216",
+            "2912",
+            "1707",
+            "2327"
+          ],
+          "long_return": -0.19531319672092065,
+          "short_return": -0.11907755728719295,
+          "gross_return": -0.0762356394337277,
+          "cost": 0.0157,
+          "net_return": -0.0919356394337277,
+          "as_of": "2026-10-22",
+          "rebalance_date": "2026-10-27"
+        }
       }
     },
     "F3": {
       "factor": "F3",
-      "samples": 0,
-      "ic": null,
-      "rank_ic": null,
-      "quantiles": [],
-      "quantile_spread": 0.0,
+      "samples": 17,
+      "ic": 0.40210873539975284,
+      "rank_ic": 0.4307227367614257,
+      "quantiles": [
+        {
+          "quantile": 1,
+          "count": 3,
+          "mean_return": -0.3537795303706848
+        },
+        {
+          "quantile": 2,
+          "count": 3,
+          "mean_return": -0.09669374990305202
+        },
+        {
+          "quantile": 3,
+          "count": 4,
+          "mean_return": -0.10123516511867905
+        },
+        {
+          "quantile": 4,
+          "count": 3,
+          "mean_return": -0.13399123000966753
+        },
+        {
+          "quantile": 5,
+          "count": 4,
+          "mean_return": -0.061430334197360825
+        }
+      ],
+      "quantile_spread": 0.292349196173324,
       "monotonic": false,
       "ic_ir_threshold": 0.02,
-      "verdict": "insufficient_data",
-      "ic_series": [],
-      "ic_periods": 0,
+      "verdict": "keep",
+      "ic_series": [
+        0.40210873539975284
+      ],
+      "ic_periods": 1,
       "icir": null,
       "ic_t_stat": null,
       "long_short": {
-        "periods": 0,
+        "periods": 1,
         "metrics": {
-          "periods": 0,
-          "total_return": null,
-          "annualized_return": null,
+          "periods": 1,
+          "total_return": 0.24859666053177953,
+          "annualized_return": 10326391.460129268,
           "sharpe": null,
           "max_drawdown": 0.0,
-          "hit_rate": 0.0
+          "hit_rate": 1.0
         },
         "gross_metrics": {
-          "periods": 0,
-          "total_return": null,
-          "annualized_return": null,
+          "periods": 1,
+          "total_return": 0.26429666053177936,
+          "annualized_return": 19776312.955610797,
           "sharpe": null,
           "max_drawdown": 0.0,
-          "hit_rate": 0.0
+          "hit_rate": 1.0
         },
-        "last": null
+        "last": {
+          "factor": "F3",
+          "n_pairs": 17,
+          "long_codes": [
+            "6446",
+            "2891",
+            "2884"
+          ],
+          "short_codes": [
+            "3711",
+            "3037",
+            "3189"
+          ],
+          "long_return": -0.08948286983890534,
+          "short_return": -0.3537795303706848,
+          "gross_return": 0.26429666053177947,
+          "cost": 0.0157,
+          "net_return": 0.24859666053177948,
+          "as_of": "2026-10-22",
+          "rebalance_date": "2026-10-27"
+        }
       }
     },
     "F4": {
@@ -271,37 +379,95 @@
     },
     "F8": {
       "factor": "F8",
-      "samples": 0,
-      "ic": null,
-      "rank_ic": null,
-      "quantiles": [],
-      "quantile_spread": 0.0,
+      "samples": 38,
+      "ic": -0.13681977856625063,
+      "rank_ic": -0.08413448562745231,
+      "quantiles": [
+        {
+          "quantile": 1,
+          "count": 7,
+          "mean_return": -0.18715825579989748
+        },
+        {
+          "quantile": 2,
+          "count": 8,
+          "mean_return": -0.10737796762363797
+        },
+        {
+          "quantile": 3,
+          "count": 7,
+          "mean_return": -0.07706762479295597
+        },
+        {
+          "quantile": 4,
+          "count": 8,
+          "mean_return": -0.25642256574266886
+        },
+        {
+          "quantile": 5,
+          "count": 8,
+          "mean_return": -0.11385497162618531
+        }
+      ],
+      "quantile_spread": 0.07330328417371217,
       "monotonic": false,
       "ic_ir_threshold": 0.02,
-      "verdict": "insufficient_data",
-      "ic_series": [],
-      "ic_periods": 0,
+      "verdict": "keep",
+      "ic_series": [
+        -0.13681977856625063
+      ],
+      "ic_periods": 1,
       "icir": null,
       "ic_t_stat": null,
       "long_short": {
-        "periods": 0,
+        "periods": 1,
         "metrics": {
-          "periods": 0,
-          "total_return": null,
-          "annualized_return": null,
+          "periods": 1,
+          "total_return": 0.06555525142473106,
+          "annualized_return": 2616.130524709961,
           "sharpe": null,
           "max_drawdown": 0.0,
-          "hit_rate": 0.0
+          "hit_rate": 1.0
         },
         "gross_metrics": {
-          "periods": 0,
-          "total_return": null,
-          "annualized_return": null,
+          "periods": 1,
+          "total_return": 0.08125525142473111,
+          "annualized_return": 5711.228429630139,
           "sharpe": null,
           "max_drawdown": 0.0,
-          "hit_rate": 0.0
+          "hit_rate": 1.0
         },
-        "last": null
+        "last": {
+          "factor": "F8",
+          "n_pairs": 38,
+          "long_codes": [
+            "6505",
+            "2382",
+            "2634",
+            "2610",
+            "2474",
+            "1303",
+            "1326",
+            "2227"
+          ],
+          "short_codes": [
+            "4133",
+            "6446",
+            "2327",
+            "6669",
+            "5269",
+            "3034",
+            "2330",
+            "5347"
+          ],
+          "long_return": -0.11385497162618531,
+          "short_return": -0.1951102230509165,
+          "gross_return": 0.08125525142473118,
+          "cost": 0.0157,
+          "net_return": 0.06555525142473118,
+          "as_of": "2026-10-22",
+          "rebalance_date": "2026-10-27"
+        }
       }
     },
     "F10": {
@@ -340,5 +506,5 @@
       }
     }
   },
-  "note": "⚠️ 因子庫已累積 16 週，尚不足 8 週；**目前為流程驗證，不可解讀為策略績效**。"
+  "note": "已累積 17 週 point-in-time 快照，本報告的統計結果可用於因子去留判斷。"
 }
