@@ -1,5 +1,5 @@
 {
-  "generated_at": "2026-11-26T00:11:03+08:00",
+  "generated_at": "2026-11-26T23:50:51+08:00",
   "total": 12,
   "ok": 12,
   "blocked": 0,
@@ -21,10 +21,10 @@
       "status": "ok",
       "http_status": 200,
       "records": 1394,
-      "latency_ms": 1528,
+      "latency_ms": 1743,
       "error": null,
       "blocked_reason": "",
-      "checked_at": "2026-11-26T00:10:35+08:00"
+      "checked_at": "2026-11-26T23:50:26+08:00"
     },
     {
       "name": "twse_mi_index",
@@ -35,10 +35,10 @@
       "status": "ok",
       "http_status": 200,
       "records": 267,
-      "latency_ms": 524,
+      "latency_ms": 1123,
       "error": null,
       "blocked_reason": "",
-      "checked_at": "2026-11-26T00:10:36+08:00"
+      "checked_at": "2026-11-26T23:50:27+08:00"
     },
     {
       "name": "twse_margin",
@@ -48,11 +48,11 @@
       "description": "TWSE 融資融券餘額 → F9 融資使用率 / 融券比率",
       "status": "ok",
       "http_status": 200,
-      "records": 1311,
-      "latency_ms": 942,
+      "records": 1312,
+      "latency_ms": 1382,
       "error": null,
       "blocked_reason": "",
-      "checked_at": "2026-11-26T00:10:37+08:00"
+      "checked_at": "2026-11-26T23:50:29+08:00"
     },
     {
       "name": "twse_valuation",
@@ -63,10 +63,10 @@
       "status": "ok",
       "http_status": 200,
       "records": 1088,
-      "latency_ms": 1259,
+      "latency_ms": 1550,
       "error": null,
       "blocked_reason": "",
-      "checked_at": "2026-11-26T00:10:38+08:00"
+      "checked_at": "2026-11-26T23:50:30+08:00"
     },
     {
       "name": "twse_company_basic",
@@ -77,10 +77,10 @@
       "status": "ok",
       "http_status": 200,
       "records": 1098,
-      "latency_ms": 1118,
+      "latency_ms": 1458,
       "error": null,
       "blocked_reason": "",
-      "checked_at": "2026-11-26T00:10:39+08:00"
+      "checked_at": "2026-11-26T23:50:32+08:00"
     },
     {
       "name": "twse_stock_day",
@@ -90,11 +90,11 @@
       "description": "TWSE 月線 OHLCV（官方，價格歷史交叉校驗用）",
       "status": "ok",
       "http_status": 200,
-      "records": 18,
-      "latency_ms": 1545,
+      "records": 19,
+      "latency_ms": 1227,
       "error": null,
       "blocked_reason": "",
-      "checked_at": "2026-11-26T00:10:41+08:00"
+      "checked_at": "2026-11-26T23:50:33+08:00"
     },
     {
       "name": "twse_fund_t86",
@@ -105,10 +105,10 @@
       "status": "ok",
       "http_status": 200,
       "records": 7,
-      "latency_ms": 1423,
+      "latency_ms": 1832,
       "error": null,
       "blocked_reason": "",
-      "checked_at": "2026-11-26T00:10:42+08:00"
+      "checked_at": "2026-11-26T23:50:35+08:00"
     },
     {
       "name": "tpex_daily_close",
@@ -118,11 +118,11 @@
       "description": "TPEx 上櫃每日收盤行情",
       "status": "ok",
       "http_status": 200,
-      "records": 13830,
-      "latency_ms": 9067,
+      "records": 13832,
+      "latency_ms": 9448,
       "error": null,
       "blocked_reason": "",
-      "checked_at": "2026-11-26T00:10:51+08:00"
+      "checked_at": "2026-11-26T23:50:44+08:00"
     },
     {
       "name": "tdcc_chip_grades",
@@ -133,10 +133,10 @@
       "status": "ok",
       "http_status": 200,
       "records": 70210,
-      "latency_ms": 7051,
+      "latency_ms": 2316,
       "error": null,
       "blocked_reason": "",
-      "checked_at": "2026-11-26T00:10:58+08:00"
+      "checked_at": "2026-11-26T23:50:47+08:00"
     },
     {
       "name": "tdcc_holder_index",
@@ -147,10 +147,10 @@
       "status": "ok",
       "http_status": 200,
       "records": 19998,
-      "latency_ms": 2915,
+      "latency_ms": 2621,
       "error": null,
       "blocked_reason": "",
-      "checked_at": "2026-11-26T00:11:01+08:00"
+      "checked_at": "2026-11-26T23:50:49+08:00"
     },
     {
       "name": "yahoo_chart",
@@ -161,10 +161,10 @@
       "status": "ok",
       "http_status": 200,
       "records": 487,
-      "latency_ms": 182,
+      "latency_ms": 175,
       "error": null,
       "blocked_reason": "",
-      "checked_at": "2026-11-26T00:11:02+08:00"
+      "checked_at": "2026-11-26T23:50:49+08:00"
     },
     {
       "name": "mops_director",
@@ -175,10 +175,10 @@
       "status": "ok",
       "http_status": 200,
       "records": 63,
-      "latency_ms": 1782,
+      "latency_ms": 1252,
       "error": null,
       "blocked_reason": "",
-      "checked_at": "2026-11-26T00:11:03+08:00"
+      "checked_at": "2026-11-26T23:50:51+08:00"
     }
   ]
 }
