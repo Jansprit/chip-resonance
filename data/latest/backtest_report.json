@@ -1,11 +1,11 @@
 {
-  "generated_at": "2026-11-26T23:50:24+08:00",
+  "generated_at": "2026-11-27T23:40:38+08:00",
   "mode": "point_in_time",
   "sufficient_data": true,
   "sufficient_for_strategy": true,
   "min_weeks_required": 8,
   "min_weeks_for_strategy": 12,
-  "snapshot_count": 18,
+  "snapshot_count": 19,
   "snapshot_dates": [
     "2026-10-22",
     "2026-10-27",
@@ -24,7 +24,8 @@
     "2026-11-23",
     "2026-11-24",
     "2026-11-25",
-    "2026-11-26"
+    "2026-11-26",
+    "2026-11-27"
   ],
   "rebalance_dates": [
     "2026-10-27",
@@ -44,21 +45,22 @@
     "2026-11-26",
     "2026-11-27",
     "2026-11-30",
-    "2026-12-01"
+    "2026-12-01",
+    "2026-12-02"
   ],
   "holding_weeks": 4,
   "quantiles": 5,
   "price_series_count": 43,
-  "forward_return_samples": 38,
+  "forward_return_samples": 76,
   "factor_row_coverage": {
-    "F1": 518,
-    "F2": 670,
-    "F3": 292,
+    "F1": 555,
+    "F2": 707,
+    "F3": 308,
     "F4": 0,
     "F5": 0,
     "F6": 0,
-    "F8": 670,
-    "F10": 518
+    "F8": 707,
+    "F10": 555
   },
   "walk_forward_segments": 0,
   "walk_forward": [],
@@ -100,62 +102,63 @@
     },
     "F2": {
       "factor": "F2",
-      "samples": 38,
-      "ic": -0.1342549872784457,
-      "rank_ic": -0.16894297423014826,
+      "samples": 76,
+      "ic": -0.15281469139305598,
+      "rank_ic": -0.21624993359635333,
       "quantiles": [
         {
           "quantile": 1,
-          "count": 7,
-          "mean_return": -0.08673300213134637
+          "count": 15,
+          "mean_return": -0.10645072193424708
         },
         {
           "quantile": 2,
-          "count": 8,
-          "mean_return": -0.15476568638243807
+          "count": 15,
+          "mean_return": -0.14997794268850959
         },
         {
           "quantile": 3,
-          "count": 7,
-          "mean_return": -0.2081087750772852
+          "count": 15,
+          "mean_return": -0.15784513409212347
         },
         {
           "quantile": 4,
-          "count": 8,
-          "mean_return": -0.10078771235032753
+          "count": 15,
+          "mean_return": -0.16927425725486792
         },
         {
           "quantile": 5,
-          "count": 8,
-          "mean_return": -0.19531319672092065
+          "count": 16,
+          "mean_return": -0.1365322100208391
         }
       ],
-      "quantile_spread": -0.10858019458957428,
+      "quantile_spread": -0.030081488086592015,
       "monotonic": false,
       "ic_ir_threshold": 0.02,
       "verdict": "keep",
       "ic_series": [
-        -0.1342549872784457
+        -0.1342549872784457,
+        -0.2074798371506982
       ],
-      "ic_periods": 1,
+      "ic_periods": 2,
       "icir": null,
-      "ic_t_stat": null,
+      "ic_t_stat": -6.600027508230073,
       "long_short": {
-        "periods": 1,
+        "periods": 2,
         "metrics": {
-          "periods": 1,
-          "total_return": -0.09193563943372773,
-          "annualized_return": -99.33615787214636,
-          "sharpe": null,
-          "max_drawdown": 0.0,
+          "periods": 2,
+          "total_return": -0.15215687020292357,
+          "annualized_return": -98.63163127527511,
+          "sharpe": -44.54726129028042,
+          "max_drawdown": -6.631824062739522,
           "hit_rate": 0.0
         },
         "gross_metrics": {
-          "periods": 1,
-          "total_return": -0.07623563943372769,
-          "annualized_return": -98.38123968378764,
-          "sharpe": null,
-          "max_drawdown": 0.0,
+          "periods": 2,
+          "total_return": -0.12299496611988314,
+          "annualized_return": -96.703491194481,
+          "sharpe": -35.70840056866936,
+          "max_drawdown": -5.061824062739517,
           "hit_rate": 0.0
         },
         "last": {
@@ -172,82 +175,83 @@
             "2634"
           ],
           "short_codes": [
-            "4133",
-            "6446",
             "2317",
             "2227",
             "1216",
             "2912",
             "1707",
-            "2327"
+            "2330",
+            "2454",
+            "3711"
           ],
-          "long_return": -0.19531319672092065,
-          "short_return": -0.11907755728719295,
-          "gross_return": -0.0762356394337277,
+          "long_return": -0.14734582797601758,
+          "short_return": -0.09672758734862243,
+          "gross_return": -0.05061824062739516,
           "cost": 0.0157,
-          "net_return": -0.0919356394337277,
-          "as_of": "2026-10-22",
-          "rebalance_date": "2026-10-27"
+          "net_return": -0.06631824062739516,
+          "as_of": "2026-10-27",
+          "rebalance_date": "2026-10-30"
         }
       }
     },
     "F3": {
       "factor": "F3",
-      "samples": 17,
-      "ic": 0.40210873539975284,
-      "rank_ic": 0.4307227367614257,
+      "samples": 34,
+      "ic": 0.41816795659889083,
+      "rank_ic": 0.46285015039091504,
       "quantiles": [
         {
           "quantile": 1,
-          "count": 3,
-          "mean_return": -0.3537795303706848
+          "count": 6,
+          "mean_return": -0.2252366401368684
         },
         {
           "quantile": 2,
-          "count": 3,
-          "mean_return": -0.09669374990305202
+          "count": 7,
+          "mean_return": -0.20958508203069173
         },
         {
           "quantile": 3,
-          "count": 4,
-          "mean_return": -0.10123516511867905
+          "count": 7,
+          "mean_return": -0.11660711336309908
         },
         {
           "quantile": 4,
-          "count": 3,
-          "mean_return": -0.13399123000966753
+          "count": 7,
+          "mean_return": -0.11851047245799944
         },
         {
           "quantile": 5,
-          "count": 4,
-          "mean_return": -0.061430334197360825
+          "count": 7,
+          "mean_return": -0.08843217004416018
         }
       ],
-      "quantile_spread": 0.292349196173324,
+      "quantile_spread": 0.1368044700927082,
       "monotonic": false,
       "ic_ir_threshold": 0.02,
       "verdict": "keep",
       "ic_series": [
-        0.40210873539975284
+        0.40210873539975284,
+        0.44539253978103766
       ],
-      "ic_periods": 1,
+      "ic_periods": 2,
       "icir": null,
-      "ic_t_stat": null,
+      "ic_t_stat": 27.690444835468256,
       "long_short": {
-        "periods": 1,
+        "periods": 2,
         "metrics": {
-          "periods": 1,
-          "total_return": 0.24859666053177953,
-          "annualized_return": 10326391.460129268,
-          "sharpe": null,
+          "periods": 2,
+          "total_return": 0.5287731123678447,
+          "annualized_return": 6207431.50617696,
+          "sharpe": 140.92037738728095,
           "max_drawdown": 0.0,
           "hit_rate": 1.0
         },
         "gross_metrics": {
-          "periods": 1,
-          "total_return": 0.26429666053177936,
-          "annualized_return": 19776312.955610797,
-          "sharpe": null,
+          "periods": 2,
+          "total_return": 0.5678455413130752,
+          "annualized_return": 11964141.125221794,
+          "sharpe": 150.27554824941157,
           "max_drawdown": 0.0,
           "hit_rate": 1.0
         },
@@ -264,13 +268,13 @@
             "3037",
             "3189"
           ],
-          "long_return": -0.08948286983890534,
-          "short_return": -0.3537795303706848,
-          "gross_return": 0.26429666053177947,
+          "long_return": -0.09685034600274726,
+          "short_return": -0.33694342720539733,
+          "gross_return": 0.24009308120265005,
           "cost": 0.0157,
-          "net_return": 0.24859666053177948,
-          "as_of": "2026-10-22",
-          "rebalance_date": "2026-10-27"
+          "net_return": 0.22439308120265006,
+          "as_of": "2026-10-27",
+          "rebalance_date": "2026-10-30"
         }
       }
     },
@@ -381,61 +385,62 @@
     },
     "F8": {
       "factor": "F8",
-      "samples": 38,
-      "ic": -0.13681977856625063,
-      "rank_ic": -0.08413448562745231,
+      "samples": 76,
+      "ic": -0.14697860848413302,
+      "rank_ic": -0.08830101456770859,
       "quantiles": [
         {
           "quantile": 1,
-          "count": 7,
-          "mean_return": -0.18715825579989748
+          "count": 15,
+          "mean_return": -0.1747692230902396
         },
         {
           "quantile": 2,
-          "count": 8,
-          "mean_return": -0.10737796762363797
+          "count": 15,
+          "mean_return": -0.10009287757589176
         },
         {
           "quantile": 3,
-          "count": 7,
-          "mean_return": -0.07706762479295597
+          "count": 15,
+          "mean_return": -0.09887185595998894
         },
         {
           "quantile": 4,
-          "count": 8,
-          "mean_return": -0.25642256574266886
+          "count": 15,
+          "mean_return": -0.16420669857094522
         },
         {
           "quantile": 5,
-          "count": 8,
-          "mean_return": -0.11385497162618531
+          "count": 16,
+          "mean_return": -0.17928914824522907
         }
       ],
-      "quantile_spread": 0.07330328417371217,
+      "quantile_spread": -0.004519925154989474,
       "monotonic": false,
       "ic_ir_threshold": 0.02,
       "verdict": "keep",
       "ic_series": [
-        -0.13681977856625063
+        -0.13681977856625063,
+        -0.1588676972130379
       ],
-      "ic_periods": 1,
+      "ic_periods": 2,
       "icir": null,
-      "ic_t_stat": null,
+      "ic_t_stat": -18.96620017381411,
       "long_short": {
-        "periods": 1,
+        "periods": 2,
         "metrics": {
-          "periods": 1,
-          "total_return": 0.06555525142473106,
-          "annualized_return": 2616.130524709961,
-          "sharpe": null,
+          "periods": 2,
+          "total_return": 0.12161990983910242,
+          "annualized_return": 1876.9170899845733,
+          "sharpe": 65.85420355277871,
           "max_drawdown": 0.0,
           "hit_rate": 1.0
         },
         "gross_metrics": {
-          "periods": 1,
-          "total_return": 0.08125525142473111,
-          "annualized_return": 5711.228429630139,
-          "sharpe": null,
+          "periods": 2,
+          "total_return": 0.1551216796947117,
+          "annualized_return": 4149.336342603755,
+          "sharpe": 83.35280634809088,
           "max_drawdown": 0.0,
           "hit_rate": 1.0
         },
@@ -453,22 +458,22 @@
             "2227"
           ],
           "short_codes": [
+            "2454",
             "4133",
-            "6446",
+            "1707",
             "2327",
             "6669",
             "5269",
             "3034",
-            "2330",
-            "5347"
+            "2383"
           ],
-          "long_return": -0.11385497162618531,
-          "short_return": -0.1951102230509165,
-          "gross_return": 0.08125525142473118,
+          "long_return": -0.09561337945394628,
+          "short_return": -0.16392881946928894,
+          "gross_return": 0.06831544001534266,
           "cost": 0.0157,
-          "net_return": 0.06555525142473118,
-          "as_of": "2026-10-22",
-          "rebalance_date": "2026-10-27"
+          "net_return": 0.052615440015342664,
+          "as_of": "2026-10-27",
+          "rebalance_date": "2026-10-30"
         }
       }
     },
@@ -508,5 +513,5 @@
       }
     }
   },
-  "note": "已累積 18 週 point-in-time 快照，本報告的統計結果可用於因子去留判斷。"
+  "note": "已累積 19 週 point-in-time 快照，本報告的統計結果可用於因子去留判斷。"
 }
